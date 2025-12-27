@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
+    "@radix-ui/react-slot": "^1.2.4",
     "@sentry/tanstackstart-react": "^10.22.0",
     "@storybook/react-vite": "^9.1.9",
     "@t3-oss/env-core": "^0.13.8",
@@ -39,6 +40,7 @@
     "@tanstack/store": "^0.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.544.0",
     "react": "^19.2.0",
