@@ -29,6 +29,7 @@ export default function Header() {
 		<>
 			<header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
 				<button
+					type="button"
 					onClick={() => setIsOpen(true)}
 					className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
 					aria-label="Open menu"

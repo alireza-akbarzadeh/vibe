@@ -16,6 +16,9 @@ import { Route as DemoTanchatRouteImport } from './routes/demo/tanchat'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoStorybookRouteImport } from './routes/demo/storybook'
 import { Route as DemoStoreRouteImport } from './routes/demo/store'
+import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ExampleGuitarsIndexRouteImport } from './routes/example.guitars/index'
 import { Route as ExampleGuitarsGuitarIdRouteImport } from './routes/example.guitars/$guitarId'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
@@ -62,6 +65,21 @@ const DemoStorybookRoute = DemoStorybookRouteImport.update({
 const DemoStoreRoute = DemoStoreRouteImport.update({
   id: '/demo/store',
   path: '/demo/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVerifyRoute = AuthVerifyRouteImport.update({
+  id: '/auth/verify',
+  path: '/auth/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExampleGuitarsIndexRoute = ExampleGuitarsIndexRouteImport.update({
@@ -127,6 +145,9 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/table': typeof DemoTableRoute
@@ -148,6 +169,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/table': typeof DemoTableRoute
@@ -170,6 +194,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/table': typeof DemoTableRoute
@@ -193,6 +220,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/verify'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
@@ -214,6 +244,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/verify'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
@@ -235,6 +268,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/verify'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
@@ -257,6 +293,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthVerifyRoute: typeof AuthVerifyRoute
   DemoStoreRoute: typeof DemoStoreRoute
   DemoStorybookRoute: typeof DemoStorybookRoute
   DemoTableRoute: typeof DemoTableRoute
@@ -326,6 +365,27 @@ declare module '@tanstack/react-router' {
       path: '/demo/store'
       fullPath: '/demo/store'
       preLoaderRoute: typeof DemoStoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/verify': {
+      id: '/auth/verify'
+      path: '/auth/verify'
+      fullPath: '/auth/verify'
+      preLoaderRoute: typeof AuthVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/example/guitars/': {
@@ -417,6 +477,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+  AuthVerifyRoute: AuthVerifyRoute,
   DemoStoreRoute: DemoStoreRoute,
   DemoStorybookRoute: DemoStorybookRoute,
   DemoTableRoute: DemoTableRoute,
