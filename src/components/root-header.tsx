@@ -1,7 +1,9 @@
+import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link, Menu, Music, X } from "lucide-react";
+import { Menu, Music, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
 	{ label: "Music", href: "#" },
@@ -34,7 +36,7 @@ export function RootHeader() {
 			<nav className="max-w-7xl mx-auto px-6 py-4">
 				<div className="flex items-center justify-between">
 					{/* Logo */}
-					<Link to="Home" className="flex items-center gap-3">
+					<Link to="/" className="flex items-center gap-3">
 						<div className="w-10 h-10 rounded-xl bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center">
 							<Music className="w-5 h-5 text-white" />
 						</div>
@@ -56,15 +58,23 @@ export function RootHeader() {
 
 					{/* CTA buttons */}
 					<div className="hidden md:flex items-center gap-4">
-						<Button
-							variant="ghost"
-							className="text-gray-400 hover:text-white hover:bg-white/10"
+						<Link
+							to="/auth/login"
+							className={cn(
+								buttonVariants({
+									className: "text-gray-400 hover:text-white hover:bg-white/10",
+									variant: "ghost",
+								}),
+							)}
 						>
 							Log in
-						</Button>
-						<Button className="bg-white text-black hover:bg-gray-200 rounded-full px-6">
+						</Link>
+						<Link
+							to="/auth/register"
+							className="bg-white text-black hover:bg-gray-200 rounded-full px-6 py-1.5"
+						>
 							Start Free Trial
-						</Button>
+						</Link>
 					</div>
 
 					{/* Mobile menu button */}
@@ -103,15 +113,24 @@ export function RootHeader() {
 								</a>
 							))}
 							<div className="pt-4 border-t border-white/10 space-y-3">
-								<Button
-									variant="ghost"
-									className="w-full justify-center text-gray-400 hover:text-white hover:bg-white/10"
+								<Link
+									to="/auth/login"
+									className={cn(
+										buttonVariants({
+											variant: "ghost",
+											className:
+												"w-full justify-center text-gray-400 hover:text-white hover:bg-white/10",
+										}),
+									)}
 								>
 									Log in
-								</Button>
-								<Button className="w-full bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-full">
+								</Link>
+								<Link
+									to="/auth/register"
+									className="w-full bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-full"
+								>
 									Start Free Trial
-								</Button>
+								</Link>
 							</div>
 						</div>
 					</motion.div>
