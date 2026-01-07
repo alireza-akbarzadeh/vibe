@@ -1,15 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RootHeader } from "@/components/root-header";
 import Footer from "@/domains/home/footer";
-import Home from "@/domains/home/home-domains";
+import Plans from "@/domains/plans/plans.domains";
 
-export const Route = createFileRoute("/")({ component: App });
+export const Route = createFileRoute("/pricing")({
+	component: RouteComponent,
+});
 
-function App() {
+function RouteComponent() {
 	return (
 		<>
 			<RootHeader />
-			<Home />
+			<Plans />
 			<Footer />
 		</>
 	);

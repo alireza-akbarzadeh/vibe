@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { Toaster } from "@/components/ui/sonner";
+import { MSG } from "@/constants/constants";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import AiDevtools from "../lib/ai-devtools";
 import StoreDevtools from "../lib/demo-store-devtools";
@@ -27,7 +28,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "vibe",
+				title: MSG.APP_NAME,
 			},
 		],
 		links: [

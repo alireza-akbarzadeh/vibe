@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Clock, Play, Star } from "lucide-react";
 import { useRef } from "react";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const playlists = [
 	{
+		id: "todays-top-hits",
 		title: "Today's Top Hits",
 		tracks: 50,
 		image:
@@ -12,6 +14,7 @@ const playlists = [
 		gradient: "from-purple-600 to-pink-600",
 	},
 	{
+		id: "chill-vibes",
 		title: "Chill Vibes",
 		tracks: 80,
 		image:
@@ -19,6 +22,7 @@ const playlists = [
 		gradient: "from-cyan-600 to-teal-600",
 	},
 	{
+		id: "workout-energy",
 		title: "Workout Energy",
 		tracks: 65,
 		image:
@@ -26,6 +30,7 @@ const playlists = [
 		gradient: "from-orange-600 to-red-600",
 	},
 	{
+		id: "late-night-jazz",
 		title: "Late Night Jazz",
 		tracks: 45,
 		image:
@@ -33,6 +38,7 @@ const playlists = [
 		gradient: "from-amber-600 to-yellow-600",
 	},
 	{
+		id: "electronic-dreams",
 		title: "Electronic Dreams",
 		tracks: 70,
 		image:
@@ -43,6 +49,7 @@ const playlists = [
 
 const movies = [
 	{
+		id: "dune-part-two",
 		title: "Dune: Part Two",
 		year: 2024,
 		rating: 8.8,
@@ -51,6 +58,7 @@ const movies = [
 			"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&h=600&fit=crop",
 	},
 	{
+		id: "oppenheimer",
 		title: "Oppenheimer",
 		year: 2023,
 		rating: 8.6,
@@ -59,6 +67,7 @@ const movies = [
 			"https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&h=600&fit=crop",
 	},
 	{
+		id: "poor-things",
 		title: "Poor Things",
 		year: 2023,
 		rating: 8.2,
@@ -67,6 +76,7 @@ const movies = [
 			"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=600&fit=crop",
 	},
 	{
+		id: "killers-of-the-flower-moon",
 		title: "Killers of the Flower Moon",
 		year: 2023,
 		rating: 8.1,
@@ -75,6 +85,7 @@ const movies = [
 			"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=600&fit=crop",
 	},
 	{
+		id: "the-zone-of-interest",
 		title: "The Zone of Interest",
 		year: 2023,
 		rating: 7.8,
@@ -155,7 +166,11 @@ export default function FeaturedContent() {
 								transition={{ delay: index * 0.1, duration: 0.5 }}
 								className="shrink-0 w-56 snap-start group"
 							>
-								<div className="relative mb-4">
+								<Link
+									to="/movies/$movieId"
+									params={{ movieId: playlist.id }}
+									className="relative mb-4"
+								>
 									<div className="aspect-square rounded-2xl overflow-hidden">
 										<img
 											src={playlist.image}
@@ -173,7 +188,7 @@ export default function FeaturedContent() {
 									>
 										<Play className="w-5 h-5 fill-current ml-0.5" />
 									</button>
-								</div>
+								</Link>
 								<h3 className="text-white font-semibold text-lg truncate">
 									{playlist.title}
 								</h3>
@@ -235,7 +250,11 @@ export default function FeaturedContent() {
 								transition={{ delay: index * 0.1, duration: 0.5 }}
 								className="shrink-0 w-48 snap-start group cursor-pointer"
 							>
-								<div className="relative mb-4">
+								<Link
+									to="/movies/$movieId"
+									params={{ movieId: movie.id }}
+									className="relative mb-4"
+								>
 									<div className="aspect-2/3 rounded-2xl overflow-hidden">
 										<img
 											src={movie.image}
@@ -245,7 +264,6 @@ export default function FeaturedContent() {
 										<div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 									</div>
 
-									{/* Hover overlay */}
 									<div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
 										<button
 											type="button"
@@ -255,14 +273,13 @@ export default function FeaturedContent() {
 										</button>
 									</div>
 
-									{/* Rating badge */}
 									<div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-sm">
 										<Star className="w-3 h-3 text-yellow-400 fill-current" />
 										<span className="text-white text-xs font-medium">
 											{movie.rating}
 										</span>
 									</div>
-								</div>
+								</Link>
 
 								<h3 className="text-white font-semibold truncate mb-1">
 									{movie.title}

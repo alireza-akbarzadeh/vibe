@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowLeft, Music } from "lucide-react";
 import { useEffect, useState } from "react";
+import { MSG } from "@/constants/constants";
 
 interface AuthLayoutProps {
 	children: React.ReactNode;
@@ -90,7 +91,9 @@ export default function AuthLayout({
 							<div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
 								<Music className="w-6 h-6 text-white" />
 							</div>
-							<span className="text-2xl font-bold text-white">Vibe</span>
+							<span className="text-2xl font-bold text-white">
+								{MSG.APP_NAME}
+							</span>
 						</div>
 					</div>
 

@@ -1,4 +1,5 @@
 import { Facebook, Instagram, Music, Twitter, Youtube } from "lucide-react";
+import { MSG } from "@/constants/constants";
 
 const footerLinks = {
 	Product: ["Features", "Pricing", "Apps", "Download"],
@@ -25,7 +26,9 @@ export default function Footer() {
 							<div className="w-10 h-10 rounded-xl bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center">
 								<Music className="w-5 h-5 text-white" />
 							</div>
-							<span className="text-xl font-bold text-white">Vibe</span>
+							<span className="text-xl font-bold text-white">
+								{MSG.APP_NAME}
+							</span>
 						</div>
 						<p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-xs">
 							The next generation streaming platform. Music and movies, unified
@@ -55,7 +58,7 @@ export default function Footer() {
 								{links.map((link) => (
 									<li key={link}>
 										<a
-											href="#"
+											href={link}
 											className="text-gray-500 hover:text-white transition-colors text-sm"
 										>
 											{link}
