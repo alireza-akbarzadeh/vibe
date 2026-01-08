@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, TrendingUp, X } from "lucide-react";
 import { useState } from "react";
+import { Logo } from "@/components/logo";
 import { Button } from "@/components/storybook";
 import { Input } from "@/components/ui/input";
 
@@ -33,14 +34,7 @@ export function SearchHeader({
 			<div className="max-w-450 mx-auto px-6 py-4">
 				<div className="flex items-center gap-4">
 					{/* Logo */}
-					<div className="flex items-center gap-3">
-						<div className="w-10 h-10 rounded-xl bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center">
-							<span className="text-white font-bold text-xl">V</span>
-						</div>
-						<span className="text-2xl font-bold text-white hidden md:block">
-							Vibe
-						</span>
-					</div>
+					<Logo />
 
 					{/* Search bar */}
 					<div className="relative flex-1 max-w-2xl">

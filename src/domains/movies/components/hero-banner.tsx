@@ -159,7 +159,7 @@ export function HeroBanner() {
 									<Link
 										to="/movies/$movieId"
 										params={{ movieId: current.movieId.toString() }}
-										className="h-14 px-8 bg-white text-black hover:bg-gray-200 rounded-xl font-bold text-lg group transition-all shadow-2xl shadow-white/20"
+										className="h-14 px-8 flex items-center bg-white text-black hover:bg-gray-200 rounded-xl font-bold text-lg group transition-all shadow-2xl shadow-white/20"
 									>
 										<Play className="w-5 h-5 mr-2 fill-black group-hover:scale-110 transition-transform" />
 										Play Now
