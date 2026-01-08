@@ -3,7 +3,9 @@ import { RootHeader } from "@/components/root-header";
 import Footer from "@/domains/home/footer";
 import Home from "@/domains/home/home-domains";
 
-export const Route = createFileRoute("/")({ component: App });
+export const Route = createFileRoute("/")({
+	component: App,
+});
 
 function App() {
 	return (

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { MSG } from "@/constants/constants";
 import { cn } from "@/lib/utils";
+import { ModeToggle } from "./mode-toggle";
 
 const navLinks = [
 	{ label: "Music", href: "#" },
@@ -132,6 +133,7 @@ export function RootHeader() {
 								>
 									Start Free Trial
 								</Link>
+								<ModeToggle />
 							</div>
 						</div>
 					</motion.div>

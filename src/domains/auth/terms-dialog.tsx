@@ -15,10 +15,8 @@ export function TermsOfServiceDialog() {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button
-					className={buttonVariants({
-						variant: "link",
-						className: "text-purple-400 hover:text-purple-300",
-					})}
+					variant="ghost"
+					className="text-purple-400 hover:text-purple-300"
 				>
 					Terms of Service
 				</Button>

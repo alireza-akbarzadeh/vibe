@@ -6,8 +6,10 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { MSG } from "@/constants/constants";
+import { getThemeServerFn } from "@/lib/theme";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import AiDevtools from "../lib/ai-devtools";
 import StoreDevtools from "../lib/demo-store-devtools";
@@ -38,18 +40,20 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 	}),
-
+	loader: () => getThemeServerFn(),
 	shellComponent: RootDocument,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+	const theme = Route.useLoaderData();
+
 	return (
 		<html lang="en">
 			<head>
 				<HeadContent />
 			</head>
 			<body>
-				{children}
+				<ThemeProvider theme={theme}>{children}</ThemeProvider>
 				<Toaster />
 				<TanStackDevtools
 					config={{

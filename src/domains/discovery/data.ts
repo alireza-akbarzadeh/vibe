@@ -1,0 +1,131 @@
+import type { ArtistType } from "@/types/app";
+
+export const artists: ArtistType[] = [
+	{
+		id: 1,
+		name: "The Weeknd",
+		type: "music",
+		image:
+			"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80",
+		genres: ["R&B", "Pop", "Electronic"],
+		followers: "25M",
+		size: "large",
+		trending: true,
+	},
+	{
+		id: 2,
+		name: "Billie Eilish",
+		type: "music",
+		image:
+			"https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&q=80",
+		genres: ["Alternative", "Pop"],
+		followers: "18M",
+		size: "medium",
+		recommended: true,
+	},
+	{
+		id: 3,
+		name: "Dune: Part Two",
+		type: "movie",
+		image:
+			"https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80",
+		genres: ["Sci-Fi", "Action"],
+		followers: "12M",
+		size: "medium",
+	},
+	{
+		id: 4,
+		name: "Kendrick Lamar",
+		type: "music",
+		image:
+			"https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80",
+		genres: ["Hip-Hop", "Rap"],
+		followers: "22M",
+		size: "large",
+		trending: true,
+	},
+	{
+		id: 5,
+		name: "Taylor Swift",
+		type: "music",
+		image:
+			"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80",
+		genres: ["Pop", "Country"],
+		followers: "30M",
+		size: "medium",
+		recommended: true,
+	},
+	{
+		id: 6,
+		name: "Interstellar",
+		type: "movie",
+		image:
+			"https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&q=80",
+		genres: ["Sci-Fi", "Drama"],
+		followers: "15M",
+		size: "small",
+	},
+	{
+		id: 7,
+		name: "Drake",
+		type: "music",
+		image:
+			"https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80",
+		genres: ["Hip-Hop", "R&B"],
+		followers: "28M",
+		size: "medium",
+	},
+	{
+		id: 8,
+		name: "Ariana Grande",
+		type: "music",
+		image:
+			"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
+		genres: ["Pop", "R&B"],
+		followers: "24M",
+		size: "small",
+		recommended: true,
+	},
+	{
+		id: 9,
+		name: "Inception",
+		type: "movie",
+		image:
+			"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80",
+		genres: ["Thriller", "Sci-Fi"],
+		followers: "18M",
+		size: "medium",
+		trending: true,
+	},
+	{
+		id: 10,
+		name: "Post Malone",
+		type: "music",
+		image:
+			"https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?w=800&q=80",
+		genres: ["Hip-Hop", "Pop"],
+		followers: "20M",
+		size: "small",
+	},
+	{
+		id: 11,
+		name: "SZA",
+		type: "music",
+		image:
+			"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80",
+		genres: ["R&B", "Soul"],
+		followers: "16M",
+		size: "medium",
+		recommended: true,
+	},
+	{
+		id: 12,
+		name: "The Dark Knight",
+		type: "movie",
+		image:
+			"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80",
+		genres: ["Action", "Crime"],
+		followers: "22M",
+		size: "large",
+	},
+];

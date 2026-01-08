@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { socialProviders } from "@/config/socials";
 import AuthLayout from "@/domains/auth/auth-layout";
 
 const loginFormSchema = z.object({
@@ -210,18 +211,16 @@ function LoginPage() {
 				</div>
 
 				<div className="grid grid-cols-2 gap-3">
-					<Button
-						variant="outline"
-						className="h-11 bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl"
-					>
-						Google
-					</Button>
-					<Button
-						variant="outline"
-						className="h-11 bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl"
-					>
-						GitHub
-					</Button>
+					{socialProviders.map((social) => (
+						<Button
+							key={social.id}
+							variant="outline"
+							className="h-11 bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl"
+						>
+							<img src={social.icon} className="w-5 h-5" alt={social.name} />
+							{social.name}
+						</Button>
+					))}
 				</div>
 			</form>
 

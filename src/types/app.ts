@@ -44,3 +44,15 @@ export type ContinueWatching = {
 	progress?: number;
 	description?: string;
 };
+
+export interface ArtistType {
+	id: number;
+	name: string;
+	type: "music" | "movie";
+	image: string;
+	genres: string[];
+	followers: string;
+	size: "small" | "medium" | "large";
+	trending?: boolean;
+	recommended?: boolean;
+}

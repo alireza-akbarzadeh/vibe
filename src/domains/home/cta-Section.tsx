@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Film, Music, Sparkles } from "lucide-react";
 import { useId } from "react";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export default function CTASection() {
 	const titleId = useId();
+	const navigate = useNavigate();
 
 	return (
 		<section className="relative py-32 overflow-hidden">
@@ -92,6 +94,7 @@ export default function CTASection() {
 					{/* CTAs */}
 					<div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
 						<Button
+							onClick={() => navigate({ to: "/movies" })}
 							size="lg"
 							className="group relative px-10 py-7 text-lg font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105"
 						>
@@ -110,6 +113,7 @@ export default function CTASection() {
 						<span className="text-gray-500">or</span>
 
 						<Button
+							onClick={() => navigate({ to: "/pricing", resetScroll: true })}
 							variant="ghost"
 							size="lg"
 							className="px-8 py-7 text-lg font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-full border border-white/20 backdrop-blur-sm transition-all duration-300"

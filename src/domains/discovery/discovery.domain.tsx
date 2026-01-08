@@ -1,7 +1,8 @@
+import { useNavigate } from "@tanstack/react-router";
+import { useStore } from "@tanstack/react-store";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Music, Search, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,188 +11,26 @@ import {
 	ProgressTracker,
 	TasteProfile,
 } from "./components";
-
-export interface ArtistType {
-	id: number;
-	name: string;
-	type: "music" | "movie";
-	image: string;
-	genres: string[];
-	followers: string;
-	size: "small" | "medium" | "large";
-	trending?: boolean;
-	recommended?: boolean;
-}
+import { artists } from "./data";
+import { discoveryActions, discoveryStore } from "./discoveryStore";
 
 export function Discovery() {
-	const [selectedArtists, setSelectedArtists] = useState<ArtistType[]>([]);
-	const [searchQuery, setSearchQuery] = useState("");
-	const [activeFilter, setActiveFilter] = useState("all");
+	const selectedArtists = useStore(discoveryStore, (s) => s.selectedArtists);
+	const searchQuery = useStore(discoveryStore, (s) => s.searchQuery);
+	const activeFilter = useStore(discoveryStore, (s) => s.activeFilter);
+
+	// 2. Local UI State (Keep as useState for performance/simplicity)
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 	const [showWelcome, setShowWelcome] = useState(true);
 
+	const navigate = useNavigate();
 	const minSelections = 5;
 	const recommendedSelections = 10;
-
-	useEffect(() => {
-		const timer = setTimeout(() => setShowWelcome(false), 2000);
-		return () => clearTimeout(timer);
-	}, []);
-
-	useEffect(() => {
-		const handleMouseMove = (e: MouseEvent) => {
-			setMousePosition({ x: e.clientX, y: e.clientY });
-		};
-		window.addEventListener("mousemove", handleMouseMove);
-		return () => window.removeEventListener("mousemove", handleMouseMove);
-	}, []);
-
-	const artists: ArtistType[] = [
-		{
-			id: 1,
-			name: "The Weeknd",
-			type: "music",
-			image:
-				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80",
-			genres: ["R&B", "Pop", "Electronic"],
-			followers: "25M",
-			size: "large",
-			trending: true,
-		},
-		{
-			id: 2,
-			name: "Billie Eilish",
-			type: "music",
-			image:
-				"https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&q=80",
-			genres: ["Alternative", "Pop"],
-			followers: "18M",
-			size: "medium",
-			recommended: true,
-		},
-		{
-			id: 3,
-			name: "Dune: Part Two",
-			type: "movie",
-			image:
-				"https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80",
-			genres: ["Sci-Fi", "Action"],
-			followers: "12M",
-			size: "medium",
-		},
-		{
-			id: 4,
-			name: "Kendrick Lamar",
-			type: "music",
-			image:
-				"https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80",
-			genres: ["Hip-Hop", "Rap"],
-			followers: "22M",
-			size: "large",
-			trending: true,
-		},
-		{
-			id: 5,
-			name: "Taylor Swift",
-			type: "music",
-			image:
-				"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80",
-			genres: ["Pop", "Country"],
-			followers: "30M",
-			size: "medium",
-			recommended: true,
-		},
-		{
-			id: 6,
-			name: "Interstellar",
-			type: "movie",
-			image:
-				"https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&q=80",
-			genres: ["Sci-Fi", "Drama"],
-			followers: "15M",
-			size: "small",
-		},
-		{
-			id: 7,
-			name: "Drake",
-			type: "music",
-			image:
-				"https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80",
-			genres: ["Hip-Hop", "R&B"],
-			followers: "28M",
-			size: "medium",
-		},
-		{
-			id: 8,
-			name: "Ariana Grande",
-			type: "music",
-			image:
-				"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
-			genres: ["Pop", "R&B"],
-			followers: "24M",
-			size: "small",
-			recommended: true,
-		},
-		{
-			id: 9,
-			name: "Inception",
-			type: "movie",
-			image:
-				"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80",
-			genres: ["Thriller", "Sci-Fi"],
-			followers: "18M",
-			size: "medium",
-			trending: true,
-		},
-		{
-			id: 10,
-			name: "Post Malone",
-			type: "music",
-			image:
-				"https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?w=800&q=80",
-			genres: ["Hip-Hop", "Pop"],
-			followers: "20M",
-			size: "small",
-		},
-		{
-			id: 11,
-			name: "SZA",
-			type: "music",
-			image:
-				"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80",
-			genres: ["R&B", "Soul"],
-			followers: "16M",
-			size: "medium",
-			recommended: true,
-		},
-		{
-			id: 12,
-			name: "The Dark Knight",
-			type: "movie",
-			image:
-				"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80",
-			genres: ["Action", "Crime"],
-			followers: "22M",
-			size: "large",
-		},
-	];
-
-	const handleToggleArtist = (artistId: number) => {
-		setSelectedArtists((prev) => {
-			const isSelected = prev.some((artist) => artist.id === artistId);
-			if (isSelected) {
-				return prev.filter((artist) => artist.id !== artistId);
-			} else {
-				const artistToAdd = artists.find((artist) => artist.id === artistId);
-				return artistToAdd ? [...prev, artistToAdd] : prev;
-			}
-		});
-	};
 
 	const filteredArtists = artists.filter((artist) => {
 		const matchesSearch =
 			artist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			artist.genres.some((g) =>
+			artist.genres.some((g: string) =>
 				g.toLowerCase().includes(searchQuery.toLowerCase()),
 			);
 
@@ -203,13 +42,23 @@ export function Discovery() {
 			return matchesSearch && artist.type === "music";
 		if (activeFilter === "movies")
 			return matchesSearch && artist.type === "movie";
-
 		return matchesSearch;
 	});
 
-	const handleContinue = () => {
-		// Navigate to main app
-		console.log("Selected artists:", selectedArtists);
+	useEffect(() => {
+		const timer = setTimeout(() => setShowWelcome(false), 2000);
+		return () => clearTimeout(timer);
+	}, []);
+
+	useEffect(() => {
+		const handleMouseMove = (e: MouseEvent) =>
+			setMousePosition({ x: e.clientX, y: e.clientY });
+		window.addEventListener("mousemove", handleMouseMove);
+		return () => window.removeEventListener("mousemove", handleMouseMove);
+	}, []);
+
+	const handleContinue = (): void => {
+		navigate({ to: "/" });
 	};
 
 	return (
@@ -237,9 +86,9 @@ export function Discovery() {
 				/>
 
 				{/* Floating particles */}
-				{[...Array(20)].map((_, i) => (
+				{[...Array(20)].map((b) => (
 					<motion.div
-						key={`secrekey${i}`}
+						key={`secrekey${b}`}
 						initial={{ opacity: 0 }}
 						animate={{
 							opacity: [0.1, 0.3, 0.1],
@@ -338,7 +187,7 @@ export function Discovery() {
 								<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
 								<Input
 									value={searchQuery}
-									onChange={(e) => setSearchQuery(e.target.value)}
+									onChange={(e) => discoveryActions.setSearch(e.target.value)}
 									placeholder="Search artists, genres..."
 									className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl"
 								/>
@@ -346,7 +195,7 @@ export function Discovery() {
 
 							<GenreFilters
 								activeFilter={activeFilter}
-								onFilterChange={setActiveFilter}
+								onFilterChange={discoveryActions.setFilter}
 							/>
 						</div>
 					</div>
@@ -372,7 +221,7 @@ export function Discovery() {
 								key={artist.id}
 								artist={artist}
 								isSelected={selectedArtists.some((a) => a.id === artist.id)}
-								onToggle={() => handleToggleArtist(artist.id)}
+								onToggle={() => discoveryActions.toggleArtist(artist)}
 								index={index}
 							/>
 						))}

@@ -217,7 +217,9 @@ function RouteComponent() {
 									Must be at least 8 characters
 								</p>
 								{isInvalid && (
-									<p className="text-xs text-red-400 mt-1">{errorMessage}</p>
+									<p className="text-xs text-red-400 mt-1">
+										{errorMessage.message}
+									</p>
 								)}
 							</div>
 						);

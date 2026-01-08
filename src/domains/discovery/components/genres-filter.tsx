@@ -35,14 +35,6 @@ export function GenreFilters({
 				>
 					<filter.icon className="w-4 h-4" />
 					<span>{filter.label}</span>
-
-					{activeFilter === filter.id && (
-						<motion.div
-							layoutId="activeFilter"
-							className="absolute inset-0 bg-linear-to-r from-purple-600 to-pink-600 rounded-xl -z-10"
-							transition={{ type: "spring", stiffness: 300, damping: 30 }}
-						/>
-					)}
 				</motion.button>
 			))}
 		</div>

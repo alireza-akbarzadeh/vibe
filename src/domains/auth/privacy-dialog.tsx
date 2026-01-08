@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogClose,
@@ -13,10 +13,8 @@ export function PrivacyPolicyDialog() {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button
-					className={buttonVariants({
-						variant: "link",
-						className: "text-purple-400 hover:text-purple-300",
-					})}
+					variant="ghost"
+					className="text-purple-400 hover:text-purple-300"
 				>
 					Privacy Policy
 				</Button>
