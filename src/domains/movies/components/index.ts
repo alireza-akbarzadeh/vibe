@@ -1,7 +1,11 @@
 export { CastCarousel } from "./cast-carousel";
+export { CategoryNav } from "./category-nav";
+export { HeroBanner } from "./hero-banner";
 export { ImagesGallery } from "./image-gallery";
+export { MovieCarousel } from "./movie-carousel";
 export { MovieHero } from "./movie-hero";
 export { ReviewsSection } from "./reviews-section";
+export { SearchHeader } from "./search-header";
 export { SimilarMovies } from "./similar-movies";
 export { StatsBar } from "./stats-bar";
 export { Synopsis } from "./synopsis";

@@ -1,3 +1,4 @@
+import { MovieTypes } from "@/types/app";
 import {
 	CastCarousel,
 	ImagesGallery,
@@ -8,31 +9,6 @@ import {
 	Synopsis,
 	TrailerPlayer,
 } from "./components";
-
-export interface MovieTypes {
-	id: number;
-	title: string;
-	year: number;
-	poster: string;
-	backdrop: string;
-	rating: number;
-	votes: number;
-	duration: string;
-	releaseDate: string;
-	rating_label: string;
-	genres: string[];
-	synopsis: string;
-	director: string;
-	writers: string[];
-	stars: string[];
-	productionCo: string;
-	budget: string;
-	revenue: string;
-	trailerUrl: string;
-	metascore: number;
-	popularity: number;
-	popularityChange: number;
-}
 
 export default function MovieDetails() {
 	const movieData: MovieTypes = {

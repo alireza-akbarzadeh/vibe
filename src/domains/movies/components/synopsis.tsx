@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import type { MovieTypes } from "../movies.domain";
+import type { MovieTypes } from "@/types/app";
 
 interface SynopsisProps {
 	movie: MovieTypes;

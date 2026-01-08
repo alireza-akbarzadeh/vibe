@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { MovieTypes } from "../movies.domain";
+import type { MovieTypes } from "@/types/app";
 
 interface MovieHeroProps {
 	movie: MovieTypes;
@@ -200,7 +200,7 @@ export function MovieHero({ movie }: MovieHeroProps) {
 						<div className="flex flex-wrap gap-4 pt-4">
 							<Button
 								size="lg"
-								className="group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold px-8 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30"
+								className="group bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold px-8 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30"
 							>
 								<Play className="w-5 h-5 mr-2 fill-current group-hover:scale-110 transition-transform" />
 								Watch Trailer
