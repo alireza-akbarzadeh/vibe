@@ -21,7 +21,7 @@ IMPORTANT:
 - Do NOT describe the guitar yourself - let the recommendGuitar tool do it
 `
 
-export const Route = createFileRoute('/demo/api/tanchat')({
+export const Route = createFileRoute('/(demo)/demo/api/tanchat')({
   server: {
     handlers: {
       POST: async ({ request }) => {

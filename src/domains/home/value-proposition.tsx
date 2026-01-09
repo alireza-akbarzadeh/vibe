@@ -31,9 +31,8 @@ const features = [
 export default function ValueProposition() {
 	return (
 		<section className="relative py-32 bg-[#0a0a0a] overflow-hidden">
-			{/* Subtle background effect */}
 			<div className="absolute inset-0">
-				<div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+				<div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-linear-to-r from-transparent via-purple-500/50 to-transparent" />
 			</div>
 
 			<div className="relative z-10 max-w-7xl mx-auto px-6">
@@ -46,7 +45,7 @@ export default function ValueProposition() {
 				>
 					<h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
 						Listen & Watch{" "}
-						<span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+						<span className="bg-linear-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
 							Instantly
 						</span>
 					</h2>
@@ -66,15 +65,15 @@ export default function ValueProposition() {
 						>
 							<div className="group relative h-full">
 								{/* Glassmorphism card */}
-								<div className="relative h-full p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 overflow-hidden transition-all duration-500 hover:bg-white/[0.06] hover:border-white/20 hover:scale-[1.02] hover:-translate-y-1">
+								<div className="relative h-full p-8 rounded-3xl bg-white/3 backdrop-blur-xl border border-white/10 overflow-hidden transition-all duration-500 hover:bg-white/6 hover:border-white/20 hover:scale-[1.02] hover:-translate-y-1">
 									{/* Hover glow effect */}
 									<div
-										className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+										className={`absolute inset-0 bg-linear-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
 									/>
 
 									{/* Icon */}
 									<div
-										className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${feature.gradient} mb-6`}
+										className={`inline-flex p-4 rounded-2xl bg-linear-to-br ${feature.gradient} mb-6`}
 									>
 										<feature.icon className="w-7 h-7 text-white" />
 									</div>
@@ -88,7 +87,7 @@ export default function ValueProposition() {
 
 									{/* Corner accent */}
 									<div
-										className={`absolute -bottom-10 -right-10 w-32 h-32 bg-gradient-to-br ${feature.gradient} opacity-20 rounded-full blur-2xl group-hover:opacity-30 transition-opacity duration-500`}
+										className={`absolute -bottom-10 -right-10 w-32 h-32 bg-linear-to-br ${feature.gradient} opacity-20 rounded-full blur-2xl group-hover:opacity-30 transition-opacity duration-500`}
 									/>
 								</div>
 							</div>

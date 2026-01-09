@@ -1,7 +1,7 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import guitars from '../../data/example-guitars'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import guitars from '@/data/example-guitars'
 
-export const Route = createFileRoute('/example/guitars/$guitarId')({
+export const Route = createFileRoute('/(demo)/example/guitars/$guitarId')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const guitar = guitars.find((guitar) => guitar.id === +params.guitarId)
@@ -30,7 +30,7 @@ function RouteComponent() {
           <div className="text-2xl font-bold text-emerald-400">
             ${guitar.price}
           </div>
-          <button className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-lg transition-colors">
+          <button type='button' className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-lg transition-colors">
             Add to Cart
           </button>
         </div>

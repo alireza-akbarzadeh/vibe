@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { VideoPlayer } from "@/components/video-payler/video-player";
 import { VIDEOS } from "@/constants/media";
 import type { MovieTypes } from "@/types/app";

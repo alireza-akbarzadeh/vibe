@@ -1,20 +1,14 @@
-import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { getPunkSongs } from '@/data/demo.punk-songs'
 
-export const Route = createFileRoute('/demo/start/ssr/spa-mode')({
-  ssr: false,
+export const Route = createFileRoute('/(demo)/demo/start/ssr/data-only')({
+  ssr: 'data-only',
   component: RouteComponent,
+  loader: async () => await getPunkSongs(),
 })
 
 function RouteComponent() {
-  const [punkSongs, setPunkSongs] = useState<
-    Awaited<ReturnType<typeof getPunkSongs>>
-  >([])
-
-  useEffect(() => {
-    getPunkSongs().then(setPunkSongs)
-  }, [])
+  const punkSongs = Route.useLoaderData()
 
   return (
     <div
@@ -25,8 +19,8 @@ function RouteComponent() {
       }}
     >
       <div className="w-full max-w-2xl p-8 rounded-xl backdrop-blur-md bg-black/50 shadow-xl border-8 border-black/10">
-        <h1 className="text-3xl font-bold mb-6 text-green-400">
-          SPA Mode - Punk Songs
+        <h1 className="text-3xl font-bold mb-6 text-pink-400">
+          Data Only SSR - Punk Songs
         </h1>
         <ul className="space-y-3">
           {punkSongs.map((song) => (

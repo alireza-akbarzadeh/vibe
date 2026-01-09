@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Send, Square } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { Streamdown } from 'streamdown'
-
-import { useGuitarRecommendationChat } from '@/lib/example.ai-hook'
-import type { ChatMessages } from '@/lib/example.ai-hook'
-
 import GuitarRecommendation from '@/components/example-GuitarRecommendation'
+import type { ChatMessages } from '@/lib/example.ai-hook'
+import { useGuitarRecommendationChat } from '@/lib/example.ai-hook'
 
 import './tanchat.css'
 
@@ -58,11 +56,10 @@ function Messages({ messages }: { messages: ChatMessages }) {
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`p-4 ${
-              message.role === 'assistant'
+            className={`p-4 ${message.role === 'assistant'
                 ? 'bg-linear-to-r from-orange-500/5 to-red-600/5'
                 : 'bg-transparent'
-            }`}
+              }`}
           >
             <div className="flex items-start gap-4 max-w-3xl mx-auto w-full">
               {message.role === 'assistant' ? (
@@ -182,6 +179,6 @@ function ChatPage() {
   )
 }
 
-export const Route = createFileRoute('/demo/tanchat')({
+export const Route = createFileRoute('/(demo)/demo/tanchat')({
   component: ChatPage,
 })

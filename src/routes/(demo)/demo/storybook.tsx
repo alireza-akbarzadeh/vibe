@@ -7,7 +7,7 @@ import { RadioGroup } from '@/components/storybook/radio-group'
 import { Slider } from '@/components/storybook/slider'
 import { Button } from '@/components/storybook/button'
 
-export const Route = createFileRoute('/demo/storybook')({
+export const Route = createFileRoute('/(demo)/demo/storybook')({
   component: StorybookDemo,
 })
 

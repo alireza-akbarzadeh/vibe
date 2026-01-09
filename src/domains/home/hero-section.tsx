@@ -1,17 +1,13 @@
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function HeroSection() {
-	const [isMuted, setIsMuted] = useState(true);
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
 	useEffect(() => {
-		interface MousePosition {
-			x: number;
-			y: number;
-		}
 
 		const handleMouseMove = (e: MouseEvent): void => {
 			setMousePosition({
@@ -28,7 +24,7 @@ export default function HeroSection() {
 			{/* Animated gradient background */}
 			<div className="absolute inset-0">
 				<div
-					className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-black to-cyan-900/30"
+					className="absolute inset-0 bg-linear-to-br from-purple-900/40 via-black to-cyan-900/30"
 					style={{
 						transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
 						transition: "transform 0.3s ease-out",
@@ -96,7 +92,7 @@ export default function HeroSection() {
 					{/* Main headline */}
 					<h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
 						<span className="block text-white">Feel Every</span>
-						<span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+						<span className="block bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
 							Beat & Scene
 						</span>
 					</h1>
@@ -118,24 +114,23 @@ export default function HeroSection() {
 						transition={{ delay: 0.9, duration: 0.6 }}
 						className="flex flex-col sm:flex-row gap-4 justify-center items-center"
 					>
-						<Button
-							size="lg"
-							className="group relative px-8 py-6 text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border-0 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30"
+						<Link
+							to="/movies"
+							className={buttonVariants({ className: "group relative px-8 py-6 text-lg font-semibold bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border-0 rounded-full! overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30", size: "lg" })}
 						>
 							<span className="relative z-10 flex items-center gap-2">
 								<Play className="w-5 h-5 fill-current" />
 								Start Streaming Free
 							</span>
-							<div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-						</Button>
+							<div className="absolute inset-0 bg-linear-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+						</Link>
 
-						<Button
-							variant="ghost"
-							size="lg"
-							className="px-8 py-6 text-lg font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-full border border-white/20 backdrop-blur-sm transition-all duration-300"
+						<Link
+							to="/library"
+							className={buttonVariants({ className: "px-8 rounded-full!  py-6 text-lg font-semibold text-white/80 hover:text-white hover:bg-white/10  border border-white/20 backdrop-blur-sm transition-all duration-300", size: "lg" })}
 						>
 							Explore Library
-						</Button>
+						</Link>
 					</motion.div>
 				</motion.div>
 
@@ -161,7 +156,7 @@ export default function HeroSection() {
 			</div>
 
 			{/* Bottom gradient fade */}
-			<div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+			<div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-[#0a0a0a] to-transparent" />
 		</section>
 	);
 }

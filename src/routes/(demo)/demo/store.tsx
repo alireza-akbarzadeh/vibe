@@ -3,7 +3,7 @@ import { Derived, Store, useStore } from "@tanstack/react-store";
 
 import { fullName, store } from "@/lib/demo-store";
 
-export const Route = createFileRoute("/demo/store")({
+export const Route = createFileRoute("/(demo)/demo/store")({
 	component: DemoStore,
 });
 const countStore = new Store(0);
@@ -39,7 +39,7 @@ function Counter() {
 				</button>
 			</div>
 		</div>
-	);
+	)
 }
 
 function FirstName() {
@@ -53,7 +53,7 @@ function FirstName() {
 			}
 			className="bg-white/10 rounded-lg px-4 py-2 outline-none border border-white/20 hover:border-white/40 focus:border-white/60 transition-colors duration-200 placeholder-white/40"
 		/>
-	);
+	)
 }
 
 function LastName() {
@@ -67,7 +67,7 @@ function LastName() {
 			}
 			className="bg-white/10 rounded-lg px-4 py-2 outline-none border border-white/20 hover:border-white/40 focus:border-white/60 transition-colors duration-200 placeholder-white/40"
 		/>
-	);
+	)
 }
 
 function FullName() {
@@ -76,7 +76,7 @@ function FullName() {
 		<div className="bg-white/10 rounded-lg px-4 py-2 outline-none ">
 			{fName}
 		</div>
-	);
+	)
 }
 
 function DemoStore() {
@@ -96,5 +96,5 @@ function DemoStore() {
 				<Counter />
 			</div>
 		</div>
-	);
+	)
 }

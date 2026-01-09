@@ -12,7 +12,7 @@ import { createServerFn } from '@tanstack/react-start'
 import * as Sentry from '@sentry/tanstackstart-react'
 import { useState, useEffect } from 'react'
 
-export const Route = createFileRoute('/demo/sentry/testing')({
+export const Route = createFileRoute('/(demo)/demo/sentry/testing')({
   component: RouteComponent,
   errorComponent: ({ error }) => {
     useEffect(() => {

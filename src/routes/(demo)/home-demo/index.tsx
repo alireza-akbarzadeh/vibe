@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 
-export const Route = createFileRoute("/home-demo/")({ component: App });
+export const Route = createFileRoute("/(demo)/home-demo/")({ component: App });
 
 function App() {
 	const features = [
@@ -49,7 +49,7 @@ function App() {
 			description:
 				"Built from the ground up for modern web applications. Deploy anywhere JavaScript runs.",
 		},
-	];
+	]
 
 	return (
 		<>
@@ -118,5 +118,5 @@ function App() {
 				</section>
 			</div>
 		</>
-	);
+	)
 }

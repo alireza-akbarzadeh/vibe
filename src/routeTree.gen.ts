@@ -13,31 +13,34 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as DiscoveryRouteImport } from './routes/discovery'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MoviesIndexRouteImport } from './routes/movies/index'
-import { Route as HomeDemoIndexRouteImport } from './routes/home-demo/index'
-import { Route as DemoIndexRouteImport } from './routes/demo/index'
+import { Route as LibraryIndexRouteImport } from './routes/library/index'
+import { Route as MusicMusicidRouteImport } from './routes/music/$musicid'
 import { Route as MoviesMovieIdRouteImport } from './routes/movies/$movieId'
+import { Route as LibraryProfileRouteImport } from './routes/library/profile'
 import { Route as ExploreSectionRouteImport } from './routes/explore/$section'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
-import { Route as DemoTanchatRouteImport } from './routes/demo/tanchat'
-import { Route as DemoTableRouteImport } from './routes/demo/table'
-import { Route as DemoStorybookRouteImport } from './routes/demo/storybook'
-import { Route as DemoStoreRouteImport } from './routes/demo/store'
 import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
-import { Route as ExampleGuitarsIndexRouteImport } from './routes/example.guitars/index'
-import { Route as ExampleGuitarsGuitarIdRouteImport } from './routes/example.guitars/$guitarId'
-import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
-import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
-import { Route as DemoSentryTestingRouteImport } from './routes/demo/sentry.testing'
-import { Route as DemoApiTqTodosRouteImport } from './routes/demo/api.tq-todos'
-import { Route as DemoApiTanchatRouteImport } from './routes/demo/api.tanchat'
-import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
-import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
-import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
-import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
-import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
+import { Route as demoHomeDemoIndexRouteImport } from './routes/(demo)/home-demo/index'
+import { Route as demoDemoIndexRouteImport } from './routes/(demo)/demo/index'
+import { Route as demoDemoTanstackQueryRouteImport } from './routes/(demo)/demo/tanstack-query'
+import { Route as demoDemoTanchatRouteImport } from './routes/(demo)/demo/tanchat'
+import { Route as demoDemoTableRouteImport } from './routes/(demo)/demo/table'
+import { Route as demoDemoStorybookRouteImport } from './routes/(demo)/demo/storybook'
+import { Route as demoDemoStoreRouteImport } from './routes/(demo)/demo/store'
+import { Route as demoExampleGuitarsIndexRouteImport } from './routes/(demo)/example.guitars/index'
+import { Route as demoExampleGuitarsGuitarIdRouteImport } from './routes/(demo)/example.guitars/$guitarId'
+import { Route as demoDemoStartServerFuncsRouteImport } from './routes/(demo)/demo/start.server-funcs'
+import { Route as demoDemoStartApiRequestRouteImport } from './routes/(demo)/demo/start.api-request'
+import { Route as demoDemoSentryTestingRouteImport } from './routes/(demo)/demo/sentry.testing'
+import { Route as demoDemoApiTqTodosRouteImport } from './routes/(demo)/demo/api.tq-todos'
+import { Route as demoDemoApiTanchatRouteImport } from './routes/(demo)/demo/api.tanchat'
+import { Route as demoDemoApiNamesRouteImport } from './routes/(demo)/demo/api.names'
+import { Route as demoDemoStartSsrIndexRouteImport } from './routes/(demo)/demo/start.ssr.index'
+import { Route as demoDemoStartSsrSpaModeRouteImport } from './routes/(demo)/demo/start.ssr.spa-mode'
+import { Route as demoDemoStartSsrFullSsrRouteImport } from './routes/(demo)/demo/start.ssr.full-ssr'
+import { Route as demoDemoStartSsrDataOnlyRouteImport } from './routes/(demo)/demo/start.ssr.data-only'
 
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
@@ -59,14 +62,14 @@ const MoviesIndexRoute = MoviesIndexRouteImport.update({
   path: '/movies/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeDemoIndexRoute = HomeDemoIndexRouteImport.update({
-  id: '/home-demo/',
-  path: '/home-demo/',
+const LibraryIndexRoute = LibraryIndexRouteImport.update({
+  id: '/library/',
+  path: '/library/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoIndexRoute = DemoIndexRouteImport.update({
-  id: '/demo/',
-  path: '/demo/',
+const MusicMusicidRoute = MusicMusicidRouteImport.update({
+  id: '/music/$musicid',
+  path: '/music/$musicid',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoviesMovieIdRoute = MoviesMovieIdRouteImport.update({
@@ -74,34 +77,14 @@ const MoviesMovieIdRoute = MoviesMovieIdRouteImport.update({
   path: '/movies/$movieId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LibraryProfileRoute = LibraryProfileRouteImport.update({
+  id: '/library/profile',
+  path: '/library/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExploreSectionRoute = ExploreSectionRouteImport.update({
   id: '/explore/$section',
   path: '/explore/$section',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoTanchatRoute = DemoTanchatRouteImport.update({
-  id: '/demo/tanchat',
-  path: '/demo/tanchat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoTableRoute = DemoTableRouteImport.update({
-  id: '/demo/table',
-  path: '/demo/table',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStorybookRoute = DemoStorybookRouteImport.update({
-  id: '/demo/storybook',
-  path: '/demo/storybook',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStoreRoute = DemoStoreRouteImport.update({
-  id: '/demo/store',
-  path: '/demo/store',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthVerifyRoute = AuthVerifyRouteImport.update({
@@ -124,66 +107,104 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/auth/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExampleGuitarsIndexRoute = ExampleGuitarsIndexRouteImport.update({
-  id: '/example/guitars/',
+const demoHomeDemoIndexRoute = demoHomeDemoIndexRouteImport.update({
+  id: '/(demo)/home-demo/',
+  path: '/home-demo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const demoDemoIndexRoute = demoDemoIndexRouteImport.update({
+  id: '/(demo)/demo/',
+  path: '/demo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const demoDemoTanstackQueryRoute = demoDemoTanstackQueryRouteImport.update({
+  id: '/(demo)/demo/tanstack-query',
+  path: '/demo/tanstack-query',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const demoDemoTanchatRoute = demoDemoTanchatRouteImport.update({
+  id: '/(demo)/demo/tanchat',
+  path: '/demo/tanchat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const demoDemoTableRoute = demoDemoTableRouteImport.update({
+  id: '/(demo)/demo/table',
+  path: '/demo/table',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const demoDemoStorybookRoute = demoDemoStorybookRouteImport.update({
+  id: '/(demo)/demo/storybook',
+  path: '/demo/storybook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const demoDemoStoreRoute = demoDemoStoreRouteImport.update({
+  id: '/(demo)/demo/store',
+  path: '/demo/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const demoExampleGuitarsIndexRoute = demoExampleGuitarsIndexRouteImport.update({
+  id: '/(demo)/example/guitars/',
   path: '/example/guitars/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExampleGuitarsGuitarIdRoute = ExampleGuitarsGuitarIdRouteImport.update({
-  id: '/example/guitars/$guitarId',
-  path: '/example/guitars/$guitarId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
-  id: '/demo/start/server-funcs',
-  path: '/demo/start/server-funcs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
-  id: '/demo/start/api-request',
+const demoExampleGuitarsGuitarIdRoute =
+  demoExampleGuitarsGuitarIdRouteImport.update({
+    id: '/(demo)/example/guitars/$guitarId',
+    path: '/example/guitars/$guitarId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const demoDemoStartServerFuncsRoute =
+  demoDemoStartServerFuncsRouteImport.update({
+    id: '/(demo)/demo/start/server-funcs',
+    path: '/demo/start/server-funcs',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const demoDemoStartApiRequestRoute = demoDemoStartApiRequestRouteImport.update({
+  id: '/(demo)/demo/start/api-request',
   path: '/demo/start/api-request',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoSentryTestingRoute = DemoSentryTestingRouteImport.update({
-  id: '/demo/sentry/testing',
+const demoDemoSentryTestingRoute = demoDemoSentryTestingRouteImport.update({
+  id: '/(demo)/demo/sentry/testing',
   path: '/demo/sentry/testing',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoApiTqTodosRoute = DemoApiTqTodosRouteImport.update({
-  id: '/demo/api/tq-todos',
+const demoDemoApiTqTodosRoute = demoDemoApiTqTodosRouteImport.update({
+  id: '/(demo)/demo/api/tq-todos',
   path: '/demo/api/tq-todos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoApiTanchatRoute = DemoApiTanchatRouteImport.update({
-  id: '/demo/api/tanchat',
+const demoDemoApiTanchatRoute = demoDemoApiTanchatRouteImport.update({
+  id: '/(demo)/demo/api/tanchat',
   path: '/demo/api/tanchat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
-  id: '/demo/api/names',
+const demoDemoApiNamesRoute = demoDemoApiNamesRouteImport.update({
+  id: '/(demo)/demo/api/names',
   path: '/demo/api/names',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
-  id: '/demo/start/ssr/',
+const demoDemoStartSsrIndexRoute = demoDemoStartSsrIndexRouteImport.update({
+  id: '/(demo)/demo/start/ssr/',
   path: '/demo/start/ssr/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStartSsrSpaModeRoute = DemoStartSsrSpaModeRouteImport.update({
-  id: '/demo/start/ssr/spa-mode',
+const demoDemoStartSsrSpaModeRoute = demoDemoStartSsrSpaModeRouteImport.update({
+  id: '/(demo)/demo/start/ssr/spa-mode',
   path: '/demo/start/ssr/spa-mode',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStartSsrFullSsrRoute = DemoStartSsrFullSsrRouteImport.update({
-  id: '/demo/start/ssr/full-ssr',
+const demoDemoStartSsrFullSsrRoute = demoDemoStartSsrFullSsrRouteImport.update({
+  id: '/(demo)/demo/start/ssr/full-ssr',
   path: '/demo/start/ssr/full-ssr',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
-  id: '/demo/start/ssr/data-only',
-  path: '/demo/start/ssr/data-only',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const demoDemoStartSsrDataOnlyRoute =
+  demoDemoStartSsrDataOnlyRouteImport.update({
+    id: '/(demo)/demo/start/ssr/data-only',
+    path: '/demo/start/ssr/data-only',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -193,28 +214,31 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/verify': typeof AuthVerifyRoute
-  '/demo/store': typeof DemoStoreRoute
-  '/demo/storybook': typeof DemoStorybookRoute
-  '/demo/table': typeof DemoTableRoute
-  '/demo/tanchat': typeof DemoTanchatRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/explore/$section': typeof ExploreSectionRoute
+  '/library/profile': typeof LibraryProfileRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
-  '/demo': typeof DemoIndexRoute
-  '/home-demo': typeof HomeDemoIndexRoute
+  '/music/$musicid': typeof MusicMusicidRoute
+  '/library': typeof LibraryIndexRoute
   '/movies': typeof MoviesIndexRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/api/tanchat': typeof DemoApiTanchatRoute
-  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
-  '/demo/sentry/testing': typeof DemoSentryTestingRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/example/guitars/$guitarId': typeof ExampleGuitarsGuitarIdRoute
-  '/example/guitars': typeof ExampleGuitarsIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
+  '/demo/store': typeof demoDemoStoreRoute
+  '/demo/storybook': typeof demoDemoStorybookRoute
+  '/demo/table': typeof demoDemoTableRoute
+  '/demo/tanchat': typeof demoDemoTanchatRoute
+  '/demo/tanstack-query': typeof demoDemoTanstackQueryRoute
+  '/demo': typeof demoDemoIndexRoute
+  '/home-demo': typeof demoHomeDemoIndexRoute
+  '/demo/api/names': typeof demoDemoApiNamesRoute
+  '/demo/api/tanchat': typeof demoDemoApiTanchatRoute
+  '/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
+  '/demo/sentry/testing': typeof demoDemoSentryTestingRoute
+  '/demo/start/api-request': typeof demoDemoStartApiRequestRoute
+  '/demo/start/server-funcs': typeof demoDemoStartServerFuncsRoute
+  '/example/guitars/$guitarId': typeof demoExampleGuitarsGuitarIdRoute
+  '/example/guitars': typeof demoExampleGuitarsIndexRoute
+  '/demo/start/ssr/data-only': typeof demoDemoStartSsrDataOnlyRoute
+  '/demo/start/ssr/full-ssr': typeof demoDemoStartSsrFullSsrRoute
+  '/demo/start/ssr/spa-mode': typeof demoDemoStartSsrSpaModeRoute
+  '/demo/start/ssr': typeof demoDemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -224,28 +248,31 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/verify': typeof AuthVerifyRoute
-  '/demo/store': typeof DemoStoreRoute
-  '/demo/storybook': typeof DemoStorybookRoute
-  '/demo/table': typeof DemoTableRoute
-  '/demo/tanchat': typeof DemoTanchatRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/explore/$section': typeof ExploreSectionRoute
+  '/library/profile': typeof LibraryProfileRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
-  '/demo': typeof DemoIndexRoute
-  '/home-demo': typeof HomeDemoIndexRoute
+  '/music/$musicid': typeof MusicMusicidRoute
+  '/library': typeof LibraryIndexRoute
   '/movies': typeof MoviesIndexRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/api/tanchat': typeof DemoApiTanchatRoute
-  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
-  '/demo/sentry/testing': typeof DemoSentryTestingRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/example/guitars/$guitarId': typeof ExampleGuitarsGuitarIdRoute
-  '/example/guitars': typeof ExampleGuitarsIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
+  '/demo/store': typeof demoDemoStoreRoute
+  '/demo/storybook': typeof demoDemoStorybookRoute
+  '/demo/table': typeof demoDemoTableRoute
+  '/demo/tanchat': typeof demoDemoTanchatRoute
+  '/demo/tanstack-query': typeof demoDemoTanstackQueryRoute
+  '/demo': typeof demoDemoIndexRoute
+  '/home-demo': typeof demoHomeDemoIndexRoute
+  '/demo/api/names': typeof demoDemoApiNamesRoute
+  '/demo/api/tanchat': typeof demoDemoApiTanchatRoute
+  '/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
+  '/demo/sentry/testing': typeof demoDemoSentryTestingRoute
+  '/demo/start/api-request': typeof demoDemoStartApiRequestRoute
+  '/demo/start/server-funcs': typeof demoDemoStartServerFuncsRoute
+  '/example/guitars/$guitarId': typeof demoExampleGuitarsGuitarIdRoute
+  '/example/guitars': typeof demoExampleGuitarsIndexRoute
+  '/demo/start/ssr/data-only': typeof demoDemoStartSsrDataOnlyRoute
+  '/demo/start/ssr/full-ssr': typeof demoDemoStartSsrFullSsrRoute
+  '/demo/start/ssr/spa-mode': typeof demoDemoStartSsrSpaModeRoute
+  '/demo/start/ssr': typeof demoDemoStartSsrIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -256,28 +283,31 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/verify': typeof AuthVerifyRoute
-  '/demo/store': typeof DemoStoreRoute
-  '/demo/storybook': typeof DemoStorybookRoute
-  '/demo/table': typeof DemoTableRoute
-  '/demo/tanchat': typeof DemoTanchatRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/explore/$section': typeof ExploreSectionRoute
+  '/library/profile': typeof LibraryProfileRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
-  '/demo/': typeof DemoIndexRoute
-  '/home-demo/': typeof HomeDemoIndexRoute
+  '/music/$musicid': typeof MusicMusicidRoute
+  '/library/': typeof LibraryIndexRoute
   '/movies/': typeof MoviesIndexRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/api/tanchat': typeof DemoApiTanchatRoute
-  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
-  '/demo/sentry/testing': typeof DemoSentryTestingRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/example/guitars/$guitarId': typeof ExampleGuitarsGuitarIdRoute
-  '/example/guitars/': typeof ExampleGuitarsIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
+  '/(demo)/demo/store': typeof demoDemoStoreRoute
+  '/(demo)/demo/storybook': typeof demoDemoStorybookRoute
+  '/(demo)/demo/table': typeof demoDemoTableRoute
+  '/(demo)/demo/tanchat': typeof demoDemoTanchatRoute
+  '/(demo)/demo/tanstack-query': typeof demoDemoTanstackQueryRoute
+  '/(demo)/demo/': typeof demoDemoIndexRoute
+  '/(demo)/home-demo/': typeof demoHomeDemoIndexRoute
+  '/(demo)/demo/api/names': typeof demoDemoApiNamesRoute
+  '/(demo)/demo/api/tanchat': typeof demoDemoApiTanchatRoute
+  '/(demo)/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
+  '/(demo)/demo/sentry/testing': typeof demoDemoSentryTestingRoute
+  '/(demo)/demo/start/api-request': typeof demoDemoStartApiRequestRoute
+  '/(demo)/demo/start/server-funcs': typeof demoDemoStartServerFuncsRoute
+  '/(demo)/example/guitars/$guitarId': typeof demoExampleGuitarsGuitarIdRoute
+  '/(demo)/example/guitars/': typeof demoExampleGuitarsIndexRoute
+  '/(demo)/demo/start/ssr/data-only': typeof demoDemoStartSsrDataOnlyRoute
+  '/(demo)/demo/start/ssr/full-ssr': typeof demoDemoStartSsrFullSsrRoute
+  '/(demo)/demo/start/ssr/spa-mode': typeof demoDemoStartSsrSpaModeRoute
+  '/(demo)/demo/start/ssr/': typeof demoDemoStartSsrIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -289,16 +319,19 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/auth/verify'
+    | '/explore/$section'
+    | '/library/profile'
+    | '/movies/$movieId'
+    | '/music/$musicid'
+    | '/library'
+    | '/movies'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
     | '/demo/tanchat'
     | '/demo/tanstack-query'
-    | '/explore/$section'
-    | '/movies/$movieId'
     | '/demo'
     | '/home-demo'
-    | '/movies'
     | '/demo/api/names'
     | '/demo/api/tanchat'
     | '/demo/api/tq-todos'
@@ -320,16 +353,19 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/auth/verify'
+    | '/explore/$section'
+    | '/library/profile'
+    | '/movies/$movieId'
+    | '/music/$musicid'
+    | '/library'
+    | '/movies'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
     | '/demo/tanchat'
     | '/demo/tanstack-query'
-    | '/explore/$section'
-    | '/movies/$movieId'
     | '/demo'
     | '/home-demo'
-    | '/movies'
     | '/demo/api/names'
     | '/demo/api/tanchat'
     | '/demo/api/tq-todos'
@@ -351,28 +387,31 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/auth/verify'
-    | '/demo/store'
-    | '/demo/storybook'
-    | '/demo/table'
-    | '/demo/tanchat'
-    | '/demo/tanstack-query'
     | '/explore/$section'
+    | '/library/profile'
     | '/movies/$movieId'
-    | '/demo/'
-    | '/home-demo/'
+    | '/music/$musicid'
+    | '/library/'
     | '/movies/'
-    | '/demo/api/names'
-    | '/demo/api/tanchat'
-    | '/demo/api/tq-todos'
-    | '/demo/sentry/testing'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
-    | '/example/guitars/$guitarId'
-    | '/example/guitars/'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr/'
+    | '/(demo)/demo/store'
+    | '/(demo)/demo/storybook'
+    | '/(demo)/demo/table'
+    | '/(demo)/demo/tanchat'
+    | '/(demo)/demo/tanstack-query'
+    | '/(demo)/demo/'
+    | '/(demo)/home-demo/'
+    | '/(demo)/demo/api/names'
+    | '/(demo)/demo/api/tanchat'
+    | '/(demo)/demo/api/tq-todos'
+    | '/(demo)/demo/sentry/testing'
+    | '/(demo)/demo/start/api-request'
+    | '/(demo)/demo/start/server-funcs'
+    | '/(demo)/example/guitars/$guitarId'
+    | '/(demo)/example/guitars/'
+    | '/(demo)/demo/start/ssr/data-only'
+    | '/(demo)/demo/start/ssr/full-ssr'
+    | '/(demo)/demo/start/ssr/spa-mode'
+    | '/(demo)/demo/start/ssr/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -383,28 +422,31 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
   AuthVerifyRoute: typeof AuthVerifyRoute
-  DemoStoreRoute: typeof DemoStoreRoute
-  DemoStorybookRoute: typeof DemoStorybookRoute
-  DemoTableRoute: typeof DemoTableRoute
-  DemoTanchatRoute: typeof DemoTanchatRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   ExploreSectionRoute: typeof ExploreSectionRoute
+  LibraryProfileRoute: typeof LibraryProfileRoute
   MoviesMovieIdRoute: typeof MoviesMovieIdRoute
-  DemoIndexRoute: typeof DemoIndexRoute
-  HomeDemoIndexRoute: typeof HomeDemoIndexRoute
+  MusicMusicidRoute: typeof MusicMusicidRoute
+  LibraryIndexRoute: typeof LibraryIndexRoute
   MoviesIndexRoute: typeof MoviesIndexRoute
-  DemoApiNamesRoute: typeof DemoApiNamesRoute
-  DemoApiTanchatRoute: typeof DemoApiTanchatRoute
-  DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
-  DemoSentryTestingRoute: typeof DemoSentryTestingRoute
-  DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
-  DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
-  ExampleGuitarsGuitarIdRoute: typeof ExampleGuitarsGuitarIdRoute
-  ExampleGuitarsIndexRoute: typeof ExampleGuitarsIndexRoute
-  DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
-  DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
-  DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
-  DemoStartSsrIndexRoute: typeof DemoStartSsrIndexRoute
+  demoDemoStoreRoute: typeof demoDemoStoreRoute
+  demoDemoStorybookRoute: typeof demoDemoStorybookRoute
+  demoDemoTableRoute: typeof demoDemoTableRoute
+  demoDemoTanchatRoute: typeof demoDemoTanchatRoute
+  demoDemoTanstackQueryRoute: typeof demoDemoTanstackQueryRoute
+  demoDemoIndexRoute: typeof demoDemoIndexRoute
+  demoHomeDemoIndexRoute: typeof demoHomeDemoIndexRoute
+  demoDemoApiNamesRoute: typeof demoDemoApiNamesRoute
+  demoDemoApiTanchatRoute: typeof demoDemoApiTanchatRoute
+  demoDemoApiTqTodosRoute: typeof demoDemoApiTqTodosRoute
+  demoDemoSentryTestingRoute: typeof demoDemoSentryTestingRoute
+  demoDemoStartApiRequestRoute: typeof demoDemoStartApiRequestRoute
+  demoDemoStartServerFuncsRoute: typeof demoDemoStartServerFuncsRoute
+  demoExampleGuitarsGuitarIdRoute: typeof demoExampleGuitarsGuitarIdRoute
+  demoExampleGuitarsIndexRoute: typeof demoExampleGuitarsIndexRoute
+  demoDemoStartSsrDataOnlyRoute: typeof demoDemoStartSsrDataOnlyRoute
+  demoDemoStartSsrFullSsrRoute: typeof demoDemoStartSsrFullSsrRoute
+  demoDemoStartSsrSpaModeRoute: typeof demoDemoStartSsrSpaModeRoute
+  demoDemoStartSsrIndexRoute: typeof demoDemoStartSsrIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -437,18 +479,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoviesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home-demo/': {
-      id: '/home-demo/'
-      path: '/home-demo'
-      fullPath: '/home-demo'
-      preLoaderRoute: typeof HomeDemoIndexRouteImport
+    '/library/': {
+      id: '/library/'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/': {
-      id: '/demo/'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof DemoIndexRouteImport
+    '/music/$musicid': {
+      id: '/music/$musicid'
+      path: '/music/$musicid'
+      fullPath: '/music/$musicid'
+      preLoaderRoute: typeof MusicMusicidRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/movies/$movieId': {
@@ -458,46 +500,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoviesMovieIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/library/profile': {
+      id: '/library/profile'
+      path: '/library/profile'
+      fullPath: '/library/profile'
+      preLoaderRoute: typeof LibraryProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/explore/$section': {
       id: '/explore/$section'
       path: '/explore/$section'
       fullPath: '/explore/$section'
       preLoaderRoute: typeof ExploreSectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/tanchat': {
-      id: '/demo/tanchat'
-      path: '/demo/tanchat'
-      fullPath: '/demo/tanchat'
-      preLoaderRoute: typeof DemoTanchatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/table': {
-      id: '/demo/table'
-      path: '/demo/table'
-      fullPath: '/demo/table'
-      preLoaderRoute: typeof DemoTableRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/storybook': {
-      id: '/demo/storybook'
-      path: '/demo/storybook'
-      fullPath: '/demo/storybook'
-      preLoaderRoute: typeof DemoStorybookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/store': {
-      id: '/demo/store'
-      path: '/demo/store'
-      fullPath: '/demo/store'
-      preLoaderRoute: typeof DemoStoreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/verify': {
@@ -528,88 +542,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/example/guitars/': {
-      id: '/example/guitars/'
+    '/(demo)/home-demo/': {
+      id: '/(demo)/home-demo/'
+      path: '/home-demo'
+      fullPath: '/home-demo'
+      preLoaderRoute: typeof demoHomeDemoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(demo)/demo/': {
+      id: '/(demo)/demo/'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof demoDemoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(demo)/demo/tanstack-query': {
+      id: '/(demo)/demo/tanstack-query'
+      path: '/demo/tanstack-query'
+      fullPath: '/demo/tanstack-query'
+      preLoaderRoute: typeof demoDemoTanstackQueryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(demo)/demo/tanchat': {
+      id: '/(demo)/demo/tanchat'
+      path: '/demo/tanchat'
+      fullPath: '/demo/tanchat'
+      preLoaderRoute: typeof demoDemoTanchatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(demo)/demo/table': {
+      id: '/(demo)/demo/table'
+      path: '/demo/table'
+      fullPath: '/demo/table'
+      preLoaderRoute: typeof demoDemoTableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(demo)/demo/storybook': {
+      id: '/(demo)/demo/storybook'
+      path: '/demo/storybook'
+      fullPath: '/demo/storybook'
+      preLoaderRoute: typeof demoDemoStorybookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(demo)/demo/store': {
+      id: '/(demo)/demo/store'
+      path: '/demo/store'
+      fullPath: '/demo/store'
+      preLoaderRoute: typeof demoDemoStoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(demo)/example/guitars/': {
+      id: '/(demo)/example/guitars/'
       path: '/example/guitars'
       fullPath: '/example/guitars'
-      preLoaderRoute: typeof ExampleGuitarsIndexRouteImport
+      preLoaderRoute: typeof demoExampleGuitarsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/example/guitars/$guitarId': {
-      id: '/example/guitars/$guitarId'
+    '/(demo)/example/guitars/$guitarId': {
+      id: '/(demo)/example/guitars/$guitarId'
       path: '/example/guitars/$guitarId'
       fullPath: '/example/guitars/$guitarId'
-      preLoaderRoute: typeof ExampleGuitarsGuitarIdRouteImport
+      preLoaderRoute: typeof demoExampleGuitarsGuitarIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/server-funcs': {
-      id: '/demo/start/server-funcs'
+    '/(demo)/demo/start/server-funcs': {
+      id: '/(demo)/demo/start/server-funcs'
       path: '/demo/start/server-funcs'
       fullPath: '/demo/start/server-funcs'
-      preLoaderRoute: typeof DemoStartServerFuncsRouteImport
+      preLoaderRoute: typeof demoDemoStartServerFuncsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/api-request': {
-      id: '/demo/start/api-request'
+    '/(demo)/demo/start/api-request': {
+      id: '/(demo)/demo/start/api-request'
       path: '/demo/start/api-request'
       fullPath: '/demo/start/api-request'
-      preLoaderRoute: typeof DemoStartApiRequestRouteImport
+      preLoaderRoute: typeof demoDemoStartApiRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/sentry/testing': {
-      id: '/demo/sentry/testing'
+    '/(demo)/demo/sentry/testing': {
+      id: '/(demo)/demo/sentry/testing'
       path: '/demo/sentry/testing'
       fullPath: '/demo/sentry/testing'
-      preLoaderRoute: typeof DemoSentryTestingRouteImport
+      preLoaderRoute: typeof demoDemoSentryTestingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/api/tq-todos': {
-      id: '/demo/api/tq-todos'
+    '/(demo)/demo/api/tq-todos': {
+      id: '/(demo)/demo/api/tq-todos'
       path: '/demo/api/tq-todos'
       fullPath: '/demo/api/tq-todos'
-      preLoaderRoute: typeof DemoApiTqTodosRouteImport
+      preLoaderRoute: typeof demoDemoApiTqTodosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/api/tanchat': {
-      id: '/demo/api/tanchat'
+    '/(demo)/demo/api/tanchat': {
+      id: '/(demo)/demo/api/tanchat'
       path: '/demo/api/tanchat'
       fullPath: '/demo/api/tanchat'
-      preLoaderRoute: typeof DemoApiTanchatRouteImport
+      preLoaderRoute: typeof demoDemoApiTanchatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/api/names': {
-      id: '/demo/api/names'
+    '/(demo)/demo/api/names': {
+      id: '/(demo)/demo/api/names'
       path: '/demo/api/names'
       fullPath: '/demo/api/names'
-      preLoaderRoute: typeof DemoApiNamesRouteImport
+      preLoaderRoute: typeof demoDemoApiNamesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/ssr/': {
-      id: '/demo/start/ssr/'
+    '/(demo)/demo/start/ssr/': {
+      id: '/(demo)/demo/start/ssr/'
       path: '/demo/start/ssr'
       fullPath: '/demo/start/ssr'
-      preLoaderRoute: typeof DemoStartSsrIndexRouteImport
+      preLoaderRoute: typeof demoDemoStartSsrIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/ssr/spa-mode': {
-      id: '/demo/start/ssr/spa-mode'
+    '/(demo)/demo/start/ssr/spa-mode': {
+      id: '/(demo)/demo/start/ssr/spa-mode'
       path: '/demo/start/ssr/spa-mode'
       fullPath: '/demo/start/ssr/spa-mode'
-      preLoaderRoute: typeof DemoStartSsrSpaModeRouteImport
+      preLoaderRoute: typeof demoDemoStartSsrSpaModeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/ssr/full-ssr': {
-      id: '/demo/start/ssr/full-ssr'
+    '/(demo)/demo/start/ssr/full-ssr': {
+      id: '/(demo)/demo/start/ssr/full-ssr'
       path: '/demo/start/ssr/full-ssr'
       fullPath: '/demo/start/ssr/full-ssr'
-      preLoaderRoute: typeof DemoStartSsrFullSsrRouteImport
+      preLoaderRoute: typeof demoDemoStartSsrFullSsrRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/ssr/data-only': {
-      id: '/demo/start/ssr/data-only'
+    '/(demo)/demo/start/ssr/data-only': {
+      id: '/(demo)/demo/start/ssr/data-only'
       path: '/demo/start/ssr/data-only'
       fullPath: '/demo/start/ssr/data-only'
-      preLoaderRoute: typeof DemoStartSsrDataOnlyRouteImport
+      preLoaderRoute: typeof demoDemoStartSsrDataOnlyRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -623,28 +686,31 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
   AuthVerifyRoute: AuthVerifyRoute,
-  DemoStoreRoute: DemoStoreRoute,
-  DemoStorybookRoute: DemoStorybookRoute,
-  DemoTableRoute: DemoTableRoute,
-  DemoTanchatRoute: DemoTanchatRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   ExploreSectionRoute: ExploreSectionRoute,
+  LibraryProfileRoute: LibraryProfileRoute,
   MoviesMovieIdRoute: MoviesMovieIdRoute,
-  DemoIndexRoute: DemoIndexRoute,
-  HomeDemoIndexRoute: HomeDemoIndexRoute,
+  MusicMusicidRoute: MusicMusicidRoute,
+  LibraryIndexRoute: LibraryIndexRoute,
   MoviesIndexRoute: MoviesIndexRoute,
-  DemoApiNamesRoute: DemoApiNamesRoute,
-  DemoApiTanchatRoute: DemoApiTanchatRoute,
-  DemoApiTqTodosRoute: DemoApiTqTodosRoute,
-  DemoSentryTestingRoute: DemoSentryTestingRoute,
-  DemoStartApiRequestRoute: DemoStartApiRequestRoute,
-  DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
-  ExampleGuitarsGuitarIdRoute: ExampleGuitarsGuitarIdRoute,
-  ExampleGuitarsIndexRoute: ExampleGuitarsIndexRoute,
-  DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
-  DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
-  DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,
-  DemoStartSsrIndexRoute: DemoStartSsrIndexRoute,
+  demoDemoStoreRoute: demoDemoStoreRoute,
+  demoDemoStorybookRoute: demoDemoStorybookRoute,
+  demoDemoTableRoute: demoDemoTableRoute,
+  demoDemoTanchatRoute: demoDemoTanchatRoute,
+  demoDemoTanstackQueryRoute: demoDemoTanstackQueryRoute,
+  demoDemoIndexRoute: demoDemoIndexRoute,
+  demoHomeDemoIndexRoute: demoHomeDemoIndexRoute,
+  demoDemoApiNamesRoute: demoDemoApiNamesRoute,
+  demoDemoApiTanchatRoute: demoDemoApiTanchatRoute,
+  demoDemoApiTqTodosRoute: demoDemoApiTqTodosRoute,
+  demoDemoSentryTestingRoute: demoDemoSentryTestingRoute,
+  demoDemoStartApiRequestRoute: demoDemoStartApiRequestRoute,
+  demoDemoStartServerFuncsRoute: demoDemoStartServerFuncsRoute,
+  demoExampleGuitarsGuitarIdRoute: demoExampleGuitarsGuitarIdRoute,
+  demoExampleGuitarsIndexRoute: demoExampleGuitarsIndexRoute,
+  demoDemoStartSsrDataOnlyRoute: demoDemoStartSsrDataOnlyRoute,
+  demoDemoStartSsrFullSsrRoute: demoDemoStartSsrFullSsrRoute,
+  demoDemoStartSsrSpaModeRoute: demoDemoStartSsrSpaModeRoute,
+  demoDemoStartSsrIndexRoute: demoDemoStartSsrIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
