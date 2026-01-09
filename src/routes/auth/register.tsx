@@ -52,20 +52,7 @@ function RouteComponent() {
             onChange: registerFormSchema,
             onBlur: registerFormSchema,
         },
-        onSubmit: async ({value, formApi}) => {
-            // TODO: proper validation need to set errors
-            if (!value.agreeToTerms) {
-                formApi.setFieldMeta("agreeToTerms", (m) => ({
-                    ...m,
-                    errorMap: {
-                        ...m.errorMap,
-                        submit:
-                            "Please agree to the terms and conditions" as unknown as typeof m.errorMap,
-                    },
-                }));
-                return;
-            }
-
+        onSubmit: async ({value}) => {
             try {
                 const response = await mutateAsync({
                     data: {
@@ -131,7 +118,6 @@ function RouteComponent() {
                                         className={`pl-12 h-12 bg-white/5 border ${
                                             isInvalid ? "border-red-500" : "border-white/10"
                                         } text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
-                                        required
                                         aria-invalid={isInvalid}
                                     />
                                 </div>
@@ -294,7 +280,6 @@ function RouteComponent() {
                     {(field) => {
                         const errorMessage = field.state.meta.errors?.[0];
                         const isInvalid = !!errorMessage && field.state.meta.isTouched;
-
                         return (
                             <div className="flex flex-col">
                                 <div className="flex items-center">
@@ -319,6 +304,7 @@ function RouteComponent() {
                                 </div>
                                 {isInvalid && (
                                     <p className="text-xs text-red-400 mt-1">
+                                        
                                         {errorMessage.message}
                                     </p>
                                 )}
@@ -329,14 +315,13 @@ function RouteComponent() {
                 {/* Error message */}
                 <form.Subscribe selector={(s) => s.errors}>
                     {(errors) =>
-                        (errors?.agreeToTerms || errors?.form) && (
+                        (errors.length > 0) && (
                             <motion.div
                                 initial={{opacity: 0, y: -10}}
                                 animate={{opacity: 1, y: 0}}
                                 className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm"
                             >
-                                {errors?.agreeToTerms?.submit ||
-                                    "Please fix errors before submitting"}
+                                { "Please fix errors before submitting"}
                             </motion.div>
                         )
                     }
@@ -347,7 +332,7 @@ function RouteComponent() {
                     {(isSubmitting) => (
                         <Button
                             type="submit"
-                            disabled={isSubmitting}
+                            disabled={!form.state.values.agreeToTerms ||isSubmitting}
                             className="w-full h-12 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 group"
                         >
                             {isSubmitting ? (

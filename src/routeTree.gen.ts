@@ -16,6 +16,7 @@ import { Route as MoviesIndexRouteImport } from './routes/movies/index'
 import { Route as HomeDemoIndexRouteImport } from './routes/home-demo/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as MoviesMovieIdRouteImport } from './routes/movies/$movieId'
+import { Route as ExploreSectionRouteImport } from './routes/explore/$section'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTanchatRouteImport } from './routes/demo/tanchat'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
@@ -71,6 +72,11 @@ const DemoIndexRoute = DemoIndexRouteImport.update({
 const MoviesMovieIdRoute = MoviesMovieIdRouteImport.update({
   id: '/movies/$movieId',
   path: '/movies/$movieId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreSectionRoute = ExploreSectionRouteImport.update({
+  id: '/explore/$section',
+  path: '/explore/$section',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
@@ -192,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/demo/table': typeof DemoTableRoute
   '/demo/tanchat': typeof DemoTanchatRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/explore/$section': typeof ExploreSectionRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/demo': typeof DemoIndexRoute
   '/home-demo': typeof HomeDemoIndexRoute
@@ -222,6 +229,7 @@ export interface FileRoutesByTo {
   '/demo/table': typeof DemoTableRoute
   '/demo/tanchat': typeof DemoTanchatRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/explore/$section': typeof ExploreSectionRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/demo': typeof DemoIndexRoute
   '/home-demo': typeof HomeDemoIndexRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/demo/table': typeof DemoTableRoute
   '/demo/tanchat': typeof DemoTanchatRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/explore/$section': typeof ExploreSectionRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/demo/': typeof DemoIndexRoute
   '/home-demo/': typeof HomeDemoIndexRoute
@@ -285,6 +294,7 @@ export interface FileRouteTypes {
     | '/demo/table'
     | '/demo/tanchat'
     | '/demo/tanstack-query'
+    | '/explore/$section'
     | '/movies/$movieId'
     | '/demo'
     | '/home-demo'
@@ -315,6 +325,7 @@ export interface FileRouteTypes {
     | '/demo/table'
     | '/demo/tanchat'
     | '/demo/tanstack-query'
+    | '/explore/$section'
     | '/movies/$movieId'
     | '/demo'
     | '/home-demo'
@@ -345,6 +356,7 @@ export interface FileRouteTypes {
     | '/demo/table'
     | '/demo/tanchat'
     | '/demo/tanstack-query'
+    | '/explore/$section'
     | '/movies/$movieId'
     | '/demo/'
     | '/home-demo/'
@@ -376,6 +388,7 @@ export interface RootRouteChildren {
   DemoTableRoute: typeof DemoTableRoute
   DemoTanchatRoute: typeof DemoTanchatRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  ExploreSectionRoute: typeof ExploreSectionRoute
   MoviesMovieIdRoute: typeof MoviesMovieIdRoute
   DemoIndexRoute: typeof DemoIndexRoute
   HomeDemoIndexRoute: typeof HomeDemoIndexRoute
@@ -443,6 +456,13 @@ declare module '@tanstack/react-router' {
       path: '/movies/$movieId'
       fullPath: '/movies/$movieId'
       preLoaderRoute: typeof MoviesMovieIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore/$section': {
+      id: '/explore/$section'
+      path: '/explore/$section'
+      fullPath: '/explore/$section'
+      preLoaderRoute: typeof ExploreSectionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/tanstack-query': {
@@ -608,6 +628,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoTableRoute: DemoTableRoute,
   DemoTanchatRoute: DemoTanchatRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  ExploreSectionRoute: ExploreSectionRoute,
   MoviesMovieIdRoute: MoviesMovieIdRoute,
   DemoIndexRoute: DemoIndexRoute,
   HomeDemoIndexRoute: HomeDemoIndexRoute,

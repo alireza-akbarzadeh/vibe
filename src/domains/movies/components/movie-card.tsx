@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Info, Play, Plus, Star } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -22,23 +22,10 @@ export function MovieCard({
 	const navigate = useNavigate();
 
 	const [isHovered, setIsHovered] = useState(false);
-	const x = useMotionValue(0);
-	const y = useMotionValue(0);
 
-	const rotateX = useTransform(y, [-100, 100], [10, -10]);
-	const rotateY = useTransform(x, [-100, 100], [-10, 10]);
 
-	const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-		const rect = e.currentTarget.getBoundingClientRect();
-		const centerX = rect.left + rect.width / 2;
-		const centerY = rect.top + rect.height / 2;
-		x.set(e.clientX - centerX);
-		y.set(e.clientY - centerY);
-	};
 
 	const handleMouseLeave = () => {
-		x.set(0);
-		y.set(0);
 		setIsHovered(false);
 	};
 
@@ -58,15 +45,11 @@ export function MovieCard({
 			transition={{ delay: index * 0.05, duration: 0.5 }}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={handleMouseLeave}
-			onMouseMove={handleMouseMove}
 			className={`relative shrink-0 ${sizeClasses[variant]} group cursor-pointer`}
 			style={{ perspective: 1000 }}
 		>
 			<motion.div
-				style={{
-					rotateX: rotateX,
-					rotateY: rotateY,
-				}}
+
 				animate={{
 					scale: isHovered ? 1.05 : 1,
 					z: isHovered ? 50 : 0,
@@ -196,11 +179,7 @@ export function MovieCard({
 
 				{/* 3D lighting effect */}
 				<motion.div
-					animate={{
-						opacity: isHovered ? 0.3 : 0,
-						x: x.get() * 0.1,
-						y: y.get() * 0.1,
-					}}
+					animate={{ opacity: isHovered ? 0.3 : 0 }}
 					className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent pointer-events-none"
 				/>
 			</motion.div>

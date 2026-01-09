@@ -34,14 +34,14 @@ export function TrailerPlayer({ trailerUrl }: TrailerPlayerProps) {
 								<div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 								<Button
 									onClick={() => setIsPlaying(true)}
-									className="absolute inset-0 flex items-center justify-center group"
+									className="absolute inset-1/2 w-20 h-20 rounded-full flex items-center justify-center group"
 								>
 									<motion.div
 										whileHover={{ scale: 1.1 }}
 										whileTap={{ scale: 0.9 }}
-										className="w-24 h-24 rounded-full bg-linear-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-2xl shadow-purple-500/50 group-hover:shadow-purple-500/70 transition-shadow"
+										className="w-16 h-16 rounded-full bg-linear-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-2xl shadow-purple-500/50 group-hover:shadow-purple-500/70 transition-shadow"
 									>
-										<Play className="w-10 h-10 text-white fill-current ml-1" />
+										<Play className="w-24 h-24 text-white fill-current ml-1" />
 									</motion.div>
 								</Button>
 							</>
