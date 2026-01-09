@@ -1,4 +1,7 @@
-import { MovieTypes } from "@/types/app";
+import { useEffect, useRef, useState } from "react";
+import { VideoPlayer } from "@/components/video-payler/video-player";
+import { VIDEOS } from "@/constants/media";
+import type { MovieTypes } from "@/types/app";
 import {
 	CastCarousel,
 	ImagesGallery,
@@ -11,6 +14,9 @@ import {
 } from "./components";
 
 export default function MovieDetails() {
+	const [watchMode, setWatchMovie] = useState<"movie" | "trailer">("trailer")
+	const modeRef = useRef<HTMLDivElement>(null)
+
 	const movieData: MovieTypes = {
 		id: 1,
 		title: "Dune: Part Two",
@@ -39,10 +45,24 @@ export default function MovieDetails() {
 		popularityChange: 2,
 	};
 
+	const videoData = { src: VIDEOS.demo, videoPoster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=675&fit=crop", year: "2014", totalTime: "2:49:00", videoName: "Interstellar" }
+
+	const onModeChange = (mode: "trailer" | "movie") => {
+		modeRef.current?.scrollIntoView()
+		setWatchMovie(mode)
+	}
 	return (
 		<div className="bg-[#0a0a0a] min-h-screen">
-			<MovieHero movie={movieData} />
-			<TrailerPlayer trailerUrl={movieData.trailerUrl} />
+			<MovieHero onClick={onModeChange} movie={movieData} />
+			<div ref={modeRef}>
+				{watchMode === "trailer" && (
+					<TrailerPlayer trailerUrl={movieData.trailerUrl} />
+				)}
+				{watchMode === "movie" && (
+					<VideoPlayer {...videoData} />
+				)}
+			</div>
+
 			<StatsBar
 				rating={movieData.rating}
 				votes={movieData.votes}

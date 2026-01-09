@@ -13,7 +13,6 @@ import { socialProviders } from "@/config/socials";
 import { Http } from "@/constants/constants.ts";
 import AuthLayout from "@/domains/auth/auth-layout";
 import { usePostAuthLogin } from "@/services/endpoints/authentication/authentication.ts";
-import { ModelsApiErrorResponse } from "@/services/models";
 
 const loginFormSchema = z.object({
 	email: z.email("Invalid email address"),
@@ -101,9 +100,8 @@ function LoginPage() {
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
-										className={`pl-12 h-12 bg-white/5 border ${
-											isInvalid ? "border-red-500" : "border-white/10"
-										} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+										className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
+											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 									/>
 								</div>
 								{isInvalid && (
@@ -151,9 +149,8 @@ function LoginPage() {
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
-										className={`pl-12 h-12 bg-white/5 border ${
-											isInvalid ? "border-red-500" : "border-white/10"
-										} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+										className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
+											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 									/>
 								</div>
 								{isInvalid && (

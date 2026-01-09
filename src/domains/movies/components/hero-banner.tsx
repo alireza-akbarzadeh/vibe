@@ -201,7 +201,8 @@ export function HeroBanner() {
 			{/* Progress indicators */}
 			<div className="absolute bottom-8 right-8 z-20 flex gap-2">
 				{featured.map((movie, index) => (
-					<button
+					<Button
+						variant="text"
 						key={movie.movieId}
 						onClick={() => setCurrentIndex(index)}
 						className="relative group"
@@ -216,7 +217,7 @@ export function HeroBanner() {
 								className="h-full bg-white rounded-full"
 							/>
 						</div>
-					</button>
+					</Button>
 				))}
 			</div>
 

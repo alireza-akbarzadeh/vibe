@@ -18,9 +18,10 @@ import type { MovieTypes } from "@/types/app";
 
 interface MovieHeroProps {
 	movie: MovieTypes;
+	onClick: (type: "movie" | "trailer") => void
 }
 
-export function MovieHero({ movie }: MovieHeroProps) {
+export function MovieHero({ movie, onClick }: MovieHeroProps) {
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
 	useEffect(() => {
@@ -167,7 +168,7 @@ export function MovieHero({ movie }: MovieHeroProps) {
 								>
 									<Badge
 										variant="outline"
-										className="bg-white/3 backdrop-blur-md border-white/20 text-gray-300 hover:bg-white/[0.08] hover:border-purple-500/50 transition-all px-4 py-1.5 cursor-pointer"
+										className="bg-white/3 backdrop-blur-md border-white/20 text-gray-300 hover:bg-white/8 hover:border-purple-500/50 transition-all px-4 py-1.5 cursor-pointer"
 									>
 										{genre}
 									</Badge>
@@ -199,6 +200,15 @@ export function MovieHero({ movie }: MovieHeroProps) {
 						{/* Action Buttons */}
 						<div className="flex flex-wrap gap-4 pt-4">
 							<Button
+								onClick={() => onClick("movie")}
+								size="lg"
+								className="rounded-full px-8 flex items-center bg-white text-black hover:bg-gray-200  font-bold text-lg group transition-all shadow-2xl shadow-white/20"
+							>
+								<Play className="w-5 h-5 mr-2 fill-black group-hover:scale-110 transition-transform" />
+								Play Now
+							</Button>
+							<Button
+								onClick={() => onClick("trailer")}
 								size="lg"
 								className="group bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold px-8 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30"
 							>

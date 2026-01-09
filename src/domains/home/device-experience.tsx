@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Laptop, Smartphone, Tablet, Tv, Wifi } from "lucide-react";
+import { MobileDevice } from "@/components/devices/mobile";
+import { VideoProgressbar } from "@/components/video-payler/video-progressbar";
 
 const devices = [
 	{ icon: Smartphone, label: "Mobile", description: "iOS & Android" },
@@ -101,19 +103,8 @@ export default function DeviceExperience() {
 											</p>
 
 											{/* Progress bar */}
-											<div className="relative h-1 bg-white/20 rounded-full overflow-hidden mb-3">
-												<motion.div
-													initial={{ width: "0%" }}
-													whileInView={{ width: "65%" }}
-													viewport={{ once: true }}
-													transition={{
-														delay: 0.5,
-														duration: 1.5,
-														ease: "easeOut",
-													}}
-													className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full"
-												/>
-											</div>
+											<VideoProgressbar progress="65%" />
+
 											<div className="flex justify-between text-white/50 text-xs">
 												<span>1:48:32</span>
 												<span>2:49:00</span>
@@ -136,22 +127,7 @@ export default function DeviceExperience() {
 							transition={{ delay: 0.4, duration: 0.6 }}
 							className="absolute -right-4 md:right-10 top-1/4 w-24 md:w-32"
 						>
-							<div className="bg-linear-to-br from-gray-800 to-gray-900 rounded-3xl p-1 shadow-xl">
-								<div className="aspect-9/19 rounded-2xl overflow-hidden bg-black">
-									<img
-										src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=400&fit=crop"
-										alt="Mobile view"
-										className="w-full h-full object-cover"
-									/>
-									<div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent">
-										<div className="absolute bottom-2 left-2 right-2">
-											<div className="h-1 w-full bg-white/20 rounded-full">
-												<div className="h-full w-1/3 bg-green-400 rounded-full" />
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							<MobileDevice />
 						</motion.div>
 					</motion.div>
 				</div>
