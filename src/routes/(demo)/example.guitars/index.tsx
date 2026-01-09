@@ -1,5 +1,5 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import guitars from '../../data/example-guitars'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import guitars from '@/data/example-guitars'
 
 export const Route = createFileRoute('/(demo)/example/guitars/')({
   component: GuitarsIndex,

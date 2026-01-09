@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Discovery } from "@/domains/discovery/discovery.domain";
 
-export const Route = createFileRoute("/discovery")({
+export const Route = createFileRoute("/(home)/discovery")({
 	component: RouteComponent,
 });
 

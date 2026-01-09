@@ -23,7 +23,7 @@ const loginFormSchema = z.object({
 
 export type RegisterFormValues = z.infer<typeof loginFormSchema>;
 
-export const Route = createFileRoute("/auth/login")({
+export const Route = createFileRoute("/(auth)/login")({
 	component: LoginPage,
 });
 
@@ -47,7 +47,7 @@ function LoginPage() {
 			try {
 				const response = await mutateAsync({
 					data: { email: value.email, password: value.password },
-				});
+				})
 				if (response.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
 					toast.success(`${response?.data?.first_name} Welcome back!`);
 					await navigate({ to: "/movies" });
@@ -55,10 +55,10 @@ function LoginPage() {
 			} catch (err) {
 				toast.error("Failed to login. Please check your credentials.", {
 					description: <p>{err}</p>,
-				});
+				})
 			}
 		},
-	});
+	})
 
 	const emailId = useId();
 	const passwordId = useId();
@@ -114,7 +114,7 @@ function LoginPage() {
 									</motion.div>
 								)}
 							</div>
-						);
+						)
 					}}
 				</form.Field>
 
@@ -134,7 +134,7 @@ function LoginPage() {
 										Password
 									</Label>
 									<Link
-										to="/auth/forgot-password"
+										to="/forgot-password"
 										className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
 									>
 										Forgot?
@@ -163,7 +163,7 @@ function LoginPage() {
 									</motion.div>
 								)}
 							</div>
-						);
+						)
 					}}
 				</form.Field>
 
@@ -239,7 +239,7 @@ function LoginPage() {
 				<p className="text-gray-400 text-sm">
 					Don't have an account?{" "}
 					<Link
-						to="/auth/register"
+						to="/register"
 						className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
 					>
 						Create one free
@@ -252,5 +252,5 @@ function LoginPage() {
 				<span>Trusted by 50M+ streamers worldwide</span>
 			</div>
 		</AuthLayout>
-	);
+	)
 }

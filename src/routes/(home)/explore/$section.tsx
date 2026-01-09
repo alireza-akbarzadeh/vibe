@@ -4,7 +4,7 @@ import { SearchHeader } from '@/domains/movies/components';
 import { MovieCard } from '@/domains/movies/components/movie-card';
 import { allMovies } from '@/domains/movies/data';
 
-export const Route = createFileRoute('/explore/$section')({
+export const Route = createFileRoute('/(home)/explore/$section')({
   component: RouteComponent,
   loader: () => allMovies
 })

@@ -131,13 +131,13 @@ export default function Plans() {
 					transition={{ duration: 0.8 }}
 					className="text-center mb-16"
 				>
-					<Badge className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-purple-400 border-purple-500/30 mb-6">
+					<Badge className="bg-linear-to-r from-purple-600/20 to-pink-600/20 text-purple-400 border-purple-500/30 mb-6">
 						Pricing Plans
 					</Badge>
 
 					<h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
 						Choose Your{" "}
-						<span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+						<span className="bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
 							Perfect Plan
 						</span>
 					</h1>
@@ -148,24 +148,24 @@ export default function Plans() {
 					</p>
 
 					{/* Toggle */}
-					<div className="inline-flex items-center gap-4 p-2 rounded-full bg-white/[0.03] backdrop-blur-xl border border-white/10">
+					<div className="inline-flex items-center gap-4 p-2 rounded-full bg-white/3 backdrop-blur-xl border border-white/10">
 						<button
+							type="button"
 							onClick={() => setIsAnnual(false)}
-							className={`px-6 py-2 rounded-full font-medium transition-all ${
-								!isAnnual
-									? "bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-									: "text-gray-400 hover:text-white"
-							}`}
+							className={`px-6 py-2 rounded-full font-medium transition-all ${!isAnnual
+								? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+								: "text-gray-400 hover:text-white"
+								}`}
 						>
 							Monthly
 						</button>
 						<button
+							type="button"
 							onClick={() => setIsAnnual(true)}
-							className={`px-6 py-2 rounded-full font-medium transition-all ${
-								isAnnual
-									? "bg-gradient-to-r from-purple-600 to-pink-600 text-white"
-									: "text-gray-400 hover:text-white"
-							}`}
+							className={`px-6 py-2 rounded-full font-medium transition-all ${isAnnual
+								? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+								: "text-gray-400 hover:text-white"
+								}`}
 						>
 							Annual
 							<Badge className="ml-2 bg-green-500/20 text-green-400 border-green-500/30">
@@ -187,16 +187,15 @@ export default function Plans() {
 						>
 							{plan.popular && (
 								<div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-									<Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 px-4 py-1.5">
+									<Badge className="bg-linear-to-r from-purple-600 to-pink-600 text-white border-0 px-4 py-1.5">
 										Most Popular
 									</Badge>
 								</div>
 							)}
 
 							<Card
-								className={`relative overflow-hidden bg-white/[0.03] backdrop-blur-xl border border-white/10 p-8 h-full transition-all duration-300 hover:bg-white/[0.05] hover:border-white/20 ${
-									plan.popular ? "md:scale-105 border-purple-500/30" : ""
-								}`}
+								className={`relative overflow-hidden bg-white/3 backdrop-blur-xl border border-white/10 p-8 h-full transition-all duration-300 hover:bg-white/5 hover:border-white/20 ${plan.popular ? "md:scale-105 border-purple-500/30" : ""
+									}`}
 							>
 								{/* Background gradient */}
 								<div
@@ -246,11 +245,10 @@ export default function Plans() {
 
 									{/* CTA Button */}
 									<Button
-										className={`w-full mb-8 ${
-											plan.popular
-												? `bg-gradient-to-r ${plan.gradient} hover:opacity-90`
-												: "bg-white/5 hover:bg-white/10 border border-white/20"
-										} text-white font-semibold py-6 rounded-xl transition-all duration-300 group`}
+										className={`w-full mb-8 ${plan.popular
+											? `bg-linear-to-r ${plan.gradient} hover:opacity-90`
+											: "bg-white/5 hover:bg-white/10 border border-white/20"
+											} text-white font-semibold py-6 rounded-xl transition-all duration-300 group`}
 									>
 										{plan.cta}
 										<ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -267,7 +265,7 @@ export default function Plans() {
 												className="flex items-start gap-3"
 											>
 												<div
-													className={`p-1 rounded-full bg-gradient-to-br ${plan.gradient} bg-opacity-20 flex-shrink-0 mt-0.5`}
+													className={`p-1 rounded-full bg-linear-to-br ${plan.gradient} bg-opacity-20 shrink-0 mt-0.5`}
 												>
 													<Check className="w-4 h-4 text-white" />
 												</div>

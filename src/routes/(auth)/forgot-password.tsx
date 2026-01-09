@@ -21,7 +21,7 @@ const forgotPasswordSchema = z.object({
 	email: z.string().email("Please enter a valid email address"),
 });
 
-export const Route = createFileRoute("/auth/forgot-password")({
+export const Route = createFileRoute("/(auth)/forgot-password")({
 	component: ForgotPasswordPage,
 });
 
@@ -43,7 +43,7 @@ function ForgotPasswordPage() {
 			console.log("Reset link sent to:", value.email);
 			setIsSubmitted(true);
 		},
-	});
+	})
 
 	// 3. Success State View
 	if (isSubmitted) {
@@ -71,11 +71,11 @@ function ForgotPasswordPage() {
 						variant="outline"
 						className="w-full h-12 bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-xl transition-all"
 					>
-						<Link to="/auth/login">Return to Login</Link>
+						<Link to="/login">Return to Login</Link>
 					</Button>
 				</div>
 			</AuthLayout>
-		);
+		)
 	}
 
 	// 4. Form View
@@ -119,9 +119,8 @@ function ForgotPasswordPage() {
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
-										className={`pl-12 h-12 bg-white/5 border ${
-											isInvalid ? "border-red-500" : "border-white/10"
-										} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+										className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
+											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 									/>
 								</div>
 								{isInvalid && (
@@ -130,7 +129,7 @@ function ForgotPasswordPage() {
 									</p>
 								)}
 							</div>
-						);
+						)
 					}}
 				</form.Field>
 
@@ -155,7 +154,7 @@ function ForgotPasswordPage() {
 
 				<div className="text-center">
 					<Link
-						to="/auth/login"
+						to="/login"
 						className="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors"
 					>
 						<ArrowLeft className="w-4 h-4" />
@@ -169,5 +168,5 @@ function ForgotPasswordPage() {
 				<span>Secure 256-bit SSL encrypted reset link</span>
 			</div>
 		</AuthLayout>
-	);
+	)
 }

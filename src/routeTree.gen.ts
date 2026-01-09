@@ -9,21 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as DiscoveryRouteImport } from './routes/discovery'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as MoviesIndexRouteImport } from './routes/movies/index'
-import { Route as LibraryIndexRouteImport } from './routes/library/index'
-import { Route as MusicMusicidRouteImport } from './routes/music/$musicid'
-import { Route as MoviesMovieIdRouteImport } from './routes/movies/$movieId'
-import { Route as LibraryProfileRouteImport } from './routes/library/profile'
-import { Route as ExploreSectionRouteImport } from './routes/explore/$section'
-import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
-import { Route as AuthRegisterRouteImport } from './routes/auth/register'
-import { Route as AuthLoginRouteImport } from './routes/auth/login'
-import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
+import { Route as homeIndexRouteImport } from './routes/(home)/index'
+import { Route as homePricingRouteImport } from './routes/(home)/pricing'
+import { Route as homeDownloadRouteImport } from './routes/(home)/download'
+import { Route as homeDiscoveryRouteImport } from './routes/(home)/discovery'
+import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
+import { Route as authRegisterRouteImport } from './routes/(auth)/register'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as homeMusicIndexRouteImport } from './routes/(home)/music/index'
+import { Route as homeMoviesIndexRouteImport } from './routes/(home)/movies/index'
+import { Route as homeLibraryIndexRouteImport } from './routes/(home)/library/index'
 import { Route as demoHomeDemoIndexRouteImport } from './routes/(demo)/home-demo/index'
 import { Route as demoDemoIndexRouteImport } from './routes/(demo)/demo/index'
+import { Route as adminSettingIndexRouteImport } from './routes/(admin)/setting/index'
+import { Route as homeMusicMusicidRouteImport } from './routes/(home)/music/$musicid'
+import { Route as homeMoviesMovieIdRouteImport } from './routes/(home)/movies/$movieId'
+import { Route as homeLibraryProfileRouteImport } from './routes/(home)/library/profile'
+import { Route as homeExploreSectionRouteImport } from './routes/(home)/explore/$section'
+import { Route as homeArtistArtistidRouteImport } from './routes/(home)/artist/$artistid'
 import { Route as demoDemoTanstackQueryRouteImport } from './routes/(demo)/demo/tanstack-query'
 import { Route as demoDemoTanchatRouteImport } from './routes/(demo)/demo/tanchat'
 import { Route as demoDemoTableRouteImport } from './routes/(demo)/demo/table'
@@ -42,69 +46,59 @@ import { Route as demoDemoStartSsrSpaModeRouteImport } from './routes/(demo)/dem
 import { Route as demoDemoStartSsrFullSsrRouteImport } from './routes/(demo)/demo/start.ssr.full-ssr'
 import { Route as demoDemoStartSsrDataOnlyRouteImport } from './routes/(demo)/demo/start.ssr.data-only'
 
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DiscoveryRoute = DiscoveryRouteImport.update({
-  id: '/discovery',
-  path: '/discovery',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const homeIndexRoute = homeIndexRouteImport.update({
+  id: '/(home)/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MoviesIndexRoute = MoviesIndexRouteImport.update({
-  id: '/movies/',
+const homePricingRoute = homePricingRouteImport.update({
+  id: '/(home)/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeDownloadRoute = homeDownloadRouteImport.update({
+  id: '/(home)/download',
+  path: '/download',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeDiscoveryRoute = homeDiscoveryRouteImport.update({
+  id: '/(home)/discovery',
+  path: '/discovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authVerifyRoute = authVerifyRouteImport.update({
+  id: '/(auth)/verify',
+  path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authRegisterRoute = authRegisterRouteImport.update({
+  id: '/(auth)/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
+  id: '/(auth)/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeMusicIndexRoute = homeMusicIndexRouteImport.update({
+  id: '/(home)/music/',
+  path: '/music/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeMoviesIndexRoute = homeMoviesIndexRouteImport.update({
+  id: '/(home)/movies/',
   path: '/movies/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LibraryIndexRoute = LibraryIndexRouteImport.update({
-  id: '/library/',
+const homeLibraryIndexRoute = homeLibraryIndexRouteImport.update({
+  id: '/(home)/library/',
   path: '/library/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MusicMusicidRoute = MusicMusicidRouteImport.update({
-  id: '/music/$musicid',
-  path: '/music/$musicid',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MoviesMovieIdRoute = MoviesMovieIdRouteImport.update({
-  id: '/movies/$movieId',
-  path: '/movies/$movieId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LibraryProfileRoute = LibraryProfileRouteImport.update({
-  id: '/library/profile',
-  path: '/library/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExploreSectionRoute = ExploreSectionRouteImport.update({
-  id: '/explore/$section',
-  path: '/explore/$section',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthVerifyRoute = AuthVerifyRouteImport.update({
-  id: '/auth/verify',
-  path: '/auth/verify',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRegisterRoute = AuthRegisterRouteImport.update({
-  id: '/auth/register',
-  path: '/auth/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
-  id: '/auth/forgot-password',
-  path: '/auth/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const demoHomeDemoIndexRoute = demoHomeDemoIndexRouteImport.update({
@@ -115,6 +109,36 @@ const demoHomeDemoIndexRoute = demoHomeDemoIndexRouteImport.update({
 const demoDemoIndexRoute = demoDemoIndexRouteImport.update({
   id: '/(demo)/demo/',
   path: '/demo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const adminSettingIndexRoute = adminSettingIndexRouteImport.update({
+  id: '/(admin)/setting/',
+  path: '/setting/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeMusicMusicidRoute = homeMusicMusicidRouteImport.update({
+  id: '/(home)/music/$musicid',
+  path: '/music/$musicid',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeMoviesMovieIdRoute = homeMoviesMovieIdRouteImport.update({
+  id: '/(home)/movies/$movieId',
+  path: '/movies/$movieId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeLibraryProfileRoute = homeLibraryProfileRouteImport.update({
+  id: '/(home)/library/profile',
+  path: '/library/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeExploreSectionRoute = homeExploreSectionRouteImport.update({
+  id: '/(home)/explore/$section',
+  path: '/explore/$section',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeArtistArtistidRoute = homeArtistArtistidRouteImport.update({
+  id: '/(home)/artist/$artistid',
+  path: '/artist/$artistid',
   getParentRoute: () => rootRouteImport,
 } as any)
 const demoDemoTanstackQueryRoute = demoDemoTanstackQueryRouteImport.update({
@@ -207,26 +231,30 @@ const demoDemoStartSsrDataOnlyRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/discovery': typeof DiscoveryRoute
-  '/pricing': typeof PricingRoute
-  '/auth/forgot-password': typeof AuthForgotPasswordRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/register': typeof AuthRegisterRoute
-  '/auth/verify': typeof AuthVerifyRoute
-  '/explore/$section': typeof ExploreSectionRoute
-  '/library/profile': typeof LibraryProfileRoute
-  '/movies/$movieId': typeof MoviesMovieIdRoute
-  '/music/$musicid': typeof MusicMusicidRoute
-  '/library': typeof LibraryIndexRoute
-  '/movies': typeof MoviesIndexRoute
+  '/forgot-password': typeof authForgotPasswordRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
+  '/verify': typeof authVerifyRoute
+  '/discovery': typeof homeDiscoveryRoute
+  '/download': typeof homeDownloadRoute
+  '/pricing': typeof homePricingRoute
+  '/': typeof homeIndexRoute
   '/demo/store': typeof demoDemoStoreRoute
   '/demo/storybook': typeof demoDemoStorybookRoute
   '/demo/table': typeof demoDemoTableRoute
   '/demo/tanchat': typeof demoDemoTanchatRoute
   '/demo/tanstack-query': typeof demoDemoTanstackQueryRoute
+  '/artist/$artistid': typeof homeArtistArtistidRoute
+  '/explore/$section': typeof homeExploreSectionRoute
+  '/library/profile': typeof homeLibraryProfileRoute
+  '/movies/$movieId': typeof homeMoviesMovieIdRoute
+  '/music/$musicid': typeof homeMusicMusicidRoute
+  '/setting': typeof adminSettingIndexRoute
   '/demo': typeof demoDemoIndexRoute
   '/home-demo': typeof demoHomeDemoIndexRoute
+  '/library': typeof homeLibraryIndexRoute
+  '/movies': typeof homeMoviesIndexRoute
+  '/music': typeof homeMusicIndexRoute
   '/demo/api/names': typeof demoDemoApiNamesRoute
   '/demo/api/tanchat': typeof demoDemoApiTanchatRoute
   '/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
@@ -241,26 +269,30 @@ export interface FileRoutesByFullPath {
   '/demo/start/ssr': typeof demoDemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/discovery': typeof DiscoveryRoute
-  '/pricing': typeof PricingRoute
-  '/auth/forgot-password': typeof AuthForgotPasswordRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/register': typeof AuthRegisterRoute
-  '/auth/verify': typeof AuthVerifyRoute
-  '/explore/$section': typeof ExploreSectionRoute
-  '/library/profile': typeof LibraryProfileRoute
-  '/movies/$movieId': typeof MoviesMovieIdRoute
-  '/music/$musicid': typeof MusicMusicidRoute
-  '/library': typeof LibraryIndexRoute
-  '/movies': typeof MoviesIndexRoute
+  '/forgot-password': typeof authForgotPasswordRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
+  '/verify': typeof authVerifyRoute
+  '/discovery': typeof homeDiscoveryRoute
+  '/download': typeof homeDownloadRoute
+  '/pricing': typeof homePricingRoute
+  '/': typeof homeIndexRoute
   '/demo/store': typeof demoDemoStoreRoute
   '/demo/storybook': typeof demoDemoStorybookRoute
   '/demo/table': typeof demoDemoTableRoute
   '/demo/tanchat': typeof demoDemoTanchatRoute
   '/demo/tanstack-query': typeof demoDemoTanstackQueryRoute
+  '/artist/$artistid': typeof homeArtistArtistidRoute
+  '/explore/$section': typeof homeExploreSectionRoute
+  '/library/profile': typeof homeLibraryProfileRoute
+  '/movies/$movieId': typeof homeMoviesMovieIdRoute
+  '/music/$musicid': typeof homeMusicMusicidRoute
+  '/setting': typeof adminSettingIndexRoute
   '/demo': typeof demoDemoIndexRoute
   '/home-demo': typeof demoHomeDemoIndexRoute
+  '/library': typeof homeLibraryIndexRoute
+  '/movies': typeof homeMoviesIndexRoute
+  '/music': typeof homeMusicIndexRoute
   '/demo/api/names': typeof demoDemoApiNamesRoute
   '/demo/api/tanchat': typeof demoDemoApiTanchatRoute
   '/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
@@ -276,26 +308,30 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/discovery': typeof DiscoveryRoute
-  '/pricing': typeof PricingRoute
-  '/auth/forgot-password': typeof AuthForgotPasswordRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/register': typeof AuthRegisterRoute
-  '/auth/verify': typeof AuthVerifyRoute
-  '/explore/$section': typeof ExploreSectionRoute
-  '/library/profile': typeof LibraryProfileRoute
-  '/movies/$movieId': typeof MoviesMovieIdRoute
-  '/music/$musicid': typeof MusicMusicidRoute
-  '/library/': typeof LibraryIndexRoute
-  '/movies/': typeof MoviesIndexRoute
+  '/(auth)/forgot-password': typeof authForgotPasswordRoute
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/register': typeof authRegisterRoute
+  '/(auth)/verify': typeof authVerifyRoute
+  '/(home)/discovery': typeof homeDiscoveryRoute
+  '/(home)/download': typeof homeDownloadRoute
+  '/(home)/pricing': typeof homePricingRoute
+  '/(home)/': typeof homeIndexRoute
   '/(demo)/demo/store': typeof demoDemoStoreRoute
   '/(demo)/demo/storybook': typeof demoDemoStorybookRoute
   '/(demo)/demo/table': typeof demoDemoTableRoute
   '/(demo)/demo/tanchat': typeof demoDemoTanchatRoute
   '/(demo)/demo/tanstack-query': typeof demoDemoTanstackQueryRoute
+  '/(home)/artist/$artistid': typeof homeArtistArtistidRoute
+  '/(home)/explore/$section': typeof homeExploreSectionRoute
+  '/(home)/library/profile': typeof homeLibraryProfileRoute
+  '/(home)/movies/$movieId': typeof homeMoviesMovieIdRoute
+  '/(home)/music/$musicid': typeof homeMusicMusicidRoute
+  '/(admin)/setting/': typeof adminSettingIndexRoute
   '/(demo)/demo/': typeof demoDemoIndexRoute
   '/(demo)/home-demo/': typeof demoHomeDemoIndexRoute
+  '/(home)/library/': typeof homeLibraryIndexRoute
+  '/(home)/movies/': typeof homeMoviesIndexRoute
+  '/(home)/music/': typeof homeMusicIndexRoute
   '/(demo)/demo/api/names': typeof demoDemoApiNamesRoute
   '/(demo)/demo/api/tanchat': typeof demoDemoApiTanchatRoute
   '/(demo)/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
@@ -312,26 +348,30 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/verify'
     | '/discovery'
+    | '/download'
     | '/pricing'
-    | '/auth/forgot-password'
-    | '/auth/login'
-    | '/auth/register'
-    | '/auth/verify'
-    | '/explore/$section'
-    | '/library/profile'
-    | '/movies/$movieId'
-    | '/music/$musicid'
-    | '/library'
-    | '/movies'
+    | '/'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
     | '/demo/tanchat'
     | '/demo/tanstack-query'
+    | '/artist/$artistid'
+    | '/explore/$section'
+    | '/library/profile'
+    | '/movies/$movieId'
+    | '/music/$musicid'
+    | '/setting'
     | '/demo'
     | '/home-demo'
+    | '/library'
+    | '/movies'
+    | '/music'
     | '/demo/api/names'
     | '/demo/api/tanchat'
     | '/demo/api/tq-todos'
@@ -346,26 +386,30 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/verify'
     | '/discovery'
+    | '/download'
     | '/pricing'
-    | '/auth/forgot-password'
-    | '/auth/login'
-    | '/auth/register'
-    | '/auth/verify'
-    | '/explore/$section'
-    | '/library/profile'
-    | '/movies/$movieId'
-    | '/music/$musicid'
-    | '/library'
-    | '/movies'
+    | '/'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
     | '/demo/tanchat'
     | '/demo/tanstack-query'
+    | '/artist/$artistid'
+    | '/explore/$section'
+    | '/library/profile'
+    | '/movies/$movieId'
+    | '/music/$musicid'
+    | '/setting'
     | '/demo'
     | '/home-demo'
+    | '/library'
+    | '/movies'
+    | '/music'
     | '/demo/api/names'
     | '/demo/api/tanchat'
     | '/demo/api/tq-todos'
@@ -380,26 +424,30 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   id:
     | '__root__'
-    | '/'
-    | '/discovery'
-    | '/pricing'
-    | '/auth/forgot-password'
-    | '/auth/login'
-    | '/auth/register'
-    | '/auth/verify'
-    | '/explore/$section'
-    | '/library/profile'
-    | '/movies/$movieId'
-    | '/music/$musicid'
-    | '/library/'
-    | '/movies/'
+    | '/(auth)/forgot-password'
+    | '/(auth)/login'
+    | '/(auth)/register'
+    | '/(auth)/verify'
+    | '/(home)/discovery'
+    | '/(home)/download'
+    | '/(home)/pricing'
+    | '/(home)/'
     | '/(demo)/demo/store'
     | '/(demo)/demo/storybook'
     | '/(demo)/demo/table'
     | '/(demo)/demo/tanchat'
     | '/(demo)/demo/tanstack-query'
+    | '/(home)/artist/$artistid'
+    | '/(home)/explore/$section'
+    | '/(home)/library/profile'
+    | '/(home)/movies/$movieId'
+    | '/(home)/music/$musicid'
+    | '/(admin)/setting/'
     | '/(demo)/demo/'
     | '/(demo)/home-demo/'
+    | '/(home)/library/'
+    | '/(home)/movies/'
+    | '/(home)/music/'
     | '/(demo)/demo/api/names'
     | '/(demo)/demo/api/tanchat'
     | '/(demo)/demo/api/tq-todos'
@@ -415,26 +463,30 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  DiscoveryRoute: typeof DiscoveryRoute
-  PricingRoute: typeof PricingRoute
-  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
-  AuthLoginRoute: typeof AuthLoginRoute
-  AuthRegisterRoute: typeof AuthRegisterRoute
-  AuthVerifyRoute: typeof AuthVerifyRoute
-  ExploreSectionRoute: typeof ExploreSectionRoute
-  LibraryProfileRoute: typeof LibraryProfileRoute
-  MoviesMovieIdRoute: typeof MoviesMovieIdRoute
-  MusicMusicidRoute: typeof MusicMusicidRoute
-  LibraryIndexRoute: typeof LibraryIndexRoute
-  MoviesIndexRoute: typeof MoviesIndexRoute
+  authForgotPasswordRoute: typeof authForgotPasswordRoute
+  authLoginRoute: typeof authLoginRoute
+  authRegisterRoute: typeof authRegisterRoute
+  authVerifyRoute: typeof authVerifyRoute
+  homeDiscoveryRoute: typeof homeDiscoveryRoute
+  homeDownloadRoute: typeof homeDownloadRoute
+  homePricingRoute: typeof homePricingRoute
+  homeIndexRoute: typeof homeIndexRoute
   demoDemoStoreRoute: typeof demoDemoStoreRoute
   demoDemoStorybookRoute: typeof demoDemoStorybookRoute
   demoDemoTableRoute: typeof demoDemoTableRoute
   demoDemoTanchatRoute: typeof demoDemoTanchatRoute
   demoDemoTanstackQueryRoute: typeof demoDemoTanstackQueryRoute
+  homeArtistArtistidRoute: typeof homeArtistArtistidRoute
+  homeExploreSectionRoute: typeof homeExploreSectionRoute
+  homeLibraryProfileRoute: typeof homeLibraryProfileRoute
+  homeMoviesMovieIdRoute: typeof homeMoviesMovieIdRoute
+  homeMusicMusicidRoute: typeof homeMusicMusicidRoute
+  adminSettingIndexRoute: typeof adminSettingIndexRoute
   demoDemoIndexRoute: typeof demoDemoIndexRoute
   demoHomeDemoIndexRoute: typeof demoHomeDemoIndexRoute
+  homeLibraryIndexRoute: typeof homeLibraryIndexRoute
+  homeMoviesIndexRoute: typeof homeMoviesIndexRoute
+  homeMusicIndexRoute: typeof homeMusicIndexRoute
   demoDemoApiNamesRoute: typeof demoDemoApiNamesRoute
   demoDemoApiTanchatRoute: typeof demoDemoApiTanchatRoute
   demoDemoApiTqTodosRoute: typeof demoDemoApiTqTodosRoute
@@ -451,95 +503,81 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/discovery': {
-      id: '/discovery'
-      path: '/discovery'
-      fullPath: '/discovery'
-      preLoaderRoute: typeof DiscoveryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/(home)/': {
+      id: '/(home)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof homeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/movies/': {
-      id: '/movies/'
+    '/(home)/pricing': {
+      id: '/(home)/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof homePricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/download': {
+      id: '/(home)/download'
+      path: '/download'
+      fullPath: '/download'
+      preLoaderRoute: typeof homeDownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/discovery': {
+      id: '/(home)/discovery'
+      path: '/discovery'
+      fullPath: '/discovery'
+      preLoaderRoute: typeof homeDiscoveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/verify': {
+      id: '/(auth)/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof authVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/register': {
+      id: '/(auth)/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof authRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/forgot-password': {
+      id: '/(auth)/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/music/': {
+      id: '/(home)/music/'
+      path: '/music'
+      fullPath: '/music'
+      preLoaderRoute: typeof homeMusicIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/movies/': {
+      id: '/(home)/movies/'
       path: '/movies'
       fullPath: '/movies'
-      preLoaderRoute: typeof MoviesIndexRouteImport
+      preLoaderRoute: typeof homeMoviesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/library/': {
-      id: '/library/'
+    '/(home)/library/': {
+      id: '/(home)/library/'
       path: '/library'
       fullPath: '/library'
-      preLoaderRoute: typeof LibraryIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/music/$musicid': {
-      id: '/music/$musicid'
-      path: '/music/$musicid'
-      fullPath: '/music/$musicid'
-      preLoaderRoute: typeof MusicMusicidRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/movies/$movieId': {
-      id: '/movies/$movieId'
-      path: '/movies/$movieId'
-      fullPath: '/movies/$movieId'
-      preLoaderRoute: typeof MoviesMovieIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/library/profile': {
-      id: '/library/profile'
-      path: '/library/profile'
-      fullPath: '/library/profile'
-      preLoaderRoute: typeof LibraryProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/explore/$section': {
-      id: '/explore/$section'
-      path: '/explore/$section'
-      fullPath: '/explore/$section'
-      preLoaderRoute: typeof ExploreSectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/verify': {
-      id: '/auth/verify'
-      path: '/auth/verify'
-      fullPath: '/auth/verify'
-      preLoaderRoute: typeof AuthVerifyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/register': {
-      id: '/auth/register'
-      path: '/auth/register'
-      fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthRegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/forgot-password': {
-      id: '/auth/forgot-password'
-      path: '/auth/forgot-password'
-      fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      preLoaderRoute: typeof homeLibraryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(demo)/home-demo/': {
@@ -554,6 +592,48 @@ declare module '@tanstack/react-router' {
       path: '/demo'
       fullPath: '/demo'
       preLoaderRoute: typeof demoDemoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(admin)/setting/': {
+      id: '/(admin)/setting/'
+      path: '/setting'
+      fullPath: '/setting'
+      preLoaderRoute: typeof adminSettingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/music/$musicid': {
+      id: '/(home)/music/$musicid'
+      path: '/music/$musicid'
+      fullPath: '/music/$musicid'
+      preLoaderRoute: typeof homeMusicMusicidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/movies/$movieId': {
+      id: '/(home)/movies/$movieId'
+      path: '/movies/$movieId'
+      fullPath: '/movies/$movieId'
+      preLoaderRoute: typeof homeMoviesMovieIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/library/profile': {
+      id: '/(home)/library/profile'
+      path: '/library/profile'
+      fullPath: '/library/profile'
+      preLoaderRoute: typeof homeLibraryProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/explore/$section': {
+      id: '/(home)/explore/$section'
+      path: '/explore/$section'
+      fullPath: '/explore/$section'
+      preLoaderRoute: typeof homeExploreSectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/artist/$artistid': {
+      id: '/(home)/artist/$artistid'
+      path: '/artist/$artistid'
+      fullPath: '/artist/$artistid'
+      preLoaderRoute: typeof homeArtistArtistidRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(demo)/demo/tanstack-query': {
@@ -679,26 +759,30 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  DiscoveryRoute: DiscoveryRoute,
-  PricingRoute: PricingRoute,
-  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
-  AuthLoginRoute: AuthLoginRoute,
-  AuthRegisterRoute: AuthRegisterRoute,
-  AuthVerifyRoute: AuthVerifyRoute,
-  ExploreSectionRoute: ExploreSectionRoute,
-  LibraryProfileRoute: LibraryProfileRoute,
-  MoviesMovieIdRoute: MoviesMovieIdRoute,
-  MusicMusicidRoute: MusicMusicidRoute,
-  LibraryIndexRoute: LibraryIndexRoute,
-  MoviesIndexRoute: MoviesIndexRoute,
+  authForgotPasswordRoute: authForgotPasswordRoute,
+  authLoginRoute: authLoginRoute,
+  authRegisterRoute: authRegisterRoute,
+  authVerifyRoute: authVerifyRoute,
+  homeDiscoveryRoute: homeDiscoveryRoute,
+  homeDownloadRoute: homeDownloadRoute,
+  homePricingRoute: homePricingRoute,
+  homeIndexRoute: homeIndexRoute,
   demoDemoStoreRoute: demoDemoStoreRoute,
   demoDemoStorybookRoute: demoDemoStorybookRoute,
   demoDemoTableRoute: demoDemoTableRoute,
   demoDemoTanchatRoute: demoDemoTanchatRoute,
   demoDemoTanstackQueryRoute: demoDemoTanstackQueryRoute,
+  homeArtistArtistidRoute: homeArtistArtistidRoute,
+  homeExploreSectionRoute: homeExploreSectionRoute,
+  homeLibraryProfileRoute: homeLibraryProfileRoute,
+  homeMoviesMovieIdRoute: homeMoviesMovieIdRoute,
+  homeMusicMusicidRoute: homeMusicMusicidRoute,
+  adminSettingIndexRoute: adminSettingIndexRoute,
   demoDemoIndexRoute: demoDemoIndexRoute,
   demoHomeDemoIndexRoute: demoHomeDemoIndexRoute,
+  homeLibraryIndexRoute: homeLibraryIndexRoute,
+  homeMoviesIndexRoute: homeMoviesIndexRoute,
+  homeMusicIndexRoute: homeMusicIndexRoute,
   demoDemoApiNamesRoute: demoDemoApiNamesRoute,
   demoDemoApiTanchatRoute: demoDemoApiTanchatRoute,
   demoDemoApiTqTodosRoute: demoDemoApiTqTodosRoute,

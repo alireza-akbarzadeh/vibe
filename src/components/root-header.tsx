@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useParams, useParentMatches, useRouter } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Music, X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -8,14 +8,17 @@ import { cn } from "@/lib/utils";
 import { ModeToggle } from "./mode-toggle";
 
 const navLinks = [
-	{ label: "Music", href: "#" },
+	{ label: "Music", href: "/music" },
 	{ label: "Movies", href: "/movies" },
 	{ label: "Pricing", href: "/pricing" },
-	{ label: "Download", href: "#" },
+	{ label: "Download", href: "/download" },
 ];
 export function RootHeader() {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const match = useRouter()
+
+	console.log({ match })
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -29,11 +32,10 @@ export function RootHeader() {
 			initial={{ y: -100 }}
 			animate={{ y: 0 }}
 			transition={{ duration: 0.6 }}
-			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-				isScrolled
-					? "bg-black/80 backdrop-blur-xl border-b border-white/5"
-					: "bg-transparent"
-			}`}
+			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+				? "bg-black/80 backdrop-blur-xl border-b border-white/5"
+				: "bg-transparent"
+				}`}
 		>
 			<nav className="max-w-7xl mx-auto px-6 py-4">
 				<div className="flex items-center justify-between">
@@ -48,20 +50,20 @@ export function RootHeader() {
 					{/* Desktop nav */}
 					<div className="hidden md:flex items-center gap-8">
 						{navLinks.map((link) => (
-							<a
+							<Link
 								key={link.label}
-								href={link.href}
-								className="text-gray-400 hover:text-white transition-colors text-sm font-medium"
+								to={link.href}
+								className="text-gray-400 data-[status=active]:font-bold data-[status=active]:text-white hover:text-white transition-colors text-sm font-medium"
 							>
 								{link.label}
-							</a>
+							</Link>
 						))}
 					</div>
 
 					{/* CTA buttons */}
 					<div className="hidden md:flex items-center gap-4">
 						<Link
-							to="/auth/login"
+							to="/login"
 							className={cn(
 								buttonVariants({
 									className: "text-gray-400 hover:text-white hover:bg-white/10",
@@ -72,7 +74,7 @@ export function RootHeader() {
 							Log in
 						</Link>
 						<Link
-							to="/auth/register"
+							to="/register"
 							className="bg-white text-black hover:bg-gray-200 rounded-full px-6 py-1.5"
 						>
 							Start Free Trial
