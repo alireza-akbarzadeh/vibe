@@ -33,6 +33,7 @@ import { Route as demoDemoTanchatRouteImport } from './routes/(demo)/demo/tancha
 import { Route as demoDemoTableRouteImport } from './routes/(demo)/demo/table'
 import { Route as demoDemoStorybookRouteImport } from './routes/(demo)/demo/storybook'
 import { Route as demoDemoStoreRouteImport } from './routes/(demo)/demo/store'
+import { Route as demoDemoFormDemoRouteImport } from './routes/(demo)/demo/form-demo'
 import { Route as demoExampleGuitarsIndexRouteImport } from './routes/(demo)/example.guitars/index'
 import { Route as demoExampleGuitarsGuitarIdRouteImport } from './routes/(demo)/example.guitars/$guitarId'
 import { Route as demoDemoStartServerFuncsRouteImport } from './routes/(demo)/demo/start.server-funcs'
@@ -166,6 +167,11 @@ const demoDemoStoreRoute = demoDemoStoreRouteImport.update({
   path: '/demo/store',
   getParentRoute: () => rootRouteImport,
 } as any)
+const demoDemoFormDemoRoute = demoDemoFormDemoRouteImport.update({
+  id: '/(demo)/demo/form-demo',
+  path: '/demo/form-demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const demoExampleGuitarsIndexRoute = demoExampleGuitarsIndexRouteImport.update({
   id: '/(demo)/example/guitars/',
   path: '/example/guitars/',
@@ -239,6 +245,7 @@ export interface FileRoutesByFullPath {
   '/download': typeof homeDownloadRoute
   '/pricing': typeof homePricingRoute
   '/': typeof homeIndexRoute
+  '/demo/form-demo': typeof demoDemoFormDemoRoute
   '/demo/store': typeof demoDemoStoreRoute
   '/demo/storybook': typeof demoDemoStorybookRoute
   '/demo/table': typeof demoDemoTableRoute
@@ -277,6 +284,7 @@ export interface FileRoutesByTo {
   '/download': typeof homeDownloadRoute
   '/pricing': typeof homePricingRoute
   '/': typeof homeIndexRoute
+  '/demo/form-demo': typeof demoDemoFormDemoRoute
   '/demo/store': typeof demoDemoStoreRoute
   '/demo/storybook': typeof demoDemoStorybookRoute
   '/demo/table': typeof demoDemoTableRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   '/(home)/download': typeof homeDownloadRoute
   '/(home)/pricing': typeof homePricingRoute
   '/(home)/': typeof homeIndexRoute
+  '/(demo)/demo/form-demo': typeof demoDemoFormDemoRoute
   '/(demo)/demo/store': typeof demoDemoStoreRoute
   '/(demo)/demo/storybook': typeof demoDemoStorybookRoute
   '/(demo)/demo/table': typeof demoDemoTableRoute
@@ -356,6 +365,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/pricing'
     | '/'
+    | '/demo/form-demo'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
@@ -394,6 +404,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/pricing'
     | '/'
+    | '/demo/form-demo'
     | '/demo/store'
     | '/demo/storybook'
     | '/demo/table'
@@ -432,6 +443,7 @@ export interface FileRouteTypes {
     | '/(home)/download'
     | '/(home)/pricing'
     | '/(home)/'
+    | '/(demo)/demo/form-demo'
     | '/(demo)/demo/store'
     | '/(demo)/demo/storybook'
     | '/(demo)/demo/table'
@@ -471,6 +483,7 @@ export interface RootRouteChildren {
   homeDownloadRoute: typeof homeDownloadRoute
   homePricingRoute: typeof homePricingRoute
   homeIndexRoute: typeof homeIndexRoute
+  demoDemoFormDemoRoute: typeof demoDemoFormDemoRoute
   demoDemoStoreRoute: typeof demoDemoStoreRoute
   demoDemoStorybookRoute: typeof demoDemoStorybookRoute
   demoDemoTableRoute: typeof demoDemoTableRoute
@@ -671,6 +684,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof demoDemoStoreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(demo)/demo/form-demo': {
+      id: '/(demo)/demo/form-demo'
+      path: '/demo/form-demo'
+      fullPath: '/demo/form-demo'
+      preLoaderRoute: typeof demoDemoFormDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(demo)/example/guitars/': {
       id: '/(demo)/example/guitars/'
       path: '/example/guitars'
@@ -767,6 +787,7 @@ const rootRouteChildren: RootRouteChildren = {
   homeDownloadRoute: homeDownloadRoute,
   homePricingRoute: homePricingRoute,
   homeIndexRoute: homeIndexRoute,
+  demoDemoFormDemoRoute: demoDemoFormDemoRoute,
   demoDemoStoreRoute: demoDemoStoreRoute,
   demoDemoStorybookRoute: demoDemoStorybookRoute,
   demoDemoTableRoute: demoDemoTableRoute,

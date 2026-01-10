@@ -1,17 +1,20 @@
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2, Lock, Mail, Sparkles } from "lucide-react";
+import { ArrowRight, Loader2, Mail, Sparkles } from "lucide-react";
 import { useId } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { InputPassword } from "@/components/ui/forms/input-password";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { socialProviders } from "@/config/socials";
 import { Http } from "@/constants/constants.ts";
 import AuthLayout from "@/domains/auth/auth-layout";
+import { logger } from "@/lib/logger";
+import { tryCatchAsync } from "@/lib/utils";
 import { usePostAuthLogin } from "@/services/endpoints/authentication/authentication.ts";
 
 const loginFormSchema = z.object({
@@ -44,25 +47,25 @@ function LoginPage() {
 			onBlur: loginFormSchema,
 		},
 		onSubmit: async ({ value }) => {
-			try {
-				const response = await mutateAsync({
+			const [error, result] = await tryCatchAsync(
+				mutateAsync({
 					data: { email: value.email, password: value.password },
-				})
-				if (response.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
-					toast.success(`${response?.data?.first_name} Welcome back!`);
-					await navigate({ to: "/movies" });
-				}
-			} catch (err) {
-				toast.error("Failed to login. Please check your credentials.", {
-					description: <p>{err}</p>,
-				})
+				}),
+			)
+			if (error) {
+				logger.error(error.message)
+				toast.error("Failed to login. Please check your credentials.")
+				throw error
+			}
+			if (result.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
+				toast.success(`${result?.data?.first_name} Welcome back!`);
+				await navigate({ to: "/movies" });
 			}
 		},
 	})
 
 	const emailId = useId();
-	const passwordId = useId();
-	const rememberId = useId();
+	const rememberId = useId()
 
 	return (
 		<AuthLayout
@@ -75,6 +78,9 @@ function LoginPage() {
 					e.stopPropagation();
 					form.handleSubmit();
 				}}
+				autoComplete="false"
+				autoCorrect="false"
+				noValidate
 				className="space-y-5"
 			>
 				{/* Email Field */}
@@ -123,46 +129,15 @@ function LoginPage() {
 					{(field) => {
 						const errorMessage = field.state.meta.errors?.[0];
 						const isInvalid = !!errorMessage && field.state.meta.isTouched;
-
 						return (
-							<div className="space-y-2">
-								<div className="flex items-center justify-between">
-									<Label
-										htmlFor={passwordId}
-										className="text-gray-300 text-sm font-medium"
-									>
-										Password
-									</Label>
-									<Link
-										to="/forgot-password"
-										className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
-									>
-										Forgot?
-									</Link>
-								</div>
-								<div className="relative">
-									<Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-									<Input
-										id={passwordId}
-										type="password"
-										placeholder="Enter your password"
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={(e) => field.handleChange(e.target.value)}
-										className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
-											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
-									/>
-								</div>
-								{isInvalid && (
-									<motion.div
-										initial={{ opacity: 0, y: -10 }}
-										animate={{ opacity: 1, y: 0 }}
-										className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm"
-									>
-										{errorMessage.message}
-									</motion.div>
-								)}
-							</div>
+							<InputPassword
+								errorMessage={errorMessage?.message || ""}
+								isInvalid={isInvalid}
+								value={field.state.value}
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(e.target.value)}
+
+							/>
 						)
 					}}
 				</form.Field>

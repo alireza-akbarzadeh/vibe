@@ -1,24 +1,22 @@
-import { AppWindowMac, Settings, Settings2 } from 'lucide-react'
-import { Button } from '../ui/button'
+import { AppWindowMac, Settings } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { TooltipButton } from '../buttons/button-tooltip'
 
 
 export function SettingVideoOptions() {
     return (
-        <div>
-            <DropdownMenu modal={false}>
-                <DropdownMenuTrigger asChild>
-                    <Button variant='text'>
-                        <Settings />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align='center'>
-                    <DropdownMenuItem >
-                        <AppWindowMac className='' />
-                        Full size
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
+        <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+                <TooltipButton tooltip={{ children: "setting", side: "top", align: "center" }} variant='text'>
+                    <Settings />
+                </TooltipButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='center'>
+                <DropdownMenuItem >
+                    <AppWindowMac className='' />
+                    Full size
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }

@@ -79,6 +79,7 @@ export function RootHeader() {
 						>
 							Start Free Trial
 						</Link>
+						<ModeToggle />
 					</div>
 
 					{/* Mobile menu button */}

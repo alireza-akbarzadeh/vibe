@@ -1,4 +1,4 @@
-import { Moon, Sun } from "lucide-react";
+import { LucideCheck, LucidePalette } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,26 +7,32 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { themeOptions } from "@/config/app";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export function ModeToggle() {
-	const { setTheme } = useTheme();
+	const theme = useTheme();
+	const media = useMediaQuery()
 
 	return (
-		<DropdownMenu>
+		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>
-				<Button variant="outline" size="icon">
-					<Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-					<Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-					<span className="sr-only">Toggle theme</span>
+				<Button variant="text">
+					<LucidePalette />
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end">
-				<DropdownMenuItem onClick={() => setTheme("light")}>
-					Light
-				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => setTheme("dark")}>
-					Dark
-				</DropdownMenuItem>
+			<DropdownMenuContent
+				side={media.isMobile ? 'bottom' : 'right'}
+				align={media.isMobile ? 'end' : 'start'}
+				className='min-w-56 rounded-lg'
+			>
+				{themeOptions.map(({ value, Icon }) => (
+					<DropdownMenuItem key={value} onClick={() => theme.set(value)}>
+						<Icon />
+						{value}
+						{theme.value === value && <LucideCheck className='ml-auto' />}
+					</DropdownMenuItem>
+				))}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

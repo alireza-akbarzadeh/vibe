@@ -1,6 +1,6 @@
 import { AppWindowMac, MoreVertical } from 'lucide-react'
-import { Button } from '../ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { TooltipButton } from '../buttons/button-tooltip'
 
 
 export function MoreVideoOptions() {
@@ -8,9 +8,10 @@ export function MoreVideoOptions() {
         <div>
             <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                    <Button variant='text'>
+                    <TooltipButton tooltip={{ children: "more", side: "top", align: "center" }} variant='text'>
                         <MoreVertical />
-                    </Button>
+                    </TooltipButton>
+
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='center'>
                     <DropdownMenuItem >

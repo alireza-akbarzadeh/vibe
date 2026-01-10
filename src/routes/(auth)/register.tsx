@@ -1,19 +1,22 @@
-import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { ArrowRight, Check, Loader2, Lock, Mail, Sparkles, User, } from "lucide-react";
-import { useId } from "react";
-import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { InputPassword } from "@/components/ui/forms/input-password";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Http } from "@/constants/constants.ts";
 import AuthLayout from "@/domains/auth/auth-layout";
 import { PrivacyPolicyDialog } from "@/domains/auth/privacy-dialog";
 import { TermsOfServiceDialog } from "@/domains/auth/terms-dialog";
+import { tryCatchAsync } from "@/lib/utils";
 import { usePostAuthRegister } from "@/services/endpoints/authentication/authentication.ts";
+import { logger } from "@sentry/tanstackstart-react";
+import { useForm } from "@tanstack/react-form";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { ArrowRight, Check, Loader2, Mail, Sparkles, User } from "lucide-react";
+import { useId } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export const Route = createFileRoute("/(auth)/register")({
     component: RouteComponent,
@@ -53,29 +56,33 @@ function RouteComponent() {
             onBlur: registerFormSchema,
         },
         onSubmit: async ({ value }) => {
-            try {
-                const response = await mutateAsync({
+            const [error, result] = await tryCatchAsync(
+                mutateAsync({
                     data: {
                         email: value.email,
                         first_name: value.firstName,
                         last_name: value.lastName,
                         password: value.password
                     }
+                }),
+            )
+            if (error) {
+                logger.error(error.message)
+                toast.error("Failed to login. Please check your credentials.", {
+                    description: <p>{error.name}</p>,
                 })
-                if (response.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
-                    toast.success(`${value.firstName} Welcome back!`);
-                    await navigate({ to: "/auth/login" })
-                    toast(response.message);
-                }
-            } catch (err) {
-                toast.error("Failed to login. Please check your credentials.");
+                throw error
+            }
+            if (result.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
+                toast.success(`${value.firstName} Welcome back!`);
+                await navigate({ to: "/login" })
+                toast(result.message);;
             }
         },
     });
     const firstNameId = useId();
     const lastNameId = useId();
     const emailId = useId();
-    const passwordId = useId();
     const termsId = useId();
 
     return (
@@ -88,6 +95,9 @@ function RouteComponent() {
                     e.preventDefault();
                     await form.handleSubmit();
                 }}
+                autoComplete="false"
+                autoCorrect="false"
+                noValidate
                 className="space-y-5"
             >
                 {/* Full Name */}
@@ -207,45 +217,21 @@ function RouteComponent() {
                     }}
                 </form.Field>
 
-                {/* Password */}
+                {/* Password Field */}
                 <form.Field name="password">
                     {(field) => {
                         const errorMessage = field.state.meta.errors?.[0];
                         const isInvalid = !!errorMessage && field.state.meta.isTouched;
-
                         return (
-                            <div className="space-y-2">
-                                <Label
-                                    htmlFor={passwordId}
-                                    className="text-gray-300 text-sm font-medium"
-                                >
-                                    Password
-                                </Label>
-                                <div className="relative">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                                    <Input
-                                        id={passwordId}
-                                        type="password"
-                                        placeholder="Create a strong password"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        onBlur={field.handleBlur}
-                                        className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
-                                            } text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
-                                        required
-                                        aria-invalid={isInvalid}
-                                    />
-                                </div>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Must be at least 8 characters
-                                </p>
-                                {isInvalid && (
-                                    <p className="text-xs text-red-400 mt-1">
-                                        {errorMessage.message}
-                                    </p>
-                                )}
-                            </div>
-                        );
+                            <InputPassword
+                                errorMessage={errorMessage?.message || ""}
+                                isInvalid={isInvalid}
+                                value={field.state.value}
+                                onBlur={field.handleBlur}
+                                onChange={(e) => field.handleChange(e.target.value)}
+
+                            />
+                        )
                     }}
                 </form.Field>
 

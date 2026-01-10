@@ -1,24 +1,132 @@
-import { useRouter } from "@tanstack/react-router";
-import { createContext, type PropsWithChildren, use } from "react";
-import { setThemeServerFn, type T as Theme } from "@/lib/theme";
+// import { outdent } from 'outdent'
 
-type ThemeContextVal = { theme: Theme; setTheme: (val: Theme) => void };
-type Props = PropsWithChildren<{ theme: Theme }>;
+//TODO: need to install  outdent
+import type { PropsWithChildren } from 'react'
+import { useEffect, useState } from 'react'
+import { z } from 'zod'
+import { createContextFactory, type ExcludeUnionStrict } from '@/lib/utils'
 
-const ThemeContext = createContext<ThemeContextVal | null>(null);
 
-export function ThemeProvider({ children, theme }: Props) {
-	const router = useRouter();
 
-	function setTheme(val: Theme) {
-		setThemeServerFn({ data: val }).then(() => router.invalidate());
+const themeSchema = z.enum(['dark', 'light', 'system'])
+
+type Theme = z.infer<typeof themeSchema>
+type ResolvedTheme = ExcludeUnionStrict<Theme, 'system'>
+
+interface ThemeContext {
+	value: Theme
+	resolved: ResolvedTheme
+	set: (theme: Theme) => void
+	toggle: () => void
+}
+
+const [ThemeContextProvider, useTheme] = createContextFactory<ThemeContext>({
+	errorMessage: 'useTheme must be used within a ThemeProvider',
+})
+
+function ThemeProvider({ children }: PropsWithChildren) {
+	const [theme, _setTheme] = useState<Theme>('system')
+	const [resolvedTheme, _setResolvedTheme] = useState<ResolvedTheme>(getResolvedTheme(theme))
+
+	const setTheme = (theme: Theme) => {
+		_setTheme(theme)
+		_setResolvedTheme(getResolvedTheme(theme))
 	}
 
-	return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>;
+	const toggleTheme = () => {
+		setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+	}
+
+	useEffect(() => {
+		localStorage.setItem('theme', theme)
+	}, [theme])
+
+	useEffect(() => {
+		document.documentElement.dataset.theme = resolvedTheme
+		document.documentElement.style.colorScheme = resolvedTheme
+	}, [resolvedTheme])
+
+	// Handle cross-tab theme changes
+	useEffect(() => {
+		const handleStorageListener = () => {
+			setTheme(getLocalTheme())
+		}
+
+		handleStorageListener()
+
+		window.addEventListener('storage', handleStorageListener)
+		return () => window.removeEventListener('storage', handleStorageListener)
+	}, [])
+
+	// Handle system theme changes
+	useEffect(() => {
+		if (theme !== 'system') return
+
+		const handleSystemThemeChange = () => {
+			_setResolvedTheme(getResolvedTheme(theme))
+		}
+
+		const media = window.matchMedia('(prefers-color-scheme: dark)')
+
+		// Intentionally use deprecated listener methods to support iOS & old browsers
+		media.addListener(handleSystemThemeChange)
+		return () => media.removeListener(handleSystemThemeChange)
+	}, [theme])
+
+
+
+	const context: ThemeContext = {
+		value: theme,
+		resolved: resolvedTheme,
+		set: setTheme,
+		toggle: toggleTheme,
+	}
+	initTheme()
+	return (
+		<ThemeContextProvider value={context}>
+			{children}
+		</ThemeContextProvider>
+	)
 }
 
-export function useTheme() {
-	const val = use(ThemeContext);
-	if (!val) throw new Error("useTheme called outside of ThemeProvider!");
-	return val;
+
+function initTheme() {
+	if (typeof localStorage === 'undefined') return
+
+	const localTheme = localStorage.getItem('theme')
+	const preferTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+	const resolvedTheme = localTheme === null || localTheme === 'system' ? preferTheme : localTheme
+
+	if (localTheme === null) {
+		localStorage.setItem('theme', 'system')
+	}
+
+	document.documentElement.dataset.theme = resolvedTheme
+	document.documentElement.style.colorScheme = resolvedTheme
 }
+
+function getLocalTheme(): Theme {
+	if (typeof localStorage === 'undefined') return 'system'
+
+	const localTheme = localStorage.getItem('theme')
+	if (localTheme === null) throw new Error('Can\'t find theme in localStorage. Make sure you wrap the app with ThemeProvider.')
+
+	const localThemeParsed = themeSchema.safeParse(localTheme)
+	if (localThemeParsed.error) return 'system'
+
+	return localThemeParsed.data
+}
+
+function getPreferTheme(): ResolvedTheme {
+	if (typeof window === 'undefined') return 'dark'
+
+	return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
+function getResolvedTheme(theme: Theme): ResolvedTheme {
+	return theme === 'system' ? getPreferTheme() : theme
+}
+
+export { ThemeProvider, themeSchema, useTheme }
+export type { ResolvedTheme, Theme }
+
