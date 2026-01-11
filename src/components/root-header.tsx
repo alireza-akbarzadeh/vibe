@@ -33,7 +33,7 @@ export function RootHeader() {
 			animate={{ y: 0 }}
 			transition={{ duration: 0.6 }}
 			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-				? "bg-black/80 backdrop-blur-xl border-b border-white/5"
+				? "bg-black/80 backdrop-blur-xl "
 				: "bg-transparent"
 				}`}
 		>
@@ -79,7 +79,6 @@ export function RootHeader() {
 						>
 							Start Free Trial
 						</Link>
-						<ModeToggle />
 					</div>
 
 					{/* Mobile menu button */}

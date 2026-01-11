@@ -11,6 +11,7 @@ export const artists: ArtistType[] = [
 		followers: "25M",
 		size: "large",
 		trending: true,
+		recommended: false,
 	},
 	{
 		id: 2,
@@ -32,6 +33,8 @@ export const artists: ArtistType[] = [
 		genres: ["Sci-Fi", "Action"],
 		followers: "12M",
 		size: "medium",
+		recommended: true,
+		trending: true,
 	},
 	{
 		id: 4,
@@ -54,6 +57,7 @@ export const artists: ArtistType[] = [
 		followers: "30M",
 		size: "medium",
 		recommended: true,
+		trending: true,
 	},
 	{
 		id: 6,
@@ -64,6 +68,8 @@ export const artists: ArtistType[] = [
 		genres: ["Sci-Fi", "Drama"],
 		followers: "15M",
 		size: "small",
+		recommended: true,
+		trending: true,
 	},
 	{
 		id: 7,
@@ -74,6 +80,8 @@ export const artists: ArtistType[] = [
 		genres: ["Hip-Hop", "R&B"],
 		followers: "28M",
 		size: "medium",
+		recommended: true,
+		trending: true,
 	},
 	{
 		id: 8,
@@ -85,6 +93,7 @@ export const artists: ArtistType[] = [
 		followers: "24M",
 		size: "small",
 		recommended: true,
+		trending: true,
 	},
 	{
 		id: 9,
@@ -96,6 +105,7 @@ export const artists: ArtistType[] = [
 		followers: "18M",
 		size: "medium",
 		trending: true,
+		recommended: true,
 	},
 	{
 		id: 10,
@@ -106,6 +116,8 @@ export const artists: ArtistType[] = [
 		genres: ["Hip-Hop", "Pop"],
 		followers: "20M",
 		size: "small",
+		recommended: true,
+		trending: true,
 	},
 	{
 		id: 11,
@@ -117,6 +129,7 @@ export const artists: ArtistType[] = [
 		followers: "16M",
 		size: "medium",
 		recommended: true,
+		trending: false,
 	},
 	{
 		id: 12,
@@ -127,5 +140,7 @@ export const artists: ArtistType[] = [
 		genres: ["Action", "Crime"],
 		followers: "22M",
 		size: "large",
+		recommended: false,
+		trending: false,
 	},
 ];

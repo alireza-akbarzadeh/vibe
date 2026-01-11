@@ -56,7 +56,8 @@ function ThemeProvider({ children }: PropsWithChildren) {
 
 		window.addEventListener('storage', handleStorageListener)
 		return () => window.removeEventListener('storage', handleStorageListener)
-	}, [])
+		// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	}, [setTheme])
 
 	// Handle system theme changes
 	useEffect(() => {
