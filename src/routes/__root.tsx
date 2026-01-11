@@ -9,6 +9,8 @@ import {
 	ScrollRestoration,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { motion } from "framer-motion"
+import BackButton from "@/components/back-button";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -104,8 +106,8 @@ function PendingComponent() {
 function ErrorComponent({ error }: ErrorComponentProps) {
 	return (
 		<RootDocument>
-			<div className='space-y-6 p-6'>
-				<Typography.H1>
+			<div className='space-y-6 flex flex-col justify-center items-center h-screen'>
+				<Typography.H1 className="block bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
 					Error
 				</Typography.H1>
 				<p className='text-destructive'>
@@ -118,10 +120,19 @@ function ErrorComponent({ error }: ErrorComponentProps) {
 
 function NotFoundComponent() {
 	return (
-		<div className='space-y-6'>
-			<Typography.H1>
+		<div className='space-y-6 flex flex-col justify-center items-center h-screen'>
+			<Typography.H1 className="block bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
 				404 Not Found
 			</Typography.H1>
+			<motion.p
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ delay: 0.2, duration: 0.3 }}
+				className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+			>
+				the page your looking for is not exist
+			</motion.p>
+			<BackButton />
 		</div>
 	)
 }

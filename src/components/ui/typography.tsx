@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
 import type { ComponentProps } from 'react'
+import { cn } from '@/lib/utils'
 
 
 function Heading1({ className, ...props }: ComponentProps<'h1'>) {
@@ -67,6 +67,14 @@ function Blockquote({ className, ...props }: ComponentProps<'blockquote'>) {
         />
     )
 }
+function Span({ className, ...props }: ComponentProps<'span'>) {
+    return (
+        <span
+            className={cn('', className)}
+            {...props}
+        />
+    )
+}
 
 const Typography = {
     H1: Heading1,
@@ -74,6 +82,7 @@ const Typography = {
     H3: Heading3,
     H4: Heading4,
     P: Paragraph,
+    S: Span,
     Blockquote,
 }
 

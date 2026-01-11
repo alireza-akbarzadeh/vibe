@@ -19,7 +19,7 @@ type LinkProps<To extends ValidLink> = (
 function Link<To extends ValidLink>(props: LinkProps<To>) {
     switch (true) {
         case isInternalLinkProps(props):
-            return <RouterLink {...props} />
+            return <RouterLink  {...props} />
 
         case isExternalLinkProps(props):
             return <a href={props.to} target='_blank' rel='noopener noreferrer' {...props} />

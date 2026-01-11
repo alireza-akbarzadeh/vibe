@@ -10,9 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as homeIndexRouteImport } from './routes/(home)/index'
+import { Route as homeTermsRouteImport } from './routes/(home)/terms'
+import { Route as homeStatusRouteImport } from './routes/(home)/status'
+import { Route as homePrivacyRouteImport } from './routes/(home)/privacy'
 import { Route as homePricingRouteImport } from './routes/(home)/pricing'
+import { Route as homePressRouteImport } from './routes/(home)/press'
+import { Route as homeLicencesRouteImport } from './routes/(home)/licences'
+import { Route as homeHelpCenterRouteImport } from './routes/(home)/help-center'
+import { Route as homeFeaturesRouteImport } from './routes/(home)/features'
 import { Route as homeDownloadRouteImport } from './routes/(home)/download'
 import { Route as homeDiscoveryRouteImport } from './routes/(home)/discovery'
+import { Route as homeCoockiesRouteImport } from './routes/(home)/coockies'
+import { Route as homeContactRouteImport } from './routes/(home)/contact'
+import { Route as homeCommunityRouteImport } from './routes/(home)/community'
+import { Route as homeCareersRouteImport } from './routes/(home)/careers'
+import { Route as homeAppsRouteImport } from './routes/(home)/apps'
+import { Route as homeAboutRouteImport } from './routes/(home)/about'
 import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
@@ -22,6 +35,7 @@ import { Route as homeMoviesIndexRouteImport } from './routes/(home)/movies/inde
 import { Route as homeLibraryIndexRouteImport } from './routes/(home)/library/index'
 import { Route as demoHomeDemoIndexRouteImport } from './routes/(demo)/home-demo/index'
 import { Route as demoDemoIndexRouteImport } from './routes/(demo)/demo/index'
+import { Route as blogBlogIndexRouteImport } from './routes/(blog)/blog/index'
 import { Route as adminSettingIndexRouteImport } from './routes/(admin)/setting/index'
 import { Route as homeMusicMusicidRouteImport } from './routes/(home)/music/$musicid'
 import { Route as homeMoviesMovieIdRouteImport } from './routes/(home)/movies/$movieId'
@@ -52,9 +66,44 @@ const homeIndexRoute = homeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const homeTermsRoute = homeTermsRouteImport.update({
+  id: '/(home)/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeStatusRoute = homeStatusRouteImport.update({
+  id: '/(home)/status',
+  path: '/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homePrivacyRoute = homePrivacyRouteImport.update({
+  id: '/(home)/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const homePricingRoute = homePricingRouteImport.update({
   id: '/(home)/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homePressRoute = homePressRouteImport.update({
+  id: '/(home)/press',
+  path: '/press',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeLicencesRoute = homeLicencesRouteImport.update({
+  id: '/(home)/licences',
+  path: '/licences',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeHelpCenterRoute = homeHelpCenterRouteImport.update({
+  id: '/(home)/help-center',
+  path: '/help-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeFeaturesRoute = homeFeaturesRouteImport.update({
+  id: '/(home)/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const homeDownloadRoute = homeDownloadRouteImport.update({
@@ -65,6 +114,36 @@ const homeDownloadRoute = homeDownloadRouteImport.update({
 const homeDiscoveryRoute = homeDiscoveryRouteImport.update({
   id: '/(home)/discovery',
   path: '/discovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeCoockiesRoute = homeCoockiesRouteImport.update({
+  id: '/(home)/coockies',
+  path: '/coockies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeContactRoute = homeContactRouteImport.update({
+  id: '/(home)/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeCommunityRoute = homeCommunityRouteImport.update({
+  id: '/(home)/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeCareersRoute = homeCareersRouteImport.update({
+  id: '/(home)/careers',
+  path: '/careers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeAppsRoute = homeAppsRouteImport.update({
+  id: '/(home)/apps',
+  path: '/apps',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeAboutRoute = homeAboutRouteImport.update({
+  id: '/(home)/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authVerifyRoute = authVerifyRouteImport.update({
@@ -110,6 +189,11 @@ const demoHomeDemoIndexRoute = demoHomeDemoIndexRouteImport.update({
 const demoDemoIndexRoute = demoDemoIndexRouteImport.update({
   id: '/(demo)/demo/',
   path: '/demo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const blogBlogIndexRoute = blogBlogIndexRouteImport.update({
+  id: '/(blog)/blog/',
+  path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const adminSettingIndexRoute = adminSettingIndexRouteImport.update({
@@ -241,9 +325,22 @@ export interface FileRoutesByFullPath {
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
   '/verify': typeof authVerifyRoute
+  '/about': typeof homeAboutRoute
+  '/apps': typeof homeAppsRoute
+  '/careers': typeof homeCareersRoute
+  '/community': typeof homeCommunityRoute
+  '/contact': typeof homeContactRoute
+  '/coockies': typeof homeCoockiesRoute
   '/discovery': typeof homeDiscoveryRoute
   '/download': typeof homeDownloadRoute
+  '/features': typeof homeFeaturesRoute
+  '/help-center': typeof homeHelpCenterRoute
+  '/licences': typeof homeLicencesRoute
+  '/press': typeof homePressRoute
   '/pricing': typeof homePricingRoute
+  '/privacy': typeof homePrivacyRoute
+  '/status': typeof homeStatusRoute
+  '/terms': typeof homeTermsRoute
   '/': typeof homeIndexRoute
   '/demo/form-demo': typeof demoDemoFormDemoRoute
   '/demo/store': typeof demoDemoStoreRoute
@@ -257,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/movies/$movieId': typeof homeMoviesMovieIdRoute
   '/music/$musicid': typeof homeMusicMusicidRoute
   '/setting': typeof adminSettingIndexRoute
+  '/blog': typeof blogBlogIndexRoute
   '/demo': typeof demoDemoIndexRoute
   '/home-demo': typeof demoHomeDemoIndexRoute
   '/library': typeof homeLibraryIndexRoute
@@ -280,9 +378,22 @@ export interface FileRoutesByTo {
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
   '/verify': typeof authVerifyRoute
+  '/about': typeof homeAboutRoute
+  '/apps': typeof homeAppsRoute
+  '/careers': typeof homeCareersRoute
+  '/community': typeof homeCommunityRoute
+  '/contact': typeof homeContactRoute
+  '/coockies': typeof homeCoockiesRoute
   '/discovery': typeof homeDiscoveryRoute
   '/download': typeof homeDownloadRoute
+  '/features': typeof homeFeaturesRoute
+  '/help-center': typeof homeHelpCenterRoute
+  '/licences': typeof homeLicencesRoute
+  '/press': typeof homePressRoute
   '/pricing': typeof homePricingRoute
+  '/privacy': typeof homePrivacyRoute
+  '/status': typeof homeStatusRoute
+  '/terms': typeof homeTermsRoute
   '/': typeof homeIndexRoute
   '/demo/form-demo': typeof demoDemoFormDemoRoute
   '/demo/store': typeof demoDemoStoreRoute
@@ -296,6 +407,7 @@ export interface FileRoutesByTo {
   '/movies/$movieId': typeof homeMoviesMovieIdRoute
   '/music/$musicid': typeof homeMusicMusicidRoute
   '/setting': typeof adminSettingIndexRoute
+  '/blog': typeof blogBlogIndexRoute
   '/demo': typeof demoDemoIndexRoute
   '/home-demo': typeof demoHomeDemoIndexRoute
   '/library': typeof homeLibraryIndexRoute
@@ -320,9 +432,22 @@ export interface FileRoutesById {
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/register': typeof authRegisterRoute
   '/(auth)/verify': typeof authVerifyRoute
+  '/(home)/about': typeof homeAboutRoute
+  '/(home)/apps': typeof homeAppsRoute
+  '/(home)/careers': typeof homeCareersRoute
+  '/(home)/community': typeof homeCommunityRoute
+  '/(home)/contact': typeof homeContactRoute
+  '/(home)/coockies': typeof homeCoockiesRoute
   '/(home)/discovery': typeof homeDiscoveryRoute
   '/(home)/download': typeof homeDownloadRoute
+  '/(home)/features': typeof homeFeaturesRoute
+  '/(home)/help-center': typeof homeHelpCenterRoute
+  '/(home)/licences': typeof homeLicencesRoute
+  '/(home)/press': typeof homePressRoute
   '/(home)/pricing': typeof homePricingRoute
+  '/(home)/privacy': typeof homePrivacyRoute
+  '/(home)/status': typeof homeStatusRoute
+  '/(home)/terms': typeof homeTermsRoute
   '/(home)/': typeof homeIndexRoute
   '/(demo)/demo/form-demo': typeof demoDemoFormDemoRoute
   '/(demo)/demo/store': typeof demoDemoStoreRoute
@@ -336,6 +461,7 @@ export interface FileRoutesById {
   '/(home)/movies/$movieId': typeof homeMoviesMovieIdRoute
   '/(home)/music/$musicid': typeof homeMusicMusicidRoute
   '/(admin)/setting/': typeof adminSettingIndexRoute
+  '/(blog)/blog/': typeof blogBlogIndexRoute
   '/(demo)/demo/': typeof demoDemoIndexRoute
   '/(demo)/home-demo/': typeof demoHomeDemoIndexRoute
   '/(home)/library/': typeof homeLibraryIndexRoute
@@ -361,9 +487,22 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/verify'
+    | '/about'
+    | '/apps'
+    | '/careers'
+    | '/community'
+    | '/contact'
+    | '/coockies'
     | '/discovery'
     | '/download'
+    | '/features'
+    | '/help-center'
+    | '/licences'
+    | '/press'
     | '/pricing'
+    | '/privacy'
+    | '/status'
+    | '/terms'
     | '/'
     | '/demo/form-demo'
     | '/demo/store'
@@ -377,6 +516,7 @@ export interface FileRouteTypes {
     | '/movies/$movieId'
     | '/music/$musicid'
     | '/setting'
+    | '/blog'
     | '/demo'
     | '/home-demo'
     | '/library'
@@ -400,9 +540,22 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/verify'
+    | '/about'
+    | '/apps'
+    | '/careers'
+    | '/community'
+    | '/contact'
+    | '/coockies'
     | '/discovery'
     | '/download'
+    | '/features'
+    | '/help-center'
+    | '/licences'
+    | '/press'
     | '/pricing'
+    | '/privacy'
+    | '/status'
+    | '/terms'
     | '/'
     | '/demo/form-demo'
     | '/demo/store'
@@ -416,6 +569,7 @@ export interface FileRouteTypes {
     | '/movies/$movieId'
     | '/music/$musicid'
     | '/setting'
+    | '/blog'
     | '/demo'
     | '/home-demo'
     | '/library'
@@ -439,9 +593,22 @@ export interface FileRouteTypes {
     | '/(auth)/login'
     | '/(auth)/register'
     | '/(auth)/verify'
+    | '/(home)/about'
+    | '/(home)/apps'
+    | '/(home)/careers'
+    | '/(home)/community'
+    | '/(home)/contact'
+    | '/(home)/coockies'
     | '/(home)/discovery'
     | '/(home)/download'
+    | '/(home)/features'
+    | '/(home)/help-center'
+    | '/(home)/licences'
+    | '/(home)/press'
     | '/(home)/pricing'
+    | '/(home)/privacy'
+    | '/(home)/status'
+    | '/(home)/terms'
     | '/(home)/'
     | '/(demo)/demo/form-demo'
     | '/(demo)/demo/store'
@@ -455,6 +622,7 @@ export interface FileRouteTypes {
     | '/(home)/movies/$movieId'
     | '/(home)/music/$musicid'
     | '/(admin)/setting/'
+    | '/(blog)/blog/'
     | '/(demo)/demo/'
     | '/(demo)/home-demo/'
     | '/(home)/library/'
@@ -479,9 +647,22 @@ export interface RootRouteChildren {
   authLoginRoute: typeof authLoginRoute
   authRegisterRoute: typeof authRegisterRoute
   authVerifyRoute: typeof authVerifyRoute
+  homeAboutRoute: typeof homeAboutRoute
+  homeAppsRoute: typeof homeAppsRoute
+  homeCareersRoute: typeof homeCareersRoute
+  homeCommunityRoute: typeof homeCommunityRoute
+  homeContactRoute: typeof homeContactRoute
+  homeCoockiesRoute: typeof homeCoockiesRoute
   homeDiscoveryRoute: typeof homeDiscoveryRoute
   homeDownloadRoute: typeof homeDownloadRoute
+  homeFeaturesRoute: typeof homeFeaturesRoute
+  homeHelpCenterRoute: typeof homeHelpCenterRoute
+  homeLicencesRoute: typeof homeLicencesRoute
+  homePressRoute: typeof homePressRoute
   homePricingRoute: typeof homePricingRoute
+  homePrivacyRoute: typeof homePrivacyRoute
+  homeStatusRoute: typeof homeStatusRoute
+  homeTermsRoute: typeof homeTermsRoute
   homeIndexRoute: typeof homeIndexRoute
   demoDemoFormDemoRoute: typeof demoDemoFormDemoRoute
   demoDemoStoreRoute: typeof demoDemoStoreRoute
@@ -495,6 +676,7 @@ export interface RootRouteChildren {
   homeMoviesMovieIdRoute: typeof homeMoviesMovieIdRoute
   homeMusicMusicidRoute: typeof homeMusicMusicidRoute
   adminSettingIndexRoute: typeof adminSettingIndexRoute
+  blogBlogIndexRoute: typeof blogBlogIndexRoute
   demoDemoIndexRoute: typeof demoDemoIndexRoute
   demoHomeDemoIndexRoute: typeof demoHomeDemoIndexRoute
   homeLibraryIndexRoute: typeof homeLibraryIndexRoute
@@ -523,11 +705,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof homeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(home)/terms': {
+      id: '/(home)/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof homeTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/status': {
+      id: '/(home)/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof homeStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/privacy': {
+      id: '/(home)/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof homePrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(home)/pricing': {
       id: '/(home)/pricing'
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof homePricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/press': {
+      id: '/(home)/press'
+      path: '/press'
+      fullPath: '/press'
+      preLoaderRoute: typeof homePressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/licences': {
+      id: '/(home)/licences'
+      path: '/licences'
+      fullPath: '/licences'
+      preLoaderRoute: typeof homeLicencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/help-center': {
+      id: '/(home)/help-center'
+      path: '/help-center'
+      fullPath: '/help-center'
+      preLoaderRoute: typeof homeHelpCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/features': {
+      id: '/(home)/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof homeFeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(home)/download': {
@@ -542,6 +773,48 @@ declare module '@tanstack/react-router' {
       path: '/discovery'
       fullPath: '/discovery'
       preLoaderRoute: typeof homeDiscoveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/coockies': {
+      id: '/(home)/coockies'
+      path: '/coockies'
+      fullPath: '/coockies'
+      preLoaderRoute: typeof homeCoockiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/contact': {
+      id: '/(home)/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof homeContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/community': {
+      id: '/(home)/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof homeCommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/careers': {
+      id: '/(home)/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof homeCareersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/apps': {
+      id: '/(home)/apps'
+      path: '/apps'
+      fullPath: '/apps'
+      preLoaderRoute: typeof homeAppsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/about': {
+      id: '/(home)/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof homeAboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/verify': {
@@ -605,6 +878,13 @@ declare module '@tanstack/react-router' {
       path: '/demo'
       fullPath: '/demo'
       preLoaderRoute: typeof demoDemoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(blog)/blog/': {
+      id: '/(blog)/blog/'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof blogBlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(admin)/setting/': {
@@ -783,9 +1063,22 @@ const rootRouteChildren: RootRouteChildren = {
   authLoginRoute: authLoginRoute,
   authRegisterRoute: authRegisterRoute,
   authVerifyRoute: authVerifyRoute,
+  homeAboutRoute: homeAboutRoute,
+  homeAppsRoute: homeAppsRoute,
+  homeCareersRoute: homeCareersRoute,
+  homeCommunityRoute: homeCommunityRoute,
+  homeContactRoute: homeContactRoute,
+  homeCoockiesRoute: homeCoockiesRoute,
   homeDiscoveryRoute: homeDiscoveryRoute,
   homeDownloadRoute: homeDownloadRoute,
+  homeFeaturesRoute: homeFeaturesRoute,
+  homeHelpCenterRoute: homeHelpCenterRoute,
+  homeLicencesRoute: homeLicencesRoute,
+  homePressRoute: homePressRoute,
   homePricingRoute: homePricingRoute,
+  homePrivacyRoute: homePrivacyRoute,
+  homeStatusRoute: homeStatusRoute,
+  homeTermsRoute: homeTermsRoute,
   homeIndexRoute: homeIndexRoute,
   demoDemoFormDemoRoute: demoDemoFormDemoRoute,
   demoDemoStoreRoute: demoDemoStoreRoute,
@@ -799,6 +1092,7 @@ const rootRouteChildren: RootRouteChildren = {
   homeMoviesMovieIdRoute: homeMoviesMovieIdRoute,
   homeMusicMusicidRoute: homeMusicMusicidRoute,
   adminSettingIndexRoute: adminSettingIndexRoute,
+  blogBlogIndexRoute: blogBlogIndexRoute,
   demoDemoIndexRoute: demoDemoIndexRoute,
   demoHomeDemoIndexRoute: demoHomeDemoIndexRoute,
   homeLibraryIndexRoute: homeLibraryIndexRoute,

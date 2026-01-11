@@ -16,9 +16,7 @@ const navLinks = [
 export function RootHeader() {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	const match = useRouter()
 
-	console.log({ match })
 
 	useEffect(() => {
 		const handleScroll = () => {
