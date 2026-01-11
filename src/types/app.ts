@@ -56,3 +56,15 @@ export interface ArtistType {
 	trending?: boolean;
 	recommended?: boolean;
 }
+
+export type Reviews = {
+	id: number;
+	username: string;
+	avatar: string;
+	rating: number;
+	title: string;
+	content: string;
+	date: string;
+	helpful: number;
+	verified: boolean;
+};

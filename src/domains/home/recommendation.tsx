@@ -1,6 +1,13 @@
+import { useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, Play, Plus } from "lucide-react";
 import { useState } from "react";
+import { AddButton } from "@/components/buttons/add-button";
+import { LikeButton } from "@/components/buttons/like-button";
+import { Button } from "@/components/ui/button";
+import { generateSlug } from "@/lib/utils";
+import { recommendations } from './data'
+
 
 const moods = [
 	{ id: "energetic", label: "Energetic", color: "from-orange-500 to-red-500" },
@@ -9,137 +16,13 @@ const moods = [
 	{ id: "dark", label: "Dark & Moody", color: "from-purple-600 to-indigo-600" },
 ];
 
-type MoodKey = "energetic" | "chill" | "romantic" | "dark";
+export type MoodKey = "energetic" | "chill" | "romantic" | "dark";
 
-const recommendations: Record<
-	MoodKey,
-	{ type: string; title: string; artist: string; image: string }[]
-> = {
-	energetic: [
-		{
-			type: "music",
-			title: "Power Anthems",
-			artist: "Various Artists",
-			image:
-				"https://images.unsplash.com/photo-1571974599782-87624638275e?w=400&h=400&fit=crop",
-		},
-		{
-			type: "movie",
-			title: "Mad Max: Fury Road",
-			artist: "Action",
-			image:
-				"https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&h=400&fit=crop",
-		},
-		{
-			type: "music",
-			title: "Workout Beast Mode",
-			artist: "DJ Thunder",
-			image:
-				"https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=400&h=400&fit=crop",
-		},
-		{
-			type: "movie",
-			title: "Top Gun",
-			artist: "Action",
-			image:
-				"https://images.unsplash.com/photo-1608346128025-1896b97a6fa7?w=400&h=400&fit=crop",
-		},
-	],
-	chill: [
-		{
-			type: "music",
-			title: "Lo-Fi Dreams",
-			artist: "Sleepy Beats",
-			image:
-				"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&h=400&fit=crop",
-		},
-		{
-			type: "movie",
-			title: "Lost in Translation",
-			artist: "Drama",
-			image:
-				"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=400&fit=crop",
-		},
-		{
-			type: "music",
-			title: "Rainy Day Jazz",
-			artist: "Mellow Collective",
-			image:
-				"https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=400&h=400&fit=crop",
-		},
-		{
-			type: "movie",
-			title: "Her",
-			artist: "Sci-Fi Romance",
-			image:
-				"https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=400&h=400&fit=crop",
-		},
-	],
-	romantic: [
-		{
-			type: "music",
-			title: "Love Songs",
-			artist: "Various Artists",
-			image:
-				"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop",
-		},
-		{
-			type: "movie",
-			title: "The Notebook",
-			artist: "Romance",
-			image:
-				"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=400&fit=crop",
-		},
-		{
-			type: "music",
-			title: "Midnight Slow Dance",
-			artist: "Luna Rose",
-			image:
-				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
-		},
-		{
-			type: "movie",
-			title: "La La Land",
-			artist: "Musical",
-			image:
-				"https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop",
-		},
-	],
-	dark: [
-		{
-			type: "music",
-			title: "Dark Synthwave",
-			artist: "Neon Void",
-			image:
-				"https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=400&h=400&fit=crop",
-		},
-		{
-			type: "movie",
-			title: "Blade Runner 2049",
-			artist: "Sci-Fi",
-			image:
-				"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&h=400&fit=crop",
-		},
-		{
-			type: "music",
-			title: "Industrial Nights",
-			artist: "Chrome Shadows",
-			image:
-				"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop",
-		},
-		{
-			type: "movie",
-			title: "The Matrix",
-			artist: "Sci-Fi",
-			image:
-				"https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=400&h=400&fit=crop",
-		},
-	],
-};
+
 
 export default function RecommendationsShowcase() {
 	const [activeMood, setActiveMood] = useState<MoodKey>("dark");
-
+	const navigate = useNavigate()
 	return (
 		<section className="relative py-32 bg-[#0a0a0a] overflow-hidden">
 			{/* Background accent */}
@@ -173,11 +56,10 @@ export default function RecommendationsShowcase() {
 								type="submit"
 								key={mood.id}
 								onClick={() => setActiveMood(mood.id as MoodKey)}
-								className={`relative px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-									activeMood === mood.id
-										? "text-white"
-										: "text-gray-400 hover:text-white bg-white/5 hover:bg-white/10"
-								}`}
+								className={`relative px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeMood === mood.id
+									? "text-white"
+									: "text-gray-400 hover:text-white bg-white/5 hover:bg-white/10"
+									}`}
 							>
 								{activeMood === mood.id && (
 									<motion.div
@@ -218,16 +100,15 @@ export default function RecommendationsShowcase() {
 									/>
 
 									{/* Overlay */}
-									<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300" />
+									<div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300" />
 
 									{/* Type badge */}
 									<div className="absolute top-3 left-3">
 										<span
-											className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-md ${
-												item.type === "music"
-													? "bg-purple-500/30 text-purple-200 border border-purple-400/30"
-													: "bg-cyan-500/30 text-cyan-200 border border-cyan-400/30"
-											}`}
+											className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-md ${item.type === "music"
+												? "bg-purple-500/30 text-purple-200 border border-purple-400/30"
+												: "bg-cyan-500/30 text-cyan-200 border border-cyan-400/30"
+												}`}
 										>
 											{item.type === "music" ? "♪ Music" : "▶ Movie"}
 										</span>
@@ -236,24 +117,21 @@ export default function RecommendationsShowcase() {
 									{/* Hover actions */}
 									<div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
 										<div className="flex items-center gap-3">
-											<button
+											<LikeButton iconSize="large" className="p-3 size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all hover:scale-110" />
+											<Button
+												onClick={() => navigate({ to: "/movies/$movieId", params: { movieId: generateSlug(item.title) } })}
 												type="button"
-												className="p-3 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white hover:bg-white/30 transition-all hover:scale-110"
+												size="lg"
+												variant="text"
+												className="p-4 size-15 rounded-full bg-white text-black hover:scale-110 transition-transform"
 											>
-												<Heart className="w-5 h-5" />
-											</button>
-											<button
-												type="button"
-												className="p-4 rounded-full bg-white text-black hover:scale-110 transition-transform"
-											>
-												<Play className="w-6 h-6 fill-current ml-0.5" />
-											</button>
-											<button
-												type="button"
-												className="p-3 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white hover:bg-white/30 transition-all hover:scale-110"
-											>
-												<Plus className="w-5 h-5" />
-											</button>
+												<Play className="size-6 fill-current ml-0.5" />
+											</Button>
+											<AddButton
+												iconSize="small"
+												className="rounded-full bg-white/20 border-white/30 text-white hover:bg-white/30 transition-all hover:scale-110 size-12"
+
+											/>
 										</div>
 									</div>
 

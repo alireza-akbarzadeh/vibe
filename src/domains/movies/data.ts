@@ -1,4 +1,4 @@
-import type { ContinueWatching, MovieTypes } from "@/types/app";
+import type { ContinueWatching, MovieTypes, Reviews } from "@/types/app";
 
 export const continueWatching: ContinueWatching[] = [
 	{
@@ -256,6 +256,48 @@ export const movieData: MovieTypes = {
 	popularity: 12,
 	popularityChange: 2,
 };
+
+export const reviews: Reviews[] = [
+	{
+		id: 1,
+		username: "JohnDoe_123",
+		avatar:
+			"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop",
+		rating: 9,
+		title: "A masterpiece of sci-fi cinema",
+		content:
+			"Dune: Part Two exceeds all expectations with breathtaking visuals, powerful performances, and a compelling narrative that stays true to Frank Herbert's vision. Denis Villeneuve has crafted a cinematic experience that will be remembered for years to come. The world-building is impeccable, and every frame is a work of art.",
+		date: "2 days ago",
+		helpful: 245,
+		verified: true,
+	},
+	{
+		id: 2,
+		username: "MovieBuff_2024",
+		avatar:
+			"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+		rating: 10,
+		title: "Best film of the year!",
+		content:
+			"Simply stunning from start to finish. The cinematography alone is worth the price of admission. Timothée Chalamet and Zendaya deliver career-best performances. The score by Hans Zimmer elevates every scene. This is what blockbuster filmmaking should aspire to be.",
+		date: "5 days ago",
+		helpful: 189,
+		verified: true,
+	},
+	{
+		id: 3,
+		username: "CinemaFan88",
+		avatar:
+			"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+		rating: 8,
+		title: "Visually spectacular, emotionally powerful",
+		content:
+			"While the pacing is slower than typical blockbusters, it serves the story well. The attention to detail in production design and costume work is extraordinary. Some may find it long, but I was captivated throughout.",
+		date: "1 week ago",
+		helpful: 156,
+		verified: false,
+	},
+];
 
 export const allMovies = [
 	animation,

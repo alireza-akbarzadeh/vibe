@@ -131,3 +131,6 @@ function getResolvedTheme(theme: Theme): ResolvedTheme {
 export { ThemeProvider, themeSchema, useTheme }
 export type { ResolvedTheme, Theme }
 
+
+
+// FIXME: need installation 

@@ -1,10 +1,11 @@
-import { AddButton } from "@/components/buttons/add-button";
-import { Button } from "@/components/ui/button";
-import type { ContinueWatching } from "@/types/app";
 import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Play, Star } from "lucide-react";
 import { useState } from "react";
+import { AddButton } from "@/components/buttons/add-button";
+import { Button } from "@/components/ui/button";
+import { generateSlug } from "@/lib/utils";
+import type { ContinueWatching } from "@/types/app";
 import type { MovieVariantCard } from "./movie-carousel";
 import { MovieInfoDialog } from "./movie-info-dialog";
 
@@ -141,7 +142,7 @@ export function MovieCard({
 									() => {
 										navigate({
 											to: "/movies/$movieId",
-											params: { movieId: movie.id.toString() },
+											params: { movieId: generateSlug(movie.title) },
 										})
 									}
 								}

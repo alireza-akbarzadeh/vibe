@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import { Pause, Play } from "lucide-react"
 import { Button } from "./ui/button"
 
-type Size = "small" | "medium" | "large" | "extra-large"
+export type Size = "x-small" | "small" | "medium" | "large" | "extra-large"
 
 interface PlayButtonProps {
     onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
@@ -14,6 +14,7 @@ export function PlayButton(props: PlayButtonProps) {
     const { onOpenChange, size = "medium", value } = props
 
     const mapSized: Record<Size, { parent: string, child: string }> = {
+        "x-small": { child: "w-24 h-24", parent: "w-16 h-16 " },
         "small": { child: "w-24 h-24", parent: "w-16 h-16 " },
         "medium": { child: "w-24 h-24", parent: "w-15 h-15 " },
         "large": { child: "w-24 h-24", parent: "w-16 h-16 " },

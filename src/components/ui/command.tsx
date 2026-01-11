@@ -1,3 +1,5 @@
+// FIXME: need installation 
+
 // import { Command as CommandPrimitive } from 'cmdk'
 // import { LuSearch } from 'react-icons/lu'
 // import type { ComponentProps } from 'react'

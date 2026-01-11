@@ -1,13 +1,18 @@
+import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Info, Play, Plus, Star } from "lucide-react";
-
+import { Info, Play, Star } from "lucide-react";
+import { AddButton } from "@/components/buttons/add-button";
 import { Button } from "@/components/ui/button";
+import { generateSlug } from "@/lib/utils";
+import { MovieInfoDialog } from "./movie-info-dialog";
 
 interface SimilarMoviesProps {
 	movieId: number;
 }
 
 export function SimilarMovies({ movieId }: SimilarMoviesProps) {
+	const navigate = useNavigate()
+
 	const movies = [
 		{
 			id: 1,
@@ -105,27 +110,29 @@ export function SimilarMovies({ movieId }: SimilarMoviesProps) {
 									<div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
 										<div className="flex flex-col gap-2 p-4">
 											<Button
+												onClick={() => navigate({ to: "/movies/$movieId", params: { movieId: generateSlug(movie.title) } })}
 												size="sm"
-												className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-full"
+												className="bg-linear-to-r z-20 from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-full"
 											>
 												<Play className="w-4 h-4 mr-1 fill-current" />
 												Play
 											</Button>
 											<div className="flex gap-2 justify-center">
-												<Button
+												<AddButton
+													iconSize="x-small"
+													className="rounded-full border-none  bg-white/10 hover:bg-white/20 text-white h-8 w-8 z-20"
 													size="icon"
-													variant="ghost"
-													className="rounded-full bg-white/10 hover:bg-white/20 text-white h-8 w-8"
-												>
-													<Plus className="w-4 h-4" />
-												</Button>
-												<Button
-													size="icon"
-													variant="ghost"
-													className="rounded-full bg-white/10 hover:bg-white/20 text-white h-8 w-8"
-												>
-													<Info className="w-4 h-4" />
-												</Button>
+												/>
+												<MovieInfoDialog triggerButton={
+													<Button
+														size="icon"
+														variant="ghost"
+														className="rounded-full z-20 bg-white/10 hover:bg-white/20 text-white h-8 w-8"
+													>
+														<Info className="w-4 h-4" />
+													</Button>
+												} />
+
 											</div>
 										</div>
 									</div>

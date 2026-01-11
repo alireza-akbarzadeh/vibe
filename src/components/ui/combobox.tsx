@@ -1,3 +1,5 @@
+// FIXME: need installation 
+
 // // FIXME: getVirtualItems() always returns an empty array with React Compiler, 'use no memo' is a temporary solution
 // 'use no memo'
 
