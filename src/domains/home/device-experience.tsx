@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Laptop, Smartphone, Tablet, Tv, Wifi } from "lucide-react";
 import { MobileDevice } from "@/components/devices/mobile";
+import { Image } from "@/components/ui/image";
+import { Typography } from "@/components/ui/typography";
 import { VideoProgressbar } from "@/components/video-payler/video-progressbar";
 
 const devices = [
@@ -43,16 +45,16 @@ export default function DeviceExperience() {
 						</span>
 					</div>
 
-					<h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+					<Typography.H2 className="text-4xl md:text-5xl font-bold text-white mb-4">
 						One Account.{" "}
 						<span className="bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
 							Everywhere.
 						</span>
-					</h2>
-					<p className="text-gray-400 text-lg max-w-2xl mx-auto">
+					</Typography.H2>
+					<Typography.P className="text-gray-400 text-lg max-w-2xl mx-auto">
 						Start on your phone, continue on your TV, finish on your laptop.
 						Your experience follows you seamlessly.
-					</p>
+					</Typography.P>
 				</motion.div>
 
 				{/* Device showcase */}
@@ -69,7 +71,7 @@ export default function DeviceExperience() {
 						<div className="relative">
 							<div className="aspect-video rounded-3xl bg-linear-to-br from-gray-800 to-gray-900 p-2 shadow-2xl shadow-purple-500/10">
 								<div className="relative h-full rounded-2xl overflow-hidden bg-black">
-									<img
+									<Image
 										src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=675&fit=crop"
 										alt="Streaming content"
 										className="w-full h-full object-cover"
@@ -95,12 +97,12 @@ export default function DeviceExperience() {
 
 										{/* Bottom content */}
 										<div className="absolute bottom-0 left-0 right-0 p-6">
-											<h3 className="text-white text-2xl md:text-3xl font-bold mb-2">
+											<Typography.H3 className="text-white text-2xl md:text-3xl font-bold mb-2">
 												Interstellar
-											</h3>
-											<p className="text-white/60 text-sm mb-4">
+											</Typography.H3>
+											<Typography.P className="text-white/60 text-sm mb-4">
 												2014 • Sci-Fi • 2h 49m
-											</p>
+											</Typography.P>
 
 											{/* Progress bar */}
 											<VideoProgressbar progress="65%" />

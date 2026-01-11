@@ -1,12 +1,14 @@
 import { useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Heart, Play, Plus } from "lucide-react";
+import { Play } from "lucide-react";
 import { useState } from "react";
 import { AddButton } from "@/components/buttons/add-button";
 import { LikeButton } from "@/components/buttons/like-button";
 import { Button } from "@/components/ui/button";
+import { Image } from "@/components/ui/image";
+import { Typography } from "@/components/ui/typography";
 import { generateSlug } from "@/lib/utils";
-import { recommendations } from './data'
+import { recommendations } from './data';
 
 
 const moods = [
@@ -39,24 +41,25 @@ export default function RecommendationsShowcase() {
 					transition={{ duration: 0.8 }}
 					className="text-center mb-16"
 				>
-					<h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+					<Typography.H2 className="text-4xl md:text-5xl font-bold text-white mb-6">
 						Discover Your{" "}
 						<span className="bg-linear-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
 							Mood
 						</span>
-					</h2>
-					<p className="text-gray-400 text-lg max-w-2xl mx-auto mb-12">
+					</Typography.H2>
+					<Typography.P className="text-gray-400 text-lg max-w-2xl mx-auto mb-12">
 						Tell us how you feel, and we'll curate the perfect mix
-					</p>
+					</Typography.P>
 
 					{/* Mood selector */}
 					<div className="flex flex-wrap justify-center gap-3 mb-16">
 						{moods.map((mood) => (
-							<button
-								type="submit"
+							<Button
+								size="lg"
+								variant="text"
 								key={mood.id}
 								onClick={() => setActiveMood(mood.id as MoodKey)}
-								className={`relative px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeMood === mood.id
+								className={`relative p-6 rounded-full font-medium transition-all duration-300 ${activeMood === mood.id
 									? "text-white"
 									: "text-gray-400 hover:text-white bg-white/5 hover:bg-white/10"
 									}`}
@@ -65,11 +68,11 @@ export default function RecommendationsShowcase() {
 									<motion.div
 										layoutId="moodBg"
 										className={`absolute inset-0 rounded-full bg-linear-to-r ${mood.color}`}
-										transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+										transition={{ type: "spring", bounce: 0.25, duration: 0.7 }}
 									/>
 								)}
 								<span className="relative z-10">{mood.label}</span>
-							</button>
+							</Button>
 						))}
 					</div>
 				</motion.div>
@@ -93,7 +96,7 @@ export default function RecommendationsShowcase() {
 								className="group relative"
 							>
 								<div className="relative aspect-square rounded-2xl overflow-hidden">
-									<img
+									<Image
 										src={item.image}
 										alt={item.title}
 										className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -137,10 +140,10 @@ export default function RecommendationsShowcase() {
 
 									{/* Content */}
 									<div className="absolute bottom-0 left-0 right-0 p-4">
-										<h3 className="text-white font-bold text-lg truncate">
+										<Typography.H3 className="text-white font-bold text-lg truncate">
 											{item.title}
-										</h3>
-										<p className="text-gray-300 text-sm">{item.artist}</p>
+										</Typography.H3>
+										<Typography.P className="text-gray-300 text-sm">{item.artist}</Typography.P>
 									</div>
 								</div>
 							</motion.div>

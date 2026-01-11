@@ -18,7 +18,7 @@ function Heading2({ className, ...props }: ComponentProps<'h2'>) {
     return (
         <h2
             className={cn(
-                'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
+                'scroll-m-20  pb-2 text-3xl font-semibold  first:mt-0',
                 className,
             )}
             {...props}
@@ -30,7 +30,7 @@ function Heading3({ className, ...props }: ComponentProps<'h3'>) {
     return (
         <h3
             className={cn(
-                'scroll-m-20 text-2xl font-semibold tracking-tight',
+                'scroll-m-20 text-2xl font-semibold',
                 className,
             )}
             {...props}
@@ -42,7 +42,7 @@ function Heading4({ className, ...props }: ComponentProps<'h4'>) {
     return (
         <h4
             className={cn(
-                'scroll-m-20 text-xl font-semibold tracking-tight',
+                'scroll-m-20 text-xl font-semibold',
                 className,
             )}
             {...props}
@@ -53,7 +53,7 @@ function Heading4({ className, ...props }: ComponentProps<'h4'>) {
 function Paragraph({ className, ...props }: ComponentProps<'p'>) {
     return (
         <p
-            className={cn('leading-7 not-first:mt-6', className)}
+            className={cn('leading-7 text-gray-400', className)}
             {...props}
         />
     )

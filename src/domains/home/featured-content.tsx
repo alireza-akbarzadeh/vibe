@@ -3,6 +3,10 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Clock, Play, Star } from "lucide-react";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Image } from "@/components/ui/image";
+import { Typography } from "@/components/ui/typography";
+import FeaturedCard from "./components/featured-card";
+import { PlayListCard } from "./components/playlists-card";
 
 const playlists = [
 	{
@@ -20,6 +24,22 @@ const playlists = [
 		image:
 			"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&h=300&fit=crop",
 		gradient: "from-cyan-600 to-teal-600",
+	},
+	{
+		id: "workout-energy",
+		title: "Workout Energy",
+		tracks: 65,
+		image:
+			"https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=300&h=300&fit=crop",
+		gradient: "from-orange-600 to-red-600",
+	},
+	{
+		id: "late-night-jazz",
+		title: "Late Night Jazz",
+		tracks: 45,
+		image:
+			"https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=300&h=300&fit=crop",
+		gradient: "from-amber-600 to-yellow-600",
 	},
 	{
 		id: "workout-energy",
@@ -85,6 +105,42 @@ const movies = [
 			"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=600&fit=crop",
 	},
 	{
+		id: "poor-things",
+		title: "Poor Things",
+		year: 2023,
+		rating: 8.2,
+		duration: "2h 21m",
+		image:
+			"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=600&fit=crop",
+	},
+	{
+		id: "killers-of-the-flower-moon",
+		title: "Killers of the Flower Moon",
+		year: 2023,
+		rating: 8.1,
+		duration: "3h 26m",
+		image:
+			"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=600&fit=crop",
+	},
+	{
+		id: "poor-things",
+		title: "Poor Things",
+		year: 2023,
+		rating: 8.2,
+		duration: "2h 21m",
+		image:
+			"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=600&fit=crop",
+	},
+	{
+		id: "killers-of-the-flower-moon",
+		title: "Killers of the Flower Moon",
+		year: 2023,
+		rating: 8.1,
+		duration: "3h 26m",
+		image:
+			"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=600&fit=crop",
+	},
+	{
 		id: "the-zone-of-interest",
 		title: "The Zone of Interest",
 		year: 2023,
@@ -125,12 +181,12 @@ export default function FeaturedContent() {
 				>
 					<div className="flex items-center justify-between mb-8">
 						<div>
-							<h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+							<Typography.H2 className="text-3xl md:text-4xl font-bold text-white">
 								Featured Playlists
-							</h2>
-							<p className="text-gray-400">
+							</Typography.H2>
+							<Typography.P>
 								Handpicked collections for every moment
-							</p>
+							</Typography.P>
 						</div>
 						<div className="hidden md:flex gap-2">
 							<Button
@@ -158,44 +214,7 @@ export default function FeaturedContent() {
 						style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
 					>
 						{playlists.map((playlist, index) => (
-							<motion.div
-								key={playlist.title}
-								initial={{ opacity: 0, x: 50 }}
-								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true }}
-								transition={{ delay: index * 0.1, duration: 0.5 }}
-								className="shrink-0 w-56 snap-start group"
-							>
-								<Link
-									to="/movies/$movieId"
-									params={{ movieId: playlist.id }}
-									className="relative mb-4"
-								>
-									<div className="aspect-square rounded-2xl overflow-hidden">
-										<img
-											src={playlist.image}
-											alt={playlist.title}
-											className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-										/>
-										<div
-											className={`absolute inset-0 bg-linear-to-br ${playlist.gradient} opacity-40`}
-										/>
-									</div>
-
-									<button
-										type="button"
-										className="absolute bottom-3 right-3 p-3 rounded-full bg-green-500 text-black shadow-lg shadow-green-500/30 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:scale-110"
-									>
-										<Play className="w-5 h-5 fill-current ml-0.5" />
-									</button>
-								</Link>
-								<h3 className="text-white font-semibold text-lg truncate">
-									{playlist.title}
-								</h3>
-								<p className="text-gray-500 text-sm">
-									{playlist.tracks} tracks
-								</p>
-							</motion.div>
+							<PlayListCard playlist={playlist} index={index} key={playlist.id} />
 						))}
 					</div>
 				</motion.div>
@@ -209,12 +228,12 @@ export default function FeaturedContent() {
 				>
 					<div className="flex items-center justify-between mb-8">
 						<div>
-							<h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+							<Typography.H2 className="text-3xl md:text-4xl font-bold text-white mb-2">
 								Trending Movies
-							</h2>
-							<p className="text-gray-400">
+							</Typography.H2>
+							<Typography.P className="text-gray-400">
 								The films everyone's talking about
-							</p>
+							</Typography.P>
 						</div>
 						<div className="hidden md:flex gap-2">
 							<Button
@@ -235,64 +254,13 @@ export default function FeaturedContent() {
 							</Button>
 						</div>
 					</div>
-
 					<div
 						ref={movieRef}
 						className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 -mx-6 px-6 snap-x snap-mandatory"
 						style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
 					>
 						{movies.map((movie, index) => (
-							<motion.div
-								key={movie.title}
-								initial={{ opacity: 0, x: 50 }}
-								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true }}
-								transition={{ delay: index * 0.1, duration: 0.5 }}
-								className="shrink-0 w-48 snap-start group cursor-pointer"
-							>
-								<Link
-									to="/movies/$movieId"
-									params={{ movieId: movie.id }}
-									className="relative mb-4"
-								>
-									<div className="aspect-2/3 rounded-2xl overflow-hidden">
-										<img
-											src={movie.image}
-											alt={movie.title}
-											className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-										/>
-										<div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-									</div>
-
-									<div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-										<button
-											type="button"
-											className="p-4 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all hover:scale-110"
-										>
-											<Play className="w-8 h-8 fill-current ml-0.5" />
-										</button>
-									</div>
-
-									<div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-sm">
-										<Star className="w-3 h-3 text-yellow-400 fill-current" />
-										<span className="text-white text-xs font-medium">
-											{movie.rating}
-										</span>
-									</div>
-								</Link>
-
-								<h3 className="text-white font-semibold truncate mb-1">
-									{movie.title}
-								</h3>
-								<div className="flex items-center gap-2 text-gray-500 text-sm">
-									<span>{movie.year}</span>
-									<span>•</span>
-									<span className="flex items-center gap-1">
-										<Clock className="w-3 h-3" />
-										{movie.duration}
-									</span>
-								</div>
-							</motion.div>
+							<FeaturedCard movie={movie} index={index} key={movie.id} />
 						))}
 					</div>
 				</motion.div>

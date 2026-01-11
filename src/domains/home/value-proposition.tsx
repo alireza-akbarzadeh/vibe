@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Headphones, Sparkles, Tv, Zap } from "lucide-react";
+import { Typography } from "@/components/ui/typography";
 
 const features = [
 	{
@@ -43,15 +44,15 @@ export default function ValueProposition() {
 					transition={{ duration: 0.8 }}
 					className="text-center mb-20"
 				>
-					<h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+					<Typography.H2 className="text-4xl md:text-5xl font-bold text-white mb-4">
 						Listen & Watch{" "}
 						<span className="bg-linear-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
 							Instantly
 						</span>
-					</h2>
-					<p className="text-gray-400 text-lg max-w-2xl mx-auto">
+					</Typography.H2>
+					<Typography.P className="text-gray-400 text-lg max-w-2xl mx-auto">
 						Everything you love, unified in one seamless experience
-					</p>
+					</Typography.P>
 				</motion.div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -78,12 +79,12 @@ export default function ValueProposition() {
 										<feature.icon className="w-7 h-7 text-white" />
 									</div>
 
-									<h3 className="text-xl font-bold text-white mb-3">
+									<Typography.H3 className="text-xl font-bold text-white mb-3">
 										{feature.title}
-									</h3>
-									<p className="text-gray-400 leading-relaxed">
+									</Typography.H3>
+									<Typography.P className="text-gray-400 leading-relaxed m-0!">
 										{feature.description}
-									</p>
+									</Typography.P>
 
 									{/* Corner accent */}
 									<div
