@@ -154,8 +154,8 @@ export default function DeviceExperience() {
 							<div className="inline-flex p-4 rounded-2xl bg-linear-to-br from-white/5 to-white/2 mb-4 group-hover:from-purple-500/20 group-hover:to-pink-500/20 transition-all duration-300">
 								<device.icon className="w-8 h-8 text-white/60 group-hover:text-white transition-colors" />
 							</div>
-							<h3 className="text-white font-semibold mb-1">{device.label}</h3>
-							<p className="text-gray-500 text-sm">{device.description}</p>
+							<Typography.H3 className="text-white text-xl font-semibold mb-1">{device.label}</Typography.H3>
+							<Typography.P className="text-gray-500 text-sm">{device.description}</Typography.P>
 						</motion.div>
 					))}
 				</motion.div>

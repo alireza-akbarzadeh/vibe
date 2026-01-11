@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Film, Music, Sparkles } from "lucide-react";
 import { useId } from "react";
 import { Button } from "@/components/ui/button";
+import { Typography } from "@/components/ui/typography";
 
 export default function CTASection() {
 	const titleId = useId();
@@ -74,22 +75,22 @@ export default function CTASection() {
 							<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
 							<span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
 						</span>
-						<span className="text-sm text-gray-300">
+						<Typography.S className="text-sm text-gray-300">
 							Join 50M+ streamers worldwide
-						</span>
+						</Typography.S>
 					</div>
 
-					<h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+					<Typography.H2 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
 						Your Next Obsession{" "}
 						<span className="block bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
 							Awaits
 						</span>
-					</h2>
+					</Typography.H2>
 
-					<p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+					<Typography.P className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
 						Unlimited music and movies. Zero ads. One simple price. Start your
 						free trial today and discover why millions chose us.
-					</p>
+					</Typography.P>
 
 					{/* CTAs */}
 					<div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -104,10 +105,10 @@ export default function CTASection() {
 								transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
 								className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12"
 							/>
-							<span className="relative z-10 flex items-center gap-2">
+							<Typography.S className="relative z-10 flex items-center gap-2">
 								Start Streaming Free
 								<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-							</span>
+							</Typography.S>
 						</Button>
 
 						<span className="text-gray-500">or</span>
@@ -139,7 +140,7 @@ export default function CTASection() {
 									clipRule="evenodd"
 								/>
 							</svg>
-							<span>7-day free trial</span>
+							<Typography.S>7-day free trial</Typography.S>
 						</div>
 						<div className="flex items-center gap-2">
 							<svg
@@ -154,7 +155,7 @@ export default function CTASection() {
 									clipRule="evenodd"
 								/>
 							</svg>
-							<span>Cancel anytime</span>
+							<Typography.S>Cancel anytime</Typography.S>
 						</div>
 						<div className="flex items-center gap-2">
 							<svg
@@ -169,7 +170,7 @@ export default function CTASection() {
 									clipRule="evenodd"
 								/>
 							</svg>
-							<span>No credit card required</span>
+							<Typography.S>No credit card required</Typography.S>
 						</div>
 					</div>
 				</motion.div>
