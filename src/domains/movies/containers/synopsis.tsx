@@ -9,8 +9,8 @@ import {
 	Users,
 } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import type { MovieTypes } from "@/types/app";
+import { Button } from "@/components/ui/button.tsx";
+import type { MovieTypes } from "@/types/app.ts";
 
 interface SynopsisProps {
 	movie: MovieTypes;

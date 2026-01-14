@@ -37,7 +37,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				'viewport-fit': 'cover',
 			},
 			title: import.meta.env.VITE_APP_TITLE,
-			description: 'A fully type-safe boilerplate with a focus on UX and DX, complete with multiple examples.',
+			description: 'vibe streaming platform .',
 			robots: 'index, follow',
 		}),
 		links: [
@@ -84,6 +84,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 						AiDevtools,
 					]}
 				/>
+				{/*FIXME: find out how to get around the scroll persist read about createRoute */}
 				<ScrollRestoration />
 				<Scripts />
 			</body>

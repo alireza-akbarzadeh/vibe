@@ -1,9 +1,10 @@
-import { ClassValue, clsx } from "clsx";
-import type { JSX } from "react";
+import {ClassValue, clsx} from "clsx";
+import type {JSX} from "react";
+// TODO: install the es-toolkit
 // import { camelCase } from 'es-toolkit'
-import { createContext, useContext } from "react";
-import { twMerge } from "tailwind-merge";
-import type { CamelCase, LiteralUnion, Simplify } from "type-fest";
+import {createContext, useContext} from "react";
+import {twMerge} from "tailwind-merge";
+import type {CamelCase, LiteralUnion, Simplify} from "type-fest";
 
 export type StringNumber = `${number}`;
 export type StringBoolean = `${boolean}`;
@@ -250,6 +251,13 @@ export function createMetadata(metadata: Metadata): Meta[] {
 
 export function generateSlug(slug: string) {
 	const split = slug.split(" ");
-	const join = split.join("-");
-	return join;
+	return split.join("-");
+}
+
+
+export function  toCamelCase(value:string){
+	return value.replace(/[^a-z ]/ig, '')
+		.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match: any, index: number) => {
+			return +match === 0 ? "" : match[index === 0 ? 'toLowerCase' : 'toUpperCase']();
+		});
 }

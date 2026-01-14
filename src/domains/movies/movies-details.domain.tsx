@@ -2,28 +2,31 @@ import { useRef, useState } from "react";
 import { VideoPlayer } from "@/components/video-payler/video-player";
 import { VIDEOS } from "@/constants/media";
 import {
-	CastCarousel,
 	MovieHero,
 	ReviewsSection,
 	SimilarMovies,
-	StatsBar,
-	Synopsis,
-	TrailerPlayer
+	TrailerPlayer,
 } from "./components";
-import { ImagesGallery } from "./containers";
+import { CastCarousel, ImagesGallery, StatsBar, Synopsis } from "./containers";
 import { movieData } from "./data";
 
 export default function MovieDetails() {
-	const [watchMode, setWatchMovie] = useState<"movie" | "trailer">("trailer")
-	const modeRef = useRef<HTMLDivElement>(null)
+	const [watchMode, setWatchMovie] = useState<"movie" | "trailer">("trailer");
+	const modeRef = useRef<HTMLDivElement>(null);
 
-
-	const videoData = { src: VIDEOS.demo, videoPoster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=675&fit=crop", year: "2014", totalTime: "2:49:00", videoName: "Interstellar" }
+	const videoData = {
+		src: VIDEOS.demo,
+		videoPoster:
+			"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=675&fit=crop",
+		year: "2014",
+		totalTime: "2:49:00",
+		videoName: "Interstellar",
+	};
 
 	const onModeChange = (mode: "trailer" | "movie") => {
-		modeRef.current?.scrollIntoView()
-		setWatchMovie(mode)
-	}
+		modeRef.current?.scrollIntoView();
+		setWatchMovie(mode);
+	};
 	return (
 		<div className="bg-[#0a0a0a] min-h-screen">
 			<MovieHero onClick={onModeChange} movie={movieData} />
@@ -31,11 +34,8 @@ export default function MovieDetails() {
 				{watchMode === "trailer" && (
 					<TrailerPlayer trailerUrl={movieData.trailerUrl} />
 				)}
-				{watchMode === "movie" && (
-					<VideoPlayer {...videoData} />
-				)}
+				{watchMode === "movie" && <VideoPlayer {...videoData} />}
 			</div>
-
 			<StatsBar
 				rating={movieData.rating}
 				votes={movieData.votes}
@@ -45,10 +45,10 @@ export default function MovieDetails() {
 				revenue={movieData.revenue}
 			/>
 			<Synopsis movie={movieData} />
-			<CastCarousel movieId={movieData.id} />
-			<ReviewsSection movieId={movieData.id} />
-			<ImagesGallery  />
-			<SimilarMovies movieId={movieData.id} />
+			<CastCarousel />
+			<ReviewsSection />
+			<ImagesGallery />
+			<SimilarMovies />
 		</div>
 	);
 }

@@ -77,7 +77,8 @@ export function ImagesGallery() {
                             Images
                         </h2>
                         {/* Image Grid */}
-                        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as unknown as ActiveTabSte)}
+                        <Tabs value={activeTab}
+                              onValueChange={(value) => setActiveTab(value as unknown as ActiveTabSte)}
                               defaultValue={activeTab}>
                             <TabsList className="bg-white/5">
                                 <TabsTrigger value="all">All</TabsTrigger>
@@ -95,3 +96,6 @@ export function ImagesGallery() {
         </section>
     );
 }
+
+
+

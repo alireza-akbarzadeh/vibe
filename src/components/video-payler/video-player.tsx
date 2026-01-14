@@ -4,9 +4,9 @@ import { VIDEOS } from "@/constants/media";
 import { useVideo } from "@/hooks/useVideo";
 import { PlayButton } from "../play-button";
 import { MoreVideoOptions } from "./more-video-options";
+import { SettingVideoOptions } from "./setting-video-options";
 import { Video } from "./video";
 import { VideoProgressbar } from "./video-progressbar";
-import { SettingVideoOptions } from "./setting-video-options";
 
 type VideoPlayerProps = {
     src: string

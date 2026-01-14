@@ -5,14 +5,9 @@ import { Button } from "@/components/ui/button";
 import { reviews } from "../data";
 import { Review } from "./review";
 
-interface ReviewsSectionProps {
-	movieId: number;
-}
-
-export function ReviewsSection({ movieId }: ReviewsSectionProps) {
+export function ReviewsSection() {
 	const [filter, setFilter] = useState("all");
 	const [expandedReviews, setExpandedReviews] = useState(new Set());
-
 
 	const toggleExpanded = (id: number) => {
 		const newExpanded = new Set(expandedReviews);
@@ -86,7 +81,13 @@ export function ReviewsSection({ movieId }: ReviewsSectionProps) {
 					{/* Reviews List */}
 					<div className="space-y-6">
 						{reviews.map((review, index) => (
-							<Review expandedReviews={expandedReviews} toggleExpanded={toggleExpanded} review={review} index={index} key={review.id} />
+							<Review
+								expandedReviews={expandedReviews}
+								toggleExpanded={toggleExpanded}
+								review={review}
+								index={index}
+								key={review.id}
+							/>
 						))}
 					</div>
 					{/* Load More */}

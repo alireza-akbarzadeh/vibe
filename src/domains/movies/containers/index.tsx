@@ -1,2 +1,5 @@
-export { ImagesGallery } from "./image-gallery"
-export { MoviesList } from "./movie-list"
+export { CastCarousel } from "./cast-carousel";
+export { ImagesGallery } from "./image-gallery";
+export { MoviesList } from "./movie-list";
+export { StatsBar } from "./stats-bar";
+export { Synopsis } from "./synopsis";
