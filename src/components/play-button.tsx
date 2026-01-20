@@ -16,8 +16,8 @@ export function PlayButton(props: PlayButtonProps) {
     const mapSized: Record<Size, { parent: string, child: string }> = {
         "x-small": { child: "w-24 h-24", parent: "w-16 h-16 " },
         "small": { child: "w-24 h-24", parent: "w-16 h-16 " },
-        "medium": { child: "w-24 h-24", parent: "w-15 h-15 " },
-        "large": { child: "w-24 h-24", parent: "w-16 h-16 " },
+        "medium": { child: "w-20 h-20", parent: "w-15 h-15 " },
+        "large": { child: "w-16 h-", parent: "w-12 h-12" },
         "extra-large": { child: "w-24 h-24", parent: "w-16 h-16 " },
     }
     return (
