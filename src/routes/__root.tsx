@@ -11,6 +11,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { motion } from "framer-motion"
 import BackButton from "@/components/back-button";
+import { RouteComponent } from "@/components/root-layout";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -51,6 +52,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 	}),
+	component: RouteComponent,
 	shellComponent: RootDocument,
 	errorComponent: ErrorComponent,
 	pendingComponent: PendingComponent,
@@ -84,8 +86,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 						AiDevtools,
 					]}
 				/>
-				{/*FIXME: find out how to get around the scroll persist read about createRoute */}
-				<ScrollRestoration />
 				<Scripts />
 			</body>
 		</html>
