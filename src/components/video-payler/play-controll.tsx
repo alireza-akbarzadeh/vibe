@@ -8,7 +8,34 @@ import { SoundControls } from "./SoundControls";
 import { SettingVideoOptions } from "./setting-video-options";
 import { VideoProgressbar } from "./video-progressbar";
 
-export function PlayerControls({ isHovered, videoName, year, state, actions, videoRef }: any) {
+interface PlayerState {
+    isPlaying: boolean;
+    currentTime: number;
+    duration: number;
+}
+
+interface PlayerActions {
+    togglePlay: () => void;
+    skip: (seconds: number) => void;
+}
+
+interface PlayerControlsProps {
+    isHovered: boolean;
+    videoName: string;
+    year: string;
+    state: PlayerState;
+    actions: PlayerActions;
+    videoRef: React.RefObject<HTMLVideoElement | null>;
+}
+
+export function PlayerControls({
+    isHovered,
+    videoName,
+    year,
+    state,
+    actions,
+    videoRef
+}: PlayerControlsProps) {
 
     const formatTime = (seconds: number) => {
         if (!seconds) return "0:00";
