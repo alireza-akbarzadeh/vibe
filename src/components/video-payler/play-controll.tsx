@@ -1,5 +1,5 @@
-import { RotateCcw, RotateCw } from "lucide-react"; // Import new icons
-import { Button } from "@/components/ui/button"; // Assuming you use shadcn/ui
+import { RotateCcw, RotateCw, SkipBack, SkipForward } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import BackButton from "../back-button";
 import { PlayButton } from "../play-button";
 import { MoreEpisode } from "./more-episode";
@@ -17,6 +17,8 @@ interface PlayerState {
 interface PlayerActions {
     togglePlay: () => void;
     skip: (seconds: number) => void;
+    onNext?: () => void;
+    onPrevious?: () => void;
 }
 
 interface PlayerControlsProps {
@@ -47,32 +49,43 @@ export function PlayerControls({
     };
 
     return (
-        <div className={`absolute inset-0 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-
+        <div
+            className={`absolute inset-0 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             {/* TOP BAR */}
             <div className="p-6 flex justify-between items-start z-20">
                 <BackButton position="none" title={videoName} />
-                <div className="flex gap-2">
-                    <MoreEpisode />
-                    <SettingVideoOptions />
-                </div>
             </div>
 
             {/* MIDDLE: PLAYBACK CONTROLS */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-10 md:gap-60 z-20">
+            {/* MIDDLE: PLAYBACK CONTROLS */}
+            <div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-6 md:gap-14 z-20"
+                onClick={(e) => e.stopPropagation()}
+            >
+                {/* PREVIOUS VIDEO */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-white hover:bg-white/20 rounded-full size-12 disabled:opacity-30 transition-all active:scale-90"
+                    disabled={!actions.onPrevious}
+                    onClick={(e) => { e.stopPropagation(); actions.onPrevious?.(); }}
+                >
+                    <SkipBack className="size-8 fill-current" />
+                </Button>
+
                 {/* 10s Backward */}
                 <Button
                     variant="ghost"
                     size="icon"
                     className="text-white hover:bg-white/20 rounded-full size-20 transition-transform active:scale-90"
                     onClick={(e) => {
-                        e.stopPropagation(); // Prevents triggering the overlay play/pause
+                        e.stopPropagation();
                         actions.skip(-10);
                     }}
                 >
                     <div className="relative flex items-center justify-center">
-                        <RotateCcw className="size-20" />
-                        <span className="absolute text-[9px] font-bold mt-1">10</span>
+                        <RotateCcw className="size-16" />
+                        <span className="absolute text-[10px] font-bold mt-1">10</span>
                     </div>
                 </Button>
 
@@ -83,19 +96,30 @@ export function PlayerControls({
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="text-white hover:bg-white/20 rounded-full w-14 h-14 transition-transform active:scale-90"
+
+                    className="text-white hover:bg-white/20 rounded-full size-20 transition-transform active:scale-90"
                     onClick={(e) => {
                         e.stopPropagation();
                         actions.skip(10);
                     }}
                 >
                     <div className="relative flex items-center justify-center">
-                        <RotateCw className="size-20" />
-                        <span className="absolute text-[9px] font-bold mt-1">10</span>
+                        <RotateCw className="size-16" />
+                        <span className="absolute text-[10px] font-bold mt-1">10</span>
                     </div>
                 </Button>
-            </div>
 
+                {/* NEXT VIDEO */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-white hover:bg-white/20 rounded-full size-12 disabled:opacity-30 transition-all active:scale-90"
+                    disabled={!actions.onNext}
+                    onClick={(e) => { e.stopPropagation(); actions.onNext?.(); }}
+                >
+                    <SkipForward className="size-8 fill-current" />
+                </Button>
+            </div>
             {/* BOTTOM BAR */}
             <div className="absolute bottom-0 inset-x-0 p-8 bg-linear-to-t from-black/90 via-black/40 to-transparent z-20">
                 <div className="flex flex-col gap-4">
@@ -120,7 +144,11 @@ export function PlayerControls({
                                 {formatTime(state.currentTime)} <span className="text-white/30 mx-1">/</span> {formatTime(state.duration)}
                             </span>
                         </div>
-                        <MoreVideoOptions videoRef={videoRef} />
+                        <div className="flex gap-2" onClick={(event) => event.stopPropagation()}>
+                            <MoreEpisode />
+                            <MoreVideoOptions videoRef={videoRef} />
+                            <SettingVideoOptions />
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { Play, SquareSquare } from 'lucide-react'
+import { Layers, Play, SquareSquare } from 'lucide-react'
 import {
     Accordion,
     AccordionContent,
@@ -29,7 +29,7 @@ export function MoreEpisode() {
         <Sheet>
             <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
-                    <SquareSquare />
+                    <Layers />
                 </Button>
             </SheetTrigger>
 
