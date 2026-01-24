@@ -1,7 +1,6 @@
-import type { DeepKeys, DeepValue, FieldApi, FormOptions, ReactFormExtendedApi, Validator } from '@tanstack/react-form'
+import type { DeepKeys, DeepValue, FieldApi, FormOptions, ReactFormExtendedApi } from '@tanstack/react-form'
 import { useField as useFieldApi, useForm as useTanStackForm } from '@tanstack/react-form'
-import { zodValidator } from '@tanstack/react-form-zod-adapter'
-import type { UseFieldOptions } from 'node_modules/@tanstack/react-form/dist/esm/types'
+import { zodValidator } from '@tanstack/zod-adapter'
 import type { ChangeEvent, ComponentProps, FC, ReactNode } from 'react'
 import type { Except } from 'type-fest'
 import type { z } from 'zod'
@@ -11,6 +10,16 @@ import { Label } from '@/components/ui/label'
 import type { AsChildProps } from '@/components/ui/slot'
 import { Slot } from '@/components/ui/slot'
 import { cn, createContextFactory } from '@/lib/utils'
+
+/** * Type Fix: TanStack Form v1+ often hides Validator in internal types 
+ * or expects a specific shape. We define a compatible interface here.
+ */
+export interface Validator<TData, TError = unknown> {
+    validate?: (params: { value: TData }) => TError | Promise<TError>
+    asyncValidate?: (params: { value: TData }) => TError | Promise<TError>
+}
+
+// --- Component Interfaces ---
 
 interface FieldLabelProps extends ComponentProps<typeof Label> { }
 interface FieldDetailProps extends ComponentProps<'p'>, AsChildProps { }
@@ -38,47 +47,39 @@ interface FieldApiExtended<
     handleChangeExtended: (value: any) => void
 }
 
-interface FieldComponentProps<
-    TParentData,
+type FieldComponent<TParentData, TFormValidator extends Validator<TParentData, unknown>> = <
     TName extends DeepKeys<TParentData>,
     TFieldValidator extends Validator<DeepValue<TParentData, TName>, unknown>,
-    TFormValidator extends Validator<TParentData, unknown>,
     TData extends DeepValue<TParentData, TName> = DeepValue<TParentData, TName>,
-> extends UseFieldOptions<TParentData, TName, TFieldValidator, TFormValidator, TData> {
+>({
+    render,
+    ...fieldOptions
+}: Except<any, 'form'> & {
     render: (fieldApi: FieldApiExtended<TParentData, TName, TFieldValidator, TFormValidator, TData>) => ReactNode
-}
-
-type FieldComponent<
-    TParentData,
-    TFormValidator extends Validator<TParentData, unknown>,
-> = <
-    TName extends DeepKeys<TParentData>,
-    TFieldValidator extends Validator<DeepValue<TParentData, TName>, unknown>,
-    TData extends DeepValue<TParentData, TName> = DeepValue<TParentData, TName>,
->({ render, ...fieldOptions }: Except<FieldComponentProps<TParentData, TName, TFieldValidator, TFormValidator, TData>, 'form'>) => ReactNode
+}) => ReactNode
 
 type AnyFieldApi = FieldApi<any, any, any, any, any>
 
-type FormExtended<
-    TFormData,
-> = ReactFormExtendedApi<TFormData, Validator<TFormData>> & {
+type FormExtended<TFormData> = ReactFormExtendedApi<TFormData, any> & {
     Root: FC<ComponentProps<'form'>>
-    Field: FieldComponent<TFormData, Validator<TFormData>>
+    Field: FieldComponent<TFormData, any>
     Submit: FC<ComponentProps<typeof Button>>
 }
 
 const [FieldContextProvider, useFieldContext] = createContextFactory<AnyFieldApi>()
 
-function useForm<
+// --- Main Hooks & Components ---
+
+export function useForm<
     TFormSchema extends z.ZodType,
     TFormData = z.infer<TFormSchema>,
 >(
     schema: TFormSchema,
-    options?: Except<FormOptions<TFormData, Validator<TFormData>>, 'validatorAdapter'>,
+    options?: Except<FormOptions<TFormData, any>, 'validatorAdapter'>,
 ): FormExtended<TFormData> {
     const form = useTanStackForm({
         validatorAdapter: zodValidator({
-            transformErrors: (errors) => errors.map((e) => e.message)[0],
+            transformErrors: (errors) => errors.map((e) => (typeof e === 'string' ? e : e.message))[0],
         }),
         validators: {
             onChange: schema,
@@ -98,21 +99,21 @@ function useForm<
         />
     )
 
-    const FormField: FieldComponent<TFormData, Validator<TFormData>> = (props) => (
+    const FormField: FieldComponent<TFormData, any> = (props: any) => (
         <form.Field
+            {...props}
             children={(field) => (
-                <FieldContextProvider value={field}>
+                <FieldContextProvider value={field as any}>
                     {props.render(Object.assign(field, {
                         Label: FieldLabel,
                         Detail: FieldDetail,
                         Message: FieldMessage,
                         Container: FieldContainer,
                         Controller: FieldController,
-                        handleChangeExtended: handleChangeExtended(field),
+                        handleChangeExtended: handleChangeExtended(field as any),
                     }))}
                 </FieldContextProvider>
             )}
-            {...props}
         />
     )
 
@@ -121,8 +122,8 @@ function useForm<
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
                 <Button
-                    type='submit'
-                    disabled={isSubmitting || !canSubmit}
+                    type="submit"
+                    disabled={!canSubmit || isSubmitting}
                     className={cn('w-full', className)}
                     {...props}
                 />
@@ -138,26 +139,31 @@ function useForm<
     } as FormExtended<TFormData>
 }
 
+/**
+ * Custom hook to consume Field Context with Reactivity
+ */
 function useField() {
     const fieldContext = useFieldContext()
-    const fieldApi = useFieldApi({ form: fieldContext.form, name: fieldContext.name })
+    // This is the critical fix for state updates:
+    const fieldState = fieldContext.useStore((state) => state)
 
-    return Object.assign(fieldContext, {
-        // for some reason, when using `fieldContext.state` here, the state is not updated.
-        ...fieldApi.state.meta,
-        hasErrors: fieldApi.state.meta.errors.length > 0,
-    })
+    return {
+        ...fieldContext,
+        state: fieldState,
+        ...fieldState.meta,
+        hasErrors: fieldState.meta.errors.length > 0,
+    }
 }
 
 function FieldLabel({ className, children, ...props }: FieldLabelProps) {
     const field = useField()
-
-    if (children === undefined) return null
+    if (!children) return null
 
     return (
         <Label
             htmlFor={field.name.toString()}
-            className={cn('font-semibold',
+            className={cn(
+                'font-semibold',
                 field.isTouched && field.hasErrors && 'text-destructive',
                 className,
             )}
@@ -170,14 +176,10 @@ function FieldLabel({ className, children, ...props }: FieldLabelProps) {
 
 function FieldDetail({ asChild, className, children, ...props }: FieldDetailProps) {
     const Comp = asChild ? Slot : 'p'
-
-    if (children === undefined) return null
+    if (!children) return null
 
     return (
-        <Comp
-            className='text-sm text-muted-foreground'
-            {...props}
-        >
+        <Comp className={cn('text-sm text-muted-foreground', className)} {...props}>
             {children}
         </Comp>
     )
@@ -185,12 +187,10 @@ function FieldDetail({ asChild, className, children, ...props }: FieldDetailProp
 
 function FieldMessage({ asChild, className, children, ...props }: FieldMessageProps) {
     const field = useField()
-
     const Comp = asChild ? Slot : 'p'
-    const hasPlaceholder = children !== undefined
-    const message = field.isTouched && field.hasErrors ? field.state.meta.errors[0] : null
 
-    if (!hasPlaceholder && !message) return null
+    const error = field.isTouched && field.hasErrors ? field.state.meta.errors[0] : null
+    if (!children && !error) return null
 
     return (
         <Comp
@@ -201,31 +201,18 @@ function FieldMessage({ asChild, className, children, ...props }: FieldMessagePr
             )}
             {...props}
         >
-            {message || children}
+            {error || children}
         </Comp>
     )
 }
 
 function FieldContainer({ label, detail, message, disableController, className, children, ...props }: FieldContainerProps) {
     return (
-        <div
-            className={cn('space-y-4', className)}
-            {...props}
-        >
-            <FieldLabel>
-                {label}
-            </FieldLabel>
-            <FieldDetail>
-                {detail}
-            </FieldDetail>
-            {disableController ? children : (
-                <FieldController>
-                    {children}
-                </FieldController>
-            )}
-            <FieldMessage>
-                {message}
-            </FieldMessage>
+        <div className={cn('space-y-2', className)} {...props}>
+            <FieldLabel>{label}</FieldLabel>
+            <FieldDetail>{detail}</FieldDetail>
+            {disableController ? children : <FieldController>{children}</FieldController>}
+            <FieldMessage>{message}</FieldMessage>
         </div>
     )
 }
@@ -235,13 +222,11 @@ function FieldController({ children, ...props }: FieldControllerProps) {
 
     return (
         <Slot
-            {...({
-                id: field.name.toString(),
-                name: field.name.toString(),
-                value: field.state.value ?? '',
-                onChange: handleChangeExtended(field),
-                onBlur: field.handleBlur,
-            })}
+            id={field.name.toString()}
+            name={field.name.toString()}
+            value={field.state.value ?? ''}
+            onBlur={field.handleBlur}
+            onChange={handleChangeExtended(field as any)}
             {...props}
         >
             {children}
@@ -249,69 +234,39 @@ function FieldController({ children, ...props }: FieldControllerProps) {
     )
 }
 
+// --- Utils ---
+
 function handleChangeExtended(field: AnyFieldApi) {
     return (value: any) => {
-        // TODO: this can be better
-        const isOptional = field.form.options.defaultValues[field.name] === undefined
+        const isOptional = field.form.options.defaultValues?.[field.name as keyof any] === undefined
 
-        let valueFromInput: any = undefined
+        let finalValue = value
         if (isInputChangeEvent(value)) {
-            const inputMode = value.target.inputMode as ComponentProps<'input'>['inputMode']
-            const inputType = value.target.type as ComponentProps<'input'>['type']
-            const inputValue = (() => {
-                switch (inputType) {
-                    case 'number':
-                    case 'range':
-                        return value.target.valueAsNumber
-
-                    case 'date':
-                    case 'time':
-                        return value.target.valueAsDate
-
-                    case 'checkbox':
-                    case 'radio':
-                        return value.target.checked
-
-                    case 'file':
-                        return value.target.files
-
-                    default:
-                        if (inputMode === 'numeric' || inputMode === 'decimal') {
-                            return value.target.valueAsNumber
-                        }
-
-                        return value.target.value
-                }
-            })()
-
-            valueFromInput = inputValue
+            const { type, valueAsNumber, valueAsDate, checked, files, value: stringValue } = value.target
+            switch (type) {
+                case 'number':
+                case 'range':
+                    finalValue = valueAsNumber
+                    break
+                case 'date':
+                    finalValue = valueAsDate
+                    break
+                case 'checkbox':
+                    finalValue = checked
+                    break
+                case 'file':
+                    finalValue = files
+                    break
+                default:
+                    finalValue = stringValue
+            }
         }
 
-        const finalValue = valueFromInput ?? value
-        const isEmpty = finalValue?.toString().length === 0
-
+        const isEmpty = finalValue === '' || finalValue === null || finalValue === undefined
         field.handleChange(isOptional && isEmpty ? undefined : finalValue)
     }
 }
 
-function isChangeEvent(value: any): value is ChangeEvent<any> {
-    return (
-        value?.target !== undefined &&
-        value.target?.value !== undefined
-    )
-}
-
 function isInputChangeEvent(value: any): value is ChangeEvent<HTMLInputElement> {
-    if (!isChangeEvent(value)) return false
-
-    const target = value.target
-
-    return (
-        target instanceof HTMLInputElement &&
-        target.tagName === 'INPUT' &&
-        typeof target.type === 'string' &&
-        typeof target.value === 'string'
-    )
+    return value?.target instanceof HTMLInputElement
 }
-
-export { useForm }

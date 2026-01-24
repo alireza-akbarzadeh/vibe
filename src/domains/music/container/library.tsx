@@ -26,7 +26,7 @@ export function Library() {
 
         {/* Main view */}
         <div className="flex-1 overflow-y-auto pb-24">
-          <LibraryView onSongSelect={setCurrentSong} />
+          <LibraryView />
         </div>
       </div>
 

@@ -31,6 +31,7 @@ import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as homeMusicRouteRouteImport } from './routes/(home)/music/route'
+import { Route as homeMusicIndexRouteImport } from './routes/(home)/music/index'
 import { Route as homeMoviesIndexRouteImport } from './routes/(home)/movies/index'
 import { Route as homeLibraryIndexRouteImport } from './routes/(home)/library/index'
 import { Route as demoHomeDemoIndexRouteImport } from './routes/(demo)/home-demo/index'
@@ -173,6 +174,11 @@ const homeMusicRouteRoute = homeMusicRouteRouteImport.update({
   id: '/(home)/music',
   path: '/music',
   getParentRoute: () => rootRouteImport,
+} as any)
+const homeMusicIndexRoute = homeMusicIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => homeMusicRouteRoute,
 } as any)
 const homeMoviesIndexRoute = homeMoviesIndexRouteImport.update({
   id: '/(home)/movies/',
@@ -381,6 +387,7 @@ export interface FileRoutesByFullPath {
   '/home-demo': typeof demoHomeDemoIndexRoute
   '/library': typeof homeLibraryIndexRoute
   '/movies': typeof homeMoviesIndexRoute
+  '/music/': typeof homeMusicIndexRoute
   '/demo/api/names': typeof demoDemoApiNamesRoute
   '/demo/api/tanchat': typeof demoDemoApiTanchatRoute
   '/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
@@ -395,7 +402,6 @@ export interface FileRoutesByFullPath {
   '/demo/start/ssr': typeof demoDemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
-  '/music': typeof homeMusicRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
@@ -437,6 +443,7 @@ export interface FileRoutesByTo {
   '/home-demo': typeof demoHomeDemoIndexRoute
   '/library': typeof homeLibraryIndexRoute
   '/movies': typeof homeMoviesIndexRoute
+  '/music': typeof homeMusicIndexRoute
   '/demo/api/names': typeof demoDemoApiNamesRoute
   '/demo/api/tanchat': typeof demoDemoApiTanchatRoute
   '/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
@@ -494,6 +501,7 @@ export interface FileRoutesById {
   '/(demo)/home-demo/': typeof demoHomeDemoIndexRoute
   '/(home)/library/': typeof homeLibraryIndexRoute
   '/(home)/movies/': typeof homeMoviesIndexRoute
+  '/(home)/music/': typeof homeMusicIndexRoute
   '/(demo)/demo/api/names': typeof demoDemoApiNamesRoute
   '/(demo)/demo/api/tanchat': typeof demoDemoApiTanchatRoute
   '/(demo)/demo/api/tq-todos': typeof demoDemoApiTqTodosRoute
@@ -552,6 +560,7 @@ export interface FileRouteTypes {
     | '/home-demo'
     | '/library'
     | '/movies'
+    | '/music/'
     | '/demo/api/names'
     | '/demo/api/tanchat'
     | '/demo/api/tq-todos'
@@ -566,7 +575,6 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/music'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -608,6 +616,7 @@ export interface FileRouteTypes {
     | '/home-demo'
     | '/library'
     | '/movies'
+    | '/music'
     | '/demo/api/names'
     | '/demo/api/tanchat'
     | '/demo/api/tq-todos'
@@ -664,6 +673,7 @@ export interface FileRouteTypes {
     | '/(demo)/home-demo/'
     | '/(home)/library/'
     | '/(home)/movies/'
+    | '/(home)/music/'
     | '/(demo)/demo/api/names'
     | '/(demo)/demo/api/tanchat'
     | '/(demo)/demo/api/tq-todos'
@@ -887,6 +897,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/music'
       preLoaderRoute: typeof homeMusicRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(home)/music/': {
+      id: '/(home)/music/'
+      path: '/'
+      fullPath: '/music/'
+      preLoaderRoute: typeof homeMusicIndexRouteImport
+      parentRoute: typeof homeMusicRouteRoute
     }
     '/(home)/movies/': {
       id: '/(home)/movies/'
@@ -1119,12 +1136,14 @@ interface homeMusicRouteRouteChildren {
   homeMusicMusicidRoute: typeof homeMusicMusicidRoute
   homeMusicLibraryRoute: typeof homeMusicLibraryRoute
   homeMusicSearchRoute: typeof homeMusicSearchRoute
+  homeMusicIndexRoute: typeof homeMusicIndexRoute
 }
 
 const homeMusicRouteRouteChildren: homeMusicRouteRouteChildren = {
   homeMusicMusicidRoute: homeMusicMusicidRoute,
   homeMusicLibraryRoute: homeMusicLibraryRoute,
   homeMusicSearchRoute: homeMusicSearchRoute,
+  homeMusicIndexRoute: homeMusicIndexRoute,
 }
 
 const homeMusicRouteRouteWithChildren = homeMusicRouteRoute._addFileChildren(
