@@ -1,11 +1,10 @@
-// import { outdent } from 'outdent'
-
-//TODO: need to install  outdent
+import { useDidUpdate } from '@mantine/hooks'
+import { ScriptOnce } from '@tanstack/react-router'
+import { outdent } from 'outdent'
 import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { createContextFactory, type ExcludeUnionStrict } from '@/lib/utils'
-
 
 
 const themeSchema = z.enum(['dark', 'light', 'system'])
@@ -37,11 +36,11 @@ function ThemeProvider({ children }: PropsWithChildren) {
 		setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
 	}
 
-	useEffect(() => {
+	useDidUpdate(() => {
 		localStorage.setItem('theme', theme)
 	}, [theme])
 
-	useEffect(() => {
+	useDidUpdate(() => {
 		document.documentElement.dataset.theme = resolvedTheme
 		document.documentElement.style.colorScheme = resolvedTheme
 	}, [resolvedTheme])
@@ -56,8 +55,7 @@ function ThemeProvider({ children }: PropsWithChildren) {
 
 		window.addEventListener('storage', handleStorageListener)
 		return () => window.removeEventListener('storage', handleStorageListener)
-		// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	}, [setTheme])
+	}, [])
 
 	// Handle system theme changes
 	useEffect(() => {
@@ -74,36 +72,38 @@ function ThemeProvider({ children }: PropsWithChildren) {
 		return () => media.removeListener(handleSystemThemeChange)
 	}, [theme])
 
-
-
 	const context: ThemeContext = {
 		value: theme,
 		resolved: resolvedTheme,
 		set: setTheme,
 		toggle: toggleTheme,
 	}
-	initTheme()
+
 	return (
 		<ThemeContextProvider value={context}>
+			<ScriptOnce>
+				{outdent /* js */ `
+          function initTheme() {
+            if (typeof localStorage === 'undefined') return
+
+            const localTheme = localStorage.getItem('theme')
+            const preferTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+            const resolvedTheme = localTheme === null || localTheme === 'system' ? preferTheme : localTheme
+
+            if (localTheme === null) {
+              localStorage.setItem('theme', 'system')
+            }
+
+            document.documentElement.dataset.theme = resolvedTheme
+            document.documentElement.style.colorScheme = resolvedTheme
+          }
+
+          initTheme()
+        `}
+			</ScriptOnce>
 			{children}
 		</ThemeContextProvider>
 	)
-}
-
-
-function initTheme() {
-	if (typeof localStorage === 'undefined') return
-
-	const localTheme = localStorage.getItem('theme')
-	const preferTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-	const resolvedTheme = localTheme === null || localTheme === 'system' ? preferTheme : localTheme
-
-	if (localTheme === null) {
-		localStorage.setItem('theme', 'system')
-	}
-
-	document.documentElement.dataset.theme = resolvedTheme
-	document.documentElement.style.colorScheme = resolvedTheme
 }
 
 function getLocalTheme(): Theme {
@@ -128,9 +128,6 @@ function getResolvedTheme(theme: Theme): ResolvedTheme {
 	return theme === 'system' ? getPreferTheme() : theme
 }
 
-export { ThemeProvider, themeSchema, useTheme }
+export { themeSchema }
+export { ThemeProvider, useTheme }
 export type { ResolvedTheme, Theme }
-
-
-
-// FIXME: need installation 

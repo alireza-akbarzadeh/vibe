@@ -1,10 +1,9 @@
-import {ClassValue, clsx} from "clsx";
-import type {JSX} from "react";
-// TODO: install the es-toolkit
-// import { camelCase } from 'es-toolkit'
-import {createContext, useContext} from "react";
-import {twMerge} from "tailwind-merge";
-import type {CamelCase, LiteralUnion, Simplify} from "type-fest";
+import { type ClassValue, clsx } from "clsx";
+import type { JSX } from "react";
+
+import { createContext, useContext } from "react";
+import { twMerge } from "tailwind-merge";
+import type { LiteralUnion } from "type-fest";
 
 export type StringNumber = `${number}`;
 export type StringBoolean = `${boolean}`;
@@ -42,17 +41,6 @@ export function createContextFactory<ContextData>(options?: {
 export function objectKeysTyped<T extends object>(obj: T): (keyof T)[] {
 	return Object.keys(obj) as (keyof T)[];
 }
-
-type CamelCasedProperties<T> = Simplify<{
-	[K in keyof T as CamelCase<K>]: T[K];
-}>;
-
-// export function keysToCamelCase<T extends Record<string, unknown>>(obj: T): CamelCasedProperties<T> {
-//   return Object.fromEntries(
-//     Object.entries(obj)
-//       .map(([key, value]) => [camelCase(key), value]),
-//   ) as CamelCasedProperties<T>
-// }
 
 type TryCatchResult<E = Error, T = unknown> = [null, T] | [E, null];
 
@@ -254,10 +242,12 @@ export function generateSlug(slug: string) {
 	return split.join("-");
 }
 
-
-export function  toCamelCase(value:string){
-	return value.replace(/[^a-z ]/ig, '')
+export function toCamelCase(value: string) {
+	return value
+		.replace(/[^a-z ]/gi, "")
 		.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match: any, index: number) => {
-			return +match === 0 ? "" : match[index === 0 ? 'toLowerCase' : 'toUpperCase']();
+			return +match === 0
+				? ""
+				: match[index === 0 ? "toLowerCase" : "toUpperCase"]();
 		});
 }

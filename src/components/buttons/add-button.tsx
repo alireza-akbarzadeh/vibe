@@ -2,10 +2,11 @@
 import { Check, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import type { Size } from '../play-button'
+
 import { Button, type ButtonProps } from '../ui/button'
 
-//TODO: animation effect 
+export type Size = 'x-small' | 'small' | 'medium' | 'large' | 'extra-large'
+
 interface AddButtonProps extends ButtonProps {
     className?: string
     iconSize?: Size

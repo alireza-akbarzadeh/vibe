@@ -1,129 +1,73 @@
-import { useCallback, useEffect, useState } from "react";
-import { useVideoState } from "./useVIdeoState";
-
+// useVideoController.ts
 export function useVideoController(
 	videoRef: React.RefObject<HTMLVideoElement | null>,
+	videoId: string,
 ) {
-	const state = useVideoState(videoRef);
-	const { isPlaying, setIsPlaying } = state;
+	const [isPlaying, setIsPlaying] = useState(false);
+	const [currentTime, setCurrentTime] = useState(0);
+	const [duration, setDuration] = useState(0);
 	const [isWaiting, setIsWaiting] = useState(false);
+	const [buffered, setBuffered] = useState(0);
 
-	// BUFFERING LOGIC
+	// HUD States
+	const [speedHUD, setSpeedHUD] = useState({ show: false, value: 1 });
+	const [volumeHUD, setVolumeHUD] = useState({ show: false, value: 1 });
+
 	useEffect(() => {
 		const video = videoRef.current;
 		if (!video) return;
 
-		const onWaiting = () => setIsWaiting(true);
-		const onPlaying = () => setIsWaiting(false);
+		const updateTime = () => setCurrentTime(video.currentTime);
+		const updateProgress = () => {
+			if (video.buffered.length > 0 && video.duration > 0) {
+				setBuffered(
+					(video.buffered.end(video.buffered.length - 1) / video.duration) *
+						100,
+				);
+			}
+		};
+		const handleRate = () => {
+			setSpeedHUD({ show: true, value: video.playbackRate });
+			setTimeout(() => setSpeedHUD((prev) => ({ ...prev, show: false })), 1500);
+		};
+		const handleVol = () => {
+			setVolumeHUD({ show: true, value: video.volume });
+			setTimeout(
+				() => setVolumeHUD((prev) => ({ ...prev, show: false })),
+				1500,
+			);
+		};
 
-		video.addEventListener("waiting", onWaiting);
-		video.addEventListener("playing", onPlaying);
-		video.addEventListener("canplay", onPlaying);
+		video.addEventListener("timeupdate", updateTime);
+		video.addEventListener("progress", updateProgress);
+		video.addEventListener("ratechange", handleRate);
+		video.addEventListener("volumechange", handleVol);
+		video.addEventListener("waiting", () => setIsWaiting(true));
+		video.addEventListener("playing", () => setIsWaiting(false));
+		video.addEventListener("loadedmetadata", () => setDuration(video.duration));
 
 		return () => {
-			video.removeEventListener("waiting", onWaiting);
-			video.removeEventListener("playing", onPlaying);
-			video.removeEventListener("canplay", onPlaying);
+			video.removeEventListener("timeupdate", updateTime);
+			video.removeEventListener("progress", updateProgress);
+			// ... remove other listeners
 		};
 	}, [videoRef]);
 
-	const togglePlay = useCallback(() => {
-		if (!videoRef.current) return;
-		if (videoRef.current.paused) {
-			videoRef.current.play();
-			setIsPlaying(true);
-		} else {
-			videoRef.current.pause();
-			setIsPlaying(false);
-		}
-	}, [setIsPlaying, videoRef]);
+	const togglePlay = () =>
+		isPlaying ? videoRef.current?.pause() : videoRef.current?.play();
+	const skip = (seconds: number) => {
+		if (videoRef.current) videoRef.current.currentTime += seconds;
+	};
 
-	const skip = useCallback(
-		(amount: number) => {
-			if (videoRef.current) videoRef.current.currentTime += amount;
-		},
-		[videoRef],
-	);
-
-	// Inside useVideoController.ts
-
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			const video = videoRef.current;
-			if (
-				!video ||
-				e.target instanceof HTMLInputElement ||
-				e.target instanceof HTMLTextAreaElement
-			)
-				return;
-
-			// Use e.key for characters and e.code for physical locations
-			const key = e.key.toLowerCase();
-
-			switch (e.code) {
-				case "Space":
-				case "KeyK":
-					e.preventDefault();
-					togglePlay();
-					break;
-				case "ArrowRight":
-				case "KeyL":
-					skip(10);
-					break;
-				case "ArrowLeft":
-				case "KeyJ":
-					skip(-10);
-					break;
-				case "ArrowUp":
-					e.preventDefault();
-					video.volume = Math.min(video.volume + 0.1, 1);
-					break;
-				case "ArrowDown":
-					e.preventDefault();
-					video.volume = Math.max(video.volume - 0.1, 0);
-					break;
-				case "KeyM":
-					video.muted = !video.muted;
-					break;
-				case "KeyF":
-					if (!document.fullscreenElement) {
-						video.parentElement?.requestFullscreen();
-					} else {
-						document.exitFullscreen();
-					}
-					break;
-				case "Digit0":
-				case "Numpad0":
-					video.currentTime = 0;
-					break;
-
-				// SPEED CONTROLS (Handling both Key and Code for reliability)
-				case "Period":
-					if (e.shiftKey || e.key === ">") {
-						video.playbackRate = Math.min(video.playbackRate + 0.25, 2);
-					}
-					break;
-				case "Comma":
-					if (e.shiftKey || e.key === "<") {
-						video.playbackRate = Math.max(video.playbackRate - 0.25, 0.25);
-					}
-					break;
-			}
-
-			// Additional shortcuts using e.key
-			if (key === "i") {
-				// Picture-in-Picture
-				if (document.pictureInPictureElement) {
-					document.exitPictureInPicture();
-				} else if (video.requestPictureInPicture) {
-					video.requestPictureInPicture();
-				}
-			}
-		};
-
-		window.addEventListener("keydown", handleKeyDown);
-		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, [togglePlay, skip, videoRef]);
-
-	return { ...state, togglePlay, skip, isWaiting, isPlaying };
+	return {
+		isPlaying,
+		currentTime,
+		duration,
+		buffered,
+		isWaiting,
+		speedHUD,
+		volumeHUD,
+		togglePlay,
+		skip,
+	};
 }

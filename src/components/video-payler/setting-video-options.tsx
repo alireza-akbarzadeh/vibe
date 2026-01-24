@@ -39,6 +39,8 @@ export function SettingVideoOptions({ videoRef }: SettingSheetProps) {
         return () => video.removeEventListener('ratechange', sync);
     }, [videoRef]);
 
+
+
     const handleSpeedChange = (val: number) => {
         if (videoRef.current) videoRef.current.playbackRate = val;
     };
