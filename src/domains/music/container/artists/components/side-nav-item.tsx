@@ -5,12 +5,14 @@ export function NavItem({
     icon: Icon,
     label,
     to,
-    exact = true
+    exact = true,
+    isCollapsed = false // 1. Added prop
 }: {
     icon: LucideIcon,
     label: string,
     to: string,
-    exact?: boolean
+    exact?: boolean,
+    isCollapsed?: boolean // 2. Added type
 }) {
     return (
         <RouterLink
@@ -20,24 +22,38 @@ export function NavItem({
         >
             {({ isActive }) => (
                 <div className={`
-                    flex items-center gap-5 px-3 py-3 rounded-md transition-all duration-300 relative
+                    flex items-center rounded-md transition-all duration-300 relative
+                    ${isCollapsed ? 'justify-center px-0 py-4' : 'px-3 py-3 gap-5'} 
                     ${isActive
                         ? 'text-white bg-white/5'
                         : 'text-gray-400 group-hover:text-white group-hover:bg-white/5'
                     }
                 `}>
-                    {/* Active Gradient Indicator */}
+                    {/* Active Gradient Indicator - Styled as a small dot or bar when collapsed */}
                     {isActive && (
-                        <div className="absolute left-0 w-1 h-6 bg-linear-to-b from-purple-500 to-pink-500 rounded-r-full" />
+                        <div className={`
+                            absolute left-0 bg-linear-to-b from-purple-500 to-pink-500 rounded-r-full
+                            ${isCollapsed ? 'w-1 h-8' : 'w-1 h-6'}
+                        `} />
                     )}
 
-                    <Icon className={`w-6 h-6 transition-colors ${isActive ? 'text-pink-500' : 'group-hover:text-white'
+                    <Icon className={`w-6 h-6 shrink-0 transition-colors ${isActive ? 'text-pink-500' : 'group-hover:text-white'
                         }`} />
 
-                    <span className={`font-bold transition-colors ${isActive ? 'text-white' : ''
-                        }`}>
-                        {label}
-                    </span>
+                    {/* 3. Conditionally render the label based on isCollapsed */}
+                    {!isCollapsed && (
+                        <span className={`font-bold transition-colors truncate ${isActive ? 'text-white' : ''
+                            }`}>
+                            {label}
+                        </span>
+                    )}
+
+                    {/* Optional: Tooltip for collapsed state */}
+                    {isCollapsed && (
+                        <div className="absolute left-16 bg-zinc-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 transition-opacity border border-white/10 shadow-xl">
+                            {label}
+                        </div>
+                    )}
                 </div>
             )}
         </RouterLink>

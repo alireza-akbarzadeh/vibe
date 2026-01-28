@@ -80,6 +80,7 @@ export const musicStore = new Store({
 	activeFilter: "All" as ActiveFilter,
 	isAddModalOpen: false,
 	songToAddToPlaylist: null as Song | null,
+	isSidebarCollapsed: false,
 });
 
 export const openAddToPlaylist = (song: Song) => {
@@ -151,5 +152,12 @@ export const removeFromLibrary = (id: string | number) => {
 	musicStore.setState((s) => ({
 		...s,
 		library: s.library.filter((item) => item.id !== id),
+	}));
+};
+
+export const toggleSidebar = () => {
+	musicStore.setState((s) => ({
+		...s,
+		isSidebarCollapsed: !s.isSidebarCollapsed,
 	}));
 };
