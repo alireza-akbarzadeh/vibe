@@ -30,6 +30,8 @@ export function VideoOverlay({ onTogglePlay, onSkip, isHovered, children }: Vide
     };
 
     return (
+        // biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
+        // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
         <div
             className="absolute inset-0 z-10"
             onDoubleClick={handleDoubleClick}
