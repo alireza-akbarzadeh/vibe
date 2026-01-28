@@ -1,4 +1,4 @@
-import { useRouter } from '@tanstack/react-router';
+import { useNavigate, useRouter } from '@tanstack/react-router';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
     ArrowLeft,
@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { generateSlug } from '@/lib/utils';
 
 export function BlogPost() {
     const [isLiked, setIsLiked] = useState(false);
@@ -109,7 +110,7 @@ export function BlogPost() {
         }
     };
     const router = useRouter();
-
+    const navigate = useNavigate()
     return (
         <div className="min-h-screen bg-black">
             {/* Reading Progress Bar */}
@@ -439,6 +440,8 @@ export function BlogPost() {
                                 key={related.id}
                                 whileHover={{ y: -4 }}
                                 className="group cursor-pointer"
+                                onClick={() => navigate({ to: "/blog/$blogslug", params: { blogslug: generateSlug(related.title) } })}
+
                             >
                                 <div className="aspect-4/5 rounded-xl overflow-hidden mb-4 bg-gray-900">
                                     <img
