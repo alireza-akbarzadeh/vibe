@@ -56,7 +56,7 @@ export function ArticleCard({ article, index }: ArticleCardProps) {
                 to: "/blog/$blogslug",
                 params: { blogslug: generateSlug(article.title) }
             })}
-            className={`group cursor-pointer flex flex-col h-full relative bg-white/[0.02] border border-white/5 rounded-[2rem] p-3 transition-all duration-500 ${isFinished ? 'opacity-70 hover:opacity-100' : 'hover:bg-white/[0.04] hover:border-white/10 shadow-2xl hover:shadow-purple-500/5'
+            className={`group cursor-pointer flex flex-col h-full relative bg-white/2 border border-white/5 rounded-[2rem] p-3 transition-all duration-500 ${isFinished ? 'opacity-70 hover:opacity-100' : 'hover:bg-white/4 hover:border-white/10 shadow-2xl hover:shadow-purple-500/5'
                 }`}
         >
             {/* Image Section */}
