@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as blogRouteRouteImport } from './routes/(blog)/route'
 import { Route as homeIndexRouteImport } from './routes/(home)/index'
 import { Route as homeTermsRouteImport } from './routes/(home)/terms'
 import { Route as homeStatusRouteImport } from './routes/(home)/status'
@@ -51,6 +52,7 @@ import { Route as demoDemoTableRouteImport } from './routes/(demo)/demo/table'
 import { Route as demoDemoStorybookRouteImport } from './routes/(demo)/demo/storybook'
 import { Route as demoDemoStoreRouteImport } from './routes/(demo)/demo/store'
 import { Route as demoDemoFormDemoRouteImport } from './routes/(demo)/demo/form-demo'
+import { Route as blogBlogBlogslugRouteImport } from './routes/(blog)/blog/$blogslug'
 import { Route as demoExampleGuitarsIndexRouteImport } from './routes/(demo)/example.guitars/index'
 import { Route as demoExampleGuitarsGuitarIdRouteImport } from './routes/(demo)/example.guitars/$guitarId'
 import { Route as demoDemoStartServerFuncsRouteImport } from './routes/(demo)/demo/start.server-funcs'
@@ -64,6 +66,10 @@ import { Route as demoDemoStartSsrSpaModeRouteImport } from './routes/(demo)/dem
 import { Route as demoDemoStartSsrFullSsrRouteImport } from './routes/(demo)/demo/start.ssr.full-ssr'
 import { Route as demoDemoStartSsrDataOnlyRouteImport } from './routes/(demo)/demo/start.ssr.data-only'
 
+const blogRouteRoute = blogRouteRouteImport.update({
+  id: '/(blog)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const homeIndexRoute = homeIndexRouteImport.update({
   id: '/(home)/',
   path: '/',
@@ -200,9 +206,9 @@ const demoDemoIndexRoute = demoDemoIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const blogBlogIndexRoute = blogBlogIndexRouteImport.update({
-  id: '/(blog)/blog/',
+  id: '/blog/',
   path: '/blog/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => blogRouteRoute,
 } as any)
 const adminSettingIndexRoute = adminSettingIndexRouteImport.update({
   id: '/(admin)/setting/',
@@ -273,6 +279,11 @@ const demoDemoFormDemoRoute = demoDemoFormDemoRouteImport.update({
   id: '/(demo)/demo/form-demo',
   path: '/demo/form-demo',
   getParentRoute: () => rootRouteImport,
+} as any)
+const blogBlogBlogslugRoute = blogBlogBlogslugRouteImport.update({
+  id: '/blog/$blogslug',
+  path: '/blog/$blogslug',
+  getParentRoute: () => blogRouteRoute,
 } as any)
 const demoExampleGuitarsIndexRoute = demoExampleGuitarsIndexRouteImport.update({
   id: '/(demo)/example/guitars/',
@@ -361,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/status': typeof homeStatusRoute
   '/terms': typeof homeTermsRoute
   '/': typeof homeIndexRoute
+  '/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/demo/form-demo': typeof demoDemoFormDemoRoute
   '/demo/store': typeof demoDemoStoreRoute
   '/demo/storybook': typeof demoDemoStorybookRoute
@@ -416,6 +428,7 @@ export interface FileRoutesByTo {
   '/status': typeof homeStatusRoute
   '/terms': typeof homeTermsRoute
   '/': typeof homeIndexRoute
+  '/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/demo/form-demo': typeof demoDemoFormDemoRoute
   '/demo/store': typeof demoDemoStoreRoute
   '/demo/storybook': typeof demoDemoStorybookRoute
@@ -451,6 +464,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/(blog)': typeof blogRouteRouteWithChildren
   '/(home)/music': typeof homeMusicRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/login': typeof authLoginRoute
@@ -473,6 +487,7 @@ export interface FileRoutesById {
   '/(home)/status': typeof homeStatusRoute
   '/(home)/terms': typeof homeTermsRoute
   '/(home)/': typeof homeIndexRoute
+  '/(blog)/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/(demo)/demo/form-demo': typeof demoDemoFormDemoRoute
   '/(demo)/demo/store': typeof demoDemoStoreRoute
   '/(demo)/demo/storybook': typeof demoDemoStorybookRoute
@@ -531,6 +546,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/terms'
     | '/'
+    | '/blog/$blogslug'
     | '/demo/form-demo'
     | '/demo/store'
     | '/demo/storybook'
@@ -586,6 +602,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/terms'
     | '/'
+    | '/blog/$blogslug'
     | '/demo/form-demo'
     | '/demo/store'
     | '/demo/storybook'
@@ -620,6 +637,7 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   id:
     | '__root__'
+    | '/(blog)'
     | '/(home)/music'
     | '/(auth)/forgot-password'
     | '/(auth)/login'
@@ -642,6 +660,7 @@ export interface FileRouteTypes {
     | '/(home)/status'
     | '/(home)/terms'
     | '/(home)/'
+    | '/(blog)/blog/$blogslug'
     | '/(demo)/demo/form-demo'
     | '/(demo)/demo/store'
     | '/(demo)/demo/storybook'
@@ -677,6 +696,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  blogRouteRoute: typeof blogRouteRouteWithChildren
   homeMusicRouteRoute: typeof homeMusicRouteRouteWithChildren
   authForgotPasswordRoute: typeof authForgotPasswordRoute
   authLoginRoute: typeof authLoginRoute
@@ -710,7 +730,6 @@ export interface RootRouteChildren {
   homeMoviesMovieIdRoute: typeof homeMoviesMovieIdRoute
   homePlayPlayIdRoute: typeof homePlayPlayIdRoute
   adminSettingIndexRoute: typeof adminSettingIndexRoute
-  blogBlogIndexRoute: typeof blogBlogIndexRoute
   demoDemoIndexRoute: typeof demoDemoIndexRoute
   demoHomeDemoIndexRoute: typeof demoHomeDemoIndexRoute
   homeLibraryIndexRoute: typeof homeLibraryIndexRoute
@@ -731,6 +750,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/(blog)': {
+      id: '/(blog)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof blogRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(home)/': {
       id: '/(home)/'
       path: '/'
@@ -925,7 +951,7 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof blogBlogIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof blogRouteRoute
     }
     '/(admin)/setting/': {
       id: '/(admin)/setting/'
@@ -1025,6 +1051,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof demoDemoFormDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(blog)/blog/$blogslug': {
+      id: '/(blog)/blog/$blogslug'
+      path: '/blog/$blogslug'
+      fullPath: '/blog/$blogslug'
+      preLoaderRoute: typeof blogBlogBlogslugRouteImport
+      parentRoute: typeof blogRouteRoute
+    }
     '/(demo)/example/guitars/': {
       id: '/(demo)/example/guitars/'
       path: '/example/guitars'
@@ -1112,6 +1145,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface blogRouteRouteChildren {
+  blogBlogBlogslugRoute: typeof blogBlogBlogslugRoute
+  blogBlogIndexRoute: typeof blogBlogIndexRoute
+}
+
+const blogRouteRouteChildren: blogRouteRouteChildren = {
+  blogBlogBlogslugRoute: blogBlogBlogslugRoute,
+  blogBlogIndexRoute: blogBlogIndexRoute,
+}
+
+const blogRouteRouteWithChildren = blogRouteRoute._addFileChildren(
+  blogRouteRouteChildren,
+)
+
 interface homeMusicRouteRouteChildren {
   homeMusicMusicidRoute: typeof homeMusicMusicidRoute
   homeMusicLibraryRoute: typeof homeMusicLibraryRoute
@@ -1131,6 +1178,7 @@ const homeMusicRouteRouteWithChildren = homeMusicRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  blogRouteRoute: blogRouteRouteWithChildren,
   homeMusicRouteRoute: homeMusicRouteRouteWithChildren,
   authForgotPasswordRoute: authForgotPasswordRoute,
   authLoginRoute: authLoginRoute,
@@ -1164,7 +1212,6 @@ const rootRouteChildren: RootRouteChildren = {
   homeMoviesMovieIdRoute: homeMoviesMovieIdRoute,
   homePlayPlayIdRoute: homePlayPlayIdRoute,
   adminSettingIndexRoute: adminSettingIndexRoute,
-  blogBlogIndexRoute: blogBlogIndexRoute,
   demoDemoIndexRoute: demoDemoIndexRoute,
   demoHomeDemoIndexRoute: demoHomeDemoIndexRoute,
   homeLibraryIndexRoute: homeLibraryIndexRoute,

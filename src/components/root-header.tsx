@@ -11,6 +11,7 @@ const navLinks = [
 	{ label: "Music", href: "/music" },
 	{ label: "Movies", href: "/movies" },
 	{ label: "Pricing", href: "/pricing" },
+	{ label: "Weblog", href: "/blog" },
 	{ label: "Download", href: "/download" },
 ];
 export function RootHeader() {
