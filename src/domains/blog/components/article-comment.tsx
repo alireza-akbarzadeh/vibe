@@ -43,7 +43,7 @@ export function ArticleComments() {
 
             <form onSubmit={handleComment} className="mb-12">
                 <div className="flex gap-4">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80" className="w-10 h-10 rounded-full" />
+                    <img alt={""} src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80" className="w-10 h-10 rounded-full" />
                     <div className="flex-1">
                         <textarea
                             value={comment}
@@ -64,7 +64,7 @@ export function ArticleComments() {
             <div className="space-y-6">
                 {comments.map((c) => (
                     <motion.div key={c.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-4 p-6 bg-white/[0.03] border border-white/5 rounded-2xl">
-                        <img src={c.author.avatar} className="w-10 h-10 rounded-full" />
+                        <img src={c.author.avatar} alt='' className="w-10 h-10 rounded-full" />
                         <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                                 <span className="font-semibold text-white">{c.author.name}</span>
@@ -72,10 +72,10 @@ export function ArticleComments() {
                             </div>
                             <p className="text-neutral-300 text-sm leading-relaxed">{c.content}</p>
                             <div className="flex items-center gap-4 mt-4">
-                                <button className="flex items-center gap-2 text-xs text-neutral-500 hover:text-white transition-colors">
+                                <button type='button' className="flex items-center gap-2 text-xs text-neutral-500 hover:text-white transition-colors">
                                     <ThumbsUp size={14} /> {c.likes}
                                 </button>
-                                <button className="text-xs text-neutral-500 hover:text-white transition-colors">Reply</button>
+                                <button type='button' className="text-xs text-neutral-500 hover:text-white transition-colors">Reply</button>
                             </div>
                         </div>
                     </motion.div>
