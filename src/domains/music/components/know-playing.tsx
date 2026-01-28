@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { useState } from 'react';
+import type { Song } from '../music.store';
 
-export function NowPlaying({ song, isPlaying }) {
+export function NowPlaying({ song, isPlaying }: { isPlaying: boolean; song: Song }) {
     const [isLiked, setIsLiked] = useState(false);
 
     return (
         <div className="flex flex-col items-center lg:items-start">
-            {/* Album artwork */}
             <motion.div
                 animate={{
                     scale: isPlaying ? [1, 1.02, 1] : 1,
@@ -20,7 +20,7 @@ export function NowPlaying({ song, isPlaying }) {
                 className="relative group"
             >
                 {/* Main artwork */}
-                <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                <div className="relative w-75 h-75 md:w-100 md:h-100 lg:w-125 lg:h-125 rounded-3xl overflow-hidden shadow-2xl">
                     <img
                         src={song.albumArt}
                         alt={song.album}
@@ -34,7 +34,7 @@ export function NowPlaying({ song, isPlaying }) {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"
+                                className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent"
                             />
                         )}
                     </AnimatePresence>
@@ -62,12 +62,12 @@ export function NowPlaying({ song, isPlaying }) {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="absolute -inset-4 bg-gradient-to-br from-purple-600/40 to-pink-600/40 rounded-3xl blur-2xl -z-10"
+                    className="absolute -inset-4 bg-linear-to-br from-purple-600/40 to-pink-600/40 rounded-3xl blur-2xl -z-10"
                 />
             </motion.div>
 
             {/* Song info (desktop) */}
-            <div className="hidden lg:block mt-8 w-full max-w-[500px]">
+            <div className="hidden lg:block mt-8 w-full max-w-125">
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex-1 min-w-0">
                         <motion.h1

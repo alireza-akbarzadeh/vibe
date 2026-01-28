@@ -61,6 +61,7 @@ const initialLibrary: LibraryItem[] = [
 			"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&q=80",
 	},
 ];
+export type ActiveFilter = "All" | "Playlists" | "Artists";
 
 export const musicStore = new Store({
 	currentSong: {
@@ -76,8 +77,26 @@ export const musicStore = new Store({
 	currentTime: 0,
 	library: initialLibrary,
 	searchQuery: "",
-	activeFilter: "All" as "All" | "Playlists" | "Artists",
+	activeFilter: "All" as ActiveFilter,
+	isAddModalOpen: false,
+	songToAddToPlaylist: null as Song | null,
 });
+
+export const openAddToPlaylist = (song: Song) => {
+	musicStore.setState((s) => ({
+		...s,
+		isAddModalOpen: true,
+		songToAddToPlaylist: song,
+	}));
+};
+
+export const closeAddToPlaylist = () => {
+	musicStore.setState((s) => ({
+		...s,
+		isAddModalOpen: false,
+		songToAddToPlaylist: null,
+	}));
+};
 
 // Action helpers
 export const setCurrentSong = (song: Song) => {
@@ -87,7 +106,6 @@ export const setCurrentSong = (song: Song) => {
 		isPlaying: true,
 	}));
 };
-
 export const togglePlay = () => {
 	musicStore.setState((state) => ({ ...state, isPlaying: !state.isPlaying }));
 };
@@ -100,10 +118,22 @@ export const setSearchQuery = (query: string) => {
 	musicStore.setState((s) => ({ ...s, searchQuery: query }));
 };
 
-export const setFilter = (filter: "All" | "Playlists" | "Artists") => {
+export const setFilter = (filter: ActiveFilter) => {
 	musicStore.setState((s) => ({ ...s, activeFilter: filter }));
 };
 
 export const addLibraryItem = (item: LibraryItem) => {
 	musicStore.setState((s) => ({ ...s, library: [item, ...s.library] }));
+};
+
+export const createPlaylist = (name: string, description: string) => {
+	const newPlaylist: LibraryItem = {
+		id: Math.random().toString(36).substr(2, 9),
+		title: name,
+		subtitle: `Playlist • ${description || "User"}`,
+		type: "playlist",
+		image:
+			"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&q=80",
+	};
+	musicStore.setState((s) => ({ ...s, library: [newPlaylist, ...s.library] }));
 };

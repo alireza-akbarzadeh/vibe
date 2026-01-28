@@ -34,7 +34,7 @@ export function MusicSearch({
             // Increased backdrop blur and refined border for a premium "Glass" look
             className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-3xl border-b border-white/5"
         >
-            <div className="max-w-[1400px] mx-auto px-6 py-4">
+            <div className="max-w-350 mx-auto px-6 py-4">
                 <div className="flex items-center gap-6 justify-between">
                     <div className="flex items-center gap-8 flex-1">
                         <Logo />
@@ -53,6 +53,7 @@ export function MusicSearch({
                                 />
                                 {searchQuery && (
                                     <button
+                                        type="button"
                                         onClick={() => onSearchChange("")}
                                         className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
                                     >

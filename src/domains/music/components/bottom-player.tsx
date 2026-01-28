@@ -18,7 +18,7 @@ import {
     VolumeX
 } from 'lucide-react';
 import { useCallback, useEffect, useRef } from 'react';
-import type { Song } from '@/domains/music/music.store';
+import { openAddToPlaylist, type Song } from '@/domains/music/music.store';
 import {
     playerStore,
     setVolume,
@@ -120,7 +120,15 @@ export function BottomPlayer({
                         >
                             <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
                         </button>
-                        <PlusCircle className="w-5 h-5 text-[#b3b3b3] hover:text-white cursor-pointer transition-colors" />
+
+                        <button
+                            type="button"
+                            title="Add to playlist"
+                            onClick={() => openAddToPlaylist(currentSong)}
+                            className="text-[#b3b3b3] hover:text-white cursor-pointer transition-colors active:scale-90"
+                        >
+                            <PlusCircle className="w-5 h-5" />
+                        </button>
                     </div>
                 </div>
 

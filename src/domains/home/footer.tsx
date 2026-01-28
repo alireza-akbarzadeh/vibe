@@ -1,7 +1,9 @@
 import { Facebook, Instagram, Music, Twitter, Youtube } from "lucide-react";
+import { Image } from "@/components/ui/image";
 import { Link, type ValidLink } from "@/components/ui/link";
 import { Typography } from "@/components/ui/typography";
 import { MSG } from "@/constants/constants";
+import { IMAGES } from "@/constants/media";
 
 const footerLinks = {
 	Product: ["Features", "Pricing", "Apps", "Download"],
@@ -83,17 +85,35 @@ export default function Footer() {
 							© 2024 Vibe. All rights reserved.
 						</Typography.P>
 
-						{/* App store badges placeholder */}
-						<div className="flex gap-4">
-							<div className="px-4 py-2 rounded-lg bg-white/5 border border-white/10">
-								<Typography.S className="text-xs text-gray-400">Download on the</Typography.S>
-								<Typography.P className="text-white text-sm font-medium leading-none my-2!">App Store</Typography.P>
-
-							</div>
-							<div className="px-4 py-2 rounded-lg bg-white/5 border border-white/10">
-								<Typography.S className="text-xs text-gray-400">Get it on</Typography.S>
-								<Typography.P className="text-white text-sm font-medium leading-none my-2!">Google Play</Typography.P>
-							</div>
+						<div className="flex flex-wrap gap-4">
+							<Link
+								to="https://www.apple.com/app-store/"
+								className="flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group min-w-40"
+							>
+								<Image src={IMAGES.APP_STORE} className="w-7 h-7 object-contain group-hover:scale-110 transition-transform" />
+								<div className="flex flex-col items-start">
+									<Typography.S className="text-[10px] uppercase tracking-wider text-gray-400 leading-none">
+										Download on the
+									</Typography.S>
+									<Typography.P className="text-white text-base font-semibold leading-tight mt-0.5">
+										App Store
+									</Typography.P>
+								</div>
+							</Link>
+							<Link
+								to="https://play.google.com/store"
+								className="flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group min-w-40"
+							>
+								<Image src={IMAGES.GOOGLE_PLAY} className="w-7 h-7 object-contain group-hover:scale-110 transition-transform" />
+								<div className="flex flex-col items-start">
+									<Typography.S className="text-[10px] uppercase tracking-wider text-gray-400 leading-none">
+										Get it on
+									</Typography.S>
+									<Typography.P className="text-white text-base font-semibold leading-tight mt-0.5">
+										Google Play
+									</Typography.P>
+								</div>
+							</Link>
 						</div>
 					</div>
 				</div>

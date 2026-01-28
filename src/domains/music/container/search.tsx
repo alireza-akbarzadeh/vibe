@@ -3,12 +3,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
     Heart,
     MoreHorizontal,
-    Play,
-    Search as SearchIcon,
-    X
+    Play
 } from 'lucide-react';
 import { useState } from 'react';
-import { SearchHeader } from '@/domains/movies/components';
 // Import your stores and types
 import { musicStore, setCurrentSong } from '@/domains/music/music.store';
 import { MusicSearch } from '../components/music-search';
@@ -54,7 +51,7 @@ export function SearchView() {
             </div>
 
             {/* 2. Category Filter Chips */}
-            <div className="flex items-center gap-2 mb-8 sticky top-[80px] z-40 bg-[#121212] py-2">
+            <div className="flex items-center gap-2 mb-8 sticky top-20 z-40 bg-[#121212] py-2 ">
                 {searchFilters.map((filter) => (
                     <button type='button'
                         key={filter}
@@ -68,16 +65,15 @@ export function SearchView() {
                     </button>
                 ))}
             </div>
-
             {/* 3. Conditional Content based on Filter */}
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" >
                 {(activeFilter === "All" || activeFilter === "Songs") && (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
                     >
-                        <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 mb-12">
+                        <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 my-12">
                             {/* Top Result */}
                             <section>
                                 <h2 className="text-2xl font-bold text-white mb-4">Top result</h2>

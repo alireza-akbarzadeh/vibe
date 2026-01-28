@@ -13,6 +13,8 @@ This project is a modern streaming platform inspired by **Spotify, Netflix, and 
 - Landing Page
 - Movie Discovery Page
 - Movie Details Page
+- Music Page
+- about page
 - Authentication (Sign in / Sign up)
 - Plans / Subscription Page
 - Artist Discovery & Selection Page (onboarding personalization)
