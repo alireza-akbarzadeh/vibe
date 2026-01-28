@@ -8,7 +8,6 @@ import {
     Music, Play, Quote, Send, Share2, ThumbsUp, Twitter
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import BackButton from '@/components/back-button';
 import { Button } from '@/components/ui/button';
 
 export function BlogPost() {
