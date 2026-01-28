@@ -8,8 +8,16 @@ export interface BlogState {
 	likes: number[];
 	readingProgress: Record<number, number>;
 	finishedArticles: number[];
+	reactions: Record<number, string>;
+	reactionCounts: Record<number, Record<string, number>>;
 }
-
+export const initialReactionCounts: Record<string, number> = {
+	"🤯": 12,
+	"🔥": 24,
+	"💖": 18,
+	"👀": 7,
+	"⚡️": 15,
+};
 export const blogStore = new Store<BlogState>({
 	activeCategory: "all",
 	isSidebarOpen: true,
@@ -18,9 +26,41 @@ export const blogStore = new Store<BlogState>({
 	likes: [],
 	readingProgress: { 2: 45, 5: 80 },
 	finishedArticles: [4],
+	reactions: {},
+	reactionCounts: {},
 });
 
 export const actions = {
+	setReaction: (articleId: number, emoji: string) => {
+		blogStore.setState((s) => {
+			const currentReaction = s.reactions[articleId];
+			const currentCounts =
+				s.reactionCounts[articleId] || initialReactionCounts;
+
+			const newCounts = { ...currentCounts };
+
+			if (currentReaction) {
+				newCounts[currentReaction] = Math.max(
+					0,
+					newCounts[currentReaction] - 1,
+				);
+			}
+
+			if (currentReaction !== emoji) {
+				newCounts[emoji] = (newCounts[emoji] || 0) + 1;
+			}
+
+			return {
+				...s,
+				reactions: {
+					...s.reactions,
+					[articleId]: currentReaction === emoji ? "" : emoji,
+				},
+				reactionCounts: { ...s.reactionCounts, [articleId]: newCounts },
+			};
+		});
+	},
+
 	setActiveCategory: (id: string) =>
 		blogStore.setState((s) => ({ ...s, activeCategory: id, searchQuery: "" })),
 	setSearchQuery: (query: string) =>

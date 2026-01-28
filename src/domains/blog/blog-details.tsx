@@ -16,6 +16,7 @@ import { actions, blogStore } from '@/domains/blog/blog.store';
 import { generateSlug } from '@/lib/utils';
 import { MOCK_ARTICLES } from './blog-mock';
 import { ArticleComments } from './components/article-comment';
+import ReactionSection from './components/reaction-section';
 
 export function BlogPost() {
     const { blogslug } = useParams({ from: '/(blog)/blog/$blogslug' });
@@ -111,13 +112,15 @@ export function BlogPost() {
             {/* 2. LEFT SIDE ACTION BAR & TOC */}
             <div className="fixed left-8 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-10 z-40">
                 <div className="flex flex-col items-center gap-4 bg-white/[0.03] border border-white/5 backdrop-blur-md p-2 rounded-full shadow-2xl">
-                    <button onClick={() => actions.toggleLike(article.id)} className={`p-4 rounded-full transition-all ${isLiked ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/20' : 'hover:bg-white/10 text-neutral-500'}`}>
+                    <button type='button' onClick={() => actions.toggleLike(article.id)} className={`p-4 rounded-full transition-all ${isLiked ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/20' : 'hover:bg-white/10 text-neutral-500'}`}>
                         <Heart size={20} fill={isLiked ? "currentColor" : "none"} />
                     </button>
-                    <button onClick={() => actions.toggleBookmark(article.id)} className={`p-4 rounded-full transition-all ${isSaved ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'hover:bg-white/10 text-neutral-500'}`}>
+                    <button
+                        type='button'
+                        onClick={() => actions.toggleBookmark(article.id)} className={`p-4 rounded-full transition-all ${isSaved ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'hover:bg-white/10 text-neutral-500'}`}>
                         <Bookmark size={20} fill={isSaved ? "currentColor" : "none"} />
                     </button>
-                    <button onClick={handleCopyLink} className="p-4 rounded-full hover:bg-white/10 text-neutral-500 transition-all">
+                    <button type='button' onClick={handleCopyLink} className="p-4 rounded-full hover:bg-white/10 text-neutral-500 transition-all">
                         <Share2 size={20} />
                     </button>
                 </div>
@@ -125,6 +128,7 @@ export function BlogPost() {
                 <div className="flex flex-col gap-6 pl-2">
                     {sections.map((s) => (
                         <button
+                            type='button'
                             key={s.id}
                             onClick={() => document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth' })}
                             className="group flex items-center gap-4 text-left"
@@ -180,8 +184,8 @@ export function BlogPost() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <button className="p-4 rounded-2xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white transition-all"><Twitter size={20} /></button>
-                        <button className="p-4 rounded-2xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white transition-all"><Facebook size={20} /></button>
+                        <button type='button' className="p-4 rounded-2xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white transition-all"><Twitter size={20} /></button>
+                        <button type='button' className="p-4 rounded-2xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white transition-all"><Facebook size={20} /></button>
                     </div>
                 </div>
 
@@ -211,21 +215,7 @@ export function BlogPost() {
                 </div>
 
                 {/* 5. REACTION SECTION */}
-                <div className="mt-32 p-16 rounded-[4rem] bg-white/[0.02] border border-white/5 text-center">
-                    <h4 className="text-3xl font-black text-white mb-10 italic">How's your vibe after reading?</h4>
-                    <div className="flex flex-wrap justify-center gap-6">
-                        {['🤯', '🔥', '💖', '👀', '⚡️'].map((emoji) => (
-                            <motion.button
-                                key={emoji}
-                                whileHover={{ y: -10, scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl hover:bg-white/10 transition-colors shadow-2xl"
-                            >
-                                {emoji}
-                            </motion.button>
-                        ))}
-                    </div>
-                </div>
+                <ReactionSection articleId={article.id} />
 
                 <div id="comments-section" className="mt-32">
                     <ArticleComments />
@@ -233,11 +223,11 @@ export function BlogPost() {
             </article>
 
             {/* 6. RELATED FOOTER */}
-            <footer className="bg-white/[0.01] border-t border-white/5 py-32 px-6">
+            <footer className="bg-white/1 border-t border-white/5 py-32 px-6">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex items-center justify-between mb-16">
                         <h3 className="text-5xl font-black text-white italic tracking-tighter">Keep Reading</h3>
-                        <button onClick={() => navigate({ to: '/' })} className="group flex items-center gap-3 text-neutral-500 hover:text-white transition-colors">
+                        <button type='button' onClick={() => navigate({ to: '/' })} className="group flex items-center gap-3 text-neutral-500 hover:text-white transition-colors">
                             <span className="text-xs font-black uppercase tracking-widest">The Feed</span>
                             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                         </button>
