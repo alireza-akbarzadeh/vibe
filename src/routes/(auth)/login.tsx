@@ -58,7 +58,7 @@ function LoginPage() {
 				throw error
 			}
 			if (result.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
-				toast.success(`${result?.data?.first_name} Welcome back!`);
+				// toast.success(`${result?.data?.first_name} Welcome back!`);
 				await navigate({ to: "/movies" });
 			}
 		},

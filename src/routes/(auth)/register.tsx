@@ -1,3 +1,11 @@
+import { logger } from "@sentry/tanstackstart-react";
+import { useForm } from "@tanstack/react-form";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { ArrowRight, Check, Loader2, Mail, Sparkles, User } from "lucide-react";
+import { useId } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InputPassword } from "@/components/ui/forms/input-password";
@@ -9,14 +17,6 @@ import { PrivacyPolicyDialog } from "@/domains/auth/privacy-dialog";
 import { TermsOfServiceDialog } from "@/domains/auth/terms-dialog";
 import { tryCatchAsync } from "@/lib/utils";
 import { usePostAuthRegister } from "@/services/endpoints/authentication/authentication.ts";
-import { logger } from "@sentry/tanstackstart-react";
-import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { ArrowRight, Check, Loader2, Mail, Sparkles, User } from "lucide-react";
-import { useId } from "react";
-import { toast } from "sonner";
-import { z } from "zod";
 
 export const Route = createFileRoute("/(auth)/register")({
     component: RouteComponent,
