@@ -11,7 +11,7 @@ count.txt
 .output
 .vinxi
 todos.json
-/src/services/models
-/src/services/endpoints
+# /src/services/models
+# /src/services/endpoints
 
 .idea
