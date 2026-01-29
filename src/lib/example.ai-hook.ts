@@ -1,10 +1,10 @@
+import { clientTools } from "@tanstack/ai-client";
+import type { InferChatMessages } from "@tanstack/ai-react";
 import {
+	createChatClientOptions,
 	fetchServerSentEvents,
 	useChat,
-	createChatClientOptions,
 } from "@tanstack/ai-react";
-import type { InferChatMessages } from "@tanstack/ai-react";
-import { clientTools } from "@tanstack/ai-client";
 
 import { recommendGuitarToolDef } from "@/lib/example.guitar-tools";
 

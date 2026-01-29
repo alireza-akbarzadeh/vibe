@@ -1,4 +1,4 @@
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Music, X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -10,8 +10,8 @@ import { ModeToggle } from "./mode-toggle";
 const navLinks = [
 	{ label: "Music", href: "/music" },
 	{ label: "Movies", href: "/movies" },
-	{ label: "Pricing", href: "/pricing" },
 	{ label: "Weblog", href: "/blog" },
+	{ label: "Pricing", href: "/pricing" },
 	{ label: "Download", href: "/download" },
 ];
 export function RootHeader() {
@@ -30,9 +30,8 @@ export function RootHeader() {
 			initial={{ y: -100 }}
 			animate={{ y: 0 }}
 			transition={{ duration: 0.6 }}
-			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-				isScrolled ? "bg-black/80 backdrop-blur-xl " : "bg-transparent"
-			}`}
+			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-black/80 backdrop-blur-xl " : "bg-transparent"
+				}`}
 		>
 			<nav className="max-w-7xl mx-auto px-6 py-4">
 				<div className="flex items-center justify-between">

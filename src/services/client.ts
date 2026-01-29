@@ -1,8 +1,7 @@
 import type { AxiosError, AxiosRequestConfig } from "axios";
 import Axios from "axios";
-
-import { env } from "@/env.ts";
 import { Http } from "@/constants/constants";
+import { env } from "@/env.ts";
 
 const STORAGE_KEY = "Vibe_Access_Token";
 

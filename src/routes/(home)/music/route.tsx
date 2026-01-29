@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronRight, Maximize2 } from "lucide-react";
+import { Maximize2 } from "lucide-react";
 import { BottomPlayer } from "@/domains/music/components/bottom-player";
 import { Sidebar } from "@/domains/music/container/sidebar";
 import {

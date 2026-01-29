@@ -56,7 +56,7 @@ function ThemeProvider({ children }: PropsWithChildren) {
 
 		window.addEventListener("storage", handleStorageListener);
 		return () => window.removeEventListener("storage", handleStorageListener);
-	}, []);
+	}, [setTheme]);
 
 	// Handle system theme changes
 	useEffect(() => {

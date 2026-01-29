@@ -57,7 +57,7 @@ export function VideoProgressbar({
 		setIsDragging(true);
 
 		// Initial seek on click
-		const rect = barRef.current!.getBoundingClientRect();
+		const rect = barRef.current?.getBoundingClientRect();
 		onSeek(((e.clientX - rect.left) / rect.width) * duration);
 
 		window.addEventListener("mousemove", handleMouseMove as any);

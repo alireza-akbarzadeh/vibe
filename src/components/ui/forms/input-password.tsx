@@ -1,13 +1,13 @@
+import { Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { Lock, LucideEye, LucideEyeOff, type LucideProps } from "lucide-react";
+import { type ComponentProps, useId, useState } from "react";
+import type { Except } from "type-fest";
 import { PropsProvider } from "@/components/props-provider";
 import { cn } from "@/lib/utils";
-import { Lock, LucideEye, LucideEyeOff, LucideProps } from "lucide-react";
-import { ComponentProps, useId, useState } from "react";
-import type { Except } from "type-fest";
 import { Button } from "../button";
 import { Input } from "../input";
-import { motion } from "framer-motion";
 import { Label } from "../label";
-import { Link } from "@tanstack/react-router";
 
 export interface InputPasswordProps
 	extends Except<ComponentProps<typeof Input>, "type"> {

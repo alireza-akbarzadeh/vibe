@@ -1,6 +1,6 @@
 import { Share2 } from "lucide-react";
-import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 export function SharedButton() {
 	const handleShare = async () => {
@@ -9,7 +9,7 @@ export function SharedButton() {
 			await navigator.share({
 				url,
 			});
-		} catch (error) {
+		} catch (_error) {
 			toast("Failed to Share link");
 		}
 	};

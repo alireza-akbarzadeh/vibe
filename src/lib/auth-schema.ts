@@ -1,6 +1,3 @@
-import { z } from "zod";
-import en from "@/messages/en";
-
 export const NAME_MIN = 2;
 export const NAME_MAX = 10;
 

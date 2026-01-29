@@ -1,6 +1,12 @@
-import { Award, DollarSign, LucideIcon, Star, TrendingUp } from "lucide-react";
-import type { StatsBarProps } from "../movie-types.ts";
+import {
+	Award,
+	DollarSign,
+	type LucideIcon,
+	Star,
+	TrendingUp,
+} from "lucide-react";
 import { StatsCard } from "@/domains/movies/components";
+import type { StatsBarProps } from "../movie-types.ts";
 
 export type Stats = {
 	icon: LucideIcon;

@@ -68,7 +68,7 @@ export function ArticleCard({ article, index }: ArticleCardProps) {
 	);
 
 	const ratingStyle =
-		RATING_CONFIG[article.rating as Rating] || RATING_CONFIG["Interesting"];
+		RATING_CONFIG[article.rating as Rating] || RATING_CONFIG.Interesting;
 
 	const categoryColor =
 		article.category.toLowerCase() === "music"

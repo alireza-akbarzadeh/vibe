@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export function useVideoController(
 	videoRef: React.RefObject<HTMLVideoElement | null>,
-	videoId: string,
+	_videoId: string,
 ) {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [currentTime, setCurrentTime] = useState(0);

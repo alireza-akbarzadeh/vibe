@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MovieImages } from "@/domains/movies/components";
 import { LightBox } from "../components/light-box";
 import type { MovieImage } from "../movie-types";
-import { MovieImages } from "@/domains/movies/components";
 
 type ActiveTabSte = "poster" | "still" | "behind" | "all";
 

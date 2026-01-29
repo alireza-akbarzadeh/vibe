@@ -1,4 +1,4 @@
-import { ModelsUser } from "@/services/models";
+import type { ModelsUser } from "@/services/models";
 
 type Session = {
 	user: ModelsUser;

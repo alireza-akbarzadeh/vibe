@@ -27,7 +27,7 @@ export function ScrollRestoration({ children }: { children: React.ReactNode }) {
 			} else {
 				window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 			}
-			//@ts-ignore
+			//@ts-expect-error
 			prevLocation.current = location;
 			lastAction.current = action.type;
 		});

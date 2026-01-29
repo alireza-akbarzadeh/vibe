@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { chat, maxIterations, toStreamResponse } from "@tanstack/ai";
 import { anthropic } from "@tanstack/ai-anthropic";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { getGuitars, recommendGuitarToolDef } from "@/lib/example.guitar-tools";
 

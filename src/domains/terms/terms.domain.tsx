@@ -56,7 +56,7 @@ export function TermsAndConditionsDomain() {
 		});
 
 		return () => observer.disconnect();
-	}, []);
+	}, [sections.forEach]);
 
 	const scrollToSection = (id) => {
 		const element = document.getElementById(id);

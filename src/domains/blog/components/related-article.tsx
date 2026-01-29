@@ -84,8 +84,7 @@ export function RelatedArticle({ articleId }: RelatedArticleProps) {
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
 					{related.map((item, index) => {
 						const ratingStyle =
-							RATING_CONFIG[item.rating as Rating] ||
-							RATING_CONFIG["Interesting"];
+							RATING_CONFIG[item.rating as Rating] || RATING_CONFIG.Interesting;
 
 						return (
 							<motion.div

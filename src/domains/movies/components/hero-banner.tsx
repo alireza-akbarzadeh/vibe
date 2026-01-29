@@ -1,11 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Info, Play, Plus, Star, Volume2, VolumeX } from "lucide-react";
+import { Info, Play, Star, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useState } from "react";
+import { AddButton } from "@/components/buttons/add-button";
 import { Button, buttonVariants } from "@/components/ui/button";
 import type { FeaturedMovie } from "@/types/app";
-import { MovieInfoDialog } from "./movie-info-dialog";
-import { AddButton } from "@/components/buttons/add-button";
 
 export function HeroBanner() {
 	const [currentIndex, setCurrentIndex] = useState(0);

@@ -1,5 +1,5 @@
-import { Children, cloneElement, isValidElement } from "react";
 import type { ComponentProps, ComponentType, PropsWithChildren } from "react";
+import { Children, cloneElement, isValidElement } from "react";
 
 type PropsProviderProps<ComponentOrProps> = PropsWithChildren<
 	ComponentOrProps extends ComponentType

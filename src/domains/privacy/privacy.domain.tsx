@@ -45,7 +45,7 @@ export function PrivacyDomain() {
 		});
 
 		return () => observer.disconnect();
-	}, []);
+	}, [sections.forEach]);
 
 	const scrollToSection = (id: string) => {
 		const element = document.getElementById(id);

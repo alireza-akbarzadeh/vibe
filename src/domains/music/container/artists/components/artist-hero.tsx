@@ -8,7 +8,7 @@ import {
 	UserCheck,
 	UserPlus,
 } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export function ArtistHero({ artist }) {

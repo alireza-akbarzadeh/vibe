@@ -1,5 +1,13 @@
-import React from "react";
+import type { RankingInfo } from "@tanstack/match-sorter-utils";
+import { compareItems, rankItem } from "@tanstack/match-sorter-utils";
 import { createFileRoute } from "@tanstack/react-router";
+import type {
+	Column,
+	ColumnDef,
+	ColumnFiltersState,
+	FilterFn,
+	SortingFn,
+} from "@tanstack/react-table";
 import {
 	flexRender,
 	getCoreRowModel,
@@ -9,20 +17,9 @@ import {
 	sortingFns,
 	useReactTable,
 } from "@tanstack/react-table";
-import { compareItems, rankItem } from "@tanstack/match-sorter-utils";
-
-import { makeData } from "@/data/demo-table-data";
-
-import type {
-	Column,
-	ColumnDef,
-	ColumnFiltersState,
-	FilterFn,
-	SortingFn,
-} from "@tanstack/react-table";
-import type { RankingInfo } from "@tanstack/match-sorter-utils";
-
+import React from "react";
 import type { Person } from "@/data/demo-table-data";
+import { makeData } from "@/data/demo-table-data";
 
 export const Route = createFileRoute("/(demo)/demo/table")({
 	component: TableDemo,
@@ -138,7 +135,7 @@ function TableDemo() {
 				table.setSorting([{ id: "fullName", desc: false }]);
 			}
 		}
-	}, [table.getState().columnFilters[0]?.id]);
+	}, [table.getState, table.setSorting]);
 
 	return (
 		<div className="min-h-screen bg-gray-900 p-6">
@@ -349,7 +346,7 @@ function DebouncedInput({
 		}, debounce);
 
 		return () => clearTimeout(timeout);
-	}, [value]);
+	}, [value, debounce, onChange]);
 
 	return (
 		<input

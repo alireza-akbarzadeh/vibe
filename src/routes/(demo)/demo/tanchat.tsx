@@ -41,7 +41,7 @@ function Messages({ messages }: { messages: ChatMessages }) {
 			messagesContainerRef.current.scrollTop =
 				messagesContainerRef.current.scrollHeight;
 		}
-	}, [messages]);
+	}, []);
 
 	if (!messages.length) {
 		return null;
@@ -153,8 +153,7 @@ function ChatPage() {
 									onInput={(e) => {
 										const target = e.target as HTMLTextAreaElement;
 										target.style.height = "auto";
-										target.style.height =
-											Math.min(target.scrollHeight, 200) + "px";
+										target.style.height = `${Math.min(target.scrollHeight, 200)}px`;
 									}}
 									onKeyDown={(e) => {
 										if (e.key === "Enter" && !e.shiftKey && input.trim()) {

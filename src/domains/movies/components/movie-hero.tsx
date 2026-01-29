@@ -1,7 +1,7 @@
-import type { MovieTypes } from "@/types/app";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { MovieTypes } from "@/types/app";
 import MovieInfo from "./movie-info";
 
 interface MovieHeroProps {

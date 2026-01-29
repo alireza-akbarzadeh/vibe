@@ -17,7 +17,7 @@ export function useVideoState(ref: React.RefObject<HTMLVideoElement | null>) {
 		const resolveDuration = () => {
 			// normal case
 			if (
-				!isNaN(video.duration) &&
+				!Number.isNaN(video.duration) &&
 				video.duration > 0 &&
 				video.duration !== Infinity
 			) {
@@ -28,7 +28,7 @@ export function useVideoState(ref: React.RefObject<HTMLVideoElement | null>) {
 			// 🔥 SAFARI / STREAMING fallback
 			if (video.seekable && video.seekable.length > 0) {
 				const end = video.seekable.end(video.seekable.length - 1);
-				if (end > 0 && !isNaN(end)) {
+				if (end > 0 && !Number.isNaN(end)) {
 					setDuration(end);
 				}
 			}

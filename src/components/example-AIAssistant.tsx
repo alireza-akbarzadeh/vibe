@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from "react";
 import { useStore } from "@tanstack/react-store";
 import { Store } from "@tanstack/store";
-
-import { Send, X, ChevronRight } from "lucide-react";
+import { ChevronRight, Send, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Streamdown } from "streamdown";
-
-import { useGuitarRecommendationChat } from "@/lib/example.ai-hook";
 import type { ChatMessages } from "@/lib/example.ai-hook";
+import { useGuitarRecommendationChat } from "@/lib/example.ai-hook";
 
 import GuitarRecommendation from "./example-GuitarRecommendation";
 
@@ -20,7 +18,7 @@ function Messages({ messages }: { messages: ChatMessages }) {
 			messagesContainerRef.current.scrollTop =
 				messagesContainerRef.current.scrollHeight;
 		}
-	}, [messages]);
+	}, []);
 
 	if (!messages.length) {
 		return (
@@ -133,8 +131,7 @@ export default function AIAssistant() {
 									onInput={(e) => {
 										const target = e.target as HTMLTextAreaElement;
 										target.style.height = "auto";
-										target.style.height =
-											Math.min(target.scrollHeight, 120) + "px";
+										target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
 									}}
 									onKeyDown={(e) => {
 										if (e.key === "Enter" && !e.shiftKey && input.trim()) {

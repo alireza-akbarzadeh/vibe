@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Heart, MoreHorizontal, Music, Pause, Play } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export function TopSongs({ songs }) {

@@ -83,7 +83,7 @@ function Calendar({
 				numberOfMonths={columnsDisplayed}
 				showOutsideDays={showOutsideDays}
 				className={cn("overflow-visible p-2", className)}
-				style={{ width: 248.8 * (columnsDisplayed ?? 1) + "px" }}
+				style={{ width: `${248.8 * (columnsDisplayed ?? 1)}px` }}
 				classNames={{
 					months: "flex flex-col relative sm:flex-row",
 					month_caption:
@@ -282,7 +282,7 @@ function CaptionLabel({
 			{/* @ts-expect-error React 19 Support */}
 			{navView === "days"
 				? children
-				: displayYears.from + " - " + displayYears.to}
+				: `${displayYears.from} - ${displayYears.to}`}
 		</Button>
 	);
 }

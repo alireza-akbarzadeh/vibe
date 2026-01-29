@@ -1,8 +1,8 @@
-import { VariantProps } from "class-variance-authority";
-import { ComponentProps } from "react";
+import type { VariantProps } from "class-variance-authority";
+import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
-import { AsChildProps, Slot } from "../ui/slot";
+import { type AsChildProps, Slot } from "../ui/slot";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface TooltipButtonProps

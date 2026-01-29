@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useCallback, useState } from "react";
 
 export const Route = createFileRoute("/(demo)/demo/tanstack-query")({
 	component: TanStackQueryDemo,

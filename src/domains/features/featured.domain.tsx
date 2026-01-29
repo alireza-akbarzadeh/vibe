@@ -123,9 +123,9 @@ export function FeaturesPage() {
                             viewport={{ once: true }}
                             className="group relative"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all" />
-                            <div className="relative bg-gradient-to-br from-purple-600/10 to-pink-600/10 backdrop-blur-xl border border-white/10 rounded-3xl p-10 h-full">
-                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center mb-6">
+                            <div className="absolute inset-0 bg-linear-to-br from-purple-600/20 to-pink-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all" />
+                            <div className="relative bg-linear-to-br from-purple-600/10 to-pink-600/10 backdrop-blur-xl border border-white/10 rounded-3xl p-10 h-full">
+                                <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center mb-6">
                                     <Headphones className="w-8 h-8 text-white" />
                                 </div>
                                 <h3 className="text-4xl font-bold mb-4">Music Streaming</h3>
@@ -155,9 +155,9 @@ export function FeaturesPage() {
                             viewport={{ once: true }}
                             className="group relative"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-cyan-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all" />
-                            <div className="relative bg-gradient-to-br from-blue-600/10 to-cyan-600/10 backdrop-blur-xl border border-white/10 rounded-3xl p-10 h-full">
-                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center mb-6">
+                            <div className="absolute inset-0 bg-linear-to-br from-blue-600/20 to-cyan-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all" />
+                            <div className="relative bg-linear-to-br from-blue-600/10 to-cyan-600/10 backdrop-blur-xl border border-white/10 rounded-3xl p-10 h-full">
+                                <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-blue-600 to-cyan-600 flex items-center justify-center mb-6">
                                     <Tv className="w-8 h-8 text-white" />
                                 </div>
                                 <h3 className="text-4xl font-bold mb-4">Video Streaming</h3>
