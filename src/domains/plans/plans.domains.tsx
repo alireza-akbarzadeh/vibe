@@ -22,8 +22,6 @@ export function Plans() {
 		return () => window.removeEventListener("mousemove", handleMouseMove);
 	}, []);
 
-
-
 	return (
 		<div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
 			{/* Animated background */}
@@ -97,20 +95,22 @@ export function Plans() {
 						<button
 							type="button"
 							onClick={() => setIsAnnual(false)}
-							className={`px-6 py-2 rounded-full font-medium transition-all ${!isAnnual
-								? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
-								: "text-gray-400 hover:text-white"
-								}`}
+							className={`px-6 py-2 rounded-full font-medium transition-all ${
+								!isAnnual
+									? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+									: "text-gray-400 hover:text-white"
+							}`}
 						>
 							Monthly
 						</button>
 						<button
 							type="button"
 							onClick={() => setIsAnnual(true)}
-							className={`px-6 py-2 rounded-full font-medium transition-all ${isAnnual
-								? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
-								: "text-gray-400 hover:text-white"
-								}`}
+							className={`px-6 py-2 rounded-full font-medium transition-all ${
+								isAnnual
+									? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+									: "text-gray-400 hover:text-white"
+							}`}
 						>
 							Annual
 							<Badge className="ml-2 bg-green-500/20 text-green-400 border-green-500/30">
@@ -122,7 +122,12 @@ export function Plans() {
 				{/* Pricing Cards */}
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
 					{plans.map((plan, index) => (
-						<PlanCard key={plan.name} plan={plan} index={index} isAnnual={isAnnual} />
+						<PlanCard
+							key={plan.name}
+							plan={plan}
+							index={index}
+							isAnnual={isAnnual}
+						/>
 					))}
 				</div>
 				<FaqSection />

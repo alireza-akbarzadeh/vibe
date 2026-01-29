@@ -8,13 +8,13 @@ import { Input } from "@/components/ui/input";
 interface SearchHeaderProps {
 	searchQuery: string;
 	onSearchChange: (query: string) => void;
-	title?: string
+	title?: string;
 }
 
 export function SearchHeader({
 	searchQuery,
 	onSearchChange,
-	title
+	title,
 }: SearchHeaderProps) {
 	const [isFocused, setIsFocused] = useState(false);
 

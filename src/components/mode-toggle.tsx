@@ -12,7 +12,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export function ModeToggle() {
 	const theme = useTheme();
-	const media = useMediaQuery()
+	const media = useMediaQuery();
 
 	return (
 		<DropdownMenu modal={false}>
@@ -22,15 +22,15 @@ export function ModeToggle() {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent
-				side={media.isMobile ? 'bottom' : 'right'}
-				align={media.isMobile ? 'end' : 'start'}
-				className='min-w-56 rounded-lg'
+				side={media.isMobile ? "bottom" : "right"}
+				align={media.isMobile ? "end" : "start"}
+				className="min-w-56 rounded-lg"
 			>
 				{themeOptions.map(({ value, Icon }) => (
 					<DropdownMenuItem key={value} onClick={() => theme.set(value)}>
 						<Icon />
 						{value}
-						{theme.value === value && <LucideCheck className='ml-auto' />}
+						{theme.value === value && <LucideCheck className="ml-auto" />}
 					</DropdownMenuItem>
 				))}
 			</DropdownMenuContent>

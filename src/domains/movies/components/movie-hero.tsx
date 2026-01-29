@@ -1,14 +1,12 @@
 import type { MovieTypes } from "@/types/app";
 import { motion } from "framer-motion";
-import {
-	ChevronDown
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import MovieInfo from "./movie-info";
 
 interface MovieHeroProps {
 	movie: MovieTypes;
-	onClick?: (type: "movie" | "trailer") => void
+	onClick?: (type: "movie" | "trailer") => void;
 }
 
 export function MovieHero({ movie, onClick }: MovieHeroProps) {

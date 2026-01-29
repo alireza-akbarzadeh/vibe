@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/(home)/cookies')({
-    component: RouteComponent,
-})
+export const Route = createFileRoute("/(home)/cookies")({
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-    return <div>Hello "/(home)/coockies"!</div>
+	return <div>Hello "/(home)/coockies"!</div>;
 }

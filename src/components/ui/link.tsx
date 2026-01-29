@@ -1,61 +1,75 @@
-import type { LinkComponentProps, RegisteredRouter } from '@tanstack/react-router'
-import { Link as RouterLink } from '@tanstack/react-router'
-import type { ComponentProps } from 'react'
-import type { FileRouteTypes } from '@/routeTree.gen'
+import type {
+	LinkComponentProps,
+	RegisteredRouter,
+} from "@tanstack/react-router";
+import { Link as RouterLink } from "@tanstack/react-router";
+import type { ComponentProps } from "react";
+import type { FileRouteTypes } from "@/routeTree.gen";
 
-type InternalLink = '.' | '..' | Exclude<FileRouteTypes['to'], ''>
-type ExternalLink = `http${'s' | ''}://${string}.${string}`
-type AnchorLink = `#${string}`
-type ValidLink = InternalLink | ExternalLink | AnchorLink
+type InternalLink = "." | ".." | Exclude<FileRouteTypes["to"], "">;
+type ExternalLink = `http${"s" | ""}://${string}.${string}`;
+type AnchorLink = `#${string}`;
+type ValidLink = InternalLink | ExternalLink | AnchorLink;
 
-type LinkProps<To extends ValidLink> = (
-    To extends InternalLink
-    ? LinkComponentProps<'a', RegisteredRouter, string, To>
-    : ComponentProps<'a'>
-) & {
-    to: To
-}
+type LinkProps<To extends ValidLink> = (To extends InternalLink
+	? LinkComponentProps<"a", RegisteredRouter, string, To>
+	: ComponentProps<"a">) & {
+	to: To;
+};
 
 function Link<To extends ValidLink>(props: LinkProps<To>) {
-    switch (true) {
-        case isInternalLinkProps(props):
-            return <RouterLink  {...props} />
+	switch (true) {
+		case isInternalLinkProps(props):
+			return <RouterLink {...props} />;
 
-        case isExternalLinkProps(props):
-            return <a href={props.to} target='_blank' rel='noopener noreferrer' {...props} />
+		case isExternalLinkProps(props):
+			return (
+				<a
+					href={props.to}
+					target="_blank"
+					rel="noopener noreferrer"
+					{...props}
+				/>
+			);
 
-        case isAnchorLinkProps(props):
-            return <a href={props.to} {...props} />
+		case isAnchorLinkProps(props):
+			return <a href={props.to} {...props} />;
 
-        default:
-            throw new Error(`Invalid link type: ${props.to}`)
-    }
+		default:
+			throw new Error(`Invalid link type: ${props.to}`);
+	}
 }
 
 function isInternalLink(link: string): link is InternalLink {
-    return link.startsWith('/') || link.startsWith('.')
+	return link.startsWith("/") || link.startsWith(".");
 }
 
 function isExternalLink(link: string): link is ExternalLink {
-    return link.startsWith('http')
+	return link.startsWith("http");
 }
 
 function isAnchorLink(link: string): link is AnchorLink {
-    return link.startsWith('#')
+	return link.startsWith("#");
 }
 
-function isInternalLinkProps(props: LinkProps<ValidLink>): props is LinkProps<InternalLink> {
-    return isInternalLink(props.to)
+function isInternalLinkProps(
+	props: LinkProps<ValidLink>,
+): props is LinkProps<InternalLink> {
+	return isInternalLink(props.to);
 }
 
-function isExternalLinkProps(props: LinkProps<ValidLink>): props is LinkProps<ExternalLink> {
-    return isExternalLink(props.to)
+function isExternalLinkProps(
+	props: LinkProps<ValidLink>,
+): props is LinkProps<ExternalLink> {
+	return isExternalLink(props.to);
 }
 
-function isAnchorLinkProps(props: LinkProps<ValidLink>): props is LinkProps<AnchorLink> {
-    return isAnchorLink(props.to)
+function isAnchorLinkProps(
+	props: LinkProps<ValidLink>,
+): props is LinkProps<AnchorLink> {
+	return isAnchorLink(props.to);
 }
 
-export { Link }
-export { isAnchorLink, isExternalLink, isInternalLink }
-export type { AnchorLink, ExternalLink, InternalLink, ValidLink }
+export { Link };
+export { isAnchorLink, isExternalLink, isInternalLink };
+export type { AnchorLink, ExternalLink, InternalLink, ValidLink };

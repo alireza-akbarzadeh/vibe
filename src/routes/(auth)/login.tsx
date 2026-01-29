@@ -51,21 +51,21 @@ function LoginPage() {
 				mutateAsync({
 					data: { email: value.email, password: value.password },
 				}),
-			)
+			);
 			if (error) {
-				logger.error(error.message)
-				toast.error("Failed to login. Please check your credentials.")
-				throw error
+				logger.error(error.message);
+				toast.error("Failed to login. Please check your credentials.");
+				throw error;
 			}
 			if (result.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
 				// toast.success(`${result?.data?.first_name} Welcome back!`);
 				await navigate({ to: "/movies" });
 			}
 		},
-	})
+	});
 
 	const emailId = useId();
-	const rememberId = useId()
+	const rememberId = useId();
 
 	return (
 		<AuthLayout
@@ -106,8 +106,9 @@ function LoginPage() {
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
-										className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
-											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+										className={`pl-12 h-12 bg-white/5 border ${
+											isInvalid ? "border-red-500" : "border-white/10"
+										} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 									/>
 								</div>
 								{isInvalid && (
@@ -120,7 +121,7 @@ function LoginPage() {
 									</motion.div>
 								)}
 							</div>
-						)
+						);
 					}}
 				</form.Field>
 
@@ -136,9 +137,8 @@ function LoginPage() {
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
-
 							/>
-						)
+						);
 					}}
 				</form.Field>
 
@@ -227,5 +227,5 @@ function LoginPage() {
 				<span>Trusted by 50M+ streamers worldwide</span>
 			</div>
 		</AuthLayout>
-	)
+	);
 }

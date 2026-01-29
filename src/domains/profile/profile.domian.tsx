@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export function ProfileDomains() {
-    return (
-        <div>profile.domian</div>
-    )
+	return <div>profile.domian</div>;
 }

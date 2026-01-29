@@ -14,5 +14,5 @@ function RouteComponent() {
 			<Plans />
 			<Footer />
 		</>
-	)
+	);
 }

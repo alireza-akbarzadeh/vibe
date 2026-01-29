@@ -1,5 +1,5 @@
-import { AspectRatio as AspectRatioPrimitive } from 'radix-ui'
+import { AspectRatio as AspectRatioPrimitive } from "radix-ui";
 
-const AspectRatio = AspectRatioPrimitive.Root
+const AspectRatio = AspectRatioPrimitive.Root;
 
-export { AspectRatio }
+export { AspectRatio };

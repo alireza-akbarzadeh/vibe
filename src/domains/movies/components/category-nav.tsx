@@ -4,18 +4,11 @@ import type { Categories, CategoriesType } from "../movies";
 interface CategoryNavProps {
 	activeCategory: Categories;
 	onCategoryChange: (category: Categories) => void;
-	categories: CategoriesType[]
+	categories: CategoriesType[];
 }
 
-
-
 export function CategoryNav(props: CategoryNavProps) {
-	const {
-		activeCategory,
-		categories,
-		onCategoryChange,
-	} = props
-
+	const { activeCategory, categories, onCategoryChange } = props;
 
 	return (
 		<motion.div
@@ -32,10 +25,11 @@ export function CategoryNav(props: CategoryNavProps) {
 						animate={{ opacity: 1, scale: 1 }}
 						transition={{ delay: 0.4 + index * 0.05 }}
 						onClick={() => onCategoryChange(category.id)}
-						className={`relative flex items-center gap-2 px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all ${activeCategory === category.id
-							? "text-white"
-							: "text-gray-400 hover:text-white"
-							}`}
+						className={`relative flex items-center gap-2 px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all ${
+							activeCategory === category.id
+								? "text-white"
+								: "text-gray-400 hover:text-white"
+						}`}
 					>
 						{/* Active background */}
 						{activeCategory === category.id && (

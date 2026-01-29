@@ -39,9 +39,9 @@ function VerifyPage() {
 			// Redirect after success
 			setTimeout(() => {
 				navigate({ to: "/" });
-			}, 2000)
+			}, 2000);
 		},
-	})
+	});
 
 	// Resend Timer logic
 	useEffect(() => {
@@ -61,13 +61,13 @@ function VerifyPage() {
 		if (value && index < 5) {
 			inputRefs.current[index + 1]?.focus();
 		}
-	}
+	};
 
 	const handleKeyDown = (index: number, e: React.KeyboardEvent, field: any) => {
 		if (e.key === "Backspace" && !field.state.value[index] && index > 0) {
 			inputRefs.current[index - 1]?.focus();
 		}
-	}
+	};
 
 	if (isVerified) {
 		return (
@@ -93,7 +93,7 @@ function VerifyPage() {
 					</div>
 				</div>
 			</AuthLayout>
-		)
+		);
 	}
 
 	return (
@@ -128,7 +128,7 @@ function VerifyPage() {
 									<Input
 										key={index + digit}
 										ref={(el) => {
-											inputRefs.current[index] = el
+											inputRefs.current[index] = el;
 										}}
 										type="text"
 										inputMode="numeric"
@@ -221,5 +221,5 @@ function VerifyPage() {
 				</Link>
 			</div>
 		</AuthLayout>
-	)
+	);
 }

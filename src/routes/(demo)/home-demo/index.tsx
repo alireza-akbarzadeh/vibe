@@ -49,7 +49,7 @@ function App() {
 			description:
 				"Built from the ground up for modern web applications. Deploy anywhere JavaScript runs.",
 		},
-	]
+	];
 
 	return (
 		<>
@@ -118,5 +118,5 @@ function App() {
 				</section>
 			</div>
 		</>
-	)
+	);
 }

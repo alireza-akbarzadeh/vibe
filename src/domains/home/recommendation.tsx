@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Typography } from "@/components/ui/typography";
 import { generateSlug } from "@/lib/utils";
-import { recommendations } from './data';
-
+import { recommendations } from "./data";
 
 const moods = [
 	{ id: "energetic", label: "Energetic", color: "from-orange-500 to-red-500" },
@@ -20,11 +19,9 @@ const moods = [
 
 export type MoodKey = "energetic" | "chill" | "romantic" | "dark";
 
-
-
 export default function RecommendationsShowcase() {
 	const [activeMood, setActiveMood] = useState<MoodKey>("dark");
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	return (
 		<section className="relative py-32 bg-[#0a0a0a] overflow-hidden">
 			{/* Background accent */}
@@ -59,10 +56,11 @@ export default function RecommendationsShowcase() {
 								variant="text"
 								key={mood.id}
 								onClick={() => setActiveMood(mood.id as MoodKey)}
-								className={`relative p-6 rounded-full font-medium transition-all duration-300 ${activeMood === mood.id
-									? "text-white"
-									: "text-gray-400 hover:text-white bg-white/5 hover:bg-white/10"
-									}`}
+								className={`relative p-6 rounded-full font-medium transition-all duration-300 ${
+									activeMood === mood.id
+										? "text-white"
+										: "text-gray-400 hover:text-white bg-white/5 hover:bg-white/10"
+								}`}
 							>
 								{activeMood === mood.id && (
 									<motion.div
@@ -108,10 +106,11 @@ export default function RecommendationsShowcase() {
 									{/* Type badge */}
 									<div className="absolute top-3 left-3">
 										<span
-											className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-md ${item.type === "music"
-												? "bg-purple-500/30 text-purple-200 border border-purple-400/30"
-												: "bg-cyan-500/30 text-cyan-200 border border-cyan-400/30"
-												}`}
+											className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-md ${
+												item.type === "music"
+													? "bg-purple-500/30 text-purple-200 border border-purple-400/30"
+													: "bg-cyan-500/30 text-cyan-200 border border-cyan-400/30"
+											}`}
 										>
 											{item.type === "music" ? "♪ Music" : "▶ Movie"}
 										</span>
@@ -120,9 +119,17 @@ export default function RecommendationsShowcase() {
 									{/* Hover actions */}
 									<div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
 										<div className="flex items-center gap-3">
-											<LikeButton iconSize="large" className="p-3 size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all hover:scale-110" />
+											<LikeButton
+												iconSize="large"
+												className="p-3 size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all hover:scale-110"
+											/>
 											<Button
-												onClick={() => navigate({ to: "/movies/$movieId", params: { movieId: generateSlug(item.title) } })}
+												onClick={() =>
+													navigate({
+														to: "/movies/$movieId",
+														params: { movieId: generateSlug(item.title) },
+													})
+												}
 												type="button"
 												size="lg"
 												variant="text"
@@ -133,7 +140,6 @@ export default function RecommendationsShowcase() {
 											<AddButton
 												iconSize="small"
 												className="rounded-full bg-white/20 border-white/30 text-white hover:bg-white/30 transition-all hover:scale-110 size-12"
-
 											/>
 										</div>
 									</div>
@@ -143,7 +149,9 @@ export default function RecommendationsShowcase() {
 										<Typography.H3 className="text-white font-bold text-lg truncate">
 											{item.title}
 										</Typography.H3>
-										<Typography.P className="text-gray-300 text-sm">{item.artist}</Typography.P>
+										<Typography.P className="text-gray-300 text-sm">
+											{item.artist}
+										</Typography.P>
 									</div>
 								</div>
 							</motion.div>

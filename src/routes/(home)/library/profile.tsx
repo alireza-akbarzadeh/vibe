@@ -1,10 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { ProfileDomains } from '@/domains/profile/profile.domian'
+import { createFileRoute } from "@tanstack/react-router";
+import { ProfileDomains } from "@/domains/profile/profile.domian";
 
-export const Route = createFileRoute('/(home)/library/profile')({
-    component: RouteComponent,
-})
+export const Route = createFileRoute("/(home)/library/profile")({
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-    return <ProfileDomains />
+	return <ProfileDomains />;
 }

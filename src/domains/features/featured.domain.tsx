@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import {
     ArrowRight,
     Check,
@@ -14,9 +14,9 @@ import {
     Tv,
     Users,
     Wifi,
-    Zap
-} from 'lucide-react';
-import React from 'react';
+    Zap,
+} from "lucide-react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 
 export function FeaturesPage() {
@@ -60,7 +60,7 @@ export function FeaturesPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.1 }}
-                        className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent"
+                        className="text-6xl md:text-8xl font-bold mb-6 bg-linear-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent"
                     >
                         Everything you need
                     </motion.h1>
@@ -71,8 +71,8 @@ export function FeaturesPage() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-xl text-gray-400 max-w-2xl mx-auto mb-12"
                     >
-                        From lossless audio to 4K video, offline downloads to social sharing.
-                        Experience entertainment like never before.
+                        From lossless audio to 4K video, offline downloads to social
+                        sharing. Experience entertainment like never before.
                     </motion.p>
 
                     <motion.div
@@ -81,11 +81,14 @@ export function FeaturesPage() {
                         transition={{ duration: 0.8, delay: 0.3 }}
                         className="flex flex-col sm:flex-row items-center justify-center gap-4"
                     >
-                        <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-8 py-6 text-lg rounded-full">
+                        <Button className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-8 py-6 text-lg rounded-full">
                             Start Free Trial
                             <ArrowRight className="w-5 h-5 ml-2" />
                         </Button>
-                        <Button variant="outline" className="border-white/20 hover:bg-white/5 px-8 py-6 text-lg rounded-full">
+                        <Button
+                            variant="outline"
+                            className="border-white/20 hover:bg-white/5 px-8 py-6 text-lg rounded-full"
+                        >
                             Compare Plans
                         </Button>
                     </motion.div>
@@ -105,7 +108,10 @@ export function FeaturesPage() {
                             Core Features
                         </span>
                         <h2 className="text-5xl md:text-6xl font-bold mb-4">
-                            Two platforms, <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">one experience</span>
+                            Two platforms,{" "}
+                            <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
+                                one experience
+                            </span>
                         </h2>
                     </motion.div>
 
@@ -124,8 +130,9 @@ export function FeaturesPage() {
                                 </div>
                                 <h3 className="text-4xl font-bold mb-4">Music Streaming</h3>
                                 <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-                                    Access over 50 million songs with lossless audio quality. Create playlists,
-                                    discover new artists, and enjoy music like never before.
+                                    Access over 50 million songs with lossless audio quality.
+                                    Create playlists, discover new artists, and enjoy music like
+                                    never before.
                                 </p>
                                 <div className="flex flex-wrap gap-3">
                                     <span className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm">
@@ -155,8 +162,8 @@ export function FeaturesPage() {
                                 </div>
                                 <h3 className="text-4xl font-bold mb-4">Video Streaming</h3>
                                 <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-                                    Watch movies, series, and exclusive content in stunning 4K HDR.
-                                    Your personal cinema, anywhere you go.
+                                    Watch movies, series, and exclusive content in stunning 4K
+                                    HDR. Your personal cinema, anywhere you go.
                                 </p>
                                 <div className="flex flex-wrap gap-3">
                                     <span className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm">
@@ -224,11 +231,15 @@ export function FeaturesPage() {
                                 Offline Mode
                             </span>
                             <h2 className="text-5xl font-bold mb-6 leading-tight">
-                                Download and enjoy <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">offline</span>
+                                Download and enjoy{" "}
+                                <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
+                                    offline
+                                </span>
                             </h2>
                             <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-                                Going somewhere without internet? Download your favorite music and videos
-                                to enjoy offline. Perfect for flights, commutes, or anywhere.
+                                Going somewhere without internet? Download your favorite music
+                                and videos to enjoy offline. Perfect for flights, commutes, or
+                                anywhere.
                             </p>
                             <ul className="space-y-4">
                                 <CheckItem text="Unlimited downloads with Premium" />
@@ -299,7 +310,10 @@ export function FeaturesPage() {
                             Personalization
                         </span>
                         <h2 className="text-5xl font-bold mb-4">
-                            Made <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">just for you</span>
+                            Made{" "}
+                            <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
+                                just for you
+                            </span>
                         </h2>
                         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
                             Our AI learns your taste and surfaces content you'll love
@@ -366,7 +380,10 @@ export function FeaturesPage() {
                                 Multi-Device
                             </span>
                             <h2 className="text-5xl font-bold mb-6 leading-tight">
-                                Seamless across <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">all devices</span>
+                                Seamless across{" "}
+                                <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
+                                    all devices
+                                </span>
                             </h2>
                             <p className="text-gray-400 text-lg mb-8 leading-relaxed">
                                 Start on your phone, continue on your TV, finish on your laptop.
@@ -392,7 +409,7 @@ export function FeaturesPage() {
                         features={[
                             "Share playlists with friends",
                             "Collaborative playlists",
-                            "Live listening sessions"
+                            "Live listening sessions",
                         ]}
                         gradient="from-purple-600/20 to-pink-600/20"
                         delay={0.1}
@@ -404,7 +421,7 @@ export function FeaturesPage() {
                         features={[
                             "End-to-end encryption",
                             "No ads, no tracking",
-                            "Parental controls"
+                            "Parental controls",
                         ]}
                         gradient="from-blue-600/20 to-cyan-600/20"
                         delay={0.2}
@@ -426,14 +443,18 @@ export function FeaturesPage() {
                             Ready to experience all features?
                         </h2>
                         <p className="text-gray-400 text-lg mb-10 max-w-xl mx-auto">
-                            Start your free 30-day trial and unlock everything. No credit card required.
+                            Start your free 30-day trial and unlock everything. No credit card
+                            required.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-8 py-6 text-lg rounded-full">
                                 Start Free Trial
                                 <ArrowRight className="w-5 h-5 ml-2" />
                             </Button>
-                            <Button variant="outline" className="border-white/20 hover:bg-white/5 px-8 py-6 text-lg rounded-full">
+                            <Button
+                                variant="outline"
+                                className="border-white/20 hover:bg-white/5 px-8 py-6 text-lg rounded-full"
+                            >
                                 Compare Plans
                             </Button>
                         </div>
@@ -499,13 +520,22 @@ function DeviceCard({ icon, label }) {
             whileHover={{ y: -4, scale: 1.02 }}
             className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center aspect-square hover:border-purple-500/50 transition-all"
         >
-            <div className="text-purple-400 mb-3">{React.cloneElement(icon, { className: 'w-10 h-10' })}</div>
+            <div className="text-purple-400 mb-3">
+                {React.cloneElement(icon, { className: "w-10 h-10" })}
+            </div>
             <span className="text-sm font-medium">{label}</span>
         </motion.div>
     );
 }
 
-function SocialSecurityCard({ icon, title, description, features, gradient, delay }) {
+function SocialSecurityCard({
+    icon,
+    title,
+    description,
+    features,
+    gradient,
+    delay,
+}) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -514,7 +544,9 @@ function SocialSecurityCard({ icon, title, description, features, gradient, dela
             transition={{ delay }}
             className="group relative"
         >
-            <div className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-3xl blur-xl group-hover:blur-2xl transition-all`} />
+            <div
+                className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-3xl blur-xl group-hover:blur-2xl transition-all`}
+            />
             <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-10">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 flex items-center justify-center mb-6 text-purple-400">
                     {icon}
@@ -525,7 +557,10 @@ function SocialSecurityCard({ icon, title, description, features, gradient, dela
                 </p>
                 <div className="space-y-3">
                     {features.map((feature, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5">
+                        <div
+                            key={i}
+                            className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5"
+                        >
                             <Check className="w-5 h-5 text-purple-400 flex-shrink-0" />
                             <span className="text-sm">{feature}</span>
                         </div>

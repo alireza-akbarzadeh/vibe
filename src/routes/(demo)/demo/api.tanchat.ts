@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { chat, maxIterations, toStreamResponse } from '@tanstack/ai'
-import { anthropic } from '@tanstack/ai-anthropic'
+import { createFileRoute } from "@tanstack/react-router";
+import { chat, maxIterations, toStreamResponse } from "@tanstack/ai";
+import { anthropic } from "@tanstack/ai-anthropic";
 
-import { getGuitars, recommendGuitarToolDef } from '@/lib/example.guitar-tools'
+import { getGuitars, recommendGuitarToolDef } from "@/lib/example.guitar-tools";
 
 const SYSTEM_PROMPT = `You are a helpful assistant for a store that sells guitars.
 
@@ -19,54 +19,54 @@ IMPORTANT:
 - ONLY recommend guitars from our inventory (use getGuitars first)
 - The recommendGuitar tool has a buy button - this is how customers purchase
 - Do NOT describe the guitar yourself - let the recommendGuitar tool do it
-`
+`;
 
-export const Route = createFileRoute('/(demo)/demo/api/tanchat')({
-  server: {
-    handlers: {
-      POST: async ({ request }) => {
-        // Capture request signal before reading body (it may be aborted after body is consumed)
-        const requestSignal = request.signal
+export const Route = createFileRoute("/(demo)/demo/api/tanchat")({
+	server: {
+		handlers: {
+			POST: async ({ request }) => {
+				// Capture request signal before reading body (it may be aborted after body is consumed)
+				const requestSignal = request.signal;
 
-        // If request is already aborted, return early
-        if (requestSignal.aborted) {
-          return new Response(null, { status: 499 }) // 499 = Client Closed Request
-        }
+				// If request is already aborted, return early
+				if (requestSignal.aborted) {
+					return new Response(null, { status: 499 }); // 499 = Client Closed Request
+				}
 
-        const abortController = new AbortController()
+				const abortController = new AbortController();
 
-        try {
-          const { messages } = await request.json()
+				try {
+					const { messages } = await request.json();
 
-          const stream = chat({
-            adapter: anthropic(),
-            model: 'claude-haiku-4-5',
-            tools: [
-              getGuitars, // Server tool
-              recommendGuitarToolDef, // No server execute - client will handle
-            ],
-            systemPrompts: [SYSTEM_PROMPT],
-            agentLoopStrategy: maxIterations(5),
-            messages,
-            abortController,
-          })
+					const stream = chat({
+						adapter: anthropic(),
+						model: "claude-haiku-4-5",
+						tools: [
+							getGuitars, // Server tool
+							recommendGuitarToolDef, // No server execute - client will handle
+						],
+						systemPrompts: [SYSTEM_PROMPT],
+						agentLoopStrategy: maxIterations(5),
+						messages,
+						abortController,
+					});
 
-          return toStreamResponse(stream, { abortController })
-        } catch (error: any) {
-          console.error('Chat API error:', error)
-          // If request was aborted, return early (don't send error response)
-          if (error.name === 'AbortError' || abortController.signal.aborted) {
-            return new Response(null, { status: 499 }) // 499 = Client Closed Request
-          }
-          return new Response(
-            JSON.stringify({ error: 'Failed to process chat request' }),
-            {
-              status: 500,
-              headers: { 'Content-Type': 'application/json' },
-            },
-          )
-        }
-      },
-    },
-  },
-})
+					return toStreamResponse(stream, { abortController });
+				} catch (error: any) {
+					console.error("Chat API error:", error);
+					// If request was aborted, return early (don't send error response)
+					if (error.name === "AbortError" || abortController.signal.aborted) {
+						return new Response(null, { status: 499 }); // 499 = Client Closed Request
+					}
+					return new Response(
+						JSON.stringify({ error: "Failed to process chat request" }),
+						{
+							status: 500,
+							headers: { "Content-Type": "application/json" },
+						},
+					);
+				}
+			},
+		},
+	},
+});

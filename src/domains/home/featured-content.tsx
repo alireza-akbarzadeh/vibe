@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
@@ -214,7 +213,11 @@ export default function FeaturedContent() {
 						style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
 					>
 						{playlists.map((playlist, index) => (
-							<PlayListCard playlist={playlist} index={index} key={playlist.id} />
+							<PlayListCard
+								playlist={playlist}
+								index={index}
+								key={playlist.id}
+							/>
 						))}
 					</div>
 				</motion.div>

@@ -1,12 +1,9 @@
-import {ModelsUser} from "@/services/models";
+import { ModelsUser } from "@/services/models";
 
 type Session = {
-    user: ModelsUser
-}
+	user: ModelsUser;
+};
 
 export function UseSession(): Session {
-
-
-
-    return {user: {}}
+	return { user: {} };
 }

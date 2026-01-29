@@ -8,7 +8,6 @@ export default function HeroSection() {
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
 	useEffect(() => {
-
 		const handleMouseMove = (e: MouseEvent): void => {
 			setMousePosition({
 				x: (e.clientX / window.innerWidth - 0.5) * 20,
@@ -116,7 +115,11 @@ export default function HeroSection() {
 					>
 						<Link
 							to="/movies"
-							className={buttonVariants({ className: "group relative px-8 py-6 text-lg font-semibold bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border-0 rounded-full! overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30", size: "lg" })}
+							className={buttonVariants({
+								className:
+									"group relative px-8 py-6 text-lg font-semibold bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border-0 rounded-full! overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30",
+								size: "lg",
+							})}
 						>
 							<span className="relative z-10 flex items-center gap-2">
 								<Play className="w-5 h-5 fill-current" />
@@ -127,7 +130,11 @@ export default function HeroSection() {
 
 						<Link
 							to="/library"
-							className={buttonVariants({ className: "px-8 rounded-full!  py-6 text-lg font-semibold text-white/80 hover:text-white hover:bg-white/10  border border-white/20 backdrop-blur-sm transition-all duration-300", size: "lg" })}
+							className={buttonVariants({
+								className:
+									"px-8 rounded-full!  py-6 text-lg font-semibold text-white/80 hover:text-white hover:bg-white/10  border border-white/20 backdrop-blur-sm transition-all duration-300",
+								size: "lg",
+							})}
 						>
 							Explore Library
 						</Link>

@@ -1,7 +1,7 @@
-import { Slot as SlotPrimitive } from 'radix-ui'
+import { Slot as SlotPrimitive } from "radix-ui";
 
-export const Slot = SlotPrimitive.Slot
+export const Slot = SlotPrimitive.Slot;
 
 export interface AsChildProps {
-    asChild?: boolean
+	asChild?: boolean;
 }

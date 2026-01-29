@@ -4,7 +4,7 @@ import {
 	createRootRouteWithContext,
 	type ErrorComponentProps,
 	HeadContent,
-	Scripts
+	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { motion } from "framer-motion";
@@ -27,17 +27,17 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
 		meta: createMetadata({
-			charSet: 'utf-8',
+			charSet: "utf-8",
 			viewport: {
-				'width': 'device-width',
-				'initial-scale': '1',
-				'maximum-scale': '1',
-				'user-scalable': 'no',
-				'viewport-fit': 'cover',
+				width: "device-width",
+				"initial-scale": "1",
+				"maximum-scale": "1",
+				"user-scalable": "no",
+				"viewport-fit": "cover",
 			},
 			title: import.meta.env.VITE_APP_TITLE,
-			description: 'vibe streaming platform.',
-			robots: 'index, follow',
+			description: "vibe streaming platform.",
+			robots: "index, follow",
 		}),
 		links: [
 			{
@@ -61,9 +61,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body className="antialiased">
 				<ThemeProvider>
-					<TooltipProvider>
-						{children}
-					</TooltipProvider>
+					<TooltipProvider>{children}</TooltipProvider>
 					<Toaster />
 				</ThemeProvider>
 				<TanStackDevtools
@@ -86,33 +84,31 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
 function PendingComponent() {
 	return (
-		<div className='flex items-center justify-center h-screen'>
-			<Typography.H1 className="animate-pulse">
-				Loading...
-			</Typography.H1>
+		<div className="flex items-center justify-center h-screen">
+			<Typography.H1 className="animate-pulse">Loading...</Typography.H1>
 		</div>
-	)
+	);
 }
 
 function ErrorComponent({ error }: ErrorComponentProps) {
 	return (
 		<RootDocument>
-			<div className='space-y-6 flex flex-col justify-center items-center h-screen px-4 text-center'>
+			<div className="space-y-6 flex flex-col justify-center items-center h-screen px-4 text-center">
 				<Typography.H1 className="block bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent text-5xl font-black">
 					Error
 				</Typography.H1>
-				<p className='text-destructive max-w-md font-mono text-sm bg-destructive/10 p-4 rounded-lg'>
+				<p className="text-destructive max-w-md font-mono text-sm bg-destructive/10 p-4 rounded-lg">
 					{error.message}
 				</p>
 				<BackButton />
 			</div>
 		</RootDocument>
-	)
+	);
 }
 
 function NotFoundComponent() {
 	return (
-		<div className='space-y-6 flex flex-col justify-center items-center h-screen px-4 text-center'>
+		<div className="space-y-6 flex flex-col justify-center items-center h-screen px-4 text-center">
 			<Typography.H1 className="block bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent text-6xl font-black tracking-tighter">
 				404
 			</Typography.H1>
@@ -126,5 +122,5 @@ function NotFoundComponent() {
 			</motion.p>
 			<BackButton />
 		</div>
-	)
+	);
 }

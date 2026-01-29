@@ -8,12 +8,11 @@ export const Route = createFileRoute("/(home)/")({
 });
 
 function App() {
-
 	return (
 		<>
 			<RootHeader />
 			<Home />
 			<Footer />
 		</>
-	)
+	);
 }

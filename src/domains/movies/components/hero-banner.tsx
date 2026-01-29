@@ -170,7 +170,11 @@ export function HeroBanner() {
 									<Link
 										to="/movies/$movieId"
 										params={{ movieId: current.movieId.toString() }}
-										className={buttonVariants({ variant: "outline", className: "h-14 px-8 bg-white/10 backdrop-blur-xl border-white/30 text-white hover:bg-white/20 rounded-xl font-semibold text-lg group" })}
+										className={buttonVariants({
+											variant: "outline",
+											className:
+												"h-14 px-8 bg-white/10 backdrop-blur-xl border-white/30 text-white hover:bg-white/20 rounded-xl font-semibold text-lg group",
+										})}
 									>
 										<Info className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
 										More Info

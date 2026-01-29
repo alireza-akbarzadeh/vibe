@@ -6,10 +6,8 @@ import { Http } from "@/constants/constants";
 
 const STORAGE_KEY = "Vibe_Access_Token";
 
-
-
 export const AXIOS_INSTANCE = Axios.create({
-	baseURL:`${env.VITE_API_BASE_URL}`,
+	baseURL: `${env.VITE_API_BASE_URL}`,
 	headers: {
 		"Content-Type": "application/json",
 	},

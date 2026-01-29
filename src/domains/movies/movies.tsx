@@ -1,5 +1,13 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Clock, Film, Heart, type LucideIcon, Sparkles, TrendingUp, Tv } from "lucide-react";
+import {
+	Clock,
+	Film,
+	Heart,
+	type LucideIcon,
+	Sparkles,
+	TrendingUp,
+	Tv,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import {
 	CategoryNav,
@@ -8,15 +16,30 @@ import {
 	SearchHeader,
 } from "./components";
 
-import { animation, continueWatching, latestMovies, popularSeries, topRated } from "./data";
+import {
+	animation,
+	continueWatching,
+	latestMovies,
+	popularSeries,
+	topRated,
+} from "./data";
 
-export type Categories = "all" | "series" | "trending" | "recent" | "favorites" | "movies" | "animation" | "comedy" | "romantic"
+export type Categories =
+	| "all"
+	| "series"
+	| "trending"
+	| "recent"
+	| "favorites"
+	| "movies"
+	| "animation"
+	| "comedy"
+	| "romantic";
 
 export type CategoriesType = {
-	id: Categories
-	label: string
-	icon: LucideIcon
-}
+	id: Categories;
+	label: string;
+	icon: LucideIcon;
+};
 
 export default function MovieDiscovery() {
 	const [activeCategory, setActiveCategory] = useState<Categories>("all");

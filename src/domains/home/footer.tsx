@@ -19,7 +19,6 @@ const socialLinks = [
 	{ icon: Facebook, href: "http://localhost:3000/", label: "Facebook" },
 ];
 
-
 export default function Footer() {
 	return (
 		<footer className="relative bg-[#0a0a0a] border-t border-white/5">
@@ -42,10 +41,9 @@ export default function Footer() {
 
 						{/* Social links */}
 						<div className="flex gap-3">
-
 							{socialLinks.map((social) => (
 								<Link<ValidLink>
-									// @ts-expect-error FIXME: find why 
+									// @ts-expect-error FIXME: find why
 									to={social.href}
 									key={social.label}
 									className="p-2.5 rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
@@ -90,7 +88,10 @@ export default function Footer() {
 								to="https://www.apple.com/app-store/"
 								className="flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group min-w-40"
 							>
-								<Image src={IMAGES.APP_STORE} className="w-7 h-7 object-contain group-hover:scale-110 transition-transform" />
+								<Image
+									src={IMAGES.APP_STORE}
+									className="w-7 h-7 object-contain group-hover:scale-110 transition-transform"
+								/>
 								<div className="flex flex-col items-start">
 									<Typography.S className="text-[10px] uppercase tracking-wider text-gray-400 leading-none">
 										Download on the
@@ -104,7 +105,10 @@ export default function Footer() {
 								to="https://play.google.com/store"
 								className="flex items-center gap-3 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group min-w-40"
 							>
-								<Image src={IMAGES.GOOGLE_PLAY} className="w-7 h-7 object-contain group-hover:scale-110 transition-transform" />
+								<Image
+									src={IMAGES.GOOGLE_PLAY}
+									className="w-7 h-7 object-contain group-hover:scale-110 transition-transform"
+								/>
 								<div className="flex flex-col items-start">
 									<Typography.S className="text-[10px] uppercase tracking-wider text-gray-400 leading-none">
 										Get it on

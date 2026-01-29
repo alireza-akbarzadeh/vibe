@@ -3,11 +3,11 @@ import { ScrollRestoration } from "@/components/scroll-top";
 import { usePersistentScroll } from "@/hooks/usePersistentScroll";
 
 export function RouteLayout() {
-    usePersistentScroll();
+	usePersistentScroll();
 
-    return (
-        <ScrollRestoration>
-            <Outlet />
-        </ScrollRestoration>
-    );
+	return (
+		<ScrollRestoration>
+			<Outlet />
+		</ScrollRestoration>
+	);
 }

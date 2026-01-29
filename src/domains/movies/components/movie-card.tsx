@@ -26,8 +26,6 @@ export function MovieCard({
 
 	const [isHovered, setIsHovered] = useState(false);
 
-
-
 	const handleMouseLeave = () => {
 		setIsHovered(false);
 	};
@@ -52,13 +50,13 @@ export function MovieCard({
 			style={{ perspective: 1000 }}
 		>
 			<motion.div
-
 				animate={{
 					scale: isHovered ? 1.05 : 1,
 					z: isHovered ? 50 : 0,
 				}}
 				transition={{ type: "spring", stiffness: 300, damping: 30 }}
-				className="relative w-full h-full rounded-2xl overflow-hidden">
+				className="relative w-full h-full rounded-2xl overflow-hidden"
+			>
 				{/* Movie poster */}
 				<img
 					src={movie.poster_path}
@@ -138,14 +136,12 @@ export function MovieCard({
 						{/* Action buttons */}
 						<div className="flex gap-2">
 							<Button
-								onClick={
-									() => {
-										navigate({
-											to: "/movies/$movieId",
-											params: { movieId: generateSlug(movie.title) },
-										})
-									}
-								}
+								onClick={() => {
+									navigate({
+										to: "/movies/$movieId",
+										params: { movieId: generateSlug(movie.title) },
+									});
+								}}
 								size="sm"
 								className="flex-1 bg-white h-10 text-black hover:bg-gray-200 rounded-lg font-semibold group"
 							>

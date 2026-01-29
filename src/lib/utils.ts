@@ -251,3 +251,22 @@ export function toCamelCase(value: string) {
 				: match[index === 0 ? "toLowerCase" : "toUpperCase"]();
 		});
 }
+
+export const generateIdFromObject = (obj: any) => {
+	// 1. Extract values and flatten any arrays (like your coordinates)
+	// 2. Filter out non-primitive values or stringify them
+	// 3. Join them with a delimiter to create a "seed" string
+	const seed = Object.values(obj)
+		.map((value) => (Array.isArray(value) ? value.join("-") : String(value)))
+		.join("|");
+
+	// 4. Create a simple hash (djb2 algorithm) to keep the ID clean and short
+	let hash = 0;
+	for (let i = 0; i < seed.length; i++) {
+		const char = seed.charCodeAt(i);
+		hash = (hash << 5) - hash + char;
+		hash |= 0; // Convert to 32bit integer
+	}
+
+	return `id_${Math.abs(hash).toString(36)}`;
+};

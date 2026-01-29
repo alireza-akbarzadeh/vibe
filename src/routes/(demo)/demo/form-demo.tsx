@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 // import { createFileRoute, useSearch } from '@tanstack/react-router'
 // import { toast } from 'sonner'
 // import { z } from 'zod'
@@ -12,9 +12,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // import { socialProviders } from '@/config/social-provider'
 // import { cx } from '@/libs/utils'
 
-export const Route = createFileRoute('/(demo)/demo/form-demo')({
-    component: () => "demo form",
-})
+export const Route = createFileRoute("/(demo)/demo/form-demo")({
+	component: () => "demo form",
+});
 
 // const signInSchema = (t = tKey) => z
 //     .object({

@@ -11,5 +11,5 @@ function MovieRouteComponent() {
 			<BackButton />
 			<MovieDetails />
 		</>
-	)
+	);
 }

@@ -43,7 +43,7 @@ function ForgotPasswordPage() {
 			console.log("Reset link sent to:", value.email);
 			setIsSubmitted(true);
 		},
-	})
+	});
 
 	// 3. Success State View
 	if (isSubmitted) {
@@ -75,7 +75,7 @@ function ForgotPasswordPage() {
 					</Button>
 				</div>
 			</AuthLayout>
-		)
+		);
 	}
 
 	// 4. Form View
@@ -119,8 +119,9 @@ function ForgotPasswordPage() {
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
-										className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
-											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+										className={`pl-12 h-12 bg-white/5 border ${
+											isInvalid ? "border-red-500" : "border-white/10"
+										} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 									/>
 								</div>
 								{isInvalid && (
@@ -129,7 +130,7 @@ function ForgotPasswordPage() {
 									</p>
 								)}
 							</div>
-						)
+						);
 					}}
 				</form.Field>
 
@@ -168,5 +169,5 @@ function ForgotPasswordPage() {
 				<span>Secure 256-bit SSL encrypted reset link</span>
 			</div>
 		</AuthLayout>
-	)
+	);
 }

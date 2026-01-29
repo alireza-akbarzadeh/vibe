@@ -1,21 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { VideoPlayer } from '@/components/video-payler/video-player';
-import { VIDEOS } from '@/constants/media';
+import { createFileRoute } from "@tanstack/react-router";
+import { VideoPlayer } from "@/components/video-payler/video-player";
+import { VIDEOS } from "@/constants/media";
 
-export const Route = createFileRoute('/(home)/play/$playId')({
-    component: RouteComponent,
-})
+export const Route = createFileRoute("/(home)/play/$playId")({
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-    const videoData = {
-        src: VIDEOS.demo,
-        videoPoster:
-            "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=675&fit=crop",
-        year: "2014",
-        totalTime: "2:49:00",
-        videoName: "Interstellar",
-    };
-    return (
-        <VideoPlayer videoId='s' {...videoData} />
-    )
+	const videoData = {
+		src: VIDEOS.demo,
+		videoPoster:
+			"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=675&fit=crop",
+		year: "2014",
+		totalTime: "2:49:00",
+		videoName: "Interstellar",
+	};
+	return <VideoPlayer videoId="s" {...videoData} />;
 }
