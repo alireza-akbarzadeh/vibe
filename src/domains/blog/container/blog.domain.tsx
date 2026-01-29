@@ -5,7 +5,6 @@ import { MOCK_ARTICLES } from '../blog-mock';
 import { ArticleCard } from '../components/article-card';
 import { actions, blogStore } from '../store/blog.store';
 
-// ... other imports
 
 export default function Blog() {
     const activeCategory = useStore(blogStore, (s) => s.activeCategory);

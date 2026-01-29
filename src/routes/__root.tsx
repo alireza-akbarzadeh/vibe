@@ -5,13 +5,12 @@ import {
 	createRootRouteWithContext,
 	type ErrorComponentProps,
 	HeadContent,
-	Scripts,
-	ScrollRestoration,
+	Scripts
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import BackButton from "@/components/back-button";
-import { RouteComponent } from "@/components/root-layout";
+import { RouteLayout } from "@/components/root-layout";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -52,7 +51,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 	}),
-	component: RouteComponent,
+	component: RouteLayout,
 	shellComponent: RootDocument,
 	errorComponent: ErrorComponent,
 	pendingComponent: PendingComponent,
