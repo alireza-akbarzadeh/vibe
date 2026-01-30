@@ -1,3 +1,4 @@
+import { Row } from "@tanstack/react-table";
 import { type ClassValue, clsx } from "clsx";
 import type { JSX } from "react";
 
@@ -270,3 +271,41 @@ export const generateIdFromObject = (obj: any) => {
 
 	return `id_${Math.abs(hash).toString(36)}`;
 };
+
+export function downloadCSV<TData>(
+	rows: Row<TData>[],
+	filename: string,
+): boolean {
+	try {
+		const data = rows.map((row) => row.original);
+		if (data.length === 0) return false;
+
+		const headers = Object.keys(data[0] as object).join(",");
+		const csvRows = data.map((item) =>
+			Object.values(item as object)
+				.map((val) => {
+					const stringVal =
+						val === null || val === undefined ? "" : String(val);
+					return `"${stringVal.replace(/"/g, '""')}"`;
+				})
+				.join(","),
+		);
+
+		const csvContent = [headers, ...csvRows].join("\n");
+		const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+		const url = URL.createObjectURL(blob);
+
+		const link = document.createElement("a");
+		link.href = url;
+		link.download = `${filename}.csv`;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
+
+		return true; // Success
+	} catch (error) {
+		console.error("CSV Export failed", error);
+		return false;
+	}
+}

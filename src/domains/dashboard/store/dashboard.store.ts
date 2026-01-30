@@ -26,13 +26,19 @@ export interface MessageItem {
 	time: string;
 	unread: boolean;
 }
-
+export type TimePeriod = "24h" | "7d" | "30d";
 export interface DashboardState {
 	notifications: NotificationItem[];
-	messages: MessageItem[]; // Add this
+	messages: MessageItem[];
 	searchOpen: boolean;
-	notificationOpen: boolean; // Add this
+	notificationOpen: boolean;
 	mobileSidebarOpen: boolean;
+	selectedPeriod: TimePeriod;
+	stats: {
+		revenue: number;
+		subscribers: number;
+		watchTime: number;
+	};
 }
 
 export const dashboardStore = new Store<DashboardState>({
@@ -66,9 +72,18 @@ export const dashboardStore = new Store<DashboardState>({
 	searchOpen: false,
 	notificationOpen: false,
 	mobileSidebarOpen: false,
+	selectedPeriod: "24h",
+	stats: {
+		revenue: 0,
+		subscribers: 0,
+		watchTime: 0,
+	},
 });
 
 export const actions = {
+	setPeriod: (period: TimePeriod) =>
+		dashboardStore.setState((state) => ({ ...state, selectedPeriod: period })),
+
 	setSearchOpen: (open: boolean) =>
 		dashboardStore.setState((state) => ({ ...state, searchOpen: open })),
 
