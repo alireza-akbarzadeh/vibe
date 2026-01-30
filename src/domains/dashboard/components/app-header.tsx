@@ -60,7 +60,7 @@ export default function AppHeader({ pathname, setMobileOpen, setSearchOpen }: Ap
                 {/* Quick Create Action */}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl hidden sm:flex">
+                        <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl flex">
                             <Plus className="h-5 w-5" />
                         </Button>
                     </DropdownMenuTrigger>
