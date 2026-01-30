@@ -7,7 +7,7 @@ import { getSidebarData } from '@/domains/dashboard/server/dahboard.functions'
 export const Route = createFileRoute('/(admin)/dashboard')({
     component: RouteComponent,
     loader: async ({ context }) => {
-        const role = context.auth?.role ?? "admin";
+        const role = context.auth?.role ?? "customer";
         await context.queryClient.ensureQueryData({
             queryKey: ['sidebar', role],
             queryFn: () => getSidebarData({ data: role }),

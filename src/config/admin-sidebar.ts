@@ -1,15 +1,23 @@
+// config/admin-sidebar.ts
 import {
 	Activity,
 	AlertTriangle,
 	BarChart3,
 	Bell,
 	CreditCard,
+	Database,
 	FileText,
 	Film,
+	Flag,
 	FolderArchive,
+	Globe,
 	Headphones,
+	Layers,
 	LayoutDashboard,
+	Library,
+	MonitorPlay,
 	Music,
+	PlugZap,
 	Server,
 	Settings,
 	Shield,
@@ -22,7 +30,7 @@ export type SidebarItem = {
 	href?: string;
 	icon?: string;
 	children?: SidebarItem[];
-	permission?: string; // RBAC hook
+	permission?: string;
 };
 
 export type SidebarGroup = {
@@ -41,275 +49,167 @@ export const dashboard_SIDEBAR: SidebarGroup[] = [
 			},
 		],
 	},
-
 	{
 		group: "Users & Access",
 		items: [
 			{
 				label: "Users",
-				href: "/dashboard/users",
 				icon: "Users",
-			},
-			{
-				label: "Roles & Permissions",
-				href: "/dashboard/roles",
-				icon: "Shield",
-			},
-			{
-				label: "Audit Logs",
-				href: "/dashboard/audit-logs",
-				icon: "Activity",
+				children: [
+					{ label: "Staff Directory", href: "/dashboard/users" },
+					{ label: "Roles & Permissions", href: "/dashboard/roles" },
+					{ label: "Audit Logs", href: "/dashboard/audit-logs" },
+				],
 			},
 		],
 	},
-
 	{
-		group: "Movies",
+		group: "Content Library",
 		items: [
 			{
 				label: "Movies & Series",
 				href: "/dashboard/movies",
 				icon: "Film",
 			},
-		],
-	},
-
-	{
-		group: "Music",
-		items: [
 			{
-				label: "Artists",
-				href: "/dashboard/music/artists",
+				label: "Music",
 				icon: "Music",
+				children: [
+					{ label: "Artists", href: "/dashboard/music/artists" },
+					{ label: "Albums", href: "/dashboard/music/albums" },
+					{ label: "Tracks", href: "/dashboard/music/tracks" },
+				],
 			},
 			{
-				label: "Albums",
-				href: "/dashboard/music/albums",
-			},
-			{
-				label: "Tracks",
-				href: "/dashboard/music/tracks",
-			},
-		],
-	},
-
-	{
-		group: "Media",
-		items: [
-			{
-				label: "Media Library",
-				href: "/dashboard/media",
+				label: "Media Assets",
 				icon: "FolderArchive",
-			},
-			{
-				label: "Uploads",
-				href: "/dashboard/media/uploads",
-			},
-		],
-	},
-
-	{
-		group: "Streaming",
-		items: [
-			{
-				label: "Active Streams",
-				href: "/dashboard/streams",
-				icon: "Activity",
-			},
-			{
-				label: "Playback Errors",
-				href: "/dashboard/playback/errors",
-			},
-			{
-				label: "DRM & Licenses",
-				href: "/dashboard/drm",
+				children: [
+					{ label: "Media Library", href: "/dashboard/media" },
+					{ label: "Uploads", href: "/dashboard/media/uploads" },
+				],
 			},
 		],
 	},
-
 	{
-		group: "Monetization",
+		group: "Operations",
 		items: [
 			{
-				label: "Subscription Plans",
-				href: "/dashboard/subscriptions/plans",
-				icon: "CreditCard",
+				label: "Streaming",
+				icon: "MonitorPlay",
+				children: [
+					{ label: "Active Streams", href: "/dashboard/streams" },
+					{ label: "Playback Errors", href: "/dashboard/playback/errors" },
+					{ label: "DRM & Licenses", href: "/dashboard/drm" },
+				],
 			},
 			{
-				label: "User Subscriptions",
-				href: "/dashboard/subscriptions/users",
-			},
-			{
-				label: "Payments",
-				href: "/dashboard/payments",
-			},
-		],
-	},
-
-	{
-		group: "Analytics",
-		items: [
-			{
-				label: "Overview",
-				href: "/dashboard/analytics",
-				icon: "BarChart3",
-			},
-			{
-				label: "Content Performance",
-				href: "/dashboard/analytics/content",
-			},
-			{
-				label: "User Behavior",
-				href: "/dashboard/analytics/users",
-			},
-			{
-				label: "Reports",
-				href: "/dashboard/reports",
-			},
-		],
-	},
-
-	{
-		group: "Discovery",
-		items: [
-			{
-				label: "Recommendations",
-				href: "/dashboard/recommendations",
-				icon: "Sparkles",
-			},
-			{
-				label: "Featured Content",
-				href: "/dashboard/featured",
-			},
-			{
-				label: "A/B Testing",
-				href: "/dashboard/ab-tests",
-			},
-		],
-	},
-
-	{
-		group: "Moderation",
-		items: [
-			{
-				label: "User Reports",
-				href: "/dashboard/moderation/reports",
+				label: "Moderation",
 				icon: "AlertTriangle",
-			},
-			{
-				label: "DMCA & Copyright",
-				href: "/dashboard/moderation/dmca",
-			},
-			{
-				label: "Region Restrictions",
-				href: "/dashboard/moderation/region-blocks",
-			},
-		],
-	},
-
-	{
-		group: "Communication",
-		items: [
-			{
-				label: "Notifications",
-				href: "/dashboard/notifications",
-				icon: "Bell",
-			},
-			{
-				label: "Campaigns",
-				href: "/dashboard/campaigns",
+				children: [
+					{ label: "User Reports", href: "/dashboard/moderation/reports" },
+					{ label: "DMCA & Copyright", href: "/dashboard/moderation/dmca" },
+					{
+						label: "Region Restrictions",
+						href: "/dashboard/moderation/region-blocks",
+					},
+				],
 			},
 		],
 	},
-
 	{
-		group: "Support",
+		group: "Business",
 		items: [
 			{
-				label: "Support Tickets",
+				label: "Monetization",
+				icon: "CreditCard",
+				children: [
+					{
+						label: "Subscription Plans",
+						href: "/dashboard/subscriptions/plans",
+					},
+					{
+						label: "User Subscriptions",
+						href: "/dashboard/subscriptions/users",
+					},
+					{ label: "Payments", href: "/dashboard/payments" },
+				],
+			},
+			{
+				label: "Analytics",
+				icon: "BarChart3",
+				children: [
+					{ label: "Overview", href: "/dashboard/analytics" },
+					{
+						label: "Content Performance",
+						href: "/dashboard/analytics/content",
+					},
+					{ label: "User Behavior", href: "/dashboard/analytics/users" },
+					{ label: "Reports", href: "/dashboard/reports" },
+				],
+			},
+			{
+				label: "Discovery",
+				icon: "Sparkles",
+				children: [
+					{ label: "Recommendations", href: "/dashboard/recommendations" },
+					{ label: "Featured Content", href: "/dashboard/featured" },
+					{ label: "A/B Testing", href: "/dashboard/ab-tests" },
+				],
+			},
+		],
+	},
+	{
+		group: "Support & Comms",
+		items: [
+			{
+				label: "Support",
 				href: "/dashboard/support",
 				icon: "Headphones",
 			},
-		],
-	},
-
-	{
-		group: "Settings",
-		items: [
 			{
-				label: "General",
-				href: "/dashboard/settings/general",
-				icon: "Settings",
-			},
-			{
-				label: "Localization",
-				href: "/dashboard/settings/localization",
-			},
-			{
-				label: "Feature Flags",
-				href: "/dashboard/settings/features",
-			},
-			{
-				label: "Integrations",
-				href: "/dashboard/settings/integrations",
+				label: "Communication",
+				icon: "Bell",
+				children: [
+					{ label: "Notifications", href: "/dashboard/notifications" },
+					{ label: "Campaigns", href: "/dashboard/campaigns" },
+				],
 			},
 		],
 	},
-
 	{
-		group: "Infrastructure",
+		group: "System",
 		items: [
 			{
-				label: "Logs",
-				href: "/dashboard/logs",
+				label: "Infrastructure",
 				icon: "Server",
+				children: [
+					{ label: "System Logs", href: "/dashboard/logs" },
+					{ label: "Monitoring", href: "/dashboard/monitoring" },
+					{ label: "Backups", href: "/dashboard/backups" },
+				],
 			},
 			{
-				label: "Monitoring",
-				href: "/dashboard/monitoring",
+				label: "Settings",
+				icon: "Settings",
+				children: [
+					{ label: "General", href: "/dashboard/settings/general" },
+					{ label: "Localization", href: "/dashboard/settings/localization" },
+					{ label: "Feature Flags", href: "/dashboard/settings/features" },
+					{ label: "Integrations", href: "/dashboard/settings/integrations" },
+				],
 			},
 			{
-				label: "Backups",
-				href: "/dashboard/backups",
-			},
-		],
-	},
-
-	{
-		group: "Legal",
-		items: [
-			{
-				label: "Terms of Service",
-				href: "/dashboard/legal/terms",
+				label: "Legal",
 				icon: "FileText",
-			},
-			{
-				label: "Privacy Policy",
-				href: "/dashboard/legal/privacy",
-			},
-			{
-				label: "Licenses",
-				href: "/dashboard/legal/licenses",
+				children: [
+					{ label: "Terms of Service", href: "/dashboard/legal/terms" },
+					{ label: "Privacy Policy", href: "/dashboard/legal/privacy" },
+					{ label: "Licenses", href: "/dashboard/legal/licenses" },
+				],
 			},
 		],
 	},
 ];
-
-export const userPermissions = ["users:read", "movies:read", "analytics:read"];
-
-function filterSidebarByPermission(
-	sidebar: typeof dashboard_SIDEBAR,
-	permissions: string[],
-) {
-	return sidebar
-		.map((group) => ({
-			...group,
-			items: group.items.filter(
-				(item) => !item.permission || permissions.includes(item.permission),
-			),
-		}))
-		.filter((group) => group.items.length > 0);
-}
 
 export const ICON_MAP = {
 	Activity,
@@ -317,12 +217,19 @@ export const ICON_MAP = {
 	BarChart3,
 	Bell,
 	CreditCard,
+	Database,
 	FileText,
 	Film,
+	Flag,
 	FolderArchive,
+	Globe,
 	Headphones,
+	Layers,
 	LayoutDashboard,
+	Library,
+	MonitorPlay,
 	Music,
+	PlugZap,
 	Server,
 	Settings,
 	Shield,

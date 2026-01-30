@@ -1,4 +1,3 @@
-// components/admin-sidebar/nav-item.tsx
 import { Link } from '@tanstack/react-router'
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -9,7 +8,6 @@ import { cn } from '@/lib/utils'
 
 export function SidebarNavItem({ item, isCollapsed, pathname }: { item: SidebarItem, isCollapsed: boolean, pathname: string }) {
     const hasChildren = !!(item.children && item.children.length > 0)
-
     const isChildActive = hasChildren && item.children?.some((c) => pathname.startsWith(c.href || ''))
     const [isOpen, setIsOpen] = useState(!!isChildActive)
 
@@ -17,31 +15,31 @@ export function SidebarNavItem({ item, isCollapsed, pathname }: { item: SidebarI
         if (isChildActive) setIsOpen(true)
     }, [isChildActive])
 
-    const Icon = item.icon ? (ICON_MAP as any)[item.icon] : null
     const isActive = pathname === item.href || isChildActive
 
     const itemClasses = cn(
-        'group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all outline-none mb-0.5',
+        'group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 outline-none mb-1',
         isActive
-            ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
-            : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground'
+            ? 'bg-secondary/80 text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] border border-border/50'
+            : 'text-muted-foreground hover:bg-accent/40 hover:text-foreground border border-transparent'
     )
 
-    // Sub-item link (for nested menus)
-    const renderChild = (child: SidebarItem) => (
-        <Link
-            key={child.href}
-            to={child.href}
-            className={cn(
-                "block rounded-md px-3 py-1.5 text-xs transition-colors relative",
-                pathname === child.href
-                    ? "text-primary font-bold before:absolute before:left-[-17px] before:top-1/2 before:-translate-y-1/2 before:w-1.5 before:h-1.5 before:bg-primary before:rounded-full"
-                    : "text-muted-foreground hover:text-foreground"
-            )}
-        >
-            {child.label}
-        </Link>
-    )
+    const renderIcon = (iconName?: string, active?: boolean) => {
+        const IconComponent = iconName ? (ICON_MAP as any)[iconName] : null
+        return (
+            <div className={cn(
+                "flex items-center justify-center shrink-0 transition-colors duration-200",
+                isCollapsed ? "h-9 w-9" : "h-5 w-5",
+                active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+            )}>
+                {IconComponent ? (
+                    <IconComponent size={isCollapsed ? 20 : 18} strokeWidth={active ? 2.5 : 2} />
+                ) : (
+                    <div className={cn("h-1.5 w-1.5 rounded-full bg-current transition-all", active ? "scale-125" : "opacity-30")} />
+                )}
+            </div>
+        )
+    }
 
     if (hasChildren && !isCollapsed) {
         return (
@@ -49,14 +47,38 @@ export function SidebarNavItem({ item, isCollapsed, pathname }: { item: SidebarI
                 <CollapsibleTrigger asChild>
                     <button className={cn(itemClasses, "w-full justify-between cursor-pointer")}>
                         <div className="flex items-center gap-3">
-                            {Icon && <Icon className="h-4 w-4 shrink-0" />}
-                            <span>{item.label}</span>
+                            {renderIcon(item.icon, isActive)}
+                            <span className={cn("transition-colors", isActive ? "font-semibold" : "font-medium")}>
+                                {item.label}
+                            </span>
                         </div>
-                        <ChevronDown className={cn("h-3 w-3 transition-transform duration-200 opacity-50", isOpen && "rotate-180")} />
+                        <ChevronDown className={cn(
+                            "h-3.5 w-3.5 transition-transform duration-300 opacity-40",
+                            isOpen && "rotate-180 opacity-100 text-primary"
+                        )} />
                     </button>
                 </CollapsibleTrigger>
-                <CollapsibleContent className="ml-4 mt-1 border-l border-muted-foreground/20 pl-4 space-y-1">
-                    {item.children?.map(renderChild)}
+                <CollapsibleContent className="ml-[22px] mt-1 border-l border-border/60 pl-4 space-y-0.5">
+                    {item.children?.map((child) => {
+                        const isChildLinkActive = pathname === child.href
+                        return (
+                            <Link
+                                key={child.href}
+                                to={child.href}
+                                className={cn(
+                                    "block rounded-lg px-3 py-2 text-xs transition-all relative",
+                                    isChildLinkActive
+                                        ? "text-foreground font-bold bg-accent/50 shadow-sm"
+                                        : "text-muted-foreground hover:text-foreground hover:bg-accent/30"
+                                )}
+                            >
+                                {isChildLinkActive && (
+                                    <div className="absolute left-[-17px] top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.6)]" />
+                                )}
+                                {child.label}
+                            </Link>
+                        )
+                    })}
                 </CollapsibleContent>
             </Collapsible>
         )
@@ -67,14 +89,17 @@ export function SidebarNavItem({ item, isCollapsed, pathname }: { item: SidebarI
             <TooltipTrigger asChild>
                 <Link
                     to={item.href || '#'}
-                    className={cn(itemClasses, isCollapsed && "justify-center px-0 h-10 w-10 mx-auto")}
+                    className={cn(itemClasses, isCollapsed && "justify-center p-0 h-10 w-10 mx-auto rounded-xl")}
                 >
-                    {Icon && <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-accent-foreground")} />}
+                    {renderIcon(item.icon, isActive)}
                     {!isCollapsed && <span className="flex-1 truncate">{item.label}</span>}
+                    {isActive && isCollapsed && (
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-primary rounded-r-full" />
+                    )}
                 </Link>
             </TooltipTrigger>
             {isCollapsed && (
-                <TooltipContent side="right" sideOffset={10} className="font-semibold">
+                <TooltipContent side="right" sideOffset={10} className="bg-popover border-border px-3 py-1.5 text-xs font-bold shadow-xl">
                     {item.label}
                 </TooltipContent>
             )}

@@ -1,17 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { Outlet, useRouterState } from '@tanstack/react-router'
-import { Bell, Search } from 'lucide-react'
+import { Menu, Search } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { TooltipProvider } from '@/components/ui/tooltip' // Added
 import { getSidebarData } from '../server/dahboard.functions'
+import { DashboardBreadcrumbs } from './breadcrumbs'
 import { SearchSide } from './search-setting'
 import { AdminSidebar } from './sidebar'
 
 export function AppSidebarLayout() {
     const [searchOpen, setSearchOpen] = useState(false)
+    const [mobileOpen, setMobileOpen] = useState(false)
     const pathname = useRouterState().location.pathname
-
     const userRole = "admin"
 
     const { data: groups = [] } = useQuery({
@@ -21,48 +23,66 @@ export function AppSidebarLayout() {
     })
 
     return (
-        <div className="flex h-screen w-full overflow-hidden bg-background">
-            {/* 1. Left Navigation Navigation */}
-            <AdminSidebar pathname={pathname} groups={groups} onSearchOpen={() => setSearchOpen(true)} />
+        <TooltipProvider delayDuration={0}>
+            <div className="flex h-screen w-full overflow-hidden bg-background">
+                <AdminSidebar
+                    pathname={pathname}
+                    groups={groups}
+                    onSearchOpen={() => setSearchOpen(true)}
+                    className="hidden md:flex"
+                />
 
-            {/* 2. Main Content Wrapper */}
-            <div className="flex flex-1 flex-col min-w-0">
-                {/* 3. Global Topbar */}
-                <header className="flex h-14 items-center justify-between border-b px-6 bg-card">
-                    <div className="flex items-center gap-4 flex-1">
+                <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+                    <SheetContent side="left" className="p-0 w-72 border-none">
+                        <AdminSidebar
+                            pathname={pathname}
+                            groups={groups}
+                            isMobile
+                            onSearchOpen={() => {
+                                setSearchOpen(true)
+                                setMobileOpen(false)
+                            }}
+                        />
+                    </SheetContent>
+                </Sheet>
+
+                <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
+                    <header className="flex h-14 shrink-0 items-center gap-4 border-b px-4 md:px-6 bg-card/80 backdrop-blur-md sticky top-0 z-20">
                         <Button
-                            variant="outline"
-                            className="relative h-9 w-full max-w-100 justify-start text-sm text-muted-foreground bg-muted/50"
-                            onClick={() => setSearchOpen(true)}
+                            variant="ghost"
+                            size="icon"
+                            className="md:hidden"
+                            onClick={() => setMobileOpen(true)}
                         >
-                            <Search className="mr-2 h-4 w-4" />
-                            <span>Search dashboard...</span>
-                            <kbd className="pointer-events-none absolute right-2 top-2 h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium opacity-100 hidden sm:flex">
-                                ⌘K
-                            </kbd>
+                            <Menu className="h-5 w-5" />
                         </Button>
-                    </div>
+                        <div className="flex items-center gap-6 flex-1">
+                            <DashboardBreadcrumbs pathname={pathname} />
+                            <div className="flex-1 max-w-md ml-auto md:ml-0">
+                                <Button
+                                    variant="outline"
+                                    className="relative h-9 w-full max-w-100 justify-start text-sm text-muted-foreground bg-muted/50 rounded-xl"
+                                    onClick={() => setSearchOpen(true)}
+                                >
+                                    <Search className="mr-2 h-4 w-4" />
+                                    <span className="hidden sm:inline">Search dashboard...</span>
+                                    <span className="sm:hidden text-xs">Search...</span>
+                                    <kbd className="pointer-events-none absolute right-2 top-2 h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium opacity-100 hidden sm:flex">
+                                        ⌘K
+                                    </kbd>
+                                </Button>
+                            </div>
+                        </div>
+                    </header>
 
-                    <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon" className="relative">
-                            <Bell className="h-4 w-4" />
-                            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-destructive border-2 border-card" />
-                        </Button>
-                        <Separator orientation="vertical" className="h-6 mx-2" />
-                        <div className="h-8 w-8 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 shadow-sm border border-white/20" />
-                    </div>
-                </header>
-
-                {/* 4. Page Content */}
-                <main className="flex-1 overflow-y-auto bg-muted/30 scroll-smooth">
-                    <div className="container mx-auto p-6 max-w-400">
-                        <Outlet />
-                    </div>
-                </main>
+                    <main className="flex-1 overflow-y-auto bg-muted/30">
+                        <div className="container mx-auto p-4 md:p-6 max-w-7xl">
+                            <Outlet />
+                        </div>
+                    </main>
+                </div>
+                <SearchSide data={groups} open={searchOpen} setOpen={setSearchOpen} />
             </div>
-
-            {/* 5. Command Palette (Search) */}
-            <SearchSide data={groups} open={searchOpen} setOpen={setSearchOpen} />
-        </div>
+        </TooltipProvider>
     )
 }

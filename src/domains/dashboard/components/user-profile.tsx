@@ -31,7 +31,27 @@ export function UserProfile({ isCollapsed }: UserProfileProps) {
 								src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
 								className="w-9 h-9 rounded-lg object-cover shadow-sm ring-1 ring-border group-hover:ring-primary/50 transition-all"
 							/>
-							<div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-card rounded-full" />
+
+							{/* Animated Status Indicator */}
+							<div className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center">
+								{/* The Pulse Ripple */}
+								<motion.div
+									initial={{ scale: 0.8, opacity: 0.5 }}
+									animate={{
+										scale: [1, 2.2],
+										opacity: [0.5, 0]
+									}}
+									transition={{
+										duration: 2,
+										repeat: Infinity,
+										ease: "easeOut"
+									}}
+									className="absolute w-3 h-3 bg-emerald-500 rounded-full"
+								/>
+
+								{/* The Static Dot */}
+								<div className="relative w-3 h-3 bg-emerald-500 border-2 border-card rounded-full z-10" />
+							</div>
 						</div>
 
 						{/* Name and Role - Hidden when collapsed */}
