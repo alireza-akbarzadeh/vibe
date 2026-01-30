@@ -1,16 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
 import { Outlet, useRouterState } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useStore } from '@tanstack/react-store' // Added
 import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { TooltipProvider } from '@/components/ui/tooltip'; // Added
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { getSidebarData } from '../server/dahboard.functions'
-import AppHeader from './app-header';
+import { actions, dashboardStore } from '../store/dashboard.store'
+import AppHeader from './app-header'
 import { SearchSide } from './search-setting'
 import { AdminSidebar } from './sidebar'
 
 export function AppSidebarLayout() {
-    const [searchOpen, setSearchOpen] = useState(false)
-    const [mobileOpen, setMobileOpen] = useState(false)
+    const searchOpen = useStore(dashboardStore, (state) => state.searchOpen)
+    const mobileOpen = useStore(dashboardStore, (state) => state.mobileSidebarOpen)
+
     const pathname = useRouterState().location.pathname
     const userRole = "admin"
 
@@ -23,36 +25,40 @@ export function AppSidebarLayout() {
     return (
         <TooltipProvider delayDuration={0}>
             <div className="flex h-screen w-full overflow-hidden bg-background">
+                {/* Desktop Sidebar */}
                 <AdminSidebar
                     pathname={pathname}
                     groups={groups}
-                    onSearchOpen={() => setSearchOpen(true)}
                     className="hidden md:flex"
                 />
 
-                <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+                {/* Mobile Sidebar - Now controlled by Store */}
+                <Sheet open={mobileOpen} onOpenChange={actions.setMobileSidebarOpen}>
                     <SheetContent side="left" className="p-0 w-72 border-none">
                         <AdminSidebar
                             pathname={pathname}
                             groups={groups}
                             isMobile
-                            onSearchOpen={() => {
-                                setSearchOpen(true)
-                                setMobileOpen(false)
-                            }}
                         />
                     </SheetContent>
                 </Sheet>
 
-                <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
-                    <AppHeader pathname={pathname} setMobileOpen={setMobileOpen} setSearchOpen={setSearchOpen} />
-                    <main className="flex-1 overflow-y-auto bg-muted/30">
-                        <div className="container mx-auto p-4 md:p-6 max-w-7xl">
+                <div className="flex flex-1 flex-col min-w-0 overflow-hidden relative">
+                    <AppHeader pathname={pathname} />
+
+                    <main className="flex-1 overflow-y-auto bg-muted/20 scroll-smooth">
+                        {/* PREMIUM TIP: The "Container" here uses a subtle 
+                           fade-in animation for page transitions 
+                        */}
+                        <div className="container mx-auto p-4 md:p-8 max-w-[1600px] min-h-full">
                             <Outlet />
                         </div>
                     </main>
                 </div>
-                <SearchSide data={groups} open={searchOpen} setOpen={setSearchOpen} />
+
+                <SearchSide
+                    data={groups}
+                />
             </div>
         </TooltipProvider>
     )
