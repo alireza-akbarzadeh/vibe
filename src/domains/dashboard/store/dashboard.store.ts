@@ -27,6 +27,18 @@ export interface MessageItem {
 	unread: boolean;
 }
 export type TimePeriod = "24h" | "7d" | "30d";
+
+export type SubscriptionTier = "Free" | "Standard" | "Premium" | "All";
+export type RiskLevel = "all" | "safe" | "medium" | "high";
+
+export interface FilterState {
+	dateRange: { from: Date | undefined; to: Date | undefined };
+	verifiedOnly: boolean;
+	tiers: SubscriptionTier[];
+	region: string;
+	riskThreshold: RiskLevel;
+}
+
 export interface DashboardState {
 	notifications: NotificationItem[];
 	messages: MessageItem[];
@@ -39,6 +51,7 @@ export interface DashboardState {
 		subscribers: number;
 		watchTime: number;
 	};
+	filters: FilterState;
 }
 
 export const dashboardStore = new Store<DashboardState>({
@@ -78,9 +91,46 @@ export const dashboardStore = new Store<DashboardState>({
 		subscribers: 0,
 		watchTime: 0,
 	},
+	filters: {
+		dateRange: { from: undefined, to: undefined },
+		verifiedOnly: true,
+		tiers: ["Premium"],
+		region: "all",
+		riskThreshold: "safe",
+	},
 });
 
 export const actions = {
+	updateFilters: (updates: Partial<FilterState>) => {
+		dashboardStore.setState((state) => {
+			// Check if the values are actually different
+			const isDifferent = Object.entries(updates).some(
+				([key, value]) =>
+					JSON.stringify(state.filters[key as keyof FilterState]) !==
+					JSON.stringify(value),
+			);
+
+			// If nothing changed, return the original state reference to stop the render chain
+			if (!isDifferent) return state;
+
+			return {
+				...state,
+				filters: { ...state.filters, ...updates },
+			};
+		});
+	},
+
+	resetFilters: () =>
+		dashboardStore.setState((state) => ({
+			...state,
+			filters: {
+				dateRange: { from: undefined, to: undefined },
+				verifiedOnly: false,
+				tiers: ["All"],
+				region: "all",
+				riskThreshold: "all",
+			},
+		})),
 	setPeriod: (period: TimePeriod) =>
 		dashboardStore.setState((state) => ({ ...state, selectedPeriod: period })),
 

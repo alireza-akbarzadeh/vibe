@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { AppSidebarLayout } from '@/domains/dashboard/components/app-sidebar-layout'
-import { getSidebarData } from '@/domains/dashboard/server/dahboard.functions'
+import { getSidebarData } from '@/domains/dashboard/server/dashboard.functions'
 
 export const Route = createFileRoute('/(admin)/dashboard')({
     component: RouteComponent,

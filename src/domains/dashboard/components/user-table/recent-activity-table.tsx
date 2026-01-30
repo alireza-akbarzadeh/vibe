@@ -11,7 +11,7 @@ import * as React from "react"
 import { toast } from "sonner"
 import { Table } from "@/components/table/data-table"
 import { downloadCSV } from "@/lib/utils"
-import { getTransactions } from "../../server/dahboard.functions"
+import { getTransactions } from "../../server/dashboard.functions"
 import type { Transaction } from "../../server/mock-data"
 import { userColumns } from "./user-columns"
 
@@ -19,12 +19,17 @@ export function RecentActivityTable() {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = React.useState({})
 
-    const { data: transactions = [], isLoading, isError } = useQuery({
+
+    const { data: allTransactions = [], isLoading, isError } = useQuery({
         queryKey: ["transactions"],
-        queryFn: () => getTransactions(),
-    })
+        queryFn: getTransactions,
+    });
+
+
+
+
     const table = useReactTable({
-        data: transactions,
+        data: allTransactions,
         columns: userColumns,
         state: { columnFilters, rowSelection },
         onColumnFiltersChange: setColumnFilters,
@@ -63,6 +68,8 @@ export function RecentActivityTable() {
             });
         }
     }
+
+
     if (isError) return <div className="p-8 text-center text-destructive">Failed to load data.</div>
     return (
         <Table.Root table={table}>

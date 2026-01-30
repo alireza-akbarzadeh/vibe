@@ -3,7 +3,7 @@ import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store' // Added
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { getSidebarData } from '../server/dahboard.functions'
+import { getSidebarData } from '../server/dashboard.functions'
 import { actions, dashboardStore } from '../store/dashboard.store'
 import AppHeader from './app-header'
 import { SearchSide } from './search-setting'

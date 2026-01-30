@@ -160,7 +160,7 @@ export const Table = {
         const rows = table.getRowModel().rows
 
         return (
-            <div className="rounded-3xl border border-border/40 bg-card/20 backdrop-blur-2xl overflow-hidden shadow-2xl">
+            <div className="rounded-3xl border border-border/40 bg-card/20 backdrop-blur-2xl shadow-2xl overflow-hidden">
                 <table className="w-full text-sm">
                     <thead className="bg-muted/50 border-b border-border/40">
                         {table.getHeaderGroups().map(headerGroup => (
