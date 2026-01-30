@@ -21,7 +21,7 @@ export function SidebarNavItem({ item, isCollapsed, pathname }: { item: SidebarI
 
     useEffect(() => {
         if (isChildActive) setIsOpen(true)
-    }, [isChildActive, pathname])
+    }, [isChildActive])
 
     const isActive = pathname === item.href || isChildActive
 

@@ -1,8 +1,11 @@
+import { useMediaQuery } from "@mantine/hooks";
 import { Command as CommandPrimitive } from "cmdk";
 import { LucideSearch } from "lucide-react";
 import type { ComponentProps } from "react";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "./dialog";
+import { Drawer, DrawerContent } from "./drawer";
 
 function Command({
 	className,
@@ -19,16 +22,46 @@ function Command({
 	);
 }
 
-function CommandDialog({ children, ...props }: ComponentProps<typeof Dialog>) {
+interface CommandDialogProps extends React.ComponentPropsWithoutRef<typeof Dialog> {
+	children: React.ReactNode
+}
+
+// FIX: Ensure this is the ONLY declaration of CommandDialog in this file
+export function CommandDialog({ children, ...props }: CommandDialogProps) {
+	const isDesktop = useMediaQuery("(min-width: 768px)")
+
+	// We use a state to ensure we don't get hydration errors 
+	// between server-side and client-side rendering
+	const [mounted, setMounted] = React.useState(false)
+	React.useEffect(() => setMounted(true), [])
+
+	const CommandContent = (
+		<Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:size-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:size-5">
+			{children}
+		</Command>
+	)
+
+	if (!mounted) return null
+
+	if (isDesktop) {
+		return (
+			<Dialog {...props}>
+				<DialogContent className="overflow-hidden p-0 shadow-lg">
+					{CommandContent}
+				</DialogContent>
+			</Dialog>
+		)
+	}
+
 	return (
-		<Dialog {...props}>
-			<DialogContent className="overflow-hidden p-0 shadow-lg">
-				<Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:size-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:size-5">
-					{children}
-				</Command>
-			</DialogContent>
-		</Dialog>
-	);
+		<Drawer {...props}>
+			<DrawerContent className="p-0">
+				<div className="overflow-hidden rounded-t-[10px]">
+					{CommandContent}
+				</div>
+			</DrawerContent>
+		</Drawer>
+	)
 }
 
 function CommandInput({
@@ -36,7 +69,7 @@ function CommandInput({
 	...props
 }: ComponentProps<typeof CommandPrimitive.Input>) {
 	return (
-		<div className="flex items-center border-b px-3">
+		<div className="flex items-center border-b px-3" cmdk-input-wrapper="">
 			<LucideSearch className="mr-2 size-4 shrink-0 opacity-50" />
 			<CommandPrimitive.Input
 				className={cn(
@@ -132,7 +165,6 @@ function CommandShortcut({ className, ...props }: ComponentProps<"span">) {
 
 export {
 	Command,
-	CommandDialog,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
