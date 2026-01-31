@@ -1,8 +1,8 @@
-import type React from "react";
+import React from "react";
+import { CompactSelect } from "@/components/table/compact-select";
 import { Textarea } from "@/components/ui/forms/textarea";
 import { Input } from "@/components/ui/input";
 import { InputPhone } from "@/components/ui/input-phone";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
@@ -64,35 +64,16 @@ export function CompactField<TForm extends { Field: any }, TOption = string>(
 
                 switch (type) {
                     case "select": {
-                        const getValue = props.getOptionValue || ((opt: TOption) => String(opt));
-                        const getLabel = props.getOptionLabel || ((opt: TOption) => String(opt));
-                        const renderOptionContent = props.renderOption || getLabel;
-
-                        const currentValue = (value as string) ?? "";
-
                         return (
-                            <Select
-                                value={currentValue}
-                                onValueChange={(val) => field.handleChange(val)}
-                                defaultValue={currentValue}
-                            >
-                                <SelectTrigger className={cn(baseStyles, "h-11")}>
-                                    <SelectValue placeholder={placeholder} />
-                                </SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white shadow-2xl font-sans">
-                                    {props.options?.map((opt) => {
-                                        const optValue = getValue(opt);
-                                        return (
-                                            <SelectItem key={optValue} value={optValue} className="capitalize cursor-pointer focus:bg-white/5">
-                                                {renderOptionContent(opt)}
-                                            </SelectItem>
-                                        );
-                                    })}
-                                </SelectContent>
-                            </Select>
+                            <CompactSelect<TForm, TOption>
+                                props={props}
+                                field={field}
+                                baseStyles={baseStyles}
+                                placeholder={placeholder}
+                                Icon={Icon}
+                            />
                         );
                     }
-
                     case "textarea":
                         return (
                             <Textarea
