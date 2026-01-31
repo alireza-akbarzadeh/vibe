@@ -61,7 +61,7 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 		},
 	});
 
-	const containerStyle = "max-w-[1100px] mx-auto bg-slate-900/40 backdrop-blur-3xl border border-white/5 rounded-[1.5rem] overflow-hidden shadow-2xl";
+
 
 	type CountryOption = { code: string; name: string; flag: string };
 
@@ -89,8 +89,8 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 	const locales = ["en-US", "en-GB", "es-ES", "fr-FR", "de-DE", "ja-JP"] as const;
 
 	return (
-		<div className="min-h-screen bg-slate-950 text-slate-300 py-12 px-6 font-sans">
-			<div className={containerStyle}>
+		<div className="min-h-screen  bg-[#020408] text-slate-400  px-6 font-sans">
+			<div className={"bg-[#0a0c10] border border-white/5 rounded-2xl overflow-hidden shadow-2xl"}>
 				<UserFormHeader isEditMode={isEditMode} />
 
 				<form.Root className="p-8">
@@ -269,7 +269,7 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 
 					{/* FOOTER ACTIONS */}
 					<div className="flex items-center justify-end gap-3 pt-8 px-8 pb-8 mt-6">
-						<form.Submit className="px-10 h-11 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all active:scale-95 shadow-lg shadow-blue-600/20">
+						<form.Submit className="px-10 h-11 rounded-xl text-white font-bold transition-all active:scale-95 shadow-lg shadow-blue-600/20">
 							{isEditMode ? "Update Identity" : "Save Entity"}
 						</form.Submit>
 					</div>

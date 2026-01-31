@@ -10,7 +10,7 @@ interface UserFormHeaderProps {
 export default function UserFormHeader(props: UserFormHeaderProps) {
     const { isEditMode } = props;
     return (
-        <div className="relative mb-12 space-y-6">
+        <div className="relative  space-y-6 px-6 pt-8">
             {/* Breadcrumb / Back Link - Clean and minimal */}
             <div className="flex items-center gap-2 group">
                 <Link

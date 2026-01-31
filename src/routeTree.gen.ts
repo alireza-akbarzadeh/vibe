@@ -67,7 +67,9 @@ import { Route as adminDashboardUsersEditRouteImport } from './routes/(admin)/da
 import { Route as adminDashboardUsersCreateRouteImport } from './routes/(admin)/dashboard/users/create'
 import { Route as adminDashboardUsersUserIdRouteImport } from './routes/(admin)/dashboard/users/$userId'
 import { Route as adminDashboardSupportTicketIdRouteImport } from './routes/(admin)/dashboard/support/$ticketId'
+import { Route as adminDashboardSeriesCreateRouteImport } from './routes/(admin)/dashboard/series/create'
 import { Route as adminDashboardPaymentsPaymentIdRouteImport } from './routes/(admin)/dashboard/payments/$paymentId'
+import { Route as adminDashboardMusicCreateRouteImport } from './routes/(admin)/dashboard/music/create'
 import { Route as adminDashboardMoviesCreateRouteImport } from './routes/(admin)/dashboard/movies/create'
 import { Route as adminDashboardMoviesMovieIdRouteImport } from './routes/(admin)/dashboard/movies/$movieId'
 import { Route as adminDashboardMediaMediaIdRouteImport } from './routes/(admin)/dashboard/media/$mediaId'
@@ -406,10 +408,22 @@ const adminDashboardSupportTicketIdRoute =
     path: '/support/$ticketId',
     getParentRoute: () => adminDashboardRouteRoute,
   } as any)
+const adminDashboardSeriesCreateRoute =
+  adminDashboardSeriesCreateRouteImport.update({
+    id: '/series/create',
+    path: '/series/create',
+    getParentRoute: () => adminDashboardRouteRoute,
+  } as any)
 const adminDashboardPaymentsPaymentIdRoute =
   adminDashboardPaymentsPaymentIdRouteImport.update({
     id: '/payments/$paymentId',
     path: '/payments/$paymentId',
+    getParentRoute: () => adminDashboardRouteRoute,
+  } as any)
+const adminDashboardMusicCreateRoute =
+  adminDashboardMusicCreateRouteImport.update({
+    id: '/music/create',
+    path: '/music/create',
     getParentRoute: () => adminDashboardRouteRoute,
   } as any)
 const adminDashboardMoviesCreateRoute =
@@ -607,7 +621,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/media/$mediaId': typeof adminDashboardMediaMediaIdRoute
   '/dashboard/movies/$movieId': typeof adminDashboardMoviesMovieIdRoute
   '/dashboard/movies/create': typeof adminDashboardMoviesCreateRoute
+  '/dashboard/music/create': typeof adminDashboardMusicCreateRoute
   '/dashboard/payments/$paymentId': typeof adminDashboardPaymentsPaymentIdRoute
+  '/dashboard/series/create': typeof adminDashboardSeriesCreateRoute
   '/dashboard/support/$ticketId': typeof adminDashboardSupportTicketIdRoute
   '/dashboard/users/$userId': typeof adminDashboardUsersUserIdRoute
   '/dashboard/users/create': typeof adminDashboardUsersCreateRoute
@@ -692,7 +708,9 @@ export interface FileRoutesByTo {
   '/dashboard/media/$mediaId': typeof adminDashboardMediaMediaIdRoute
   '/dashboard/movies/$movieId': typeof adminDashboardMoviesMovieIdRoute
   '/dashboard/movies/create': typeof adminDashboardMoviesCreateRoute
+  '/dashboard/music/create': typeof adminDashboardMusicCreateRoute
   '/dashboard/payments/$paymentId': typeof adminDashboardPaymentsPaymentIdRoute
+  '/dashboard/series/create': typeof adminDashboardSeriesCreateRoute
   '/dashboard/support/$ticketId': typeof adminDashboardSupportTicketIdRoute
   '/dashboard/users/$userId': typeof adminDashboardUsersUserIdRoute
   '/dashboard/users/create': typeof adminDashboardUsersCreateRoute
@@ -780,7 +798,9 @@ export interface FileRoutesById {
   '/(admin)/dashboard/media/$mediaId': typeof adminDashboardMediaMediaIdRoute
   '/(admin)/dashboard/movies/$movieId': typeof adminDashboardMoviesMovieIdRoute
   '/(admin)/dashboard/movies/create': typeof adminDashboardMoviesCreateRoute
+  '/(admin)/dashboard/music/create': typeof adminDashboardMusicCreateRoute
   '/(admin)/dashboard/payments/$paymentId': typeof adminDashboardPaymentsPaymentIdRoute
+  '/(admin)/dashboard/series/create': typeof adminDashboardSeriesCreateRoute
   '/(admin)/dashboard/support/$ticketId': typeof adminDashboardSupportTicketIdRoute
   '/(admin)/dashboard/users/$userId': typeof adminDashboardUsersUserIdRoute
   '/(admin)/dashboard/users/create': typeof adminDashboardUsersCreateRoute
@@ -869,7 +889,9 @@ export interface FileRouteTypes {
     | '/dashboard/media/$mediaId'
     | '/dashboard/movies/$movieId'
     | '/dashboard/movies/create'
+    | '/dashboard/music/create'
     | '/dashboard/payments/$paymentId'
+    | '/dashboard/series/create'
     | '/dashboard/support/$ticketId'
     | '/dashboard/users/$userId'
     | '/dashboard/users/create'
@@ -954,7 +976,9 @@ export interface FileRouteTypes {
     | '/dashboard/media/$mediaId'
     | '/dashboard/movies/$movieId'
     | '/dashboard/movies/create'
+    | '/dashboard/music/create'
     | '/dashboard/payments/$paymentId'
+    | '/dashboard/series/create'
     | '/dashboard/support/$ticketId'
     | '/dashboard/users/$userId'
     | '/dashboard/users/create'
@@ -1041,7 +1065,9 @@ export interface FileRouteTypes {
     | '/(admin)/dashboard/media/$mediaId'
     | '/(admin)/dashboard/movies/$movieId'
     | '/(admin)/dashboard/movies/create'
+    | '/(admin)/dashboard/music/create'
     | '/(admin)/dashboard/payments/$paymentId'
+    | '/(admin)/dashboard/series/create'
     | '/(admin)/dashboard/support/$ticketId'
     | '/(admin)/dashboard/users/$userId'
     | '/(admin)/dashboard/users/create'
@@ -1531,11 +1557,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof adminDashboardSupportTicketIdRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
+    '/(admin)/dashboard/series/create': {
+      id: '/(admin)/dashboard/series/create'
+      path: '/series/create'
+      fullPath: '/dashboard/series/create'
+      preLoaderRoute: typeof adminDashboardSeriesCreateRouteImport
+      parentRoute: typeof adminDashboardRouteRoute
+    }
     '/(admin)/dashboard/payments/$paymentId': {
       id: '/(admin)/dashboard/payments/$paymentId'
       path: '/payments/$paymentId'
       fullPath: '/dashboard/payments/$paymentId'
       preLoaderRoute: typeof adminDashboardPaymentsPaymentIdRouteImport
+      parentRoute: typeof adminDashboardRouteRoute
+    }
+    '/(admin)/dashboard/music/create': {
+      id: '/(admin)/dashboard/music/create'
+      path: '/music/create'
+      fullPath: '/dashboard/music/create'
+      preLoaderRoute: typeof adminDashboardMusicCreateRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/movies/create': {
@@ -1728,7 +1768,9 @@ interface adminDashboardRouteRouteChildren {
   adminDashboardMediaMediaIdRoute: typeof adminDashboardMediaMediaIdRoute
   adminDashboardMoviesMovieIdRoute: typeof adminDashboardMoviesMovieIdRoute
   adminDashboardMoviesCreateRoute: typeof adminDashboardMoviesCreateRoute
+  adminDashboardMusicCreateRoute: typeof adminDashboardMusicCreateRoute
   adminDashboardPaymentsPaymentIdRoute: typeof adminDashboardPaymentsPaymentIdRoute
+  adminDashboardSeriesCreateRoute: typeof adminDashboardSeriesCreateRoute
   adminDashboardSupportTicketIdRoute: typeof adminDashboardSupportTicketIdRoute
   adminDashboardUsersUserIdRoute: typeof adminDashboardUsersUserIdRoute
   adminDashboardUsersCreateRoute: typeof adminDashboardUsersCreateRoute
@@ -1783,7 +1825,9 @@ const adminDashboardRouteRouteChildren: adminDashboardRouteRouteChildren = {
   adminDashboardMediaMediaIdRoute: adminDashboardMediaMediaIdRoute,
   adminDashboardMoviesMovieIdRoute: adminDashboardMoviesMovieIdRoute,
   adminDashboardMoviesCreateRoute: adminDashboardMoviesCreateRoute,
+  adminDashboardMusicCreateRoute: adminDashboardMusicCreateRoute,
   adminDashboardPaymentsPaymentIdRoute: adminDashboardPaymentsPaymentIdRoute,
+  adminDashboardSeriesCreateRoute: adminDashboardSeriesCreateRoute,
   adminDashboardSupportTicketIdRoute: adminDashboardSupportTicketIdRoute,
   adminDashboardUsersUserIdRoute: adminDashboardUsersUserIdRoute,
   adminDashboardUsersCreateRoute: adminDashboardUsersCreateRoute,

@@ -122,7 +122,7 @@ export function CompactField<TForm extends { Field: any }, TOption = string>(
                                 <InputPhone
                                     value={(value as string) ?? ""}
                                     onChange={(val) => field.handleChange(val)}
-                                    className="border-none bg-transparent h-full w-full px-4"
+                                    className="border-none bg-transparent h-full w-full "
                                 />
                             </div>
                         );

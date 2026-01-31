@@ -33,7 +33,7 @@ export default function UserManagementPage() {
 					</p>
 				</div>
 
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-2 overflow-x-auto">
 					<Button
 						variant="outline"
 						onClick={handleExport}

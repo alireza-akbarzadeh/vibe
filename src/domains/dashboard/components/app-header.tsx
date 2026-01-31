@@ -1,4 +1,4 @@
-import { Film, LayoutGrid, Menu, Plus, Search, Users, Zap } from 'lucide-react'
+import { Film, LayoutGrid, Menu, Music2, Plus, Search, Users, Zap } from 'lucide-react'
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,6 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { Link } from '@/components/ui/link'
 import { cn } from '@/lib/utils'
 import { useDashboardShortcuts } from '../hooks/useDahboardShortcut'
 import { actions } from '../store/dashboard.store'
@@ -103,34 +104,48 @@ export default function AppHeader({ pathname }: AppHeaderProps) {
                             Quick Actions
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator className="opacity-50" />
-                        <DropdownMenuItem className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer">
-                            <div className="bg-blue-500/10 p-2 rounded-lg"><Film className="w-4 h-4 text-blue-500" /></div>
-                            <div className="flex flex-col">
-                                <span className="text-sm font-medium">New Movie</span>
-                                <span className="text-[10px] text-muted-foreground font-mono">N</span>
-                            </div>
+                        <DropdownMenuItem asChild className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer">
+                            <Link to="/dashboard/movies/create">
+                                <div className="bg-blue-500/10 p-2 rounded-lg"><Film className="w-4 h-4 text-blue-500" /></div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium">New Movie</span>
+                                    <span className="text-[10px] text-muted-foreground font-mono">N</span>
+                                </div>
+                            </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer">
-                            <div className="bg-purple-500/10 p-2 rounded-lg"><LayoutGrid className="w-4 h-4 text-purple-500" /></div>
-                            <div className="flex flex-col">
-                                <span className="text-sm font-medium">New Series</span>
-                                <span className="text-[10px] text-muted-foreground font-mono">S</span>
-                            </div>
+                        <DropdownMenuItem asChild className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer">
+                            <Link to="/dashboard/music/create">
+                                <div className="bg-blue-500/10 p-2 rounded-lg"><Music2 className="w-4 h-4 text-pink-500" /></div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium">New Music</span>
+                                    <span className="text-[10px] text-muted-foreground font-mono">N</span>
+                                </div>
+                            </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer">
-                            <div className="bg-emerald-500/10 p-2 rounded-lg"><Users className="w-4 h-4 text-emerald-500" /></div>
-                            <div className="flex flex-col">
-                                <span className="text-sm font-medium">New Staff</span>
-                                <span className="text-[10px] text-muted-foreground font-mono">U</span>
-                            </div>
+                        <DropdownMenuItem asChild className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer">
+                            <Link to="/dashboard/series/create">
+                                <div className="bg-purple-500/10 p-2 rounded-lg"><LayoutGrid className="w-4 h-4 text-purple-500" /></div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium">New Series</span>
+                                    <span className="text-[10px] text-muted-foreground font-mono">S</span>
+                                </div>
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer">
+                            <Link to="/dashboard/users/create">
+                                <div className="bg-emerald-500/10 p-2 rounded-lg"><Users className="w-4 h-4 text-emerald-500" /></div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium">New Staff</span>
+                                    <span className="text-[10px] text-muted-foreground font-mono">U</span>
+                                </div>
+                            </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-
                 <div className="w-px h-6 bg-border/40 mx-2 hidden sm:block" />
                 <Notification />
                 <UserProfile variant='header' />
             </div>
-        </header>
+        </header >
     )
 }
