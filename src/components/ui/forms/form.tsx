@@ -1,14 +1,14 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 /** biome-ignore-all lint/correctness/noChildrenProp: <explanation> */
+
 import type {
 	DeepKeys,
-	DeepValue,
 	FieldApi,
 	FormOptions,
 } from "@tanstack/react-form";
 import { useField, useForm as useTanStackForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-adapter";
-import type { ComponentProps, FC, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import React from "react";
 import type { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -28,21 +28,8 @@ interface FieldContainerProps extends ComponentProps<"div"> {
 	message?: string;
 }
 
-type FieldUIProps<TFormData, TName extends DeepKeys<TFormData>> = {
-	Label: FC<FieldLabelProps>;
-	Detail: FC<FieldDetailProps>;
-	Message: FC<FieldMessageProps>;
-	Container: FC<FieldContainerProps>;
-	Controller: {
-		id: string;
-		name: string;
-		value: DeepValue<TFormData, TName>;
-		onBlur: () => void;
-		onChange: (value: DeepValue<TFormData, TName>) => void;
-	};
-};
+// --- Context ---
 
-// CHANGE: Context now stores the "pointer" to the field, not the instance
 type FieldContextValue = {
 	form: any;
 	name: string;
@@ -82,35 +69,41 @@ export function useForm<
 		/>
 	);
 
+	/**
+	 * Dynamic Field Wrapper
+	 * Handles Icon positioning, Label/Detail layout, and provides the FieldApi to children.
+	 */
 	const FormField = <TName extends DeepKeys<TFormData>>({
 		name,
-		render,
+		label,
+		detail,
+		icon: Icon,
+		className,
+		children,
 	}: {
 		name: TName;
-		render: (
-			field: any // Using any here to bypass the 23-generic recursion limit
-		) => ReactNode;
+		label?: string;
+		detail?: string;
+		icon?: React.ElementType;
+		className?: string;
+		children: (field: FieldApi<TFormData, TName, any, any, any>) => ReactNode;
 	}) => {
-		// We use the hook here to provide immediate data to the render prop
 		const field = useField({ form, name: name as any });
-
-		const extendedField = Object.assign(field, {
-			Label: FieldLabel,
-			Detail: FieldDetail,
-			Message: FieldMessage,
-			Container: FieldContainer,
-			Controller: {
-				id: field.name.toString(),
-				name: field.name.toString(),
-				value: field.state.value,
-				onBlur: field.handleBlur,
-				onChange: (val: any) => field.handleChange(val),
-			},
-		});
 
 		return (
 			<FieldContextProvider value={{ form, name: name as string }}>
-				{render(extendedField)}
+				<FieldContainer label={label} detail={detail} className={cn("group", className)}>
+					<div className="relative flex items-center">
+						{Icon && (
+							<div className="absolute left-4 z-10 opacity-20 group-focus-within:opacity-70 transition-opacity pointer-events-none">
+								<Icon className="w-4 h-4 text-white" />
+							</div>
+						)}
+						<div className="flex-1">
+							{children(field as any)}
+						</div>
+					</div>
+				</FieldContainer>
 			</FieldContextProvider>
 		);
 	};
@@ -141,9 +134,6 @@ export function useForm<
 
 function useFieldInstance() {
 	const context = useFieldContext();
-
-	// This is the fix. By calling useField inside the sub-component, 
-	// we guarantee useStore is a valid function on the resulting object.
 	const field = useField({
 		form: context.form,
 		name: context.name,
@@ -183,24 +173,16 @@ function FieldMessage({ asChild, className, children, ...props }: FieldMessagePr
 	const field = useFieldInstance();
 	const Comp = asChild ? Slot : "p";
 
-	// 1. Get the raw error
 	const rawError = field.state.meta.isTouched && field.hasErrors
 		? field.state.meta.errors[0]
 		: null;
 
-	// 2. Extract the string message safely
 	const errorMessage = React.useMemo(() => {
 		if (!rawError) return null;
-
-		// If it's a string, return it
 		if (typeof rawError === 'string') return rawError;
-
-		// If it's a Zod-style error object with a message property
 		if (typeof rawError === 'object' && 'message' in (rawError as any)) {
 			return (rawError as any).message;
 		}
-
-		// Fallback for arrays or other object types
 		return String(rawError);
 	}, [rawError]);
 
@@ -219,6 +201,7 @@ function FieldMessage({ asChild, className, children, ...props }: FieldMessagePr
 		</Comp>
 	);
 }
+
 function FieldContainer({ label, detail, message, children, className }: FieldContainerProps) {
 	return (
 		<div className={cn("space-y-1.5", className)}>

@@ -30,3 +30,5 @@ export const userAccountSchema = z.object({
 	notes: z.string().max(500, "Notes are too long").optional(),
 	tags: z.array(z.string()).default([]),
 });
+
+type UserAccount = z.infer<typeof userAccountSchema>;
