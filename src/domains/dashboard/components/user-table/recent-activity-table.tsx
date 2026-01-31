@@ -75,12 +75,12 @@ export function RecentActivityTable() {
         <Table.Root table={table}>
             <div className="space-y-6">
                 <div className="flex flex-col gap-4">
-                    <div className="flex justify-between items-center gap-4">
+                    <div className="flex justify-between items-center gap-4 flex-wrap">
                         <Table.Search columnId="user" placeholder="Search subscribers..." />
                         <Table.FilterTabs columnId="plan" options={['All', 'Premium', 'Standard', 'Free']} />
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-border/40 pt-4">
+                    <div className="flex items-center flex-wrap justify-between border-t border-border/40 pt-4">
                         <Table.StatusFilters
                             columnId="status"
                             title="Billing"

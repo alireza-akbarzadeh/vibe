@@ -1,12 +1,14 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { flexRender } from "@tanstack/react-table"
-import { Download, RotateCcw, Search, Trash2, X } from "lucide-react"
-import type * as React from "react"
+import { Check, ChevronDown, Download, RotateCcw, Search, Trash2, X } from "lucide-react"
+import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { DataTablePagination } from "./data-table-pagination"
 import { TableRoot, useTableContext } from "./table-context"
+
+
 
 // 1. DEFINE GENERIC INTERFACES
 export interface StatusOption {
@@ -49,6 +51,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Skeleton } from "../ui/skeleton"
 
 interface BulkActionsProps<TData> {
@@ -83,78 +87,149 @@ export const Table = {
         const { table } = useTableContext()
         const column = table.getColumn(columnId)
         const currentValue = (column?.getFilterValue() as string) ?? ""
+        const [open, setOpen] = React.useState(false)
 
         return (
-            <div className="flex items-center bg-muted/30 p-1 rounded-2xl border border-border/40">
-                {options.map((opt) => (
+            <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
                     <Button
-                        key={opt}
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => column?.setFilterValue(opt === 'All' ? "" : opt)}
+                        variant="outline"
                         className={cn(
-                            "rounded-xl px-4 text-[11px] font-bold uppercase tracking-wider transition-all",
-                            (opt === 'All' ? currentValue === "" : currentValue === opt)
-                                ? "bg-background text-primary shadow-sm"
-                                : "text-muted-foreground hover:text-foreground"
+                            "h-11 w-full md:w-44 justify-between rounded-2xl border-border/40 bg-card/40 px-4",
+                            "text-[11px] font-black uppercase tracking-widest transition-all",
+                            currentValue && "border-primary/40 bg-primary/5 text-primary"
                         )}
                     >
-                        {opt}
+                        <span className="truncate">{currentValue || "All Categories"}</span>
+                        <ChevronDown className={cn("size-4 shrink-0 transition-transform duration-200 opacity-50", open && "rotate-180")} />
                     </Button>
-                ))}
-            </div>
+                </PopoverTrigger>
+                <PopoverContent
+                    align="start"
+                    className="w-[--radix-popover-trigger-width] p-1.5 bg-[#0d1117]/95 backdrop-blur-xl border-border/40 shadow-2xl rounded-2xl"
+                >
+                    <div className="flex flex-col gap-1">
+                        {options.map((opt) => {
+                            const isActive = (opt === 'All' ? currentValue === "" : currentValue === opt)
+                            return (
+                                <Button
+                                    key={opt}
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                        column?.setFilterValue(opt === 'All' ? "" : opt)
+                                        setOpen(false)
+                                    }}
+                                    className={cn(
+                                        "justify-start rounded-xl px-3 text-[10px] font-bold uppercase tracking-wider h-9 transition-all",
+                                        isActive
+                                            ? "bg-primary/10 text-primary"
+                                            : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                                    )}
+                                >
+                                    <div className="flex items-center w-full">
+                                        {isActive ? (
+                                            <Check className="mr-2 size-3 stroke-[3]" />
+                                        ) : (
+                                            <div className="mr-2 size-3" />
+                                        )}
+                                        {opt}
+                                    </div>
+                                </Button>
+                            )
+                        })}
+                    </div>
+                </PopoverContent>
+            </Popover>
         )
     },
-
     StatusFilters: ({ columnId, options, title = "Status" }: StatusFiltersProps) => {
         const { table } = useTableContext()
         const column = table.getColumn(columnId)
         const currentValue = (column?.getFilterValue() as string) ?? ""
+        const [open, setOpen] = React.useState(false)
+
+        // Find the currently active option to display in the trigger
+        const activeOption = options.find((opt) => (opt.value ?? opt.label) === currentValue)
 
         return (
-            <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-2">
+            <div className="flex items-center gap-2 w-full md:w-auto">
+                <span className="hidden sm:inline text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mr-1">
                     {title}:
                 </span>
-                {options.map((s) => {
-                    const filterValue = s.value ?? s.label
-                    const isActive = currentValue === filterValue
-                    const Icon = s.icon
 
-                    return (
+                <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
                         <Button
-                            key={s.label}
                             variant="outline"
-                            size="sm"
-                            onClick={() => column?.setFilterValue(isActive ? "" : filterValue)}
+                            role="combobox"
                             className={cn(
-                                "h-8 rounded-full px-3 text-[10px] font-bold border-border/40 transition-all",
-                                isActive
-                                    ? "bg-primary/10 border-primary/30 text-primary shadow-inner"
-                                    : "bg-transparent text-muted-foreground hover:bg-muted"
+                                "h-10 w-full md:w-[200px] justify-between rounded-xl border-border/40 bg-[#0d1117] text-[11px] font-bold uppercase tracking-wider transition-all",
+                                currentValue ? "text-primary border-primary/30" : "text-muted-foreground hover:text-foreground"
                             )}
                         >
-                            <Icon className={cn("mr-1.5 size-3", isActive ? "text-primary" : s.color)} />
-                            {s.label}
+                            <div className="flex items-center gap-2 truncate">
+                                {activeOption ? (
+                                    <>
+                                        <activeOption.icon className={cn("size-3.5", activeOption.color)} />
+                                        <span>{activeOption.label}</span>
+                                    </>
+                                ) : (
+                                    <span>Select {title}</span>
+                                )}
+                            </div>
+                            <ChevronDown className="ml-2 size-4 shrink-0 opacity-50" />
                         </Button>
-                    )
-                })}
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0 bg-[#0d1117] border-border/40 shadow-2xl" align="start">
+                        <Command className="bg-transparent">
+                            <CommandInput placeholder={`Filter ${title}...`} className="h-9 text-xs" />
+                            <CommandList>
+                                <CommandEmpty className="py-2 text-[10px] text-center uppercase text-muted-foreground">No results</CommandEmpty>
+                                <CommandGroup>
+                                    {options.map((s) => {
+                                        const filterValue = s.value ?? s.label
+                                        const isActive = currentValue === filterValue
+                                        const Icon = s.icon
 
-                {currentValue && (
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => column?.setFilterValue("")}
-                        className="h-8 text-[10px] font-bold text-destructive hover:bg-destructive/10 rounded-full"
-                    >
-                        <RotateCcw className="mr-1.5 size-3" />
-                        Reset
-                    </Button>
-                )}
+                                        return (
+                                            <CommandItem
+                                                key={s.label}
+                                                onSelect={() => {
+                                                    column?.setFilterValue(isActive ? "" : filterValue)
+                                                    setOpen(false)
+                                                }}
+                                                className="flex items-center gap-2 px-3 py-2 cursor-pointer text-[11px] font-bold uppercase"
+                                            >
+                                                <Icon className={cn("size-3.5", s.color)} />
+                                                <span className="flex-1">{s.label}</span>
+                                                {isActive && <Check className="size-3 text-primary" />}
+                                            </CommandItem>
+                                        )
+                                    })}
+                                </CommandGroup>
+                            </CommandList>
+                            {currentValue && (
+                                <div className="p-1 border-t border-border/10">
+                                    <Button
+                                        variant="ghost"
+                                        onClick={() => {
+                                            column?.setFilterValue("")
+                                            setOpen(false)
+                                        }}
+                                        className="w-full h-8 text-[10px] font-bold uppercase text-destructive hover:text-destructive/80"
+                                    >
+                                        <RotateCcw className="mr-2 size-3" />
+                                        Reset Filter
+                                    </Button>
+                                </div>
+                            )}
+                        </Command>
+                    </PopoverContent>
+                </Popover>
             </div>
         )
     },
-
     Body: <TData,>({ columnsCount, onRowDoubleClick }: BodyProps<TData>) => {
         const { table } = useTableContext<TData>()
         const rows = table.getRowModel().rows
