@@ -2,28 +2,18 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
 	BookText,
-	ChevronRight,
 	Clapperboard,
 	CreditCard,
-	Menu,
 	Music,
 	PlaySquare,
-	Sparkles,
-	X
+	Sparkles
 } from "lucide-react";
 import { useState } from "react";
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerHeader,
-	DrawerTitle,
-	DrawerTrigger,
-} from "@/components/ui/drawer";
 import { MSG } from "@/constants/constants";
 import { cn } from "@/lib/utils";
+import { MobileHeader } from "./mobile-header";
 
-const navLinks = [
+export const navLinks = [
 	{ label: "Music", href: "/music", icon: Music },
 	{ label: "Movies", href: "/movies", icon: Clapperboard },
 	{ label: "Reels", href: "/reels", icon: PlaySquare },
@@ -110,84 +100,9 @@ export function RootHeader() {
 							);
 						})}
 					</div>
-
-					{/* 3. ACTIONS & MOBILE TRIGGER */}
-					<div className="flex items-center gap-3">
-						<div className="hidden md:flex items-center gap-4 mr-2">
-							<Link to="/login" className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">
-								Login
-							</Link>
-							<Link to="/register" className="relative group overflow-hidden px-6 py-2.5 rounded-full bg-white text-black font-black text-xs uppercase tracking-tighter hover:scale-105 transition-transform active:scale-95">
-								Join Now
-							</Link>
-						</div>
-
-						{/* MOBILE DRAWER (VAUL) */}
-						<Drawer open={isOpen} onOpenChange={setIsOpen} shouldScaleBackground>
-							<DrawerTrigger asChild>
-								<button className="lg:hidden p-2.5 bg-white/5 rounded-full border border-white/10 text-slate-300 active:scale-95 transition-all">
-									<Menu className="size-5" />
-								</button>
-							</DrawerTrigger>
-							<DrawerContent className="bg-[#0a0a0b] border-white/10 text-white rounded-t-[2.5rem] outline-none max-h-[92vh]">
-								{/* DRAG HANDLE (Visual clue for dragging) */}
-								<div className="mx-auto mt-4 h-1.5 w-12 rounded-full bg-white/20" />
-
-								<DrawerHeader className="flex flex-row items-center justify-between px-8 pt-6">
-									<div className="flex flex-col gap-1">
-										<DrawerTitle className="text-2xl font-black tracking-tighter">Explore</DrawerTitle>
-										<p className="text-[10px] text-purple-400 font-bold uppercase tracking-[0.2em]">Navigation</p>
-									</div>
-									<DrawerClose asChild>
-										<button className="p-2.5 bg-white/5 rounded-full text-slate-400 hover:text-white outline-none">
-											<X className="size-5" />
-										</button>
-									</DrawerClose>
-								</DrawerHeader>
-
-								<div className="px-6 pb-10 pt-4 overflow-y-auto">
-									<div className="space-y-1">
-										{navLinks.map((link) => (
-											<Link
-												key={link.label}
-												to={link.href}
-												onClick={() => setIsOpen(false)}
-												className="flex items-center gap-4 py-4 px-3 rounded-2xl active:bg-white/5 transition-all group"
-											>
-												<div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-active:scale-90 transition-transform">
-													<link.icon className="size-5 text-slate-300 group-active:text-purple-400" />
-												</div>
-												<span className="text-lg font-bold text-slate-200 flex-1">
-													{link.label}
-												</span>
-												<ChevronRight className="size-5 text-slate-700 group-active:translate-x-1 transition-transform" />
-											</Link>
-										))}
-									</div>
-
-									{/* DRAWER FOOTER ACTIONS */}
-									<div className="mt-8 pt-8 border-t border-white/5 grid grid-cols-2 gap-4">
-										<Link
-											to="/login"
-											onClick={() => setIsOpen(false)}
-											className="flex items-center justify-center py-4 text-slate-300 font-bold bg-white/5 rounded-2xl active:scale-95 transition-transform"
-										>
-											Sign In
-										</Link>
-										<Link
-											to="/register"
-											onClick={() => setIsOpen(false)}
-											className="flex items-center justify-center py-4 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-purple-500/20 active:scale-95 transition-transform"
-										>
-											Join Now
-										</Link>
-									</div>
-								</div>
-							</DrawerContent>
-						</Drawer>
-					</div>
+					<MobileHeader open={isOpen} onOpenChange={setIsOpen} />
 				</div>
 			</nav>
 		</motion.header>
 	);
-}
+}	

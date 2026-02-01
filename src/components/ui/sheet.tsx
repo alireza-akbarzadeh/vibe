@@ -100,12 +100,15 @@ const sheetVariants = cva(
 
 interface SheetContentProps
 	extends ComponentProps<typeof SheetPrimitive.Content>,
-		VariantProps<typeof sheetVariants> {}
+	VariantProps<typeof sheetVariants> {
+	noCLose?: boolean;
+}
 
 function SheetContent({
 	side = "right",
 	className,
 	children,
+	noCLose,
 	...props
 }: SheetContentProps) {
 	return (
@@ -116,27 +119,29 @@ function SheetContent({
 				{...props}
 			>
 				{children}
+				{noCLose ? null : (
 
-				{/* Close button */}
-				<SheetPrimitive.Close
-					className="
-            absolute right-4 top-4
-            rounded-full p-2
-            bg-muted/40
-            text-muted-foreground
-            backdrop-blur
-            transition-all
-            hover:bg-muted
-            hover:text-foreground
-            focus:outline-none
-            focus:ring-2 focus:ring-ring
-          "
-				>
-					<LucideX className="h-4 w-4" />
-					<span className="sr-only">Close</span>
-				</SheetPrimitive.Close>
+					< SheetPrimitive.Close
+						className="
+				absolute right-4 top-4
+				rounded-full p-2
+				bg-muted/40
+				text-muted-foreground
+				backdrop-blur
+				transition-all
+				hover:bg-muted
+				hover:text-foreground
+				focus:outline-none
+				focus:ring-2 focus:ring-ring
+				"
+					>
+						<LucideX className="h-4 w-4" />
+						<span className="sr-only">Close</span>
+					</SheetPrimitive.Close>
+				)}
+
 			</SheetPrimitive.Content>
-		</SheetPortal>
+		</SheetPortal >
 	);
 }
 

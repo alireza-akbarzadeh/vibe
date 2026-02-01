@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useStore } from '@tanstack/react-store';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Loader2, Plus, Search } from 'lucide-react';
+import { Loader2, Search } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { MobileHeader } from '@/components/mobile-header';
 import { cn } from '@/lib/utils';
 import CommentModal from './components/reel-comment';
 import { VideoCard } from './components/reels-video-card';
@@ -21,7 +22,7 @@ export const reelsQueryOptions = {
 export function ReelsDomain() {
     const { data: serverVideos, isLoading } = useQuery(reelsQueryOptions);
     const { videos, activeTab, activeVideoId, commentModalOpen } = useStore(reelsStore);
-
+    const [open, setOpen] = useState<boolean>(false);
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -75,10 +76,12 @@ export function ReelsDomain() {
                     animate={{ y: 0, opacity: 1 }}
                     className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pt-12 pb-4 bg-linear-to-b from-black/80 to-transparent"
                 >
-                    <button className="text-white hover:opacity-70 transition-opacity">
-                        <Search className="size-6" />
-                    </button>
-
+                    <div className="flex space-x-4">
+                        <MobileHeader show onOpenChange={setOpen} open={open} />
+                        <button className="text-white hover:opacity-70 transition-opacity">
+                            <Search className="size-6" />
+                        </button>
+                    </div>
                     <div className="flex gap-6">
                         {(['following', 'foryou'] as const).map((tab) => (
                             <button
