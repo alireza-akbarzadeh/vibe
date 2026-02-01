@@ -3,10 +3,24 @@ import { Heart, Send, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 
-export default function CommentModal({ isOpen, onClose, videoId }) {
+interface User {
+    username: string;
+    avatar: string;
+}
+
+interface CommentItem {
+    id: number;
+    user: User;
+    text: string;
+    likes: number;
+    isLiked: boolean;
+    timestamp: string;
+}
+
+export default function CommentModal({ isOpen, onClose, videoId }: { isOpen: boolean; onClose: () => void; videoId: number }) {
     const [comment, setComment] = useState('');
 
-    const comments = [
+    const comments: CommentItem[] = [
         {
             id: 1,
             user: {
@@ -64,10 +78,11 @@ export default function CommentModal({ isOpen, onClose, videoId }) {
         }
     ];
 
-    const handleSubmit = (e) => {
+
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         if (comment.trim()) {
-            // Handle comment submission
             console.log('Comment:', comment);
             setComment('');
         }
@@ -145,8 +160,8 @@ export default function CommentModal({ isOpen, onClose, videoId }) {
                                             <div className="flex items-center gap-1">
                                                 <Heart
                                                     className={`w-3.5 h-3.5 ${comment.isLiked
-                                                            ? 'fill-pink-500 text-pink-500'
-                                                            : 'text-gray-400'
+                                                        ? 'fill-pink-500 text-pink-500'
+                                                        : 'text-gray-400'
                                                         }`}
                                                 />
                                                 <span className={`text-xs ${comment.isLiked ? 'text-pink-500' : 'text-gray-400'
