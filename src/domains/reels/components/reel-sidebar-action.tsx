@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import {
     Bookmark,
     Heart,
+    Maximize2,
     MessageCircle,
     MoreVertical
 } from 'lucide-react';
@@ -17,6 +18,7 @@ import {
 } from '../reels.store';
 import type { VideoReel } from '../reels.types';
 import { QuickReactionsOverlay } from './quick-reactions-0verlay';
+import { ActionButton } from './reel-action-button';
 import { ShareDrawer } from './reel-share-drawer';
 
 /* --- TYPES --- */
@@ -24,14 +26,11 @@ import { ShareDrawer } from './reel-share-drawer';
 interface SidebarActionsProps {
     video: VideoReel;
     onMore: () => void;
+    isFocused: boolean;
+    onToggleFocus: () => void;
 }
 
-interface ActionButtonProps {
-    icon: React.ReactNode;
-    label?: string;
-    onClick?: () => void;
-    className?: string;
-}
+
 
 /* --- UTILS --- */
 
@@ -46,6 +45,7 @@ const formatNumber = (num: number): string => {
 export const SidebarActions = ({
     video,
     onMore,
+    isFocused, onToggleFocus
 }: SidebarActionsProps) => {
     // 1. Hook into reactions from store for this specific video
     const reactions = useStore(reelsStore, (s) => s.reactions);
@@ -54,6 +54,7 @@ export const SidebarActions = ({
     return (
         <div className="absolute bottom-24 right-4 flex flex-col gap-5 z-20">
             {/* Like Action */}
+
             <ActionButton
                 icon={<Heart className={cn("size-7 transition-colors", video.isLiked ? 'fill-rose-500 text-rose-500' : 'text-white')} />}
                 label={formatNumber(video.likes)}
@@ -84,7 +85,12 @@ export const SidebarActions = ({
                 selectedEmoji={selectedEmoji}
                 onReact={(emoji) => setVideoReaction(video.id, emoji)}
             />
-
+            <ActionButton
+                icon={<Maximize2 className={cn("size-6 transition-all", isFocused ? 'text-blue-400 scale-110' : 'text-white')} />}
+                label={isFocused ? "Focused" : "Focus"}
+                onClick={onToggleFocus}
+                className={isFocused ? "bg-blue-500/20" : ""}
+            />
             {/* More Menu Trigger */}
             <ActionButton icon={<MoreVertical className="size-7 text-white" />} onClick={onMore} />
 
@@ -104,20 +110,4 @@ export const SidebarActions = ({
     );
 };
 
-const ActionButton = ({ icon, label, onClick }: ActionButtonProps) => (
-    <motion.button
-        whileTap={{ scale: 0.8 }}
-        onClick={(e) => {
-            if (onClick) {
-                e.stopPropagation();
-                onClick();
-            }
-        }}
-        className="flex flex-col items-center gap-1 outline-none"
-    >
-        <div className="flex size-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-xl transition-colors active:bg-white/20">
-            {icon}
-        </div>
-        {label && <span className="text-[10px] font-black uppercase tracking-tighter text-white drop-shadow-md">{label}</span>}
-    </motion.button>
-);
+
