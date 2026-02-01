@@ -124,11 +124,10 @@ export function SearchView() {
 						type="button"
 						key={filter}
 						onClick={() => setActiveFilter(filter)}
-						className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-							activeFilter === filter
-								? "bg-white text-black"
-								: "bg-white/10 text-white hover:bg-white/20"
-						}`}
+						className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${activeFilter === filter
+							? "bg-white text-black"
+							: "bg-white/10 text-white hover:bg-white/20"
+							}`}
 					>
 						{filter}
 					</button>
@@ -182,9 +181,15 @@ export function SearchView() {
 											<div
 												key={song.id}
 												onClick={() => setCurrentSong(song)}
+												onKeyDown={(e) => {
+													if (e.key === "Enter" || e.key === " ") {
+														e.preventDefault();
+														setCurrentSong(song);
+													}
+												}}
 												className="flex items-center gap-3 p-2 rounded-md hover:bg-white/10 group cursor-pointer"
 											>
-												<div className="relative w-10 h-10 flex-shrink-0">
+												<div className="relative w-10 h-10 shrink-0">
 													<img
 														src={song.albumArt}
 														className="w-full h-full rounded object-cover"

@@ -13,6 +13,8 @@ import {
 import { useState } from "react";
 import { MSG } from "@/constants/constants";
 import { cn } from "@/lib/utils";
+import { JoinButton } from "./buttons/join-button";
+import { Logo } from "./logo";
 import { MobileHeader } from "./mobile-header";
 
 export const navLinks = [
@@ -49,39 +51,16 @@ export function RootHeader() {
 				"md:max-w-7xl mx-auto top-0 overflow-visible"
 			)}
 		>
-			{/* Glossy Gradient Overlay */}
 			<motion.div
 				style={{ opacity: bgOpacity }}
-				className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent md:rounded-[2.5rem] -z-10"
+				className="absolute inset-0 bg-linear-to-b from-white/8 to-transparent md:rounded-[2.5rem] -z-10"
 			/>
-			{/* Solid Dark Base */}
 			<div className="absolute inset-0 bg-[#0a0a0b]/80 md:rounded-[2.5rem] -z-20" />
 
 			<nav className="px-5 py-2.5 relative">
 				<div className="flex items-center justify-between gap-4">
-
-					{/* 1. LOGO SECTION */}
-					<Link to="/" className="flex items-center gap-3 group shrink-0">
-						<div className="relative">
-							<div className="absolute inset-0 bg-indigo-500 blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
-							<div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-xl group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
-								<Music className="w-6 h-6 text-white" />
-							</div>
-						</div>
-						<div className="flex flex-col">
-							<span className="text-base font-black tracking-tighter text-white leading-none">
-								{MSG.APP_NAME}
-							</span>
-							<div className="flex items-center gap-1.5 mt-1">
-								<span className="text-[9px] text-purple-400 font-bold uppercase tracking-[0.2em]">
-									Premium
-								</span>
-								<div className="h-1 w-1 rounded-full bg-purple-500 animate-pulse" />
-							</div>
-						</div>
-					</Link>
-
-					{/* 2. DESKTOP NAV PILL (Improved) */}
+					<Logo />
+					{/* 2. DESKTOP NAV PILL */}
 					<div className="hidden lg:flex items-center bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.05] backdrop-blur-2xl rounded-full p-1.5 gap-0.5 transition-colors duration-300">
 						{navLinks.map((link) => {
 							const isActive = location.pathname === link.href;
@@ -113,29 +92,61 @@ export function RootHeader() {
 						})}
 					</div>
 
-					{/* 3. DESKTOP ACTIONS */}
-					<div className="hidden md:flex items-center gap-2 shrink-0">
+					{/* 3. DESKTOP ACTIONS (ENGAGING JOIN NOW) */}
+					<div className="hidden md:flex items-center gap-3 shrink-0">
 						<Link
 							to="/login"
-							className="px-5 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-2"
+							className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-2"
 						>
 							<LogIn className="size-4" />
 							Login
 						</Link>
 
-						<Link
-							to="/register"
-							className="relative flex items-center gap-2 px-6 py-2.5 bg-white text-black rounded-full font-black text-xs uppercase tracking-tight hover:bg-indigo-50 transition-all active:scale-95 group overflow-hidden"
+						<motion.div
+							initial="initial"
+							animate="animate"
+							whileHover="hover"
+							whileTap="tap"
+							className="relative"
 						>
-							<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shimmer" />
-							Join Now
-							<ChevronRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
-						</Link>
+							{/* The Glowing Aura - keep it subtle so the focus stays on the arrow */}
+							<motion.div
+								animate={{
+									scale: [1, 1.15, 1],
+									opacity: [0.2, 0.4, 0.2],
+								}}
+								transition={{
+									duration: 3,
+									repeat: Infinity,
+									ease: "easeInOut"
+								}}
+								className="absolute inset-0 bg-indigo-500 rounded-full blur-md -z-10"
+							/>
+
+							<Link
+								to="/register"
+								className={cn(
+									"relative flex items-center gap-2 px-7 py-2.5 rounded-full font-black text-[11px] uppercase tracking-tighter shadow-xl overflow-hidden",
+									"bg-white text-black transition-all duration-300"
+								)}
+							>
+								{/* Shimmer Effect */}
+								<motion.div
+									animate={{ x: ["-100%", "200%"] }}
+									transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
+									className="absolute inset-0 bg-linear-to-r from-transparent via-indigo-500/10 to-transparent skew-x-12"
+								/>
+
+								<span className="relative z-10">Join Now</span>
+
+								<JoinButton />
+							</Link>
+						</motion.div>
 					</div>
 
 					{/* 4. MOBILE TRIGGER */}
 					<div className="lg:hidden flex items-center">
-						<MobileHeader open={isOpen} onOpenChange={setIsOpen} />
+						<MobileHeader side="bottom" open={isOpen} onOpenChange={setIsOpen} />
 					</div>
 				</div>
 			</nav>

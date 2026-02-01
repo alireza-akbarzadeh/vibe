@@ -19,11 +19,12 @@ import { navLinks } from "./root-header";
 type RootHeaderProps = {
     onOpenChange: (open: boolean) => void;
     open: boolean;
+    side?: "top" | "bottom" | "left" | "right";
     show?: boolean;
 };
 
 export function MobileHeader(props: RootHeaderProps) {
-    const { open, show = false, onOpenChange } = props;
+    const { open, side = "left", show = false, onOpenChange } = props;
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
@@ -41,7 +42,7 @@ export function MobileHeader(props: RootHeaderProps) {
             {/* "side" can be top, bottom, left, right. Bottom feels most premium for mobile */}
             <SheetContent
                 noCLose
-                side="left"
+                side={side}
                 className="bg-[#0a0a0b] border-white/10 text-white rounded-t-[2.5rem] outline-none h-[90vh] p-0 overflow-hidden"
             >
 

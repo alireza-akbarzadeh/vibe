@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import { Logo } from "@/components/logo";
 import { MSG } from "@/constants/constants";
 import { actions, blogStore } from "@/domains/blog/store/blog.store";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -48,15 +49,7 @@ export function BlogLayout({ children }: { children: React.ReactNode }) {
 			{/* MOBILE HEADER */}
 			{isSmallScreen && (
 				<header className="sticky top-0 w-full h-16 bg-[#080808]/80 backdrop-blur-2xl border-b border-white/5 z-60 px-4 flex items-center justify-between">
-					<Link to="/" className="flex items-center gap-3">
-						<div className="w-8 h-8 rounded-lg bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center">
-							<Sparkles size={16} className="text-white" />
-						</div>
-						<span className="text-sm font-black uppercase tracking-tighter">
-							{MSG.APP_NAME}
-						</span>
-					</Link>
-
+					<Logo />
 					<div className="flex items-center gap-2">
 						<button
 							type="button"
@@ -79,30 +72,15 @@ export function BlogLayout({ children }: { children: React.ReactNode }) {
 			{/* SIDEBAR / DRAWER */}
 			<aside
 				className={`
-                ${
-									isSmallScreen
-										? `fixed inset-0 z-55 transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-500 bg-[#050505]`
-										: "w-72 border-r border-white/5 sticky top-0 h-screen"
-								} 
+                ${isSmallScreen
+						? `fixed inset-0 z-55 transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-500 bg-[#050505]`
+						: "w-72 border-r border-white/5 sticky top-0 h-screen"
+					} 
                 flex flex-col bg-[#080808]/80 backdrop-blur-2xl
             `}
 			>
 				<div className="p-8 hidden lg:block">
-					<Link to="/" className="group flex items-center gap-4">
-						<div className="relative">
-							<div className="w-12 h-12 rounded-2xl bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.4)]">
-								<Sparkles className="w-6 h-6 text-white" />
-							</div>
-						</div>
-						<div className="flex flex-col text-white">
-							<span className="text-xl font-black tracking-tighter uppercase leading-none">
-								{MSG.APP_NAME}
-							</span>
-							<span className="text-[10px] font-bold text-neutral-500 tracking-[0.2em] uppercase mt-1">
-								Editorial v2
-							</span>
-						</div>
-					</Link>
+					<Logo />
 				</div>
 
 				<div className="flex-1 overflow-y-auto px-4 mt-20 lg:mt-0 custom-scrollbar">

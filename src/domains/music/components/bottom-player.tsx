@@ -26,6 +26,7 @@ import {
     toggleMute,
     toggleShuffle,
 } from "@/domains/music/player.store";
+import { cn } from "@/lib/utils";
 
 interface BottomPlayerProps {
     currentSong: Song;
@@ -44,7 +45,6 @@ export function BottomPlayer({
 }: BottomPlayerProps) {
     const { volume, isMuted, isShuffle, likedSongIds } = useStore(playerStore);
     const isLiked = likedSongIds.has(currentSong?.id);
-
     const progressBarRef = useRef<HTMLDivElement>(null);
     const volumeBarRef = useRef<HTMLDivElement>(null);
     const duration = currentSong.duration;
@@ -96,76 +96,68 @@ export function BottomPlayer({
         <motion.div
             initial={{ y: 100 }}
             animate={{ y: 0 }}
-            className="fixed bottom-0 left-0 right-0 h-24 bg-black/95 backdrop-blur-md border-t border-white/5 px-4 z-100 select-none"
+            className={cn(
+                "fixed bottom-0 left-0 right-0 z-[100] select-none",
+                "h-20 md:h-24 px-2 md:px-4 bg-black/90 backdrop-blur-xl border-t border-white/5",
+                "pb-[env(safe-area-inset-bottom)]" // Support for mobile home bars
+            )}
         >
-            <div className="h-full flex items-center justify-between gap-4">
-                {/* Left: Song Info (As per Screenshot) */}
-                <div className="flex items-center gap-4 w-[30%] min-w-50">
-                    <div className="relative group">
+            {/* Top Micro-Progress Bar (Mobile Only) */}
+            <div className="md:hidden absolute top-0 left-0 right-0 h-[2px] bg-white/10">
+                <div
+                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300"
+                    style={{ width: `${progressPercentage}%` }}
+                />
+            </div>
+
+            <div className="h-full flex items-center justify-between gap-2 md:gap-4">
+
+                {/* 1. LEFT: Song Info */}
+                <div className="flex items-center gap-3 md:gap-4 w-auto md:w-[30%] min-w-0">
+                    <div className="relative shrink-0 group">
                         <img
                             src={currentSong.albumArt}
                             alt={currentSong.title}
-                            className="w-14 h-14 rounded shadow-2xl object-cover"
+                            className="w-12 h-12 md:w-14 md:h-14 rounded-lg md:rounded shadow-2xl object-cover"
                         />
-                        <button
-                            type="button"
-                            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 rounded-full p-0.5"
-                        >
+                        <button className="hidden md:block absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 rounded-full p-0.5">
                             <PictureInPicture2 className="w-3 h-3 text-white" />
                         </button>
                     </div>
-                    <div className="min-w-0">
-                        <div className="text-white text-[14px] font-bold truncate hover:underline cursor-pointer">
+                    <div className="min-w-0 flex-1 md:flex-none">
+                        <div className="text-white text-sm md:text-[14px] font-bold truncate">
                             {currentSong.title}
                         </div>
-                        <div className="text-[#b3b3b3] text-[11px] truncate hover:text-white transition-colors cursor-pointer">
+                        <div className="text-[#b3b3b3] text-xs md:text-[11px] truncate">
                             {currentSong.artist}
                         </div>
                     </div>
-                    <div className="flex items-center gap-3 ml-2">
-                        <button
-                            type="button"
-                            onClick={() => toggleLike(currentSong.id)}
-                            className={`transition-colors ${isLiked ? "text-pink-500" : "text-[#b3b3b3] hover:text-white"}`}
-                        >
-                            <Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />
+                    {/* Like & Add Hidden on very small screens, visible on md */}
+                    <div className="hidden sm:flex items-center gap-3 ml-2">
+                        <button onClick={() => toggleLike(currentSong.id)} className={cn("transition-colors", isLiked ? "text-pink-500" : "text-[#b3b3b3] hover:text-white")}>
+                            <Heart className={cn("w-5 h-5", isLiked && "fill-current")} />
                         </button>
-
-                        <button
-                            type="button"
-                            title="Add to playlist"
-                            onClick={() => openAddToPlaylist(currentSong)}
-                            className="text-[#b3b3b3] hover:text-white cursor-pointer transition-colors active:scale-90"
-                        >
+                        <button onClick={() => openAddToPlaylist(currentSong)} className="text-[#b3b3b3] hover:text-white transition-colors">
                             <PlusCircle className="w-5 h-5" />
                         </button>
                     </div>
                 </div>
 
-                {/* Center: Controls */}
+                {/* 2. CENTER: Main Controls */}
                 <div className="flex-1 max-w-[45%] flex flex-col items-center">
-                    <div className="flex items-center gap-6 mb-2">
-                        <button
-                            type="button"
-                            onClick={toggleShuffle}
-                            className={
-                                isShuffle
-                                    ? "text-purple-500"
-                                    : "text-[#b3b3b3] hover:text-white"
-                            }
-                        >
+                    <div className="flex items-center gap-4 md:gap-6 mb-1 md:mb-2">
+                        {/* Hidden on Mobile */}
+                        <button onClick={toggleShuffle} className={cn("hidden md:block", isShuffle ? "text-purple-500" : "text-[#b3b3b3] hover:text-white")}>
                             <Shuffle className="w-4 h-4" />
                         </button>
-                        <button type="button" className="text-[#b3b3b3] hover:text-white">
+                        <button className="hidden md:block text-[#b3b3b3] hover:text-white">
                             <SkipBack className="w-5 h-5 fill-current" />
                         </button>
 
                         <motion.button
-                            type="button"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileTap={{ scale: 0.9 }}
                             onClick={onPlayPause}
-                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:scale-105"
+                            className="w-10 h-10 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center shadow-lg"
                         >
                             {isPlaying ? (
                                 <Pause className="w-5 h-5 text-black fill-current" />
@@ -174,16 +166,16 @@ export function BottomPlayer({
                             )}
                         </motion.button>
 
-                        <button type="button" className="text-[#b3b3b3] hover:text-white">
+                        <button className="text-[#b3b3b3] hover:text-white">
                             <SkipForward className="w-5 h-5 fill-current" />
                         </button>
-                        <button type="button" className="text-[#b3b3b3] hover:text-white">
-                            <Repeat className="w-4 h-4" />{" "}
+                        <button className="hidden md:block text-[#b3b3b3] hover:text-white">
+                            <Repeat className="w-4 h-4" />
                         </button>
                     </div>
 
-                    {/* Pink/Purple Theme Progress Bar */}
-                    <div className="flex items-center gap-2 w-full">
+                    {/* Progress Bar (Hidden on Mobile - replaced by top micro-bar) */}
+                    <div className="hidden md:flex items-center gap-2 w-full">
                         <span className="text-[11px] text-[#a7a7a7] tabular-nums w-10 text-right">
                             {formatTime(currentTime)}
                         </span>
@@ -191,34 +183,36 @@ export function BottomPlayer({
                             ref={progressBarRef}
                             onClick={handleProgressSeek}
                             onKeyDown={(e) => {
+                                if (!progressBarRef.current) return;
+                                const step = 5; // seconds per arrow press
                                 if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-                                    const progress = (currentTime / duration) * 100;
-                                    const newProgress = Math.max(
+                                    e.preventDefault();
+                                    const next = Math.max(
                                         0,
-                                        Math.min(
-                                            100,
-                                            progress + (e.key === "ArrowRight" ? 5 : -5)
-                                        )
+                                        Math.min(duration, currentTime + (e.key === "ArrowRight" ? step : -step)),
                                     );
-                                    onTimeChange(Math.floor((newProgress / 100) * duration));
-                                }
-                                if (e.key === "Enter" || e.key === " ") {
-                                    handleProgressSeek(e as unknown as React.MouseEvent<HTMLDivElement>);
+                                    onTimeChange(Math.floor(next));
+                                } else if (e.key === "Home") {
+                                    e.preventDefault();
+                                    onTimeChange(0);
+                                } else if (e.key === "End") {
+                                    e.preventDefault();
+                                    onTimeChange(duration);
                                 }
                             }}
                             role="slider"
                             tabIndex={0}
-                            aria-valuenow={currentTime}
+                            aria-orientation="horizontal"
                             aria-valuemin={0}
                             aria-valuemax={duration}
-                            aria-label="Seek"
+                            aria-valuenow={currentTime}
+                            aria-valuetext={formatTime(currentTime)}
                             className="flex-1 h-1 bg-[#4d4d4d] rounded-full group cursor-pointer relative"
                         >
                             <div
-                                className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full"
+                                className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
                                 style={{ width: `${progressPercentage}%` }}
                             />
-                            {/* Theme Knob */}
                             <div
                                 className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 shadow-xl transition-opacity"
                                 style={{ left: `calc(${progressPercentage}% - 6px)` }}
@@ -230,77 +224,62 @@ export function BottomPlayer({
                     </div>
                 </div>
 
-                {/* Right: Extra Icons & Volume (As per Screenshot) */}
-                <div className="flex items-center gap-3 w-[30%] justify-end">
+                {/* 3. RIGHT: Volume & Extras */}
+                <div className="flex items-center gap-3 w-auto md:w-[30%] justify-end">
+                    {/* On Mobile, only show heart or add icon here */}
                     <button
-                        type="button"
-                        className="text-[#b3b3b3] hover:text-white transition-colors"
+                        onClick={() => toggleLike(currentSong.id)}
+                        className={cn("md:hidden transition-colors", isLiked ? "text-pink-500" : "text-[#b3b3b3]")}
                     >
-                        <Mic2 className="w-4 h-4" />
-                    </button>
-                    <button
-                        type="button"
-                        className="text-[#b3b3b3] hover:text-white transition-colors"
-                    >
-                        <ListMusic className="w-4 h-4" />
-                    </button>
-                    <button
-                        type="button"
-                        className="text-[#b3b3b3] hover:text-white transition-colors"
-                    >
-                        <MonitorSpeaker className="w-4 h-4" />
+                        <Heart className={cn("w-6 h-6", isLiked && "fill-current")} />
                     </button>
 
-                    <div className="flex items-center gap-2 group w-32">
-                        <button
-                            type="button"
-                            onClick={toggleMute}
-                            className="text-[#b3b3b3] hover:text-white"
-                        >
-                            {isMuted || volume === 0 ? (
-                                <VolumeX className="w-5 h-5" />
-                            ) : (
-                                <Volume2 className="w-5 h-5" />
-                            )}
+                    {/* Desktop Extra Icons */}
+                    <div className="hidden lg:flex items-center gap-3">
+                        <Mic2 className="w-4 h-4 text-[#b3b3b3]" />
+                        <ListMusic className="w-4 h-4 text-[#b3b3b3]" />
+                        <MonitorSpeaker className="w-4 h-4 text-[#b3b3b3]" />
+                    </div>
+
+                    {/* Volume Bar (Hidden on Mobile) */}
+                    <div className="hidden md:flex items-center gap-2 group w-24 lg:w-32">
+                        <button onClick={toggleMute} className="text-[#b3b3b3] hover:text-white">
+                            {isMuted || volume === 0 ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                         </button>
                         <div
                             ref={volumeBarRef}
                             onClick={handleVolumeSeek}
                             onKeyDown={(e) => {
+                                if (!volumeBarRef.current) return;
+                                const step = 5;
                                 if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-                                    setVolume(
-                                        Math.max(
-                                            0,
-                                            Math.min(
-                                                100,
-                                                activeVolume + (e.key === "ArrowRight" ? 5 : -5)
-                                            )
-                                        )
+                                    const current = isMuted ? 0 : volume;
+                                    const next = Math.max(
+                                        0,
+                                        Math.min(100, current + (e.key === "ArrowRight" ? step : -step)),
                                     );
+                                    setVolume(next);
+                                } else if (e.key === "Home") {
+                                    setVolume(0);
+                                } else if (e.key === "End") {
+                                    setVolume(100);
                                 }
                             }}
                             role="slider"
                             tabIndex={0}
-                            aria-valuenow={activeVolume}
                             aria-valuemin={0}
                             aria-valuemax={100}
-                            aria-label="Volume"
+                            aria-valuenow={activeVolume}
                             className="flex-1 h-1 bg-[#4d4d4d] rounded-full relative cursor-pointer"
                         >
                             <div
                                 className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full"
                                 style={{ width: `${activeVolume}%` }}
                             />
-                            <div
-                                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 shadow-xl transition-opacity"
-                                style={{ left: `calc(${activeVolume}% - 6px)` }}
-                            />
                         </div>
                     </div>
-                    <button
-                        type="button"
-                        className="text-[#b3b3b3] hover:text-white transition-colors"
-                    >
+
+                    <button className="hidden sm:block text-[#b3b3b3] hover:text-white">
                         <Maximize2 className="w-4 h-4" />
                     </button>
                 </div>

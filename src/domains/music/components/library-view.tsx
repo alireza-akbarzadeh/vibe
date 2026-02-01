@@ -116,9 +116,8 @@ export function LibraryView() {
 								key={song.id}
 								layout
 								onClick={() => handleSongClick(song)}
-								className={`grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 rounded-md group cursor-pointer transition-all ${
-									isCurrent ? "bg-white/10" : "hover:bg-white/5"
-								}`}
+								className={`grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 rounded-md group cursor-pointer transition-all ${isCurrent ? "bg-white/10" : "hover:bg-white/5"
+									}`}
 							>
 								{/* Index / Play Icon - Gradient Animation */}
 								<div className="flex items-center justify-center">
@@ -189,11 +188,10 @@ export function LibraryView() {
 										className={`${likedSongIds.has(song.id) ? "opacity-100" : "opacity-0 group-hover:opacity-100"} transition-opacity`}
 									>
 										<Heart
-											className={`w-4 h-4 ${
-												likedSongIds.has(song.id)
+											className={`w-4 h-4 ${likedSongIds.has(song.id)
 													? "fill-pink-500 text-pink-500 border-none"
 													: "text-gray-400 hover:text-white"
-											}`}
+												}`}
 										/>
 									</button>
 									<span className="text-gray-400 text-xs tabular-nums w-10 text-right">

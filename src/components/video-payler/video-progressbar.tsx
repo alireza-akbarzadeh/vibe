@@ -58,9 +58,16 @@ export function VideoProgressbar({
 
 		// Initial seek on click
 		const rect = barRef.current?.getBoundingClientRect();
-		onSeek(((e.clientX - rect.left) / rect.width) * duration);
+		if (!rect || !duration) {
+			window.addEventListener("mousemove", handleMouseMove);
+			window.addEventListener("mouseup", handleMouseUp);
+			return;
+		}
+		const x = Math.min(Math.max(e.clientX - rect.left, 0), rect.width);
+		const time = (x / rect.width) * duration;
+		onSeek(time);
 
-		window.addEventListener("mousemove", handleMouseMove as any);
+		window.addEventListener("mousemove", handleMouseMove);
 		window.addEventListener("mouseup", handleMouseUp);
 	};
 
