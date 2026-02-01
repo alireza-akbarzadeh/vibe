@@ -37,7 +37,6 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
     const isMenuOpen = moreMenuVideoId === video.id;
 
     const { videoRef, progress, togglePlayPause } = useVideoPlayer(isActive);
-    const [showHint, setShowHint] = React.useState(false);
 
     const pressTimer = React.useRef<NodeJS.Timeout | null>(null);
     const clickTimer = React.useRef<NodeJS.Timeout | null>(null);
@@ -62,16 +61,6 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
         return () => videoEl.removeEventListener('ended', handleEnded);
     }, [isActive, isFocused, isPressing, onVideoEnd, videoRef]);
 
-    // --- HINT LOGIC ---
-    React.useEffect(() => {
-        if (isActive && !video.isLiked) {
-            const timer = setTimeout(() => setShowHint(true), 1500);
-            return () => {
-                clearTimeout(timer);
-                setShowHint(false);
-            };
-        }
-    }, [isActive, video.isLiked]);
 
     // --- INTERACTION HANDLERS ---
     const handlePointerDown = (e: React.PointerEvent) => {
@@ -92,7 +81,6 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
 
     const handleSingleClick = () => {
         if (isPressing) return;
-        setShowHint(false);
         if (clickTimer.current) {
             clearTimeout(clickTimer.current);
             clickTimer.current = null;
@@ -109,7 +97,6 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
             clearTimeout(clickTimer.current);
             clickTimer.current = null;
         }
-        setShowHint(false);
         updateReelAction(video.id, 'like');
     };
 
@@ -145,24 +132,6 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
 
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/20 pointer-events-none z-10" />
 
-            <AnimatePresence>
-                {showHint && !video.isLiked && isActive && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                        animate={{ opacity: 1, scale: [0.95, 1.05, 0.95], y: 0 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        transition={{ scale: { repeat: Infinity, duration: 2, ease: "easeInOut" }, opacity: { duration: 0.3 } }}
-                        className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none"
-                    >
-                        <div className="bg-black/60 backdrop-blur-xl px-6 py-3 rounded-full border border-white/20 flex items-center gap-3 shadow-2xl">
-                            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }}>
-                                <Heart className="size-5 text-pink-500 fill-pink-500" />
-                            </motion.div>
-                            <span className="text-white text-xs font-black uppercase tracking-[0.2em]">Double Tap to Like</span>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
 
             <AnimatePresence>
                 {isFocused && (
@@ -207,7 +176,11 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
                 <SidebarActions video={video} onMore={() => setMoreMenuVideo(video.id)} isFocused={isFocused} onToggleFocus={() => toggleFocusVideo(video.id)} />
             </div>
 
-            <button onClick={(e) => { e.stopPropagation(); toggleMute(); }} className="no-pause absolute top-20 right-4 z-40 size-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10">
+            <button onClick={(e) => {
+                e.stopPropagation();
+                toggleMute();
+            }}
+                className="no-pause absolute top-20 right-4 z-40 size-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10">
                 {isMuted ? <VolumeX className="size-5 text-white" /> : <Volume2 className="size-5 text-white" />}
             </button>
 

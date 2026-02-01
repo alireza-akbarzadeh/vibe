@@ -124,15 +124,6 @@ export function ReelsDomain() {
                         </div>
                     ))}
                 </div>
-
-                {/* Create Button */}
-                <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    className="fixed bottom-10 left-1/2 -translate-x-1/2 z-40 size-14 rounded-full bg-white text-black flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                >
-                    <Plus className="size-8" />
-                </motion.button>
-
                 {/* Modal - Controlled by Store */}
                 <AnimatePresence>
                     {commentModalOpen && activeVideoId && (
