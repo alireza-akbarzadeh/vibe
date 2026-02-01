@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { CommentItem, VideoReel } from "../reels.types";
 
 const mockVideos: VideoReel[] = [
 	{
@@ -119,32 +120,79 @@ const mockVideos: VideoReel[] = [
 	},
 ];
 
+const comments: CommentItem[] = [
+	{
+		id: 1,
+		user: {
+			username: "johndoe",
+			avatar:
+				"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
+		},
+		text: "This is amazing! 🔥",
+		likes: 234,
+		isLiked: false,
+		timestamp: "2h ago",
+	},
+	{
+		id: 2,
+		user: {
+			username: "janesmit",
+			avatar:
+				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
+		},
+		text: "Where is this place? I need to visit!",
+		likes: 89,
+		isLiked: true,
+		timestamp: "5h ago",
+	},
+	{
+		id: 3,
+		user: {
+			username: "creativemind",
+			avatar:
+				"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+		},
+		text: "Love the editing style! What app did you use?",
+		likes: 156,
+		isLiked: false,
+		timestamp: "1d ago",
+	},
+	{
+		id: 4,
+		user: {
+			username: "explorer_x",
+			avatar:
+				"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80",
+		},
+		text: "Can't stop watching this 😍",
+		likes: 445,
+		isLiked: true,
+		timestamp: "1d ago",
+	},
+	{
+		id: 5,
+		user: {
+			username: "photogeek",
+			avatar:
+				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80",
+		},
+		text: "The cinematography is insane! Tutorial please?",
+		likes: 567,
+		isLiked: false,
+		timestamp: "2d ago",
+	},
+];
+
+export const getReelComments = createServerFn({ method: "GET" }).handler(
+	async (): Promise<CommentItem[]> => {
+		await new Promise((r) => setTimeout(r, 500));
+		return comments;
+	},
+);
+
 export const getVideoReels = createServerFn({ method: "GET" }).handler(
 	async (): Promise<VideoReel[]> => {
 		await new Promise((r) => setTimeout(r, 500));
 		return mockVideos;
 	},
 );
-
-export interface ReelUser {
-	username: string;
-	avatar: string;
-	isFollowing: boolean;
-	isVerified: boolean;
-}
-
-export interface VideoReel {
-	id: number;
-	videoUrl: string;
-	thumbnail: string;
-	user: ReelUser;
-	caption: string;
-	likes: number;
-	comments: number;
-	shares: number;
-	views: number;
-	isLiked: boolean;
-	isSaved: boolean;
-	soundName: string;
-	soundId: string;
-}

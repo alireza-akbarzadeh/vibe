@@ -10,73 +10,53 @@ import {
     reelsStore,
     setActiveTab,
     setVideos,
-    toggleFollow,
-    toggleMute,
-    updateReelAction
 } from './reels.store';
 import { getVideoReels } from './server/reels.functions';
 
-// Query Configuration
 export const reelsQueryOptions = {
     queryKey: ['reels', 'feed'],
     queryFn: () => getVideoReels(),
 };
 
 export function ReelsDomain() {
-    // 1. TanStack Query for data fetching
-    const { data: serverVideos, isLoading, isError } = useQuery(reelsQueryOptions);
+    const { data: serverVideos, isLoading } = useQuery(reelsQueryOptions);
 
-    // 2. TanStack Store for local UI state
-    const { videos, isMuted, activeTab } = useStore(reelsStore);
+    // Subscribe to store
+    const { videos, activeTab, activeVideoId, commentModalOpen } = useStore(reelsStore);
 
-    // 3. Local UI state
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-    const [activeVideoId, setActiveVideoId] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Sync Query data to Store
     useEffect(() => {
         if (serverVideos) setVideos(serverVideos);
     }, [serverVideos]);
 
-    // Intersection Observer for active video tracking
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        const index = Number(entry.target.getAttribute('data-index'));
-                        setCurrentVideoIndex(index);
+                        setCurrentVideoIndex(Number(entry.target.getAttribute('data-index')));
                     }
                 });
             },
             { threshold: 0.6 }
         );
 
-        const videoElements = containerRef.current?.querySelectorAll('[data-reel]');
-        videoElements?.forEach((el) => { observer.observe(el); });
-
+        containerRef.current?.querySelectorAll('[data-reel]').forEach((el) => { observer.observe(el); });
         return () => observer.disconnect();
-    }, [videos]);
+    }, []);
 
-    if (isLoading) {
-        return (
-            <div className="h-screen w-full flex items-center justify-center bg-black">
-                <Loader2 className="size-10 text-white animate-spin" />
-            </div>
-        );
-    }
-
-    if (isError) return <div className="h-screen flex items-center justify-center text-white">Critical failure: Unable to fetch manifest.</div>;
+    if (isLoading) return (
+        <div className="h-screen w-full flex items-center justify-center bg-black">
+            <Loader2 className="size-10 text-white animate-spin" />
+        </div>
+    );
 
     return (
         <div className="relative h-screen w-screen bg-black overflow-hidden select-none">
-            {/* Header Overlay */}
-            <motion.header
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pt-12 pb-4 bg-gradient-to-b from-black/60 to-transparent"
-            >
+            {/* Header */}
+            <motion.header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pt-12 pb-4 bg-gradient-to-b from-black/60 to-transparent">
                 <button className="text-white"><Search className="size-6" /></button>
                 <div className="flex gap-6">
                     {['following', 'foryou'].map((tab) => (
@@ -97,54 +77,33 @@ export function ReelsDomain() {
                         </button>
                     ))}
                 </div>
-                <div className="size-6" /> {/* Spacer */}
+                <div className="size-6" />
             </motion.header>
 
-            {/* Video Scroll Feed */}
-            <div
-                ref={containerRef}
-                className="h-full w-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide bg-black"
-            >
+            {/* Scroll Feed */}
+            <div ref={containerRef} className="h-full w-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide bg-black">
                 {videos.map((video, index) => (
-                    <div
-                        key={video.id}
-                        data-reel
-                        data-index={index}
-                        className="h-screen w-full snap-start snap-always"
-                    >
+                    <div key={video.id} data-reel data-index={index} className="h-screen w-full snap-start snap-always">
+                        {/* We only pass "isActive" and the data. The card handles the rest via Store */}
                         <VideoCard
                             video={video}
                             isActive={index === currentVideoIndex}
-                            isMuted={isMuted}
-                            onToggleMute={toggleMute}
-                            onOpenComments={(id) => setActiveVideoId(id)}
-                            onLike={(id) => updateReelAction(id, 'like')}
-                            onSave={(id) => updateReelAction(id, 'save')}
-                            onFollow={toggleFollow}
                         />
                     </div>
                 ))}
             </div>
 
-            {/* Float Actions */}
-            <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="fixed bottom-10 left-1/2 -translate-x-1/2 z-40 size-14 rounded-full bg-white text-black flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-            >
+            <motion.button className="fixed bottom-10 left-1/2 -translate-x-1/2 z-40 size-14 rounded-full bg-white text-black flex items-center justify-center shadow-xl">
                 <Plus className="size-8" />
             </motion.button>
 
-            {/* Comment Modal */}
+            {/* Modal - Controlled by Store */}
             <AnimatePresence>
-                {activeVideoId && (
-                    <CommentModal
-                        isOpen={true}
-                        onClose={() => setActiveVideoId(null)}
-                        videoId={activeVideoId}
-                    />
+                {commentModalOpen && activeVideoId && (
+                    <CommentModal videoId={activeVideoId} />
                 )}
             </AnimatePresence>
         </div>
     );
 }
+

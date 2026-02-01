@@ -1,19 +1,26 @@
 import { Store } from "@tanstack/react-store";
-import type { VideoReel } from "./server/reels.functions";
+import type { VideoReel } from "./reels.types";
 
 interface ReelsState {
 	videos: VideoReel[];
 	isMuted: boolean;
 	activeTab: "following" | "foryou";
+	activeVideoId: number | null;
+	commentModalOpen: boolean;
+	reactions: Record<number, string | null>;
 }
 
 export const reelsStore = new Store<ReelsState>({
 	videos: [],
 	isMuted: true,
 	activeTab: "foryou",
+	activeVideoId: null,
+	commentModalOpen: false,
+	reactions: {},
 });
 
-// Actions
+/* --- ACTIONS --- */
+
 export const setVideos = (videos: VideoReel[]) =>
 	reelsStore.setState((s) => ({ ...s, videos }));
 
@@ -22,6 +29,25 @@ export const toggleMute = () =>
 
 export const setActiveTab = (tab: "following" | "foryou") =>
 	reelsStore.setState((s) => ({ ...s, activeTab: tab }));
+
+// Reaction Action
+export const setVideoReaction = (videoId: number, emoji: string) => {
+	reelsStore.setState((s) => ({
+		...s,
+		reactions: { ...s.reactions, [videoId]: emoji },
+	}));
+};
+
+// Modal Actions
+export const openComments = (videoId: number) =>
+	reelsStore.setState((s) => ({
+		...s,
+		activeVideoId: videoId,
+		commentModalOpen: true,
+	}));
+
+export const closeComments = () =>
+	reelsStore.setState((s) => ({ ...s, commentModalOpen: false }));
 
 export const updateReelAction = (videoId: number, action: "like" | "save") => {
 	reelsStore.setState((s) => ({
