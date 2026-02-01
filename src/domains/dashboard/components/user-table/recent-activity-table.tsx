@@ -106,7 +106,7 @@ export function RecentActivityTable() {
                 ) : (
                     <Table.Body columnsCount={userColumns.length} />
                 )}
-                <Table.Pagination />
+                <Table.Pagination  />
             </div>
         </Table.Root>
     )

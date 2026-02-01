@@ -29,6 +29,7 @@ import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as homeMusicRouteRouteImport } from './routes/(home)/music/route'
 import { Route as adminDashboardRouteRouteImport } from './routes/(admin)/dashboard/route'
+import { Route as homeReelsIndexRouteImport } from './routes/(home)/reels/index'
 import { Route as homeMusicIndexRouteImport } from './routes/(home)/music/index'
 import { Route as homeMoviesIndexRouteImport } from './routes/(home)/movies/index'
 import { Route as homeLibraryIndexRouteImport } from './routes/(home)/library/index'
@@ -195,6 +196,11 @@ const homeMusicRouteRoute = homeMusicRouteRouteImport.update({
 const adminDashboardRouteRoute = adminDashboardRouteRouteImport.update({
   id: '/(admin)/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const homeReelsIndexRoute = homeReelsIndexRouteImport.update({
+  id: '/(home)/reels/',
+  path: '/reels/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const homeMusicIndexRoute = homeMusicIndexRouteImport.update({
@@ -618,6 +624,7 @@ export interface FileRoutesByFullPath {
   '/library': typeof homeLibraryIndexRoute
   '/movies': typeof homeMoviesIndexRoute
   '/music/': typeof homeMusicIndexRoute
+  '/reels': typeof homeReelsIndexRoute
   '/dashboard/media/$mediaId': typeof adminDashboardMediaMediaIdRoute
   '/dashboard/movies/$movieId': typeof adminDashboardMoviesMovieIdRoute
   '/dashboard/movies/create': typeof adminDashboardMoviesCreateRoute
@@ -705,6 +712,7 @@ export interface FileRoutesByTo {
   '/library': typeof homeLibraryIndexRoute
   '/movies': typeof homeMoviesIndexRoute
   '/music': typeof homeMusicIndexRoute
+  '/reels': typeof homeReelsIndexRoute
   '/dashboard/media/$mediaId': typeof adminDashboardMediaMediaIdRoute
   '/dashboard/movies/$movieId': typeof adminDashboardMoviesMovieIdRoute
   '/dashboard/movies/create': typeof adminDashboardMoviesCreateRoute
@@ -795,6 +803,7 @@ export interface FileRoutesById {
   '/(home)/library/': typeof homeLibraryIndexRoute
   '/(home)/movies/': typeof homeMoviesIndexRoute
   '/(home)/music/': typeof homeMusicIndexRoute
+  '/(home)/reels/': typeof homeReelsIndexRoute
   '/(admin)/dashboard/media/$mediaId': typeof adminDashboardMediaMediaIdRoute
   '/(admin)/dashboard/movies/$movieId': typeof adminDashboardMoviesMovieIdRoute
   '/(admin)/dashboard/movies/create': typeof adminDashboardMoviesCreateRoute
@@ -886,6 +895,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/movies'
     | '/music/'
+    | '/reels'
     | '/dashboard/media/$mediaId'
     | '/dashboard/movies/$movieId'
     | '/dashboard/movies/create'
@@ -973,6 +983,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/movies'
     | '/music'
+    | '/reels'
     | '/dashboard/media/$mediaId'
     | '/dashboard/movies/$movieId'
     | '/dashboard/movies/create'
@@ -1062,6 +1073,7 @@ export interface FileRouteTypes {
     | '/(home)/library/'
     | '/(home)/movies/'
     | '/(home)/music/'
+    | '/(home)/reels/'
     | '/(admin)/dashboard/media/$mediaId'
     | '/(admin)/dashboard/movies/$movieId'
     | '/(admin)/dashboard/movies/create'
@@ -1147,6 +1159,7 @@ export interface RootRouteChildren {
   blogBlogIndexRoute: typeof blogBlogIndexRoute
   homeLibraryIndexRoute: typeof homeLibraryIndexRoute
   homeMoviesIndexRoute: typeof homeMoviesIndexRoute
+  homeReelsIndexRoute: typeof homeReelsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1289,6 +1302,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof adminDashboardRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/reels/': {
+      id: '/(home)/reels/'
+      path: '/reels'
+      fullPath: '/reels'
+      preLoaderRoute: typeof homeReelsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(home)/music/': {
@@ -1944,6 +1964,7 @@ const rootRouteChildren: RootRouteChildren = {
   blogBlogIndexRoute: blogBlogIndexRoute,
   homeLibraryIndexRoute: homeLibraryIndexRoute,
   homeMoviesIndexRoute: homeMoviesIndexRoute,
+  homeReelsIndexRoute: homeReelsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

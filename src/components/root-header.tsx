@@ -10,6 +10,7 @@ import { ModeToggle } from "./mode-toggle";
 const navLinks = [
 	{ label: "Music", href: "/music" },
 	{ label: "Movies", href: "/movies" },
+	{ label: "Reels", href: "/reels" },
 	{ label: "Weblog", href: "/blog" },
 	{ label: "Pricing", href: "/pricing" },
 	{ label: "Download", href: "/download" },
@@ -38,7 +39,7 @@ export function RootHeader() {
 				backgroundColor
 			}}
 			className={cn(
-				"fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-300",
+				"fixed left-1/2  -translate-x-1/2 z-50 transition-all duration-300",
 				"backdrop-blur-md rounded-2xl border border-transparent",
 				"max-w-7xl mx-auto"
 			)}
