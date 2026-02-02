@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, PanInfo } from 'framer-motion';
+import { AnimatePresence, motion, type PanInfo } from 'framer-motion';
 import {
     Ban,
     ChevronRight,
