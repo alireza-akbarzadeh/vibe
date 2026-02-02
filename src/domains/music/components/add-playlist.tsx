@@ -1,34 +1,25 @@
+import { useStore } from "@tanstack/react-store";
 import { Music, Plus } from "lucide-react";
+import { useState } from "react";
 import { AppDialog } from "@/components/app-dialog";
-import type { LibraryItem } from "../music.store";
+import { addSongToPlaylistAction, musicStore, toggleAddToPlayListModal } from "../music.store";
+import { CreatePlaylistDialog } from "./create-playlist";
 
 interface AddToPlaylistModalProps {
-	isOpen: boolean;
-	onClose: () => void;
-	playlists: LibraryItem[];
-	onAddToPlaylist: (playlistId: string) => void;
-	onCreateNew: () => void;
-	onOpenChange: () => void;
 	trigger?: React.ReactNode;
-
 }
 
 export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
-	const {
-		onClose,
-		onAddToPlaylist,
-		onCreateNew,
-		onOpenChange,
-		isOpen,
-		playlists,
-		trigger
-	} = props
+	const { trigger } = props
+	const { library, isAddModalOpen, songToAddToPlaylist } = useStore(musicStore);
+	const playlists = library.filter((i) => i.type === "playlist")
+	const [isCreateOpen, setIsCreateOpen] = useState(false);
 
 	return (
 		<AppDialog
-			open={isOpen}
+			open={isAddModalOpen}
 			onOpenChange={(open) => {
-				if (!open) onClose();
+				if (!open) toggleAddToPlayListModal();
 			}}
 			component="drawer"
 			trigger={trigger ||
@@ -36,11 +27,11 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 					type="button"
 					onClick={(e) => {
 						e.stopPropagation();
-						onOpenChange();
+						toggleAddToPlayListModal();
 					}}
-					className="p-1.5 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
+					className="p-1.5 rounded-full border border-white/20 hover:bg-white/10  text-gray-400 hover:text-white transition-colors"
 				>
-					<Plus className="w-5 h-5" />
+					<Plus className="w-6 h-7" />
 				</button>
 			}
 			title="Add to Playlist"
@@ -51,8 +42,7 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 				<button
 					type="button"
 					onClick={() => {
-						onCreateNew();
-						onClose();
+						setIsCreateOpen(true);
 					}}
 					className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-left group"
 				>
@@ -64,14 +54,18 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 					</span>
 				</button>
 
+				<CreatePlaylistDialog
+					isOpen={isCreateOpen}
+					onClose={() => setIsCreateOpen(false)}
+				/>
 				{/* Playlist List */}
 				{playlists.map((playlist) => (
 					<button
 						type="button"
 						key={playlist.id}
 						onClick={() => {
-							onAddToPlaylist(playlist.id);
-							onClose();
+							addSongToPlaylistAction(playlist.id, songToAddToPlaylist);
+							toggleAddToPlayListModal();
 						}}
 						className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-left"
 					>

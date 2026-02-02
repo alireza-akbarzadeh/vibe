@@ -88,6 +88,9 @@ export const musicStore = new Store({
 export const togglePlay = () => {
 	musicStore.setState((s) => ({ ...s, isPlaying: !s.isPlaying }));
 };
+export const toggleAddToPlayListModal = () => {
+	musicStore.setState((s) => ({ ...s, isAddModalOpen: !s.isAddModalOpen }));
+};
 
 /**
  * Updates both time and percentage to keep UI in sync
@@ -146,6 +149,13 @@ export const openAddToPlaylist = (song: Song) => {
 	}));
 };
 
+export const openOpenPlayListChange = () => {
+	musicStore.setState((s) => ({
+		...s,
+		isAddModalOpen: !s.isAddModalOpen,
+	}));
+};
+
 export const closeAddToPlaylist = () => {
 	musicStore.setState((s) => ({
 		...s,
@@ -193,7 +203,13 @@ export const addLibraryItem = (item: LibraryItem) => {
 	musicStore.setState((s) => ({ ...s, library: [item, ...s.library] }));
 };
 
-export const createPlaylist = (name: string, description: string) => {
+export const createPlaylist = ({
+	description,
+	name,
+}: {
+	name: string;
+	description: string;
+}) => {
 	const newPlaylist: LibraryItem = {
 		id: Math.random().toString(36).substr(2, 9),
 		title: name,
@@ -210,4 +226,32 @@ export const removeFromLibrary = (id: string | number) => {
 		...s,
 		library: s.library.filter((item) => item.id !== id),
 	}));
+};
+
+export const addSongToPlaylistAction = (
+	playlistId: string,
+	song: Song | null,
+) => {
+	if (!song) return;
+
+	musicStore.setState((s) => {
+		const updatedLibrary = s.library.map((item) => {
+			if (item.id === playlistId && item.type === "playlist") {
+				const countMatch = item.subtitle.match(/\d+/);
+				const currentCount = countMatch ? parseInt(countMatch[0]) : 0;
+				return {
+					...item,
+					subtitle: `Playlist • ${currentCount + 1} songs`,
+				};
+			}
+			return item;
+		});
+
+		return {
+			...s,
+			library: updatedLibrary,
+			isAddModalOpen: false,
+			songToAddToPlaylist: null,
+		};
+	});
 };

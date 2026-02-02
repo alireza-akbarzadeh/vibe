@@ -7,7 +7,7 @@ import {
 	Minimize2,
 	Plus,
 	Search,
-	X,
+	X
 } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "@/components/logo";
@@ -17,6 +17,7 @@ import {
 	musicStore,
 	setFilter,
 	setSearchQuery,
+	toggleAddToPlayListModal,
 	toggleSidebar
 } from "@/domains/music/music.store";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,6 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 		searchQuery,
 		activeFilter,
 		isSidebarCollapsed: storeCollapsed,
-		isAddModalOpen,
 	} = useStore(musicStore);
 
 	// If inside a Mobile Drawer, we never want it collapsed
@@ -109,17 +109,19 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 						{!isSidebarCollapsed && (
 							<div className="flex items-center gap-1">
 								<AddToPlaylistModal
-									isOpen={isAddModalOpen}
-									onClose={() => musicStore.setState((s) => ({ ...s, isAddModalOpen: false }))}
-									playlists={library.filter((i) => i.type === "playlist")}
-									onAddToPlaylist={() => {
-										musicStore.setState((s) => ({ ...s, isAddModalOpen: false }));
-									}}
-									onOpenChange={() => setIsCreateOpen(true)}
-									onCreateNew={() => {
-										musicStore.setState((s) => ({ ...s, isAddModalOpen: false }));
-										setIsCreateOpen(true);
-									}}
+									trigger={
+										<button
+											type="button"
+											onClick={(e) => {
+												e.stopPropagation();
+												toggleAddToPlayListModal();
+											}}
+											className="p-1.5  hover:bg-white/10  text-gray-400 hover:text-white transition-colors"
+										>
+											<Plus className="w-6 h-7" />
+										</button>
+									}
+
 								/>
 								{/* Hide collapse toggle in mobile drawer */}
 								{!forceFull && (
@@ -221,13 +223,11 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 					</AnimatePresence>
 				</div>
 			</div>
-
 			{/* Modals */}
 			<CreatePlaylistDialog
 				isOpen={isCreateOpen}
 				onClose={() => setIsCreateOpen(false)}
 			/>
-
 		</div>
 	);
 }

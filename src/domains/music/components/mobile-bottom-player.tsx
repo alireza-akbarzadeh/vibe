@@ -12,8 +12,7 @@ export function MobilePlayer(props: PlayerComponentProps) {
     const [isOpen, setIsOpen] = useState(false);
     const progressBarRef = useRef<HTMLDivElement>(null);
     const controls = useAnimation();
-    const { library, isAddModalOpen } = useStore(musicStore);
-
+    const { library } = useStore(musicStore)
     // Album art animation logic (Spotify style)
     useEffect(() => {
         controls.start({ scale: props.isPlaying ? 1 : 0.85 });
@@ -78,18 +77,7 @@ export function MobilePlayer(props: PlayerComponentProps) {
                             <Play className="w-7 h-7 text-white fill-current ml-1" />
                         )}
                     </button>
-                    <AddToPlaylistModal
-                        isOpen={isAddModalOpen}
-                        onClose={() => musicStore.setState((s) => ({ ...s, isAddModalOpen: false }))}
-                        playlists={library.filter((i) => i.type === "playlist")}
-                        onAddToPlaylist={() => {
-                            musicStore.setState((s) => ({ ...s, isAddModalOpen: false }));
-                        }}
-                        onOpenChange={musicStore.setState((s) => ({ ...s, isAddModalOpen: true }))}
-                        onCreateNew={() => {
-                            musicStore.setState((s) => ({ ...s, isAddModalOpen: false }));
-                        }}
-                    />
+                    <AddToPlaylistModal />
                 </div>
             </motion.div>
 
