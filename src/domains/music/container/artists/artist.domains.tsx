@@ -39,6 +39,7 @@ export type Song = {
 	album: string;
 	albumArt: string;
 	isExplicit: boolean;
+	artist: string
 };
 
 export function ArtistProfile() {
@@ -75,6 +76,7 @@ export function ArtistProfile() {
 			albumArt:
 				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&q=80",
 			isExplicit: false,
+			artist: "The Weeknd",
 		},
 		{
 			id: 2,
@@ -85,6 +87,7 @@ export function ArtistProfile() {
 			albumArt:
 				"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&q=80",
 			isExplicit: true,
+			artist: "The Weeknd",
 		},
 		{
 			id: 3,
@@ -95,6 +98,7 @@ export function ArtistProfile() {
 			albumArt:
 				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&q=80",
 			isExplicit: false,
+			artist: "The Weeknd",
 		},
 		{
 			id: 4,
@@ -105,6 +109,7 @@ export function ArtistProfile() {
 			albumArt:
 				"https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&q=80",
 			isExplicit: true,
+			artist: "The Weeknd",
 		},
 		{
 			id: 5,
@@ -115,6 +120,7 @@ export function ArtistProfile() {
 			albumArt:
 				"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&q=80",
 			isExplicit: false,
+			artist: "The Weeknd",
 		},
 	];
 

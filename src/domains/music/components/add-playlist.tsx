@@ -8,15 +8,22 @@ interface AddToPlaylistModalProps {
 	playlists: LibraryItem[];
 	onAddToPlaylist: (playlistId: string) => void;
 	onCreateNew: () => void;
+	onOpenChange: () => void;
+	trigger?: React.ReactNode;
+
 }
 
-export function AddToPlaylistModal({
-	isOpen,
-	onClose,
-	playlists,
-	onAddToPlaylist,
-	onCreateNew,
-}: AddToPlaylistModalProps) {
+export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
+	const {
+		onClose,
+		onAddToPlaylist,
+		onCreateNew,
+		onOpenChange,
+		isOpen,
+		playlists,
+		trigger
+	} = props
+
 	return (
 		<AppDialog
 			open={isOpen}
@@ -24,6 +31,18 @@ export function AddToPlaylistModal({
 				if (!open) onClose();
 			}}
 			component="drawer"
+			trigger={trigger ||
+				<button
+					type="button"
+					onClick={(e) => {
+						e.stopPropagation();
+						onOpenChange();
+					}}
+					className="p-1.5 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
+				>
+					<Plus className="w-5 h-5" />
+				</button>
+			}
 			title="Add to Playlist"
 			description="Choose a playlist to add this song to"
 		>

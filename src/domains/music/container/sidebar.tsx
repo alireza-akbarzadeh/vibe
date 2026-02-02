@@ -14,11 +14,10 @@ import { Logo } from "@/components/logo";
 import { Input } from "@/components/ui/input";
 import {
 	type ActiveFilter,
-	createPlaylist,
 	musicStore,
 	setFilter,
 	setSearchQuery,
-	toggleSidebar,
+	toggleSidebar
 } from "@/domains/music/music.store";
 import { cn } from "@/lib/utils";
 import { AddToPlaylistModal } from "../components/add-playlist";
@@ -109,17 +108,19 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 						{/* Only show these if NOT collapsed and NOT in a forced mobile view */}
 						{!isSidebarCollapsed && (
 							<div className="flex items-center gap-1">
-								<button
-									type="button"
-									onClick={(e) => {
-										e.stopPropagation();
+								<AddToPlaylistModal
+									isOpen={isAddModalOpen}
+									onClose={() => musicStore.setState((s) => ({ ...s, isAddModalOpen: false }))}
+									playlists={library.filter((i) => i.type === "playlist")}
+									onAddToPlaylist={() => {
+										musicStore.setState((s) => ({ ...s, isAddModalOpen: false }));
+									}}
+									onOpenChange={() => setIsCreateOpen(true)}
+									onCreateNew={() => {
+										musicStore.setState((s) => ({ ...s, isAddModalOpen: false }));
 										setIsCreateOpen(true);
 									}}
-									className="p-1.5 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
-								>
-									<Plus className="w-5 h-5" />
-								</button>
-
+								/>
 								{/* Hide collapse toggle in mobile drawer */}
 								{!forceFull && (
 									<button
@@ -225,21 +226,8 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 			<CreatePlaylistDialog
 				isOpen={isCreateOpen}
 				onClose={() => setIsCreateOpen(false)}
-				onCreatePlaylist={(data) => createPlaylist(data.name, data.description)}
 			/>
 
-			<AddToPlaylistModal
-				isOpen={isAddModalOpen}
-				onClose={() => musicStore.setState((s) => ({ ...s, isAddModalOpen: false }))}
-				playlists={library.filter((i) => i.type === "playlist")}
-				onAddToPlaylist={(id) => {
-					musicStore.setState((s) => ({ ...s, isAddModalOpen: false }));
-				}}
-				onCreateNew={() => {
-					musicStore.setState((s) => ({ ...s, isAddModalOpen: false }));
-					setIsCreateOpen(true);
-				}}
-			/>
 		</div>
 	);
 }

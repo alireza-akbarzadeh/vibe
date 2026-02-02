@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import type { Artist } from "../artist.domains";
 
 export function ArtistHero({ artist }: { artist: Artist }) {
+
 	const [isFollowing, setIsFollowing] = useState(false);
 	const [showFullBio, setShowFullBio] = useState(false);
 

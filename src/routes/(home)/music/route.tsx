@@ -1,11 +1,14 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
 import { AnimatePresence, motion } from "framer-motion";
-import { Maximize2, Menu } from "lucide-react"; // Added Menu icon
+import { Maximize2, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { AddToPlaylistModal } from "@/domains/music/components/add-playlist";
 import { BottomPlayer } from "@/domains/music/components/bottom-player";
 import { Sidebar } from "@/domains/music/container/sidebar";
 import {
+	closeAddToPlaylist,
+	createPlaylist,
 	musicStore,
 	togglePlay,
 	toggleSidebar,
@@ -17,13 +20,34 @@ export const Route = createFileRoute("/(home)/music")({
 });
 
 function MusicLayout() {
-	const { currentSong, isPlaying, currentTime, isSidebarCollapsed } = useStore(musicStore);
+	const {
+		currentSong,
+		isPlaying,
+		currentTime,
+		isSidebarCollapsed,
+		isAddModalOpen,
+		library
+	} = useStore(musicStore);
+
+	const playlists = library.filter(item => item.type === "playlist");
+
+	const handleAddToPlaylist = (playlistId: string) => {
+		console.log(`Adding song to playlist: ${playlistId}`);
+		// Implement your specific "add song to playlist" API/logic here
+		closeAddToPlaylist();
+	};
+
+	const handleCreateNew = () => {
+		const name = prompt("Enter playlist name:");
+		if (name) {
+			createPlaylist(name, "My New Playlist");
+		}
+	};
 
 	return (
 		<div className="h-screen bg-black flex flex-col overflow-hidden">
 			<div className="flex-1 flex overflow-hidden relative">
-
-				{/* 1. Desktop Sidebar (Hidden on Mobile) */}
+				{/* 1. Desktop Sidebar */}
 				<motion.div
 					animate={{ width: isSidebarCollapsed ? 0 : 288 }}
 					className="z-20 shrink-0 overflow-hidden border-r border-white/5 hidden md:flex"
@@ -31,7 +55,7 @@ function MusicLayout() {
 					<Sidebar />
 				</motion.div>
 
-				{/* 2. Mobile Sidebar Drawer (Visible only on Mobile) */}
+				{/* 2. Mobile Sidebar Drawer */}
 				<div className="md:hidden absolute left-4 top-4 z-50">
 					<Sheet>
 						<SheetTrigger asChild>
@@ -40,13 +64,12 @@ function MusicLayout() {
 							</button>
 						</SheetTrigger>
 						<SheetContent side="left" className="p-0 w-80 bg-black border-r border-white/10">
-							{/* Force sidebar to show full content in drawer */}
 							<Sidebar forceFull />
 						</SheetContent>
 					</Sheet>
 				</div>
 
-				{/* 3. Desktop Expand Button (Visible only when collapsed on desktop) */}
+				{/* 3. Desktop Expand Button */}
 				<AnimatePresence>
 					{isSidebarCollapsed && (
 						<motion.button
@@ -67,6 +90,7 @@ function MusicLayout() {
 				</main>
 			</div>
 
+			{/* Bottom Player Controls */}
 			{currentSong && (
 				<div className="z-30">
 					<BottomPlayer
@@ -78,6 +102,15 @@ function MusicLayout() {
 					/>
 				</div>
 			)}
+
+			{/* Add to Playlist Dialog/Drawer */}
+			<AddToPlaylistModal
+				isOpen={isAddModalOpen}
+				onClose={closeAddToPlaylist}
+				playlists={playlists}
+				onAddToPlaylist={handleAddToPlaylist}
+				onCreateNew={handleCreateNew}
+			/>
 		</div>
 	);
 }

@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as profileRouteRouteImport } from './routes/(profile)/route'
 import { Route as homeIndexRouteImport } from './routes/(home)/index'
+import { Route as profileProfileRouteImport } from './routes/(profile)/profile'
 import { Route as homeTermsRouteImport } from './routes/(home)/terms'
 import { Route as homePrivacyRouteImport } from './routes/(home)/privacy'
 import { Route as homePricingRouteImport } from './routes/(home)/pricing'
@@ -98,10 +100,19 @@ import { Route as adminDashboardAnalyticsContentIndexRouteImport } from './route
 import { Route as adminDashboardMusicArtistsArtistIdRouteImport } from './routes/(admin)/dashboard/music/artists/$artistId'
 import { Route as adminDashboardMusicAlbumsAlbumIdRouteImport } from './routes/(admin)/dashboard/music/albums/$albumId'
 
+const profileRouteRoute = profileRouteRouteImport.update({
+  id: '/(profile)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const homeIndexRoute = homeIndexRouteImport.update({
   id: '/(home)/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const profileProfileRoute = profileProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => profileRouteRoute,
 } as any)
 const homeTermsRoute = homeTermsRouteImport.update({
   id: '/(home)/terms',
@@ -609,6 +620,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof homePricingRoute
   '/privacy': typeof homePrivacyRoute
   '/terms': typeof homeTermsRoute
+  '/profile': typeof profileProfileRoute
   '/': typeof homeIndexRoute
   '/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/blog/profile': typeof blogBlogProfileRoute
@@ -697,6 +709,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof homePricingRoute
   '/privacy': typeof homePrivacyRoute
   '/terms': typeof homeTermsRoute
+  '/profile': typeof profileProfileRoute
   '/': typeof homeIndexRoute
   '/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/blog/profile': typeof blogBlogProfileRoute
@@ -769,6 +782,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/(profile)': typeof profileRouteRouteWithChildren
   '/(admin)/dashboard': typeof adminDashboardRouteRouteWithChildren
   '/(home)/music': typeof homeMusicRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
@@ -788,6 +802,7 @@ export interface FileRoutesById {
   '/(home)/pricing': typeof homePricingRoute
   '/(home)/privacy': typeof homePrivacyRoute
   '/(home)/terms': typeof homeTermsRoute
+  '/(profile)/profile': typeof profileProfileRoute
   '/(home)/': typeof homeIndexRoute
   '/(blog)/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/(blog)/blog/profile': typeof blogBlogProfileRoute
@@ -880,6 +895,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/terms'
+    | '/profile'
     | '/'
     | '/blog/$blogslug'
     | '/blog/profile'
@@ -968,6 +984,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/terms'
+    | '/profile'
     | '/'
     | '/blog/$blogslug'
     | '/blog/profile'
@@ -1039,6 +1056,7 @@ export interface FileRouteTypes {
     | '/dashboard/subscriptions/users'
   id:
     | '__root__'
+    | '/(profile)'
     | '/(admin)/dashboard'
     | '/(home)/music'
     | '/(auth)/forgot-password'
@@ -1058,6 +1076,7 @@ export interface FileRouteTypes {
     | '/(home)/pricing'
     | '/(home)/privacy'
     | '/(home)/terms'
+    | '/(profile)/profile'
     | '/(home)/'
     | '/(blog)/blog/$blogslug'
     | '/(blog)/blog/profile'
@@ -1130,6 +1149,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  profileRouteRoute: typeof profileRouteRouteWithChildren
   adminDashboardRouteRoute: typeof adminDashboardRouteRouteWithChildren
   homeMusicRouteRoute: typeof homeMusicRouteRouteWithChildren
   authForgotPasswordRoute: typeof authForgotPasswordRoute
@@ -1164,12 +1184,26 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/(profile)': {
+      id: '/(profile)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof profileRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(home)/': {
       id: '/(home)/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof homeIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(profile)/profile': {
+      id: '/(profile)/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof profileProfileRouteImport
+      parentRoute: typeof profileRouteRoute
     }
     '/(home)/terms': {
       id: '/(home)/terms'
@@ -1783,6 +1817,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface profileRouteRouteChildren {
+  profileProfileRoute: typeof profileProfileRoute
+}
+
+const profileRouteRouteChildren: profileRouteRouteChildren = {
+  profileProfileRoute: profileProfileRoute,
+}
+
+const profileRouteRouteWithChildren = profileRouteRoute._addFileChildren(
+  profileRouteRouteChildren,
+)
+
 interface adminDashboardRouteRouteChildren {
   adminDashboardIndexRoute: typeof adminDashboardIndexRoute
   adminDashboardMediaMediaIdRoute: typeof adminDashboardMediaMediaIdRoute
@@ -1935,6 +1981,7 @@ const homeMusicRouteRouteWithChildren = homeMusicRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  profileRouteRoute: profileRouteRouteWithChildren,
   adminDashboardRouteRoute: adminDashboardRouteRouteWithChildren,
   homeMusicRouteRoute: homeMusicRouteRouteWithChildren,
   authForgotPasswordRoute: authForgotPasswordRoute,
