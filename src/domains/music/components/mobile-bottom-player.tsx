@@ -2,7 +2,7 @@
 
 import { useStore } from "@tanstack/react-store";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
-import { ChevronDown, ListMusic, Mic2, MoreHorizontal, Pause, Pin, Play, Radio, Share2, SkipBack, SkipForward, Trash2 } from "lucide-react";
+import { Check, ChevronDown, ChevronRight, Download, ExternalLink, Heart, ListMusic, Mic2, MoreHorizontal, Music, Pause, Pin, Play, Radio, Share2, SkipBack, SkipForward, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LikeButton } from "@/components/buttons/like-button";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ export function MobilePlayer() {
     const controls = useAnimation();
 
     const store = useStore(musicStore);
-    const { currentSong, isPlaying, progressPercentage, currentTime } = store;
+    const { currentSong, isPlaying, progressPercentage, currentTime, showLyrics, queue, library } = store;
 
     // --- SHARE FUNCTIONALITY ---
     const handleShare = async () => {
@@ -26,14 +26,13 @@ export function MobilePlayer() {
         const shareData = {
             title: currentSong.title,
             text: `Check out ${currentSong.title} by ${currentSong.artist}`,
-            url: window.location.href, // Or a specific song link if you have one
+            url: window.location.href,
         };
 
         try {
             if (navigator.share) {
                 await navigator.share(shareData);
             } else {
-                // Fallback: Copy to clipboard
                 await navigator.clipboard.writeText(window.location.href);
                 alert("Link copied to clipboard!");
             }
@@ -42,11 +41,106 @@ export function MobilePlayer() {
         }
     };
 
+    // --- DOWNLOAD FUNCTIONALITY ---
+    const handleDownload = () => {
+        if (!currentSong) return;
+
+        // In a real app, this would be the actual download URL
+        const downloadUrl = `https://api.musicapp.com/download/${currentSong.id}`;
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `${currentSong.title} - ${currentSong.artist}.mp3`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Show toast or feedback
+        console.log(`Downloading: ${currentSong.title}`);
+    };
+
+    // --- SONG RADIO FUNCTIONALITY ---
+    const handleGoToSongRadio = () => {
+        if (!currentSong) return;
+
+        // Create a radio based on current song
+        const radioSongs = [
+            { ...currentSong, id: Math.random() * 1000, title: "Similar Song 1" },
+            { ...currentSong, id: Math.random() * 1000, title: "Similar Song 2" },
+            { ...currentSong, id: Math.random() * 1000, title: "Similar Song 3" },
+        ];
+
+        // In a real app, you would fetch similar songs
+        console.log(`Creating radio for: ${currentSong.title}`);
+
+        // Open radio view or update queue
+        musicStore.setState(s => ({
+            ...s,
+            queue: [...radioSongs],
+            showQueue: true
+        }));
+    };
+
+    // --- REMOVE FROM QUEUE FUNCTIONALITY ---
+    const handleRemoveFromQueue = () => {
+        if (!currentSong) return;
+
+        musicStore.setState(s => ({
+            ...s,
+            queue: s.queue.filter(song => song.id !== currentSong.id)
+        }));
+
+        console.log(`Removed ${currentSong.title} from queue`);
+    };
+
+    // --- PIN/UNPIN FUNCTIONALITY ---
+    const handleTogglePin = () => {
+        if (!currentSong) return;
+
+        // Find if the album exists in library
+        const albumInLibrary = library.find(item =>
+            item.title === currentSong.album && item.type === "playlist"
+        );
+
+        if (albumInLibrary) {
+            // Toggle pin for the album
+            musicAction.togglePin(albumInLibrary.id);
+        } else {
+            // Create a new playlist for the album and pin it
+            const newPlaylist = {
+                id: `album_${currentSong.album.replace(/\s+/g, '_').toLowerCase()}`,
+                title: currentSong.album,
+                subtitle: `Album • ${currentSong.artist}`,
+                type: "playlist" as const,
+                image: currentSong.albumArt,
+                isPinned: true,
+                isLiked: false
+            };
+
+            musicStore.setState(s => ({
+                ...s,
+                library: [newPlaylist, ...s.library]
+            }));
+        }
+
+        console.log(`${currentSong.album} ${albumInLibrary?.isPinned ? 'unpinned' : 'pinned'}`);
+    };
+
+    // --- VIEW LYRICS FUNCTIONALITY ---
+    const handleViewLyrics = () => {
+        musicAction.toggleLyrics();
+        console.log("Lyrics toggled");
+    };
+
+    // --- VIEW QUEUE FUNCTIONALITY ---
+    const handleViewQueue = () => {
+        musicAction.toggleQueue(currentSong.id);
+    };
+
     // --- DRAG / SEEK LOGIC ---
     const handleSeek = useCallback((e: React.MouseEvent | React.TouchEvent | PointerEvent) => {
         if (!progressBarRef.current || !currentSong) return;
         const rect = progressBarRef.current.getBoundingClientRect();
-        const clientX = 'touches' in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+        const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
         const p = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
         musicAction.updateCurrentTime(Math.floor(p * currentSong.duration));
     }, [currentSong]);
@@ -93,6 +187,11 @@ export function MobilePlayer() {
         }
         return () => clearInterval(interval);
     }, [isPlaying]);
+
+    // Check if album is pinned
+    const isAlbumPinned = library.some(item =>
+        item.title === currentSong?.album && item.isPinned
+    );
 
     if (!currentSong) return null;
 
@@ -153,32 +252,122 @@ export function MobilePlayer() {
                             {/* --- THREE DOTS BUTTON (Dropdown) --- */}
                             <Drawer>
                                 <DrawerTrigger asChild>
-                                    <button className="p-2 -mr-2 outline-none">
-                                        <MoreHorizontal className="w-6 h-6 text-white" />
+                                    <button className="p-2 -mr-2 outline-none group">
+                                        <MoreHorizontal className="w-5 h-5 text-white/70 group-hover:text-white transition-all duration-200 group-hover:scale-110" />
                                     </button>
                                 </DrawerTrigger>
-                                <DrawerContent className="bg-[#282828] border-white/10 text-white ">
-                                    <div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/20" />
-                                    <DrawerTrigger asChild className="gap-3 py-3 focus:bg-white/10 cursor-pointer">
-                                        <Button>
-                                            <Radio className="w-4 h-4" /> Go to song radio
-                                        </Button>
-                                    </DrawerTrigger>
-                                    <DrawerTrigger asChild className="gap-3 py-3 focus:bg-white/10 cursor-pointer">
-                                        <Button >
-                                            <Mic2 className="w-4 h-4" /> View lyrics
-                                        </Button>
-                                    </DrawerTrigger>
-                                    <DrawerTrigger asChild className="gap-3 py-3 focus:bg-white/10 text-red-400 focus:text-red-400 cursor-pointer">
-                                        <Button>
-                                            <Trash2 className="w-4 h-4" /> Remove from queue
-                                        </Button>
-                                    </DrawerTrigger>
-                                    <DrawerTrigger asChild className="gap-3 py-3 focus:bg-white/10 text-red-400 focus:text-red-400 cursor-pointer">
-                                        <Button onClick={() => musicAction.togglePin(currentSong.id)}>
-                                            <Pin className="w-4 h-4" /> Remove from queue
-                                        </Button>
-                                    </DrawerTrigger>
+                                <DrawerContent className="bg-linear-to-b  backdrop-blur-xl shadow-2xl">
+                                    <div className="h-1 w-10 mx-auto mt-3 flex flex-col items-center rounded-full bg-white/20" />
+                                    {/* Drawer Header with song info */}
+                                    <div className="px-6 py-4 border-b border-white/10">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-12 h-12 rounded-lg bg-linear-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center shadow-inner">
+                                                <Music className="w-5 h-5 text-purple-400" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-semibold text-white truncate text-sm">{currentSong.title}</p>
+                                                <p className="text-xs text-white/60 truncate">{currentSong.artist}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Menu Items Container */}
+                                    <div className="px-3 py-4 space-y-1">
+                                        <DrawerTrigger asChild>
+                                            <Button
+                                                onClick={handleGoToSongRadio}
+                                                variant="text"
+                                                className="w-full justify-start gap-3 px-4 py-3 hover:bg-white/5 active:bg-white/10 transition-all duration-200 group/menu rounded-lg"
+                                            >
+                                                <div className="relative">
+                                                    <Radio className="w-4 h-4 text-blue-400 group-hover/menu:scale-110 transition-transform" />
+                                                    <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-sm group-hover/menu:opacity-100 opacity-0 transition-opacity" />
+                                                </div>
+                                                <span className="text-white text-sm font-medium">Go to song radio</span>
+                                                <ChevronRight className="w-4 h-4 ml-auto text-white/30 group-hover/menu:text-white/60 transition-colors" />
+                                            </Button>
+                                        </DrawerTrigger>
+
+                                        <DrawerTrigger asChild>
+                                            <Button
+                                                onClick={handleViewLyrics}
+                                                variant="text"
+                                                className="w-full justify-start gap-3 px-4 py-3 hover:bg-white/5 active:bg-white/10 transition-all duration-200 group/menu rounded-lg"
+                                            >
+                                                <div className="relative">
+                                                    <Mic2 className="w-4 h-4 text-emerald-400 group-hover/menu:scale-110 transition-transform" />
+                                                    <div className="absolute inset-0 bg-emerald-400/20 rounded-full blur-sm group-hover/menu:opacity-100 opacity-0 transition-opacity" />
+                                                </div>
+                                                <span className="text-white text-sm font-medium">
+                                                    {showLyrics ? "Hide lyrics" : "View lyrics"}
+                                                </span>
+                                                <ChevronRight className="w-4 h-4 ml-auto text-white/30 group-hover/menu:text-white/60 transition-colors" />
+                                            </Button>
+                                        </DrawerTrigger>
+
+                                        <div className="h-px bg-linear-to-r from-transparent via-white/10 to-transparent my-2" />
+
+                                        <DrawerTrigger asChild>
+                                            <Button
+                                                onClick={handleRemoveFromQueue}
+                                                variant="ghost"
+                                                disabled={queue.length === 0 || !queue.some(song => song.id === currentSong.id)}
+                                                className="w-full justify-start gap-3 px-4 py-3 hover:bg-red-500/10 active:bg-red-500/20 transition-all duration-200 group/menu rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                <div className="relative">
+                                                    <Trash2 className="w-4 h-4 text-red-400 group-hover/menu:scale-110 transition-transform" />
+                                                    <div className="absolute inset-0 bg-red-400/20 rounded-full blur-sm group-hover/menu:opacity-100 opacity-0 transition-opacity" />
+                                                </div>
+                                                <span className="text-red-400 text-sm font-medium">Remove from queue</span>
+                                            </Button>
+                                        </DrawerTrigger>
+
+                                        <DrawerTrigger asChild>
+                                            <Button
+                                                onClick={handleTogglePin}
+                                                variant="text"
+                                                className="w-full justify-start gap-3 px-4 py-3 hover:bg-purple-500/10 active:bg-purple-500/20 transition-all duration-200 group/menu rounded-lg"
+                                            >
+                                                <div className="relative">
+                                                    <Pin
+                                                        className={`w-4 h-4 transition-all duration-200 group-hover/menu:scale-110 ${isAlbumPinned
+                                                            ? "text-purple-500 fill-purple-500"
+                                                            : "text-white/60 group-hover/menu:text-purple-400"
+                                                            }`}
+                                                    />
+                                                    <div className="absolute inset-0 bg-purple-500/20 rounded-full blur-sm group-hover/menu:opacity-100 opacity-0 transition-opacity" />
+                                                </div>
+                                                <span className={`text-sm font-medium ${isAlbumPinned ? "text-purple-400" : "text-white"
+                                                    }`}>
+                                                    {isAlbumPinned ? "Unpin album" : "Pin album"}
+                                                </span>
+                                                {isAlbumPinned && (
+                                                    <div className="ml-auto px-2 py-0.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full">
+                                                        <Check className="w-3 h-3 text-purple-400" />
+                                                    </div>
+                                                )}
+                                            </Button>
+                                        </DrawerTrigger>
+
+                                        {/* Additional premium options */}
+                                        <div className="h-px bg-linear-to-r from-transparent via-white/10 to-transparent my-2" />
+                                        <DrawerTrigger asChild>
+                                            <Button
+                                                onClick={handleDownload}
+                                                variant="text"
+                                                className="w-full justify-start gap-3 px-4 py-3 hover:bg-white/5 active:bg-white/10 transition-all duration-200 group/menu rounded-lg"
+                                            >
+                                                <div className="relative">
+                                                    <Download className="w-4 h-4 text-amber-400 group-hover/menu:scale-110 transition-transform" />
+                                                    <div className="absolute inset-0 bg-amber-400/20 rounded-full blur-sm group-hover/menu:opacity-100 opacity-0 transition-opacity" />
+                                                </div>
+                                                <span className="text-white text-sm font-medium">Download</span>
+                                                <span className="ml-auto text-xs text-amber-400/70 bg-amber-400/10 px-2 py-0.5 rounded-full">
+                                                    PRO
+                                                </span>
+                                            </Button>
+                                        </DrawerTrigger>
+                                    </div>
                                 </DrawerContent>
                             </Drawer>
                         </div>
@@ -208,7 +397,7 @@ export function MobilePlayer() {
                                 >
                                     <div className="h-1.5 w-full bg-white/10 rounded-full relative overflow-visible">
                                         <motion.div
-                                            className="h-full bg-white rounded-full absolute left-0 top-0"
+                                            className="h-full bg-linear-to-r from-purple-500 to-pink-500 rounded-full absolute left-0 top-0"
                                             animate={{ width: `${progressPercentage}%` }}
                                             transition={{
                                                 ease: "linear",
@@ -240,19 +429,33 @@ export function MobilePlayer() {
                                 {/* --- SHARE BUTTON --- */}
                                 <button
                                     onClick={handleShare}
-                                    className="text-white/40 active:text-white transition-colors"
+                                    className="text-white/40 hover:text-white active:text-white transition-colors"
                                 >
                                     <Share2 className="w-6 h-6" />
                                 </button>
 
                                 <div className="flex items-center gap-8">
-                                    <button onClick={musicAction.skipPrevious} className="text-white"><SkipBack className="w-9 h-9 fill-current" /></button>
-                                    <button onClick={musicAction.togglePlay} className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-xl">
+                                    <button onClick={musicAction.skipPrevious} className="text-white hover:text-white/80 transition-colors">
+                                        <SkipBack className="w-9 h-9 fill-current" />
+                                    </button>
+                                    <button onClick={musicAction.togglePlay} className="w-20 h-20 rounded-full bg-white hover:bg-white/90 active:scale-95 transition-all flex items-center justify-center shadow-xl">
                                         {isPlaying ? <Pause className="w-10 h-10 text-black fill-current" /> : <Play className="w-10 h-10 text-black fill-current ml-1" />}
                                     </button>
-                                    <button onClick={musicAction.skipNext} className="text-white"><SkipForward className="w-9 h-9 fill-current" /></button>
+                                    <button onClick={musicAction.skipNext} className="text-white hover:text-white/80 transition-colors">
+                                        <SkipForward className="w-9 h-9 fill-current" />
+                                    </button>
                                 </div>
-                                <button onClick={musicAction.toggleQueue} className="text-white/40"><ListMusic className="w-6 h-6" /></button>
+                                <button
+                                    onClick={handleViewQueue}
+                                    className="text-white/40 hover:text-white active:text-white transition-colors relative"
+                                >
+                                    <ListMusic className="w-6 h-6" />
+                                    {queue.length > 0 && (
+                                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-purple-500 text-white text-xs rounded-full flex items-center justify-center">
+                                            {queue.length}
+                                        </span>
+                                    )}
+                                </button>
                             </div>
                         </div>
                     </div>

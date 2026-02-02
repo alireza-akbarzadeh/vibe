@@ -59,6 +59,7 @@ export const musicStore = new Store({
 		duration: 200,
 		plays: 1200340,
 		isExplicit: true,
+		isLiked: false,
 	} as Song,
 	queue: [] as Song[],
 	isPlaying: false,
@@ -168,7 +169,7 @@ export const musicAction = {
 	},
 	toggleLyrics: () =>
 		musicStore.setState((s) => ({ ...s, showLyrics: !s.showLyrics })),
-	toggleQueue: () =>
+	toggleQueue: (_id: number) =>
 		musicStore.setState((s) => ({ ...s, showQueue: !s.showQueue })),
 	toggleDevices: () =>
 		musicStore.setState((s) => ({ ...s, showDevices: !s.showDevices })),
