@@ -9,6 +9,7 @@ export interface Song {
 	duration: number; // in seconds
 	plays?: number;
 	isExplicit?: boolean;
+	isLiked?: boolean;
 }
 
 export interface LibraryItem {
@@ -18,6 +19,7 @@ export interface LibraryItem {
 	type: "playlist" | "artist";
 	image: string;
 	isPinned?: boolean;
+	isLiked: boolean;
 }
 
 export type ActiveFilter = "All" | "Playlists" | "Artists";
@@ -31,6 +33,7 @@ const initialLibrary: LibraryItem[] = [
 		image:
 			"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&q=80",
 		isPinned: true,
+		isLiked: true,
 	},
 	{
 		id: "ellie",
@@ -40,6 +43,7 @@ const initialLibrary: LibraryItem[] = [
 		image:
 			"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&q=80",
 		isPinned: true,
+		isLiked: false,
 	},
 ];
 
@@ -89,6 +93,43 @@ export const musicAction = {
 	togglePlay: () => {
 		musicStore.setState((s) => ({ ...s, isPlaying: !s.isPlaying }));
 	},
+	toggleLike: (song: Song | null) => {
+		if (!song) return;
+
+		musicStore.setState((s) => {
+			const isNowLiked = !song.isLiked;
+
+			const updatedCurrentSong =
+				s.currentSong?.id === song.id
+					? { ...s.currentSong, isLiked: isNowLiked }
+					: s.currentSong;
+
+			const updatedLibrary = s.library.map((item) => {
+				if (item.id === song.id.toString() || item.id === "liked") {
+					if (item.id === song.id.toString()) {
+						return { ...item, isLiked: isNowLiked };
+					}
+
+					if (item.id === "liked") {
+						const countMatch = item.subtitle.match(/\d+/);
+						const currentCount = countMatch ? parseInt(countMatch[0]) : 0;
+						const newCount = isNowLiked
+							? currentCount + 1
+							: Math.max(0, currentCount - 1);
+						return { ...item, subtitle: `Playlist • ${newCount} songs` };
+					}
+				}
+				return item;
+			});
+
+			return {
+				...s,
+				currentSong: updatedCurrentSong,
+				library: updatedLibrary,
+			};
+		});
+	},
+
 	toggleAddToPlayListModal: () => {
 		musicStore.setState((s) => ({ ...s, isAddModalOpen: !s.isAddModalOpen }));
 	},
@@ -208,6 +249,7 @@ export const musicAction = {
 			title: name,
 			subtitle: `Playlist • ${description || "User"}`,
 			type: "playlist",
+			isLiked: false,
 			image:
 				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&q=80",
 		};

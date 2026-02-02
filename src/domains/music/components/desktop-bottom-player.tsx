@@ -1,11 +1,13 @@
 /** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
+
 import { useStore } from "@tanstack/react-store";
 import {
-    Heart, ListMusic, Maximize2, Mic2, MonitorSpeaker, Pause,
+    ListMusic, Maximize2, Mic2, MonitorSpeaker, Pause,
     PictureInPicture2, Play, PlusCircle, Repeat, Shuffle,
     SkipBack, SkipForward, Volume2, VolumeX
 } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { LikeButton } from "@/components/buttons/like-button";
 import { cn } from "@/lib/utils";
 import { musicAction, musicStore } from "../music.store";
 
@@ -73,11 +75,11 @@ export function DesktopPlayer() {
                     </div>
                 </div>
                 <div className="flex items-center gap-3 ml-2">
-                    <button
+                    <LikeButton
+                        isLiked={currentSong.isLiked}
+                        onClick={() => musicAction.toggleLike(currentSong)}
                         className="text-[#b3b3b3] hover:text-white transition-colors"
-                    >
-                        <Heart className="w-5 h-5" />
-                    </button>
+                    />
                     <button
                         onClick={() => musicAction.openAddToPlaylist(currentSong)}
                         className="text-[#b3b3b3] hover:text-white transition-colors"
