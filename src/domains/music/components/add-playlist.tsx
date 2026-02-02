@@ -2,7 +2,7 @@ import { useStore } from "@tanstack/react-store";
 import { Music, Plus } from "lucide-react";
 import { useState } from "react";
 import { AppDialog } from "@/components/app-dialog";
-import { addSongToPlaylistAction, musicStore, toggleAddToPlayListModal } from "../music.store";
+import { musicAction, musicStore } from "../music.store";
 import { CreatePlaylistDialog } from "./create-playlist";
 
 interface AddToPlaylistModalProps {
@@ -19,7 +19,7 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 		<AppDialog
 			open={isAddModalOpen}
 			onOpenChange={(open) => {
-				if (!open) toggleAddToPlayListModal();
+				if (!open) musicAction.toggleAddToPlayListModal();
 			}}
 			component="drawer"
 			trigger={trigger ||
@@ -27,7 +27,7 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 					type="button"
 					onClick={(e) => {
 						e.stopPropagation();
-						toggleAddToPlayListModal();
+						musicAction.toggleAddToPlayListModal();
 					}}
 					className="p-1.5 rounded-full border border-white/20 hover:bg-white/10  text-gray-400 hover:text-white transition-colors"
 				>
@@ -64,8 +64,8 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 						type="button"
 						key={playlist.id}
 						onClick={() => {
-							addSongToPlaylistAction(playlist.id, songToAddToPlaylist);
-							toggleAddToPlayListModal();
+							musicAction.addSongToPlaylistAction(playlist.id, songToAddToPlaylist);
+							musicAction.toggleAddToPlayListModal();
 						}}
 						className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-left"
 					>

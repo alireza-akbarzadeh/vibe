@@ -2,7 +2,8 @@ import { useId, useState } from "react";
 import { AppDialog } from "@/components/app-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createPlaylist } from "../music.store";
+import { musicAction } from "../music.store";
+
 
 
 interface CreatePlaylistDialogProps {
@@ -22,7 +23,7 @@ export function CreatePlaylistDialog({
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (playlistName.trim()) {
-			createPlaylist({
+			musicAction.createPlaylist({
 				name: playlistName.trim(),
 				description: description.trim(),
 			});

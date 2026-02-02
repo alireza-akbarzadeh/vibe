@@ -55,7 +55,7 @@ export const musicStore = new Store({
 		duration: 200,
 		plays: 1200340,
 		isExplicit: true,
-	} as Song | null,
+	} as Song,
 	queue: [] as Song[],
 	isPlaying: false,
 
@@ -85,173 +85,167 @@ export const musicStore = new Store({
 
 // --- Action Helpers ---
 
-export const togglePlay = () => {
-	musicStore.setState((s) => ({ ...s, isPlaying: !s.isPlaying }));
-};
-export const toggleAddToPlayListModal = () => {
-	musicStore.setState((s) => ({ ...s, isAddModalOpen: !s.isAddModalOpen }));
-};
+export const musicAction = {
+	togglePlay: () => {
+		musicStore.setState((s) => ({ ...s, isPlaying: !s.isPlaying }));
+	},
+	toggleAddToPlayListModal: () => {
+		musicStore.setState((s) => ({ ...s, isAddModalOpen: !s.isAddModalOpen }));
+	},
+	updateCurrentTime: (time: number) => {
+		musicStore.setState((s) => {
+			const duration = s.currentSong?.duration || 1;
+			return {
+				...s,
+				currentTime: time,
+				progressPercentage: (time / duration) * 100,
+			};
+		});
+	},
 
-/**
- * Updates both time and percentage to keep UI in sync
- */
-export const updateCurrentTime = (time: number) => {
-	musicStore.setState((s) => {
-		const duration = s.currentSong?.duration || 1;
-		return {
-			...s,
-			currentTime: time,
-			progressPercentage: (time / duration) * 100,
-		};
-	});
-};
+	skipNext: () => {
+		musicStore.setState((s) => {
+			if (s.queue.length === 0) return s;
+			const nextSong = s.queue[0];
+			return {
+				...s,
+				currentSong: nextSong,
+				queue: s.queue.slice(1),
+				currentTime: 0,
+				progressPercentage: 0,
+				isPlaying: true,
+			};
+		});
+	},
 
-export const skipNext = () => {
-	musicStore.setState((s) => {
-		if (s.queue.length === 0) return s;
-		const nextSong = s.queue[0];
-		return {
+	skipPrevious: () => {
+		musicStore.setState((s) => ({
 			...s,
-			currentSong: nextSong,
-			queue: s.queue.slice(1),
 			currentTime: 0,
 			progressPercentage: 0,
-			isPlaying: true,
-		};
-	});
-};
-
-export const skipPrevious = () => {
-	musicStore.setState((s) => ({ ...s, currentTime: 0, progressPercentage: 0 }));
-};
-
-// --- UI Toggles ---
-export const toggleLyrics = () =>
-	musicStore.setState((s) => ({ ...s, showLyrics: !s.showLyrics }));
-export const toggleQueue = () =>
-	musicStore.setState((s) => ({ ...s, showQueue: !s.showQueue }));
-export const toggleDevices = () =>
-	musicStore.setState((s) => ({ ...s, showDevices: !s.showDevices }));
-export const toggleFullscreen = () =>
-	musicStore.setState((s) => ({ ...s, isFullscreen: !s.isFullscreen }));
-export const toggleSidebar = () =>
-	musicStore.setState((s) => ({
-		...s,
-		isSidebarCollapsed: !s.isSidebarCollapsed,
-	}));
-
-// --- Playlist & Library Actions ---
-export const openAddToPlaylist = (song: Song) => {
-	musicStore.setState((s) => ({
-		...s,
-		isAddModalOpen: true,
-		songToAddToPlaylist: song,
-	}));
-};
-
-export const openOpenPlayListChange = () => {
-	musicStore.setState((s) => ({
-		...s,
-		isAddModalOpen: !s.isAddModalOpen,
-	}));
-};
-
-export const closeAddToPlaylist = () => {
-	musicStore.setState((s) => ({
-		...s,
-		isAddModalOpen: false,
-		songToAddToPlaylist: null,
-	}));
-};
-
-export const openCreatePlaylist = () => {
-	musicStore.setState((s) => ({
-		...s,
-		isCreateModalOpen: true,
-		isAddModalOpen: false,
-	}));
-};
-
-export const setCurrentSong = (song: Song) => {
-	musicStore.setState((s) => ({
-		...s,
-		currentSong: song,
-		isPlaying: true,
-		currentTime: 0,
-		progressPercentage: 0,
-	}));
-};
-
-export const togglePin = (id: string | number) => {
-	musicStore.setState((s) => ({
-		...s,
-		library: s.library.map((item) =>
-			item.id === id ? { ...item, isPinned: !item.isPinned } : item,
-		),
-	}));
-};
-
-export const setSearchQuery = (query: string) => {
-	musicStore.setState((s) => ({ ...s, searchQuery: query }));
-};
-
-export const setFilter = (filter: ActiveFilter) => {
-	musicStore.setState((s) => ({ ...s, activeFilter: filter }));
-};
-
-export const addLibraryItem = (item: LibraryItem) => {
-	musicStore.setState((s) => ({ ...s, library: [item, ...s.library] }));
-};
-
-export const createPlaylist = ({
-	description,
-	name,
-}: {
-	name: string;
-	description: string;
-}) => {
-	const newPlaylist: LibraryItem = {
-		id: Math.random().toString(36).substr(2, 9),
-		title: name,
-		subtitle: `Playlist • ${description || "User"}`,
-		type: "playlist",
-		image:
-			"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&q=80",
-	};
-	musicStore.setState((s) => ({ ...s, library: [newPlaylist, ...s.library] }));
-};
-
-export const removeFromLibrary = (id: string | number) => {
-	musicStore.setState((s) => ({
-		...s,
-		library: s.library.filter((item) => item.id !== id),
-	}));
-};
-
-export const addSongToPlaylistAction = (
-	playlistId: string,
-	song: Song | null,
-) => {
-	if (!song) return;
-
-	musicStore.setState((s) => {
-		const updatedLibrary = s.library.map((item) => {
-			if (item.id === playlistId && item.type === "playlist") {
-				const countMatch = item.subtitle.match(/\d+/);
-				const currentCount = countMatch ? parseInt(countMatch[0]) : 0;
-				return {
-					...item,
-					subtitle: `Playlist • ${currentCount + 1} songs`,
-				};
-			}
-			return item;
-		});
-
-		return {
+		}));
+	},
+	toggleLyrics: () =>
+		musicStore.setState((s) => ({ ...s, showLyrics: !s.showLyrics })),
+	toggleQueue: () =>
+		musicStore.setState((s) => ({ ...s, showQueue: !s.showQueue })),
+	toggleDevices: () =>
+		musicStore.setState((s) => ({ ...s, showDevices: !s.showDevices })),
+	toggleFullscreen: () =>
+		musicStore.setState((s) => ({ ...s, isFullscreen: !s.isFullscreen })),
+	toggleSidebar: () =>
+		musicStore.setState((s) => ({
 			...s,
-			library: updatedLibrary,
+			isSidebarCollapsed: !s.isSidebarCollapsed,
+		})),
+
+	openAddToPlaylist: (song: Song) => {
+		musicStore.setState((s) => ({
+			...s,
+			isAddModalOpen: true,
+			songToAddToPlaylist: song,
+		}));
+	},
+
+	openOpenPlayListChange: () => {
+		musicStore.setState((s) => ({
+			...s,
+			isAddModalOpen: !s.isAddModalOpen,
+		}));
+	},
+	closeAddToPlaylist: () => {
+		musicStore.setState((s) => ({
+			...s,
 			isAddModalOpen: false,
 			songToAddToPlaylist: null,
+		}));
+	},
+	openCreatePlaylist: () => {
+		musicStore.setState((s) => ({
+			...s,
+			isCreateModalOpen: true,
+			isAddModalOpen: false,
+		}));
+	},
+
+	setCurrentSong: (song: Song) => {
+		musicStore.setState((s) => ({
+			...s,
+			currentSong: song,
+			isPlaying: true,
+			currentTime: 0,
+			progressPercentage: 0,
+		}));
+	},
+
+	togglePin: (id: string | number) => {
+		musicStore.setState((s) => ({
+			...s,
+			library: s.library.map((item) =>
+				item.id === id ? { ...item, isPinned: !item.isPinned } : item,
+			),
+		}));
+	},
+	setSearchQuery: (query: string) => {
+		musicStore.setState((s) => ({ ...s, searchQuery: query }));
+	},
+	setFilter: (filter: ActiveFilter) => {
+		musicStore.setState((s) => ({ ...s, activeFilter: filter }));
+	},
+	addLibraryItem: (item: LibraryItem) => {
+		musicStore.setState((s) => ({ ...s, library: [item, ...s.library] }));
+	},
+
+	createPlaylist: ({
+		description,
+		name,
+	}: {
+		name: string;
+		description: string;
+	}) => {
+		const newPlaylist: LibraryItem = {
+			id: Math.random().toString(36).substr(2, 9),
+			title: name,
+			subtitle: `Playlist • ${description || "User"}`,
+			type: "playlist",
+			image:
+				"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&q=80",
 		};
-	});
+		musicStore.setState((s) => ({
+			...s,
+			library: [newPlaylist, ...s.library],
+		}));
+	},
+
+	removeFromLibrary: (id: string | number) => {
+		musicStore.setState((s) => ({
+			...s,
+			library: s.library.filter((item) => item.id !== id),
+		}));
+	},
+
+	addSongToPlaylistAction: (playlistId: string, song: Song | null) => {
+		if (!song) return;
+
+		musicStore.setState((s) => {
+			const updatedLibrary = s.library.map((item) => {
+				if (item.id === playlistId && item.type === "playlist") {
+					const countMatch = item.subtitle.match(/\d+/);
+					const currentCount = countMatch ? parseInt(countMatch[0]) : 0;
+					return {
+						...item,
+						subtitle: `Playlist • ${currentCount + 1} songs`,
+					};
+				}
+				return item;
+			});
+
+			return {
+				...s,
+				library: updatedLibrary,
+				isAddModalOpen: false,
+				songToAddToPlaylist: null,
+			};
+		});
+	},
 };

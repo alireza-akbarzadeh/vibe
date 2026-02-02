@@ -14,11 +14,8 @@ import { Logo } from "@/components/logo";
 import { Input } from "@/components/ui/input";
 import {
 	type ActiveFilter,
-	musicStore,
-	setFilter,
-	setSearchQuery,
-	toggleAddToPlayListModal,
-	toggleSidebar
+	musicAction,
+	musicStore
 } from "@/domains/music/music.store";
 import { cn } from "@/lib/utils";
 import { AddToPlaylistModal } from "../components/add-playlist";
@@ -90,7 +87,7 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 					)}>
 						<button
 							type="button"
-							onClick={() => !forceFull && toggleSidebar()}
+							onClick={() => !forceFull && musicAction.toggleSidebar()}
 							className="flex items-center gap-3 hover:text-white transition-colors font-bold p-2 rounded-lg hover:bg-white/5"
 						>
 							<Library className="w-6 h-6 shrink-0" />
@@ -114,7 +111,7 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 											type="button"
 											onClick={(e) => {
 												e.stopPropagation();
-												toggleAddToPlayListModal();
+												musicAction.toggleAddToPlayListModal();
 											}}
 											className="p-1.5  hover:bg-white/10  text-gray-400 hover:text-white transition-colors"
 										>
@@ -127,7 +124,7 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 								{!forceFull && (
 									<button
 										type="button"
-										onClick={() => toggleSidebar()}
+										onClick={() => musicAction.toggleSidebar()}
 										className="p-1.5 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
 									>
 										<Minimize2 className="w-5 h-5" />
@@ -149,7 +146,7 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 									<button
 										type="button"
 										key={f}
-										onClick={() => setFilter(f)}
+										onClick={() => musicAction.setFilter(f)}
 										className={cn(
 											"text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap transition-all",
 											activeFilter === f
@@ -176,13 +173,13 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 												placeholder="Search in Your Library"
 												autoFocus
 												value={searchQuery}
-												onChange={(e) => setSearchQuery(e.target.value)}
+												onChange={(e) => musicAction.setSearchQuery(e.target.value)}
 											/>
 											<X
 												className="w-3.5 h-3.5 cursor-pointer hover:text-white"
 												onClick={() => {
 													setIsSearching(false);
-													setSearchQuery("");
+													musicAction.setSearchQuery("");
 												}}
 											/>
 										</motion.div>

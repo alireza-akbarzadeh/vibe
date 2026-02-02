@@ -23,8 +23,8 @@ import {
 	ContextMenuSubTrigger,
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { musicAction } from "@/domains/music/music.store";
 
-import { removeFromLibrary, togglePin } from "@/domains/music/music.store";
 
 interface LibraryItem {
 	id: string | number;
@@ -48,7 +48,7 @@ export function SidebarItem({ item, onOpenCreate }: SidebarItemProps) {
 	const isActive = location.pathname === `/music/${item.id}`;
 
 	const handlePin = () => {
-		togglePin(item.id);
+		musicAction.togglePin(item.id);
 		toast.success(
 			item.isPinned ? "Unpinned from Library" : "Pinned to Library",
 			{
@@ -59,7 +59,7 @@ export function SidebarItem({ item, onOpenCreate }: SidebarItemProps) {
 	};
 
 	const handleRemove = () => {
-		removeFromLibrary(item.id);
+		musicAction.removeFromLibrary(item.id);
 		toast.error("Removed from Library", {
 			description: `${item.title} has been removed.`,
 		});
@@ -81,18 +81,16 @@ export function SidebarItem({ item, onOpenCreate }: SidebarItemProps) {
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, scale: 0.95 }}
 					whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.08)" }}
-					className={`flex items-center gap-3 p-2 rounded-md cursor-pointer group transition-colors relative ${
-						isActive ? "bg-white/10" : ""
-					}`}
+					className={`flex items-center gap-3 p-2 rounded-md cursor-pointer group transition-colors relative ${isActive ? "bg-white/10" : ""
+						}`}
 					onClick={() => navigate({ to: `/music/${item.id}` })}
 				>
 					<div className="relative">
 						<img
 							alt={item.title}
 							src={item.image}
-							className={`w-12 h-12 object-cover transition-transform duration-300 ${
-								isActive ? "scale-90" : "scale-100"
-							} ${item.type === "artist" ? "rounded-full" : "rounded-md shadow-lg"}`}
+							className={`w-12 h-12 object-cover transition-transform duration-300 ${isActive ? "scale-90" : "scale-100"
+								} ${item.type === "artist" ? "rounded-full" : "rounded-md shadow-lg"}`}
 						/>
 						{/* Active indicator dot/bar */}
 						{isActive && (
@@ -102,9 +100,8 @@ export function SidebarItem({ item, onOpenCreate }: SidebarItemProps) {
 
 					<div className="flex-1 min-w-0">
 						<h4
-							className={`text-sm font-medium truncate transition-colors ${
-								isActive ? "text-pink-400" : "text-white"
-							}`}
+							className={`text-sm font-medium truncate transition-colors ${isActive ? "text-pink-400" : "text-white"
+								}`}
 						>
 							{item.title}
 						</h4>

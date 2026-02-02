@@ -6,43 +6,14 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AddToPlaylistModal } from "@/domains/music/components/add-playlist";
 import { BottomPlayer } from "@/domains/music/components/bottom-player";
 import { Sidebar } from "@/domains/music/container/sidebar";
-import {
-	closeAddToPlaylist,
-	createPlaylist,
-	musicStore,
-	togglePlay,
-	toggleSidebar,
-	updateCurrentTime,
-} from "@/domains/music/music.store";
+import { musicAction, musicStore } from "@/domains/music/music.store";
 
 export const Route = createFileRoute("/(home)/music")({
 	component: MusicLayout,
 });
 
 function MusicLayout() {
-	const {
-		currentSong,
-		isPlaying,
-		currentTime,
-		isSidebarCollapsed,
-		isAddModalOpen,
-		library
-	} = useStore(musicStore);
-
-	const playlists = library.filter(item => item.type === "playlist");
-
-	const handleAddToPlaylist = (playlistId: string) => {
-		console.log(`Adding song to playlist: ${playlistId}`);
-		// Implement your specific "add song to playlist" API/logic here
-		closeAddToPlaylist();
-	};
-
-	const handleCreateNew = () => {
-		const name = prompt("Enter playlist name:");
-		if (name) {
-			createPlaylist(name, "My New Playlist");
-		}
-	};
+	const { currentSong, isSidebarCollapsed } = useStore(musicStore);
 
 	return (
 		<div className="h-screen bg-black flex flex-col overflow-hidden">
@@ -76,7 +47,7 @@ function MusicLayout() {
 							initial={{ opacity: 0, x: -20 }}
 							animate={{ opacity: 1, x: 0 }}
 							exit={{ opacity: 0, x: -20 }}
-							onClick={() => toggleSidebar()}
+							onClick={() => musicAction.toggleSidebar()}
 							className="hidden md:flex absolute left-2 top-4 z-40 p-2 bg-[#121212] hover:bg-[#282828] text-gray-400 hover:text-white rounded-full shadow-2xl border border-white/10 transition-colors"
 						>
 							<Maximize2 className="w-5 h-5" />
@@ -93,24 +64,10 @@ function MusicLayout() {
 			{/* Bottom Player Controls */}
 			{currentSong && (
 				<div className="z-30">
-					<BottomPlayer
-						currentSong={currentSong}
-						isPlaying={isPlaying}
-						onPlayPause={togglePlay}
-						currentTime={currentTime}
-						onTimeChange={updateCurrentTime}
-					/>
+					<BottomPlayer />
 				</div>
 			)}
-
-			{/* Add to Playlist Dialog/Drawer */}
-			<AddToPlaylistModal
-				isOpen={isAddModalOpen}
-				onClose={closeAddToPlaylist}
-				playlists={playlists}
-				onAddToPlaylist={handleAddToPlaylist}
-				onCreateNew={handleCreateNew}
-			/>
+			<AddToPlaylistModal />
 		</div>
 	);
 }
