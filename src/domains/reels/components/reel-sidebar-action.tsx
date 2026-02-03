@@ -2,10 +2,13 @@ import { useStore } from '@tanstack/react-store';
 import { motion } from 'framer-motion';
 import {
     Bookmark,
+    Eye,
     Heart,
     Maximize2,
     MessageCircle,
-    MoreVertical
+    MoreVertical,
+    Volume2,
+    VolumeX
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -13,6 +16,7 @@ import {
     openComments,
     reelsStore,
     setVideoReaction,
+    toggleMute,
     updateReelAction
 } from '../reels.store';
 import type { VideoReel } from '../reels.types';
@@ -48,6 +52,7 @@ export const SidebarActions = ({
     onToggleFocus
 }: SidebarActionsProps) => {
     const reactions = useStore(reelsStore, (s) => s.reactions);
+    const isMuted = useStore(reelsStore, (s) => s.isMuted);
     const selectedEmoji = reactions[video.id] || null;
 
     return (
@@ -70,6 +75,14 @@ export const SidebarActions = ({
                 icon={<MessageCircle className="text-white" />}
                 label={formatNumber(video.comments)}
                 onClick={() => openComments(video.id)}
+            />
+            <ActionButton
+                icon={<Eye className="text-white" />}
+                label={formatNumber(video.views)}
+            />
+            <ActionButton
+                icon={isMuted ? <VolumeX className=" text-white" /> : <Volume2 className="text-white" />}
+                onClick={() => toggleMute()}
             />
 
             {/* Share Action */}

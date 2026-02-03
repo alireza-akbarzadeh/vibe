@@ -176,14 +176,6 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
                 <SidebarActions video={video} onMore={() => setMoreMenuVideo(video.id)} isFocused={isFocused} onToggleFocus={() => toggleFocusVideo(video.id)} />
             </div>
 
-            <button onClick={(e) => {
-                e.stopPropagation();
-                toggleMute();
-            }}
-                className="no-pause absolute top-20 right-4 z-40 size-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10">
-                {isMuted ? <VolumeX className="size-5 text-white" /> : <Volume2 className="size-5 text-white" />}
-            </button>
-
             {/** biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
             <div className={cn("no-pause hidden absolute bottom-0 left-0 right-0 h-8 md:flex items-end cursor-pointer z-50 transition-opacity", isFocused ? "opacity-0" : "opacity-100")} onClick={(e) => { e.stopPropagation(); handleSeek(e); }}>
                 <div className="w-full h-1 bg-white/20 group-hover:h-2 transition-all relative">
