@@ -87,9 +87,9 @@ export const mockTracks: Track[] = [
 // Mock Videos
 export const mockVideos: Video[] = [
 	{
-		id: "video-1",
+		id: 1,
 		title: "The Art of Storytelling in Modern Cinema",
-		thumbnail:
+		poster_path:
 			"https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&h=225&fit=crop",
 		duration: 1245,
 		views: 1250000,
@@ -98,11 +98,15 @@ export const mockVideos: Video[] = [
 			"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=50&h=50&fit=crop",
 		publishedAt: "2024-12-15",
 		category: "Documentary",
+		rating: 8.5,
+		genres: ["comedy"],
+		year: 2022,
+		progress: 65,
 	},
 	{
-		id: "video-2",
+		id: 2,
 		title: "Behind the Scenes: Epic Movie Soundtracks",
-		thumbnail:
+		poster_path:
 			"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=225&fit=crop",
 		duration: 892,
 		views: 890000,
@@ -111,11 +115,15 @@ export const mockVideos: Video[] = [
 			"https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=50&h=50&fit=crop",
 		publishedAt: "2024-12-20",
 		category: "Music",
+		rating: 8.5,
+		genres: ["comedy"],
+		year: 2022,
+		progress: 30,
 	},
 	{
-		id: "video-3",
+		id: 3,
 		title: "Concert Highlights: World Tour 2024",
-		thumbnail:
+		poster_path:
 			"https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400&h=225&fit=crop",
 		duration: 2156,
 		views: 3400000,
@@ -124,11 +132,15 @@ export const mockVideos: Video[] = [
 			"https://images.unsplash.com/photo-1494790108755-2616b612b1a4?w=50&h=50&fit=crop",
 		publishedAt: "2024-12-22",
 		category: "Concert",
+		rating: 8.5,
+		genres: ["comedy"],
+		year: 2022,
+		progress: 30,
 	},
 	{
-		id: "video-4",
+		id: 4,
 		title: "Visual Effects Breakdown: Sci-Fi Masterpiece",
-		thumbnail:
+		poster_path:
 			"https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&h=225&fit=crop",
 		duration: 1567,
 		views: 2100000,
@@ -137,11 +149,15 @@ export const mockVideos: Video[] = [
 			"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop",
 		publishedAt: "2024-12-18",
 		category: "Tutorial",
+		rating: 8.5,
+		genres: ["comedy"],
+		year: 2022,
+		progress: 22,
 	},
 	{
-		id: "video-5",
+		id: 5,
 		title: "Indie Film Festival Highlights",
-		thumbnail:
+		poster_path:
 			"https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=225&fit=crop",
 		duration: 3024,
 		views: 560000,
@@ -150,11 +166,15 @@ export const mockVideos: Video[] = [
 			"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop",
 		publishedAt: "2024-12-10",
 		category: "Festival",
+		rating: 8.5,
+		genres: ["comedy"],
+		year: 2021,
+		progress: 30,
 	},
 	{
-		id: "video-6",
+		id: 6,
 		title: "Music Production Masterclass",
-		thumbnail:
+		poster_path:
 			"https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=400&h=225&fit=crop",
 		duration: 4521,
 		views: 780000,
@@ -163,6 +183,10 @@ export const mockVideos: Video[] = [
 			"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop",
 		publishedAt: "2024-12-05",
 		category: "Education",
+		rating: 8.5,
+		genres: ["comedy"],
+		year: 2022,
+		progress: 30,
 	},
 ];
 

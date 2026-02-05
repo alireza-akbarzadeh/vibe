@@ -10,15 +10,19 @@ export interface Track {
 }
 
 export interface Video {
-	id: string;
+	id: number;
 	title: string;
-	thumbnail: string;
+	poster_path: string;
 	duration: number;
 	views: number;
 	channel: string;
 	channelAvatar: string;
 	publishedAt: string;
 	category: string;
+	rating: number;
+	year: number;
+	genres: string[];
+	progress: number;
 }
 
 export interface Blog {

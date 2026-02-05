@@ -15,6 +15,7 @@ import {
 	DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { cn } from "@/lib/utils";
 import {
 	Sheet,
 	SheetContent,
@@ -32,6 +33,7 @@ interface AppDialogProps {
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;
 	component: "sheet" | "drawer";
+	className?: string
 }
 
 export function AppDialog(props: AppDialogProps) {
@@ -43,6 +45,7 @@ export function AppDialog(props: AppDialogProps) {
 		open,
 		onOpenChange,
 		component,
+		className
 	} = props;
 	const { isMobile } = useMediaQuery();
 
@@ -50,7 +53,7 @@ export function AppDialog(props: AppDialogProps) {
 		return (
 			<Sheet open={open} onOpenChange={onOpenChange}>
 				{trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-				<SheetContent side="bottom" className="rounded-t-[20px] border-t border-white/10 bg-[#121212]">
+				<SheetContent side="bottom" className={cn("rounded-t-[20px] border-t border-white/10 bg-[#121212]", className)}>
 					<SheetHeader>
 						{title && <SheetTitle>{title}</SheetTitle>}
 						{description && <SheetDescription>{description}</SheetDescription>}
@@ -65,7 +68,7 @@ export function AppDialog(props: AppDialogProps) {
 		return (
 			<Drawer open={open} onOpenChange={onOpenChange}>
 				{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
-				<DrawerContent className="rounded-t-[20px] border-t border-white/10 bg-[#121212] focus:outline-none">
+				<DrawerContent className={cn("rounded-t-[20px] border-t border-white/10 bg-[#121212] focus:outline-none")}>
 					{/* iPhone Styled Handle Bar */}
 					<div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/20" />
 
@@ -84,7 +87,7 @@ export function AppDialog(props: AppDialogProps) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			{trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-			<DialogContent className="sm:max-w-106.25 bg-[#1a1a1a] border-white/10 shadow-2xl">
+			<DialogContent className={cn("sm:max-w-106.25 bg-[#1a1a1a] border-white/10 shadow-2xl")}>
 				<DialogHeader>
 					{title && <DialogTitle>{title}</DialogTitle>}
 					{description && <DialogDescription>{description}</DialogDescription>}

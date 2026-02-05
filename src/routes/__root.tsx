@@ -17,7 +17,6 @@ import { Typography } from "@/components/ui/typography";
 import { createMetadata } from "@/lib/utils";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import AiDevtools from "../lib/ai-devtools";
-import StoreDevtools from "../lib/demo-store-devtools";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -68,18 +67,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					<TooltipProvider>{children}</TooltipProvider>
 					<Toaster />
 				</ThemeProvider>
-				{/* <TanStackDevtools
+				<TanStackDevtools
 					config={{ position: "bottom-right" }}
 					plugins={[
 						{
 							name: "Tanstack Router",
 							render: <TanStackRouterDevtoolsPanel />,
 						},
-						StoreDevtools,
 						TanStackQueryDevtools,
 						AiDevtools,
 					]}
-				/> */}
+				/>
 				<Scripts />
 			</body>
 		</html>
