@@ -1,66 +1,35 @@
 import { motion } from "framer-motion";
 import { Pause, Play } from "lucide-react";
+import { type Recents, recents } from "@/domains/library/library-mock-data.ts";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import { cn } from "@/lib/utils.ts";
 
 export const LibraryRecent = ({ isOpen }: { isOpen: boolean }) => {
-	const recents = [
-		{
-			id: "t1",
-			title: "Midnight City",
-			artist: "M83",
-			img: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=64",
-			type: "track",
-		},
-		{
-			id: "p1",
-			title: "Dark Knight",
-			artist: "Hans Zimmer",
-			img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=64",
-			type: "podcast",
-		},
-		{
-			id: "p5",
-			title: "Dark Knight",
-			artist: "Hans Zimmer",
-			img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=64",
-			type: "podcast",
-		},
-		{
-			id: "t2",
-			title: "Lofi Beats",
-			artist: "ChilledCow",
-			img: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=64",
-			type: "track",
-		},
-	];
-
-	type RecentType = {
-		id: string;
-		title: string;
-		artist: string;
-		img: string;
-		type: "track" | "podcast";
-	};
 	const currentTrackId = useLibraryStore((s) => s.player.currentTrack?.id);
 	const currentPodcastId = useLibraryStore((s) => s.player.currentPodcast?.id);
 	const isPlaying = useLibraryStore((s) => s.player.isPlaying);
 
-	const handlePlay = (item: RecentType) => {
+	const handlePlay = (item: Recents) => {
 		if (item.type === "track") {
 			libraryActions.playTrack({
 				id: item.id,
 				title: item.title,
 				artist: item.artist,
-				cover: item.img,
+				cover: item.cover,
+				album: item.album,
+				duration: item.duration,
+				genre: item.genre,
 			});
 		} else {
 			libraryActions.playPodcast({
 				id: item.id,
 				title: item.title,
 				show: item.artist,
-				cover: item.img,
+				cover: item.cover,
+				duration: item.duration,
+				category: "movies",
+				publishedAt: item.publishedAt,
 			});
 		}
 	};

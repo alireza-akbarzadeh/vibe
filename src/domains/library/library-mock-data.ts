@@ -1,3 +1,5 @@
+import { libraryActions } from "@/domains/library/store/library-actions.ts";
+import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import type { Blog, Podcast, Track, Video } from "./store/library-store-types";
 
 // Mock Tracks
@@ -278,6 +280,32 @@ export const mockBlogs: Blog[] = [
 	},
 ];
 
+export interface Recents extends Track {
+	type: "track" | "podcast";
+}
+
+export const recents: Recents[] = [
+	{
+		id: "t1",
+		title: "Midnight City",
+		artist: "M83",
+		album: "Hurry Up, We're Dreaming",
+		cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300",
+		duration: 244,
+		genre: "Electronic",
+		type: "track",
+	},
+	{
+		id: "t2",
+		title: "Lofi Beats",
+		artist: "ChilledCow",
+		album: "Late Night Vibes",
+		cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300",
+		duration: 180,
+		genre: "Lo-Fi",
+		type: "podcast",
+	},
+];
 // Mock Podcasts
 export const mockPodcasts: Podcast[] = [
 	{

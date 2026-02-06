@@ -5,7 +5,7 @@ export interface Track {
 	artist: string;
 	album: string;
 	cover: string;
-	duration: number; // in seconds
+	duration: number;
 	genre: string;
 }
 
