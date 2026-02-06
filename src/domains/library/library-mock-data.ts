@@ -1,5 +1,3 @@
-import { libraryActions } from "@/domains/library/store/library-actions.ts";
-import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import type { Blog, Podcast, Track, Video } from "./store/library-store-types";
 
 // Mock Tracks
@@ -317,6 +315,8 @@ export const mockPodcasts: Podcast[] = [
 		duration: 3540,
 		publishedAt: "2024-12-27",
 		category: "music",
+		artist: "ChilledCow",
+		genres: "Lo-Fi",
 	},
 	{
 		id: "podcast-2",
@@ -327,6 +327,8 @@ export const mockPodcasts: Podcast[] = [
 		duration: 4200,
 		publishedAt: "2024-12-24",
 		category: "movies",
+		artist: "Cinema Secrets",
+		genres: "Documentary",
 	},
 	{
 		id: "podcast-3",
@@ -337,6 +339,8 @@ export const mockPodcasts: Podcast[] = [
 		duration: 2890,
 		publishedAt: "2024-12-21",
 		category: "music",
+		artist: "Groove Sessions",
+		genres: "Jazz",
 	},
 	{
 		id: "podcast-4",
@@ -347,6 +351,8 @@ export const mockPodcasts: Podcast[] = [
 		duration: 3120,
 		publishedAt: "2024-12-18",
 		category: "movies",
+		artist: "Film Psychology",
+		genres: "Horror",
 	},
 	{
 		id: "podcast-5",
@@ -357,6 +363,8 @@ export const mockPodcasts: Podcast[] = [
 		duration: 2650,
 		publishedAt: "2024-12-15",
 		category: "music",
+		artist: "Underground Sounds",
+		genres: "Indie",
 	},
 	{
 		id: "podcast-6",
@@ -367,5 +375,7 @@ export const mockPodcasts: Podcast[] = [
 		duration: 3890,
 		publishedAt: "2024-12-12",
 		category: "movies",
+		artist: "Future Watch",
+		genres: "Sci-Fi",
 	},
 ];

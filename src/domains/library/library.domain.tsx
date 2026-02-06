@@ -8,14 +8,13 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "@/components/ui/link.tsx";
 import { MediaCard } from "@/domains/library/components/media-card.tsx";
-import { PodcastCard } from "@/domains/library/components/podcast-card.tsx";
-import { VideoCard } from "@/domains/library/components/video-card.tsx";
 import {
 	mockPodcasts,
 	mockTracks,
 	mockVideos,
 } from "@/domains/library/library-mock-data.ts";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
+import { VideoItem } from "./components/library-video-item";
 
 export const LibraryDomains = () => {
 	return (
@@ -46,12 +45,11 @@ export const LibraryDomains = () => {
 							experience.
 						</p>
 						<div className="flex gap-4">
-							<Button size="lg" className="gap-2 glow-primary">
-								<Play className="w-5 h-5" fill="currentColor" />
-								Start Listening
-							</Button>
-							<Button variant="outline" size="lg" asChild>
-								<Link to="/music">Explore Music</Link>
+							<Button size="lg" className="gap-2 glow-primary" asChild>
+								<Link to="/music">
+									<Play className="w-5 h-5" fill="currentColor" />
+									Start Listening
+								</Link>
 							</Button>
 						</div>
 					</div>
@@ -78,7 +76,7 @@ export const LibraryDomains = () => {
 					initial="initial"
 					whileInView="animate"
 					viewport={{ once: true }}
-					className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
+					className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  gap-4"
 				>
 					{mockTracks.slice(0, 5).map((track) => (
 						<MediaCard
@@ -108,7 +106,7 @@ export const LibraryDomains = () => {
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 					{mockVideos.slice(0, 3).map((video) => (
-						<VideoCard key={video.id} video={video} />
+						<VideoItem key={video.id} video={video} />
 					))}
 				</div>
 			</section>
@@ -124,11 +122,16 @@ export const LibraryDomains = () => {
 						See all
 					</Link>
 				</div>
-				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  gap-4">
 					{mockPodcasts.map((podcast) => (
-						<PodcastCard
+						<MediaCard
 							key={podcast.id}
-							podcast={podcast}
+							id={podcast.id}
+							title={podcast.title}
+							subtitle={podcast.artist}
+							image={podcast.cover}
+							type="podcast"
+							meta={podcast.genres}
 							onPlay={() => libraryActions.playPodcast(podcast)}
 						/>
 					))}

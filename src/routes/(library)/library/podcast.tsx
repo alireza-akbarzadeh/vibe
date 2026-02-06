@@ -6,7 +6,7 @@ import {
 	staggerContainer,
 } from "@/components/motion/motion-page.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PodcastCard } from "@/domains/library/components/podcast-card.tsx";
+import { MediaCard } from "@/domains/library/components/media-card";
 import { mockPodcasts } from "@/domains/library/library-mock-data.ts";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
 
@@ -41,9 +41,14 @@ function PodcastsPage() {
 						className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
 					>
 						{mockPodcasts.map((podcast) => (
-							<PodcastCard
+							<MediaCard
 								key={podcast.id}
-								podcast={podcast}
+								id={podcast.id}
+								title={podcast.title}
+								subtitle={podcast.artist}
+								image={podcast.cover}
+								type="podcast"
+								meta={podcast.genres}
 								onPlay={() => libraryActions.playPodcast(podcast)}
 							/>
 						))}
@@ -60,9 +65,14 @@ function PodcastsPage() {
 						{mockPodcasts
 							.filter((p) => p.category === "music")
 							.map((podcast) => (
-								<PodcastCard
+								<MediaCard
 									key={podcast.id}
-									podcast={podcast}
+									id={podcast.id}
+									title={podcast.title}
+									subtitle={podcast.artist}
+									image={podcast.cover}
+									type="track"
+									meta={podcast.genres}
 									onPlay={() => libraryActions.playPodcast(podcast)}
 								/>
 							))}
@@ -79,9 +89,14 @@ function PodcastsPage() {
 						{mockPodcasts
 							.filter((p) => p.category === "movies")
 							.map((podcast) => (
-								<PodcastCard
+								<MediaCard
 									key={podcast.id}
-									podcast={podcast}
+									id={podcast.id}
+									title={podcast.title}
+									subtitle={podcast.artist}
+									image={podcast.cover}
+									type="video"
+									meta={podcast.genres}
 									onPlay={() => libraryActions.playPodcast(podcast)}
 								/>
 							))}
@@ -111,9 +126,8 @@ function PodcastsPage() {
 						>
 							<div className="flex items-center gap-4">
 								<div
-									className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl ${
-										index % 2 === 0 ? "bg-accent/20" : "bg-secondary/20"
-									}`}
+									className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl ${index % 2 === 0 ? "bg-accent/20" : "bg-secondary/20"
+										}`}
 								>
 									{index % 2 === 0 ? "🎵" : "🎬"}
 								</div>

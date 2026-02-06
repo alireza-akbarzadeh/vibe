@@ -44,6 +44,8 @@ export interface Podcast {
 	cover: string;
 	duration: number;
 	publishedAt: string;
+	genres: string;
+	artist: string;
 	category: "music" | "movies";
 }
 
