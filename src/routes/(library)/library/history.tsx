@@ -93,15 +93,15 @@ function RouteComponent() {
         {filteredHistory.length > 0 ? (
           <div className="grid gap-2">
             <TimeDivider label="Stored Logs" />
-            {filteredHistory.map((item: any) => (
+            {filteredHistory.map((item) => (
               <HistoryItem
                 key={`${item.type}-${item.id}`}
                 type={item.type}
                 title={item.title}
-                meta={'channel' in item ? item.channel : item.artist || item.show}
+                meta={'channel' in item ? item.channel : item.artist}
                 time="RECENT"
                 image={'poster_path' in item ? item.poster_path : item.cover}
-                progress={item.progress}
+                progress={item.duration}
                 onPlay={() => {
                   if (item.type === 'Track') libraryActions.playTrack(item)
                   if (item.type === 'Podcast') libraryActions.playPodcast(item)
