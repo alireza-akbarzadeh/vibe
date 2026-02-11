@@ -8,7 +8,7 @@ export const getRouter = () => {
 	const rqContext = TanstackQuery.getContext();
 	const router = createRouter({
 		routeTree,
-		context: { ...rqContext },
+		context: { ...rqContext, auth: undefined },
 		defaultPreload: "intent",
 		scrollRestoration: false,
 		Wrap: (props: { children: React.ReactNode }) => {

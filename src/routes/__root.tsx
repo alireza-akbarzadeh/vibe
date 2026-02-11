@@ -14,6 +14,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Typography } from "@/components/ui/typography";
+import { getSession } from "@/lib/auth-server";
 import { createMetadata } from "@/lib/utils";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import AiDevtools from "../lib/ai-devtools";
@@ -21,10 +22,7 @@ import appCss from "../styles.css?url";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
-	auth?: {
-		role: string;
-		id: string;
-	};
+	auth: Awaited<ReturnType<typeof getSession>>
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
@@ -49,6 +47,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 	}),
+	beforeLoad: async () => {
+		const session = await getSession();
+		return {
+			auth: session,
+		};
+	},
 	component: RouteLayout,
 	shellComponent: RootDocument,
 	errorComponent: ErrorComponent,
