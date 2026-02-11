@@ -18,10 +18,10 @@
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "db:studio": "dotenv -e .env.local -- prisma studio",
-    "db:seed": "dotenv -e .env.local -- prisma db seed"
+    "db:seed": "dotenv -e .env.local -- prisma db seed",
+    "db:reset": "dotenv -e .env.local -- prisma migrate reset"
   },
   "dependencies": {
-    "@faker-js/faker": "^10.0.0",
     "@fontsource-variable/geist": "^5.2.8",
     "@fontsource-variable/geist-mono": "^5.2.7",
     "@mantine/hooks": "^8.3.14",
@@ -99,7 +99,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
     "babel-plugin-react-compiler": "^1.0.0",
-    "dotenv-cli": "^10.0.0",
+    "dotenv-cli": "^10.0.0", 
     "jsdom": "^27.0.0",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
@@ -110,5 +110,11 @@
     "@tanstack/zod-adapter": {
       "zod": "^4.3.6"
     }
+  },
+  "prisma": {
+  "import": {
+    "schemas": "prisma/schema/*.prisma",
+    "output": "prisma/schema.prisma"
   }
+}
 }

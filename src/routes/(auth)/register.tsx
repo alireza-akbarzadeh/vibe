@@ -1,22 +1,18 @@
-import { logger } from "@sentry/tanstackstart-react";
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, Loader2, Mail, Sparkles, User } from "lucide-react";
 import { useId } from "react";
-import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InputPassword } from "@/components/ui/forms/input-password";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Http } from "@/constants/constants.ts";
 import AuthLayout from "@/domains/auth/auth-layout";
 import { PrivacyPolicyDialog } from "@/domains/auth/privacy-dialog";
 import { TermsOfServiceDialog } from "@/domains/auth/terms-dialog";
-import { tryCatchAsync } from "@/lib/utils";
-import { usePostAuthRegister } from "@/services/endpoints/authentication/authentication.ts";
+
 
 export const Route = createFileRoute("/(auth)/register")({
 	component: RouteComponent,
@@ -41,7 +37,6 @@ export type RegisterFormValues = z.infer<typeof registerFormSchema>;
 
 function RouteComponent() {
 	const navigate = useNavigate();
-	const { mutateAsync } = usePostAuthRegister();
 	const form = useForm({
 		defaultValues: {
 			firstName: "",
@@ -55,30 +50,7 @@ function RouteComponent() {
 			onChange: registerFormSchema,
 			onBlur: registerFormSchema,
 		},
-		onSubmit: async ({ value }) => {
-			const [error, result] = await tryCatchAsync(
-				mutateAsync({
-					data: {
-						email: value.email,
-						first_name: value.firstName,
-						last_name: value.lastName,
-						password: value.password,
-					},
-				}),
-			);
-			if (error) {
-				logger.error(error.message);
-				toast.error("Failed to login. Please check your credentials.", {
-					description: <p>{error.name}</p>,
-				});
-				throw error;
-			}
-			if (result.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
-				toast.success(`${value.firstName} Welcome back!`);
-				await navigate({ to: "/login" });
-				toast(result.message);
-			}
-		},
+		onSubmit: async ({ value }) => { },
 	});
 	const firstNameId = useId();
 	const lastNameId = useId();
@@ -124,9 +96,8 @@ function RouteComponent() {
 											value={field.state.value}
 											onChange={(e) => field.handleChange(e.target.value)}
 											onBlur={field.handleBlur}
-											className={`pl-12 h-12 bg-white/5 border ${
-												isInvalid ? "border-red-500" : "border-white/10"
-											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+											className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
+												} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 											aria-invalid={isInvalid}
 										/>
 									</div>
@@ -161,9 +132,8 @@ function RouteComponent() {
 											value={field.state.value}
 											onChange={(e) => field.handleChange(e.target.value)}
 											onBlur={field.handleBlur}
-											className={`pl-12 h-12 bg-white/5 border ${
-												isInvalid ? "border-red-500" : "border-white/10"
-											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+											className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
+												} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 											required
 											aria-invalid={isInvalid}
 										/>
@@ -202,9 +172,8 @@ function RouteComponent() {
 										value={field.state.value}
 										onChange={(e) => field.handleChange(e.target.value)}
 										onBlur={field.handleBlur}
-										className={`pl-12 h-12 bg-white/5 border ${
-											isInvalid ? "border-red-500" : "border-white/10"
-										} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+										className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
+											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 										required
 										aria-invalid={isInvalid}
 									/>
@@ -266,9 +235,8 @@ function RouteComponent() {
 								<div className="flex items-center">
 									<Checkbox
 										id={termsId}
-										className={`w-4 h-4 mt-0.5 rounded border-white/20 bg-white/5 text-purple-600 focus:ring-purple-500/20 focus:ring-offset-0 ${
-											isInvalid ? "border-red-500" : ""
-										}`}
+										className={`w-4 h-4 mt-0.5 rounded border-white/20 bg-white/5 text-purple-600 focus:ring-purple-500/20 focus:ring-offset-0 ${isInvalid ? "border-red-500" : ""
+											}`}
 										checked={field.state.value}
 										onCheckedChange={(value) =>
 											field.handleChange(value as boolean)

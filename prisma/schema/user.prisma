@@ -1,0 +1,182 @@
+model User {
+    id            String   @id @default(cuid())
+    email         String   @unique
+    emailVerified Boolean  @default(false)
+    name          String?
+    image         String?
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    // Relations
+    sessions           Session[]
+    accounts           Account[]
+    twoFactors         TwoFactor[]
+    passkeys           Passkey[]
+    roles              UserRole[]
+    permissions        UserPermission[]
+    subscriptionStatus SubscriptionStatus @default(FREE)
+    customerId         String?
+    profiles           Profile[]
+    watchList          WatchList[]
+    favorites          Favorite[]
+}
+
+model Profile {
+    id       String  @id @default(cuid())
+    userId   String
+    name     String
+    image    String?
+    pin      String? // For kids' profile locks
+    isKids   Boolean @default(false)
+    language String  @default("en")
+
+    user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+    history ViewingHistory[]
+
+    @@index([userId])
+}
+
+enum SubscriptionStatus {
+    FREE
+    PRO
+    PREMIUM
+    CANCELLED
+}
+
+model Session {
+    id        String   @id @default(cuid())
+    userId    String
+    token     String   @unique
+    expiresAt DateTime
+    ipAddress String?
+    userAgent String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+    id                    String    @id @default(cuid())
+    userId                String
+    accountId             String
+    providerId            String
+    accessToken           String?
+    refreshToken          String?
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    idToken               String?
+    password              String? // For email/password auth
+    createdAt             DateTime  @default(now())
+    updatedAt             DateTime  @updatedAt
+
+    // Relations
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([providerId, accountId])
+}
+
+model Verification {
+    id         String   @id @default(cuid())
+    identifier String
+    value      String
+    expiresAt  DateTime
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}
+
+model TwoFactor {
+    id          String   @id @default(cuid())
+    userId      String   @unique
+    secret      String?
+    backupCodes String[] // Store as JSON
+    enabled     Boolean  @default(false)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Relations
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Passkey {
+    id           String   @id @default(cuid())
+    userId       String
+    name         String?
+    publicKey    String   @unique
+    credentialId String   @unique
+    counter      Int      @default(0)
+    deviceType   String
+    backedUp     Boolean  @default(false)
+    transports   String[] // Store as JSON
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    // Relations
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Role-Based Access Control (RBAC)
+model Role {
+    id          String   @id @default(cuid())
+    name        String   @unique
+    description String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Relations
+    users       UserRole[]
+    permissions RolePermission[]
+}
+
+model Permission {
+    id          String   @id @default(cuid())
+    name        String   @unique
+    description String?
+    resource    String
+    action      String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Relations
+    roles RolePermission[]
+    users UserPermission[]
+
+    @@unique([resource, action])
+}
+
+model UserRole {
+    userId     String
+    roleId     String
+    assignedAt DateTime @default(now())
+    assignedBy String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+    @@id([userId, roleId])
+}
+
+model RolePermission {
+    roleId       String
+    permissionId String
+
+    role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+    permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+    @@id([roleId, permissionId])
+}
+
+model UserPermission {
+    userId       String
+    permissionId String
+    grantedAt    DateTime  @default(now())
+    grantedBy    String?
+    expiresAt    DateTime?
+
+    user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+    @@id([userId, permissionId])
+}

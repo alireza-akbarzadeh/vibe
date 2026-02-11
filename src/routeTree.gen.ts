@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as OrpcTodoRouteImport } from './routes/orpc-todo'
 import { Route as libraryRouteRouteImport } from './routes/(library)/route'
 import { Route as homeIndexRouteImport } from './routes/(home)/index'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
@@ -113,11 +112,6 @@ import { Route as adminDashboardAnalyticsContentIndexRouteImport } from './route
 import { Route as adminDashboardMusicArtistsArtistIdRouteImport } from './routes/(admin)/dashboard/music/artists/$artistId'
 import { Route as adminDashboardMusicAlbumsAlbumIdRouteImport } from './routes/(admin)/dashboard/music/albums/$albumId'
 
-const OrpcTodoRoute = OrpcTodoRouteImport.update({
-  id: '/orpc-todo',
-  path: '/orpc-todo',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const libraryRouteRoute = libraryRouteRouteImport.update({
   id: '/(library)',
   getParentRoute: () => rootRouteImport,
@@ -680,7 +674,6 @@ const adminDashboardMusicAlbumsAlbumIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/orpc-todo': typeof OrpcTodoRoute
   '/dashboard': typeof adminDashboardRouteRouteWithChildren
   '/music': typeof homeMusicRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
@@ -784,7 +777,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/subscriptions/users': typeof adminDashboardSubscriptionsUsersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/orpc-todo': typeof OrpcTodoRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
@@ -888,7 +880,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(library)': typeof libraryRouteRouteWithChildren
-  '/orpc-todo': typeof OrpcTodoRoute
   '/(admin)/dashboard': typeof adminDashboardRouteRouteWithChildren
   '/(home)/music': typeof homeMusicRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
@@ -994,7 +985,6 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/orpc-todo'
     | '/dashboard'
     | '/music'
     | '/forgot-password'
@@ -1098,7 +1088,6 @@ export interface FileRouteTypes {
     | '/dashboard/subscriptions/users'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/orpc-todo'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -1201,7 +1190,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/(library)'
-    | '/orpc-todo'
     | '/(admin)/dashboard'
     | '/(home)/music'
     | '/(auth)/forgot-password'
@@ -1307,7 +1295,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   libraryRouteRoute: typeof libraryRouteRouteWithChildren
-  OrpcTodoRoute: typeof OrpcTodoRoute
   adminDashboardRouteRoute: typeof adminDashboardRouteRouteWithChildren
   homeMusicRouteRoute: typeof homeMusicRouteRouteWithChildren
   authForgotPasswordRoute: typeof authForgotPasswordRoute
@@ -1343,13 +1330,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/orpc-todo': {
-      id: '/orpc-todo'
-      path: '/orpc-todo'
-      fullPath: '/orpc-todo'
-      preLoaderRoute: typeof OrpcTodoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(library)': {
       id: '/(library)'
       path: ''
@@ -2254,7 +2234,6 @@ const homeMusicRouteRouteWithChildren = homeMusicRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   libraryRouteRoute: libraryRouteRouteWithChildren,
-  OrpcTodoRoute: OrpcTodoRoute,
   adminDashboardRouteRoute: adminDashboardRouteRouteWithChildren,
   homeMusicRouteRoute: homeMusicRouteRouteWithChildren,
   authForgotPasswordRoute: authForgotPasswordRoute,

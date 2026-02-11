@@ -1,0 +1,132 @@
+model Media {
+    id          String    @id @default(cuid())
+    title       String
+    description String
+    thumbnail   String
+    videoUrl    String?
+    audioUrl    String?
+    duration    Int
+    releaseYear Int
+    type        MediaType
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    collectionId String?
+    collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+
+    sortOrder Int?
+
+    genres    MediaGenre[]
+    creators  MediaCreator[]
+    history   ViewingHistory[]
+    favorites Favorite[]
+    watchList WatchList[]
+}
+
+model Collection {
+    id          String         @id @default(cuid())
+    title       String
+    description String?
+    thumbnail   String?
+    type        CollectionType
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+
+    media Media[]
+}
+
+model Genre {
+    id          String  @id @default(cuid())
+    name        String  @unique
+    description String?
+
+    media MediaGenre[]
+}
+
+model MediaGenre {
+    mediaId String
+    genreId String
+
+    media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+    @@id([mediaId, genreId])
+}
+
+model Creator {
+    id        String    @id @default(cuid())
+    name      String
+    bio       String?
+    image     String?
+    birthDate DateTime?
+
+    media MediaCreator[]
+}
+
+model MediaCreator {
+    mediaId   String
+    creatorId String
+    role      CreatorRole
+
+    media   Media   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    creator Creator @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+    @@id([mediaId, creatorId, role])
+}
+
+model ViewingHistory {
+    id        String   @id @default(cuid())
+    profileId String
+    mediaId   String
+    progress  Int
+    completed Boolean  @default(false)
+    viewedAt  DateTime @default(now())
+
+    profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+    media   Media   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+    @@index([profileId, mediaId])
+}
+
+model Favorite {
+    id        String   @id @default(cuid())
+    userId    String
+    mediaId   String
+    createdAt DateTime @default(now())
+
+    user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, mediaId])
+}
+
+model WatchList {
+    id        String   @id @default(cuid())
+    userId    String
+    mediaId   String
+    createdAt DateTime @default(now())
+
+    user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, mediaId])
+}
+
+enum CollectionType {
+    SERIES
+    ALBUM
+    PLAYLIST
+}
+
+enum MediaType {
+    MOVIE
+    EPISODE
+    TRACK
+}
+
+enum CreatorRole {
+    DIRECTOR
+    ARTIST
+    ACTOR
+    PRODUCER
+}

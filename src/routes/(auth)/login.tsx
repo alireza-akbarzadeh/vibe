@@ -3,7 +3,6 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Loader2, Mail, Sparkles } from "lucide-react";
 import { useId } from "react";
-import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,11 +10,8 @@ import { InputPassword } from "@/components/ui/forms/input-password";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { socialProviders } from "@/config/socials";
-import { Http } from "@/constants/constants.ts";
 import AuthLayout from "@/domains/auth/auth-layout";
-import { logger } from "@/lib/logger";
-import { tryCatchAsync } from "@/lib/utils";
-import { usePostAuthLogin } from "@/services/endpoints/authentication/authentication.ts";
+
 
 const loginFormSchema = z.object({
 	email: z.email("Invalid email address"),
@@ -32,7 +28,6 @@ export const Route = createFileRoute("/(auth)/login")({
 
 function LoginPage() {
 	// 2. Initialize TanStack Form
-	const { mutateAsync, isPending } = usePostAuthLogin();
 	const navigate = useNavigate();
 
 	const form = useForm({
@@ -46,22 +41,7 @@ function LoginPage() {
 			onChange: loginFormSchema,
 			onBlur: loginFormSchema,
 		},
-		onSubmit: async ({ value }) => {
-			const [error, result] = await tryCatchAsync(
-				mutateAsync({
-					data: { email: value.email, password: value.password },
-				}),
-			);
-			if (error) {
-				logger.error(error.message);
-				toast.error("Failed to login. Please check your credentials.");
-				throw error;
-			}
-			if (result.code === Http.STATUS_CODE_SERVICE_SUCCESS) {
-				// toast.success(`${result?.data?.first_name} Welcome back!`);
-				await navigate({ to: "/movies" });
-			}
-		},
+		onSubmit: async ({ value }) => { },
 	});
 
 	const emailId = useId();
@@ -106,9 +86,8 @@ function LoginPage() {
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
-										className={`pl-12 h-12 bg-white/5 border ${
-											isInvalid ? "border-red-500" : "border-white/10"
-										} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+										className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
+											} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 									/>
 								</div>
 								{isInvalid && (
@@ -169,7 +148,7 @@ function LoginPage() {
 					{(isSubmitting) => (
 						<Button
 							type="submit"
-							disabled={isSubmitting || isPending}
+							disabled={isSubmitting}
 							className="w-full h-12 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 group"
 						>
 							{isSubmitting ? (
