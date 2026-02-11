@@ -1,13 +1,19 @@
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 import { Logo } from "@/components/logo.tsx";
-import { Link } from "@/components/ui/link.tsx";
+import { Link, type ValidLink } from "@/components/ui/link.tsx";
 
-const footerLinks = {
-	Product: ["Features", "Pricing", "Download", "Premium"],
-	Company: ["About", "Careers", "Blog", "Press"],
-	Support: ["Help Center", "Contact", "Community", "Status"],
-	Legal: ["Privacy", "Terms", "Licenses", "Cookies"],
+type FooterLinks = {
+	Product: ValidLink[]
+	Company: ValidLink[]
+	Support: ValidLink[]
+	Legal: ValidLink[]
+}
+const footerLinks: FooterLinks = {
+	Product: ["/features", "/pricing", "/download"],
+	Company: ["/about", "/careers", "/blog"],
+	Support: ["/help-center", "/contact", "/community",],
+	Legal: ["/privacy", "/terms", "/licenses", "/cookies"],
 };
 
 const socialLinks = [
@@ -56,7 +62,7 @@ export default function Footer() {
 			<div className="absolute inset-0 overflow-hidden pointer-events-none">
 				<div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/20 rounded-full blur-[120px]" />
 				<div className="absolute -bottom-20 right-0 w-96 h-96 bg-secondary/15 rounded-full blur-[150px]" />
-				<div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+				<div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-linear-to-r from-transparent via-border to-transparent" />
 			</div>
 
 			<motion.div
@@ -128,11 +134,11 @@ export default function Footer() {
 										>
 											<motion.div variants={linkHoverVariants}>
 												<Link
-													to={`/${link.toLowerCase().replace(" ", "-")}`}
+													to={link}
 													className="footer-link inline-flex items-center gap-1 group"
 												>
-													<span className="w-0 h-px bg-gradient-to-r from-primary to-secondary group-hover:w-3 transition-all duration-300" />
-													{link}
+													<span className="w-0 h-px bg-linear-to-r from-primary to-secondary group-hover:w-3 transition-all duration-300" />
+													{link.substring(1)}
 												</Link>
 											</motion.div>
 										</motion.li>

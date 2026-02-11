@@ -4,6 +4,7 @@ import { admin, apiKey, emailOTP, twoFactor } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { env } from "@/env";
 import { prisma } from "@/lib/db";
+import type { authClient } from "./auth-client";
 
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
@@ -38,17 +39,14 @@ export const auth = betterAuth({
 		admin(),
 		apiKey(),
 	],
-	users: {
+
+	user: {
 		additionalFields: {
-			// Custom user fields
-			phoneNumber: {
-				type: "string",
-				required: false,
-			},
-			avatar: {
-				type: "string",
-				required: false,
-			},
+			phoneNumber: { type: "string", required: false },
+			avatar: { type: "string", required: false },
+			subscriptionStatus: { type: "string", defaultValue: "FREE" },
+			customerId: { type: "string", required: false },
+			agreeToTerms: { type: "boolean", defaultValue: false },
 		},
 	},
 
@@ -69,3 +67,5 @@ export const auth = betterAuth({
 		},
 	},
 });
+
+export type Session = typeof authClient.$Infer.Session;

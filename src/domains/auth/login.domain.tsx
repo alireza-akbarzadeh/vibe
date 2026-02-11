@@ -1,40 +1,28 @@
-import { useForm } from "@tanstack/react-form";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ArrowRight, Loader2, Mail, Sparkles } from "lucide-react";
-import { useId } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useForm } from "@/components/ui/forms/form";
 import { InputPassword } from "@/components/ui/forms/input-password";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { socialProviders } from "@/config/socials";
 import AuthLayout from "@/domains/auth/auth-layout";
 import { authClient } from "@/lib/auth-client";
-
 
 const loginFormSchema = z.object({
     email: z.email("Invalid email address"),
     password: z.string().min(1, "Password is required"),
 });
 
-export type RegisterFormValues = z.infer<typeof loginFormSchema>;
-
 export function LoginDomain() {
     const navigate = useNavigate();
     const router = useRouter();
 
-    const form = useForm({
+    const form = useForm(loginFormSchema, {
         defaultValues: {
             email: "",
             password: "",
-        },
-        validators: {
-            onSubmit: loginFormSchema,
-            onChange: loginFormSchema,
-            onBlur: loginFormSchema,
         },
         onSubmit: async ({ value }) => {
             const { data, error } = await authClient.signIn.email({
@@ -48,15 +36,11 @@ export function LoginDomain() {
                 return;
             }
 
-            toast.success(`Welcome ${data?.user.name} back!`);
-
+            toast.success(`Welcome back, ${data?.user.name}!`);
             await router.invalidate();
-
             await navigate({ to: "/" });
         },
     });
-
-    const emailId = useId();
 
     const handleSocialSignIn = async (providerId: "google" | "github") => {
         await authClient.signIn.social({
@@ -70,73 +54,36 @@ export function LoginDomain() {
             title="Welcome Back"
             subtitle="Sign in to continue your journey"
         >
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    form.handleSubmit();
-                }}
-                autoComplete="false"
-                autoCorrect="false"
-                noValidate
-                className="space-y-5"
-            >
+            <form.Root className="space-y-5">
                 {/* Email Field */}
-                <form.Field name="email">
-                    {(field) => {
-                        const errorMessage = field.state.meta.errors?.[0];
-                        const isInvalid = !!errorMessage && field.state.meta.isTouched;
-
-                        return (
-                            <div className="space-y-2">
-                                <Label
-                                    htmlFor={emailId}
-                                    className="text-gray-300 text-sm font-medium"
-                                >
-                                    Email Address
-                                </Label>
-                                <div className="relative">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                                    <Input
-                                        id={emailId}
-                                        type="email"
-                                        placeholder="you@example.com"
-                                        value={field.state.value}
-                                        onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
-                                            } text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
-                                    />
-                                </div>
-                                {isInvalid && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm"
-                                    >
-                                        {errorMessage.message}
-                                    </motion.div>
-                                )}
-                            </div>
-                        );
-                    }}
+                <form.Field
+                    name="email"
+                    label="Email Address"
+                    icon={Mail}
+                >
+                    {(field) => (
+                        <Input
+                            type="email"
+                            placeholder="you@example.com"
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 rounded-xl transition-all"
+                        />
+                    )}
                 </form.Field>
 
                 {/* Password Field */}
                 <form.Field name="password">
-                    {(field) => {
-                        const errorMessage = field.state.meta.errors?.[0];
-                        const isInvalid = !!errorMessage && field.state.meta.isTouched;
-                        return (
-                            <InputPassword
-                                errorMessage={errorMessage?.message || ""}
-                                isInvalid={isInvalid}
-                                value={field.state.value}
-                                onBlur={field.handleBlur}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                            />
-                        );
-                    }}
+                    {(field) => (
+                        <InputPassword
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            errorMessage={field.state.meta.errors?.[0]?.message}
+                            isInvalid={!!field.state.meta.errors?.length && field.state.meta.isTouched}
+                        />
+                    )}
                 </form.Field>
 
                 {/* Submit Button */}
@@ -185,7 +132,7 @@ export function LoginDomain() {
                         </Button>
                     ))}
                 </div>
-            </form>
+            </form.Root>
 
             <div className="mt-6 text-center">
                 <p className="text-gray-400 text-sm">

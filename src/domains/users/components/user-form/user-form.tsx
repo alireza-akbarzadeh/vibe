@@ -2,7 +2,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { Building2, Lock, Mail, MapPin, Shield, User, Users, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { useForm } from "@/components/ui/forms/form";
 import { CompactField } from "@/domains/dashboard/components/user-table/compact-field";
 
@@ -14,6 +13,7 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 	const navigate = useNavigate();
 	const isEditMode = mode === "edit" || !!initialData?.id;
 	console.log('initialData:', initialData);
+
 	const form = useForm(userAccountSchema, {
 		defaultValues: initialData ?? {
 			name: "",

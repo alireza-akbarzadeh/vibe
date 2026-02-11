@@ -1,14 +1,36 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Crown, Library, LogOut, Settings, Sparkles } from "lucide-react";
 import type React from "react";
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { Image } from "@/components/ui/image.tsx";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import { Route } from "@/routes/__root";
 
 export function UserMenu() {
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
+	const router = useRouter();
+
+
+	const { auth } = Route.useRouteContext();
+	const user = auth?.user;
+
+	const handleLogout = async () => {
+		await authClient.signOut({
+			fetchOptions: {
+				onSuccess: async () => {
+					toast.success("Logged out successfully");
+					await router.invalidate();
+					router.navigate({ to: "/login" });
+				},
+			},
+		});
+	};
+
+	if (!user) return null;
 
 	return (
 		<div
@@ -19,20 +41,20 @@ export function UserMenu() {
 		>
 			{/* AVATAR BUTTON */}
 			<button className="group relative flex items-center gap-2 rounded-full p-1.5 transition-all hover:bg-white/5">
-				{/* Glow */}
 				<span className="absolute inset-0 rounded-full bg-indigo-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
 
-				{/* Avatar */}
 				<div className="relative size-9 rounded-full overflow-hidden ring-2 ring-white/10 group-hover:ring-indigo-400/60 transition-all">
 					<Image
-						src="https://i.pravatar.cc/100?img=12"
-						alt="User avatar"
+						src={user.image || `https://avatar.iran.liara.run/username?username=${user.name}`}
+						alt={user.name}
 						className="h-full w-full object-cover"
 					/>
 				</div>
 
-				{/* Premium Badge */}
-				<Crown className="size-4 text-yellow-400 opacity-80 group-hover:opacity-100 transition-opacity" />
+				{/* Show Crown only if PRO or PREMIUM based on your Prisma Enum */}
+				{user.subscriptionStatus !== "FREE" && (
+					<Crown className="size-4 text-yellow-400 opacity-80 group-hover:opacity-100 transition-opacity" />
+				)}
 			</button>
 
 			{/* DROPDOWN */}
@@ -42,7 +64,6 @@ export function UserMenu() {
 						initial={{ opacity: 0, y: 8, scale: 0.98 }}
 						animate={{ opacity: 1, y: 0, scale: 1 }}
 						exit={{ opacity: 0, y: 8, scale: 0.98 }}
-						transition={{ duration: 0.2, ease: "easeOut" }}
 						className={cn(
 							"absolute right-0 mt-3 w-64 overflow-hidden",
 							"rounded-2xl border border-white/10",
@@ -52,9 +73,11 @@ export function UserMenu() {
 						{/* USER INFO */}
 						<div className="px-4 py-3 border-b border-white/5">
 							<p className="text-sm font-semibold text-white">
-								Alireza Akbarzadeh
+								{user.name}
 							</p>
-							<p className="text-xs text-slate-400">Premium Member</p>
+							<p className="text-xs text-slate-400 capitalize">
+								{user.subscriptionStatus.toLowerCase()} Member
+							</p>
 						</div>
 
 						{/* ACTIONS */}
@@ -71,7 +94,10 @@ export function UserMenu() {
 
 						{/* LOGOUT */}
 						<div className="border-t border-white/5 p-2">
-							<button className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition">
+							<button
+								onClick={handleLogout}
+								className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition cursor-pointer"
+							>
 								<LogOut className="size-4" />
 								Logout
 							</button>
@@ -82,7 +108,6 @@ export function UserMenu() {
 		</div>
 	);
 }
-
 function MenuItem({
 	to,
 	icon: Icon,

@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { UserMenu } from "@/components/buttons/user-menu.tsx";
 import { cn } from "@/lib/utils";
+import { Route } from "@/routes/__root";
 import { JoinButton } from "./buttons/join-button";
 import { Logo } from "./logo";
 import { MobileHeader } from "./mobile-header";
@@ -28,8 +29,12 @@ export function RootHeader() {
 	const [isOpen, setIsOpen] = useState(false);
 	const { scrollY } = useScroll();
 	const location = useLocation();
-	const isLoggedIn = true;
-	// --- PREMIUM ANIMATIONS ---
+	const { auth } = Route.useRouteContext();
+
+	const user = auth?.user;
+	const isLoggedIn = !!user;
+
+
 	const headerWidth = useTransform(scrollY, [0, 80], ["100%", "92%"]);
 	const headerY = useTransform(scrollY, [0, 80], [0, 12]);
 	const headerBorder = useTransform(
@@ -53,7 +58,7 @@ export function RootHeader() {
 				y: headerY,
 			}}
 			className={cn(
-				"fixed left-1/2 -translate-x-1/2 z-[100] transition-all duration-700 ease-out",
+				"fixed left-1/2 -translate-x-1/2 z-100 transition-all duration-700 ease-out",
 				"backdrop-blur-xl md:rounded-[2.5rem] border",
 				"md:max-w-7xl mx-auto top-0 overflow-visible",
 			)}
@@ -68,7 +73,7 @@ export function RootHeader() {
 				<div className="flex items-center justify-between gap-4">
 					<Logo />
 					{/* 2. DESKTOP NAV PILL */}
-					<div className="hidden lg:flex items-center bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.05] backdrop-blur-2xl rounded-full p-1.5 gap-0.5 transition-colors duration-300">
+					<div className="hidden lg:flex items-center bg-white/3 hover:bg-white/5 border border-white/5 backdrop-blur-2xl rounded-full p-1.5 gap-0.5 transition-colors duration-300">
 						{navLinks.map((link) => {
 							const isActive = location.pathname === link.href;
 							const Icon = link.icon;
@@ -86,7 +91,7 @@ export function RootHeader() {
 									{isActive && (
 										<motion.div
 											layoutId="nav-pill-active"
-											className="absolute inset-0 bg-white/[0.08] border border-white/[0.1] rounded-full"
+											className="absolute inset-0 bg-white/8 border border-white/10 rounded-full"
 											transition={{
 												type: "spring",
 												bounce: 0.25,
