@@ -13,6 +13,7 @@ import { Route as libraryRouteRouteImport } from './routes/(library)/route'
 import { Route as homeIndexRouteImport } from './routes/(home)/index'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as homeTermsRouteImport } from './routes/(home)/terms'
+import { Route as homeSupportRouteImport } from './routes/(home)/support'
 import { Route as homePrivacyRouteImport } from './routes/(home)/privacy'
 import { Route as homePricingRouteImport } from './routes/(home)/pricing'
 import { Route as homeLicensesRouteImport } from './routes/(home)/licenses'
@@ -25,8 +26,10 @@ import { Route as homeContactRouteImport } from './routes/(home)/contact'
 import { Route as homeCommunityRouteImport } from './routes/(home)/community'
 import { Route as homeCareersRouteImport } from './routes/(home)/careers'
 import { Route as homeAboutRouteImport } from './routes/(home)/about'
-import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
+import { Route as authVerifyEmailRouteImport } from './routes/(auth)/verify-email'
+import { Route as authTowFaSetupRouteImport } from './routes/(auth)/tow-fa-setup'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
+import { Route as authRecoveryCodeRouteImport } from './routes/(auth)/recovery-code'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as homeMusicRouteRouteImport } from './routes/(home)/music/route'
@@ -131,6 +134,11 @@ const homeTermsRoute = homeTermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const homeSupportRoute = homeSupportRouteImport.update({
+  id: '/(home)/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const homePrivacyRoute = homePrivacyRouteImport.update({
   id: '/(home)/privacy',
   path: '/privacy',
@@ -191,14 +199,24 @@ const homeAboutRoute = homeAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authVerifyRoute = authVerifyRouteImport.update({
-  id: '/(auth)/verify',
-  path: '/verify',
+const authVerifyEmailRoute = authVerifyEmailRouteImport.update({
+  id: '/(auth)/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authTowFaSetupRoute = authTowFaSetupRouteImport.update({
+  id: '/(auth)/tow-fa-setup',
+  path: '/tow-fa-setup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authRegisterRoute = authRegisterRouteImport.update({
   id: '/(auth)/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authRecoveryCodeRoute = authRecoveryCodeRouteImport.update({
+  id: '/(auth)/recovery-code',
+  path: '/recovery-code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authLoginRoute = authLoginRouteImport.update({
@@ -678,8 +696,10 @@ export interface FileRoutesByFullPath {
   '/music': typeof homeMusicRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
+  '/recovery-code': typeof authRecoveryCodeRoute
   '/register': typeof authRegisterRoute
-  '/verify': typeof authVerifyRoute
+  '/tow-fa-setup': typeof authTowFaSetupRoute
+  '/verify-email': typeof authVerifyEmailRoute
   '/about': typeof homeAboutRoute
   '/careers': typeof homeCareersRoute
   '/community': typeof homeCommunityRoute
@@ -692,6 +712,7 @@ export interface FileRoutesByFullPath {
   '/licenses': typeof homeLicensesRoute
   '/pricing': typeof homePricingRoute
   '/privacy': typeof homePrivacyRoute
+  '/support': typeof homeSupportRoute
   '/terms': typeof homeTermsRoute
   '/api/$': typeof ApiSplatRoute
   '/': typeof homeIndexRoute
@@ -779,8 +800,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
+  '/recovery-code': typeof authRecoveryCodeRoute
   '/register': typeof authRegisterRoute
-  '/verify': typeof authVerifyRoute
+  '/tow-fa-setup': typeof authTowFaSetupRoute
+  '/verify-email': typeof authVerifyEmailRoute
   '/about': typeof homeAboutRoute
   '/careers': typeof homeCareersRoute
   '/community': typeof homeCommunityRoute
@@ -793,6 +816,7 @@ export interface FileRoutesByTo {
   '/licenses': typeof homeLicensesRoute
   '/pricing': typeof homePricingRoute
   '/privacy': typeof homePrivacyRoute
+  '/support': typeof homeSupportRoute
   '/terms': typeof homeTermsRoute
   '/api/$': typeof ApiSplatRoute
   '/': typeof homeIndexRoute
@@ -884,8 +908,10 @@ export interface FileRoutesById {
   '/(home)/music': typeof homeMusicRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/login': typeof authLoginRoute
+  '/(auth)/recovery-code': typeof authRecoveryCodeRoute
   '/(auth)/register': typeof authRegisterRoute
-  '/(auth)/verify': typeof authVerifyRoute
+  '/(auth)/tow-fa-setup': typeof authTowFaSetupRoute
+  '/(auth)/verify-email': typeof authVerifyEmailRoute
   '/(home)/about': typeof homeAboutRoute
   '/(home)/careers': typeof homeCareersRoute
   '/(home)/community': typeof homeCommunityRoute
@@ -898,6 +924,7 @@ export interface FileRoutesById {
   '/(home)/licenses': typeof homeLicensesRoute
   '/(home)/pricing': typeof homePricingRoute
   '/(home)/privacy': typeof homePrivacyRoute
+  '/(home)/support': typeof homeSupportRoute
   '/(home)/terms': typeof homeTermsRoute
   '/api/$': typeof ApiSplatRoute
   '/(home)/': typeof homeIndexRoute
@@ -989,8 +1016,10 @@ export interface FileRouteTypes {
     | '/music'
     | '/forgot-password'
     | '/login'
+    | '/recovery-code'
     | '/register'
-    | '/verify'
+    | '/tow-fa-setup'
+    | '/verify-email'
     | '/about'
     | '/careers'
     | '/community'
@@ -1003,6 +1032,7 @@ export interface FileRouteTypes {
     | '/licenses'
     | '/pricing'
     | '/privacy'
+    | '/support'
     | '/terms'
     | '/api/$'
     | '/'
@@ -1090,8 +1120,10 @@ export interface FileRouteTypes {
   to:
     | '/forgot-password'
     | '/login'
+    | '/recovery-code'
     | '/register'
-    | '/verify'
+    | '/tow-fa-setup'
+    | '/verify-email'
     | '/about'
     | '/careers'
     | '/community'
@@ -1104,6 +1136,7 @@ export interface FileRouteTypes {
     | '/licenses'
     | '/pricing'
     | '/privacy'
+    | '/support'
     | '/terms'
     | '/api/$'
     | '/'
@@ -1194,8 +1227,10 @@ export interface FileRouteTypes {
     | '/(home)/music'
     | '/(auth)/forgot-password'
     | '/(auth)/login'
+    | '/(auth)/recovery-code'
     | '/(auth)/register'
-    | '/(auth)/verify'
+    | '/(auth)/tow-fa-setup'
+    | '/(auth)/verify-email'
     | '/(home)/about'
     | '/(home)/careers'
     | '/(home)/community'
@@ -1208,6 +1243,7 @@ export interface FileRouteTypes {
     | '/(home)/licenses'
     | '/(home)/pricing'
     | '/(home)/privacy'
+    | '/(home)/support'
     | '/(home)/terms'
     | '/api/$'
     | '/(home)/'
@@ -1299,8 +1335,10 @@ export interface RootRouteChildren {
   homeMusicRouteRoute: typeof homeMusicRouteRouteWithChildren
   authForgotPasswordRoute: typeof authForgotPasswordRoute
   authLoginRoute: typeof authLoginRoute
+  authRecoveryCodeRoute: typeof authRecoveryCodeRoute
   authRegisterRoute: typeof authRegisterRoute
-  authVerifyRoute: typeof authVerifyRoute
+  authTowFaSetupRoute: typeof authTowFaSetupRoute
+  authVerifyEmailRoute: typeof authVerifyEmailRoute
   homeAboutRoute: typeof homeAboutRoute
   homeCareersRoute: typeof homeCareersRoute
   homeCommunityRoute: typeof homeCommunityRoute
@@ -1313,6 +1351,7 @@ export interface RootRouteChildren {
   homeLicensesRoute: typeof homeLicensesRoute
   homePricingRoute: typeof homePricingRoute
   homePrivacyRoute: typeof homePrivacyRoute
+  homeSupportRoute: typeof homeSupportRoute
   homeTermsRoute: typeof homeTermsRoute
   ApiSplatRoute: typeof ApiSplatRoute
   homeIndexRoute: typeof homeIndexRoute
@@ -1356,6 +1395,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof homeTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(home)/support': {
+      id: '/(home)/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof homeSupportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(home)/privacy': {
@@ -1442,11 +1488,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof homeAboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/verify': {
-      id: '/(auth)/verify'
-      path: '/verify'
-      fullPath: '/verify'
-      preLoaderRoute: typeof authVerifyRouteImport
+    '/(auth)/verify-email': {
+      id: '/(auth)/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof authVerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/tow-fa-setup': {
+      id: '/(auth)/tow-fa-setup'
+      path: '/tow-fa-setup'
+      fullPath: '/tow-fa-setup'
+      preLoaderRoute: typeof authTowFaSetupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/register': {
@@ -1454,6 +1507,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof authRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/recovery-code': {
+      id: '/(auth)/recovery-code'
+      path: '/recovery-code'
+      fullPath: '/recovery-code'
+      preLoaderRoute: typeof authRecoveryCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/login': {
@@ -2238,8 +2298,10 @@ const rootRouteChildren: RootRouteChildren = {
   homeMusicRouteRoute: homeMusicRouteRouteWithChildren,
   authForgotPasswordRoute: authForgotPasswordRoute,
   authLoginRoute: authLoginRoute,
+  authRecoveryCodeRoute: authRecoveryCodeRoute,
   authRegisterRoute: authRegisterRoute,
-  authVerifyRoute: authVerifyRoute,
+  authTowFaSetupRoute: authTowFaSetupRoute,
+  authVerifyEmailRoute: authVerifyEmailRoute,
   homeAboutRoute: homeAboutRoute,
   homeCareersRoute: homeCareersRoute,
   homeCommunityRoute: homeCommunityRoute,
@@ -2252,6 +2314,7 @@ const rootRouteChildren: RootRouteChildren = {
   homeLicensesRoute: homeLicensesRoute,
   homePricingRoute: homePricingRoute,
   homePrivacyRoute: homePrivacyRoute,
+  homeSupportRoute: homeSupportRoute,
   homeTermsRoute: homeTermsRoute,
   ApiSplatRoute: ApiSplatRoute,
   homeIndexRoute: homeIndexRoute,

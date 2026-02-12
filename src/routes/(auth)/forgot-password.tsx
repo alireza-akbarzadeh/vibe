@@ -1,4 +1,3 @@
-import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
@@ -10,15 +9,18 @@ import {
 	Sparkles,
 } from "lucide-react";
 import { useId, useState } from "react";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { useForm } from "@/components/ui/forms/form.tsx";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AuthLayout from "@/domains/auth/auth-layout";
+import { forgetPassword } from "@/lib/auth-client.ts";
 
 // 1. Validation Schema
 const forgotPasswordSchema = z.object({
-	email: z.string().email("Please enter a valid email address"),
+	email: z.email("Please enter a valid email address"),
 });
 
 export const Route = createFileRoute("/(auth)/forgot-password")({
@@ -30,7 +32,7 @@ function ForgotPasswordPage() {
 	const emailId = useId();
 
 	// 2. Form Logic
-	const form = useForm({
+	const form = useForm(forgotPasswordSchema, {
 		defaultValues: {
 			email: "",
 		},
@@ -38,9 +40,13 @@ function ForgotPasswordPage() {
 			onChange: forgotPasswordSchema,
 		},
 		onSubmit: async ({ value }) => {
-			// Simulate API call
-			await new Promise((r) => setTimeout(r, 1500));
-			console.log("Reset link sent to:", value.email);
+			const { error } = await forgetPassword.emailOtp({
+				email: value.email,
+			});
+			if (error) {
+				toast.error(error.message || "Something went wrong. Please try again.");
+				return;
+			}
 			setIsSubmitted(true);
 		},
 	});
@@ -84,13 +90,7 @@ function ForgotPasswordPage() {
 			title="Forgot Password?"
 			subtitle="No worries, we'll send you reset instructions"
 		>
-			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					form.handleSubmit();
-				}}
-				className="space-y-6"
-			>
+			<form.Root className="space-y-6">
 				<div className="flex justify-center mb-2">
 					<div className="w-16 h-16 rounded-2xl bg-linear-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/20">
 						<KeyRound className="w-8 h-8 text-purple-400" />
@@ -124,11 +124,6 @@ function ForgotPasswordPage() {
 										} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 									/>
 								</div>
-								{isInvalid && (
-									<p className="text-xs text-red-400 mt-1">
-										{errorMessage.message}
-									</p>
-								)}
 							</div>
 						);
 					}}
@@ -162,7 +157,7 @@ function ForgotPasswordPage() {
 						Back to Login
 					</Link>
 				</div>
-			</form>
+			</form.Root>
 
 			<div className="mt-8 flex items-center justify-center gap-2 text-gray-500 text-xs">
 				<Sparkles className="w-4 h-4" />

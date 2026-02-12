@@ -41,7 +41,7 @@
     "@tanstack/ai-anthropic": "^0.0.1",
     "@tanstack/ai-client": "^0.0.1",
     "@tanstack/ai-react": "^0.0.1",
-    "@tanstack/match-sorter-utils": "^8.19.4",    
+    "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-ai-devtools": "^0.0.1",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-form": "^1.27.7",
@@ -66,6 +66,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.26",
     "highlight.js": "^11.11.1",
+    "input-otp": "^1.4.2",
     "lucide-react": "^0.544.0",
     "next-themes": "^0.4.6",
     "nitro": "latest",
@@ -77,6 +78,7 @@
     "react-dom": "^19.2.0",
     "react-phone-number-input": "^3.4.14",
     "recharts": "^3.7.0",
+    "resend": "^6.9.2",
     "shadcn": "^3.6.3",
     "sonner": "^2.0.7",
     "storybook": "^9.1.9",
@@ -99,7 +101,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
     "babel-plugin-react-compiler": "^1.0.0",
-    "dotenv-cli": "^10.0.0", 
+    "dotenv-cli": "^10.0.0",
     "jsdom": "^27.0.0",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
@@ -112,9 +114,9 @@
     }
   },
   "prisma": {
-  "import": {
-    "schemas": "prisma/schema/*.prisma",
-    "output": "prisma/schema.prisma"
+    "import": {
+      "schemas": "prisma/schema/*.prisma",
+      "output": "prisma/schema.prisma"
+    }
   }
-}
 }

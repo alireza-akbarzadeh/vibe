@@ -40,3 +40,8 @@ export const Http = {
 export const MSG = {
 	APP_NAME: "Vibe",
 };
+
+export const AUTH_STATUS = {
+	EMAIL_NOT_VERIFIED: "EMAIL_NOT_VERIFIED",
+	EMAIL_ALREADY_EXISTS: "EMAIL_ALREADY_EXISTS",
+};

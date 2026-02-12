@@ -7,6 +7,7 @@ import { useForm } from "@/components/ui/forms/form";
 import { InputPassword } from "@/components/ui/forms/input-password";
 import { Input } from "@/components/ui/input";
 import { socialProviders } from "@/config/socials";
+import { AUTH_STATUS } from "@/constants/constants";
 import AuthLayout from "@/domains/auth/auth-layout";
 import { authClient } from "@/lib/auth-client";
 
@@ -32,6 +33,10 @@ export function LoginDomain() {
             });
 
             if (error) {
+                if (error.code === AUTH_STATUS.EMAIL_NOT_VERIFIED) {
+                    navigate({ to: "/verify-email", search: { email: value.email, type: "verification" } });
+                    return;
+                }
                 toast.error(error.message || "Authentication failed");
                 return;
             }

@@ -1,6 +1,6 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Crown, Library, LogOut, Settings, Sparkles } from "lucide-react";
+import { Circle, Crown, Library, Loader2, LogOut, Settings, Sparkles } from "lucide-react";
 import type React from "react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -13,19 +13,25 @@ export function UserMenu() {
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
 	const router = useRouter();
-
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { auth } = Route.useRouteContext();
 	const user = auth?.user;
 
 	const handleLogout = async () => {
+		setIsLoading(true);
 		await authClient.signOut({
 			fetchOptions: {
 				onSuccess: async () => {
 					toast.success("Logged out successfully");
+					setIsLoading(false);
 					await router.invalidate();
 					router.navigate({ to: "/login" });
 				},
+				onError: () => {
+					setIsLoading(false);
+					toast.error("Failed to log out. Please try again.");
+				}
 			},
 		});
 	};
@@ -65,7 +71,7 @@ export function UserMenu() {
 						animate={{ opacity: 1, y: 0, scale: 1 }}
 						exit={{ opacity: 0, y: 8, scale: 0.98 }}
 						className={cn(
-							"absolute right-0 mt-3 w-64 overflow-hidden",
+							"absolute right-0 mt-1 w-64 overflow-hidden",
 							"rounded-2xl border border-white/10",
 							"bg-[#0b0b0c]/90 backdrop-blur-xl shadow-2xl",
 						)}
@@ -94,13 +100,26 @@ export function UserMenu() {
 
 						{/* LOGOUT */}
 						<div className="border-t border-white/5 p-2">
-							<button
+							<motion.button
+								whileHover={{ x: 4 }} // Slides right slightly on hover
+								whileTap={{ scale: 0.95 }} // "Squish" effect on click
+								disabled={isLoading}
 								onClick={handleLogout}
-								className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition cursor-pointer"
+								className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition cursor-pointer disabled:opacity-50"
 							>
-								<LogOut className="size-4" />
-								Logout
-							</button>
+								<motion.div
+									animate={isLoading ? { rotate: 360 } : { rotate: 0 }}
+									transition={{ repeat: isLoading ? Infinity : 0, duration: 1, ease: "linear" }}
+								>
+									{isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <LogOut className="size-4" />}
+								</motion.div>
+
+								{isLoading ? (
+									<span>Logging out...</span>
+								) : (
+									<span>Logout</span>
+								)}
+							</motion.button>
 						</div>
 					</motion.div>
 				)}

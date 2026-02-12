@@ -41,3 +41,12 @@ export const passwordSchema = (t = tKey) =>
 		.regex(PASSWORD_ONE_SPECIAL_REGEX, t("auth.password-one-special-regex"))
 		.min(PASSWORD_MIN, t("auth.password-min", { min: PASSWORD_MIN }))
 		.max(PASSWORD_MAX, t("auth.password-max", { max: PASSWORD_MAX }));
+
+export const registerFormSchema = z.object({
+	name: z.string().min(1, "Name is required"),
+	email: z.email("Invalid email address"),
+	password: z.string().min(8, "Password must be at least 8 characters"),
+	agreeToTerms: z.boolean().refine((val) => val === true, {
+		message: "You must agree to the terms and conditions",
+	}),
+});
