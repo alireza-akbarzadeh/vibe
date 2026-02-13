@@ -1,11 +1,13 @@
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
-import { subscribedProcedure } from "@/orpc/context";
+import { publicProcedure, subscribedProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { listMediaInputSchema } from "@/orpc/models/media.input.schema";
-import { MediaItemSchema } from "@/orpc/models/media.schema";
-import { base } from "@/orpc/router/base";
+import {
+	MediaItemSchema,
+	MediaListItemSchema,
+} from "@/orpc/models/media.schema";
 
 /* ---------------------------- Get Media by ID ---------------------------- */
 // SUBSCRIBED ONLY - Watch page, details
@@ -41,12 +43,12 @@ export const getMedia = subscribedProcedure
 		};
 	});
 
-export const listMedia = base
+export const listMedia = publicProcedure
 	.input(listMediaInputSchema)
 	.output(
 		ApiResponseSchema(
 			z.object({
-				items: z.array(MediaItemSchema),
+				items: z.array(MediaListItemSchema),
 				pagination: z.object({
 					page: z.number(),
 					limit: z.number(),
@@ -65,6 +67,7 @@ export const listMedia = base
 			collectionId,
 			genreIds,
 			creatorIds,
+			status,
 			releaseYearFrom,
 			releaseYearTo,
 			sortBy,
@@ -77,7 +80,7 @@ export const listMedia = base
 		/* ------------------------------------------------------------------ */
 
 		const where: Prisma.MediaWhereInput = {
-			status: "PUBLISHED",
+			status: { in: status },
 			type,
 			collectionId,
 			AND: [
@@ -186,7 +189,7 @@ export const listMedia = base
 			status: 200,
 			message: "Media list retrieved successfully",
 			data: {
-				items: items.map((m) => MediaItemSchema.parse(m)),
+				items: items.map((m) => MediaListItemSchema.parse(m)),
 				pagination: {
 					page,
 					limit,

@@ -60,6 +60,31 @@ export const MediaItemSchema = z.object({
 });
 
 /* -------------------------------------------------------------------------- */
+/*                          Media List Item Schema                             */
+/* -------------------------------------------------------------------------- */
+
+export const MediaListItemSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	description: z.string(),
+	thumbnail: z.string(),
+	type: z.enum(["MOVIE", "EPISODE", "TRACK"]),
+	duration: z.number(),
+	releaseYear: z.number(),
+	createdAt: z.date(),
+	collection: z
+		.object({
+			id: z.string(),
+			title: z.string(),
+			type: z.enum(["SERIES", "ALBUM", "PLAYLIST"]),
+		})
+		.nullable()
+		.optional(),
+	genres: z.array(MediaGenreSchema),
+	creators: z.array(MediaCreatorSchema),
+});
+
+/* -------------------------------------------------------------------------- */
 /*                              Collection Schema                              */
 /* -------------------------------------------------------------------------- */
 

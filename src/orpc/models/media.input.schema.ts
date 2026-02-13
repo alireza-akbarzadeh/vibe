@@ -31,6 +31,9 @@ export const listMediaInputSchema = z.object({
 	collectionId: z.string().optional(),
 	genreIds: z.array(z.string()).optional(),
 	creatorIds: z.array(z.string()).optional(),
+	status: z
+		.array(z.enum(["DRAFT", "REVIEW", "PUBLISHED", "REJECTED"]))
+		.default(["PUBLISHED"]),
 
 	releaseYearFrom: z.number().optional(),
 	releaseYearTo: z.number().optional(),
