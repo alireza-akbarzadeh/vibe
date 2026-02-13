@@ -1,10 +1,9 @@
-import { os } from "@orpc/server";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import type { SubscriptionStatus } from "@/generated/prisma/enums";
 import { auth } from "@/lib/better-auth";
-import type { Role, Tier } from "./constants";
-import { forbidden, subscriptionRequired, unauthorized } from "./error";
-import { userHasPermission } from "./helper";
+import { base } from "../errors/error";
+import type { Role, Tier } from "../helpers/constants";
+import { userHasPermission } from "../helpers/helper";
 
 type SessionType = NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>;
 
@@ -17,14 +16,14 @@ export interface AuthContext {
 /*                              AUTH MIDDLEWARE                               */
 /* -------------------------------------------------------------------------- */
 
-export const withAuth = os
+export const withAuth = base
 	.$context<Partial<AuthContext>>()
-	.middleware(async ({ next }) => {
+	.middleware(async ({ next, errors }) => {
 		const headers = getRequestHeaders();
 		const session = await auth.api.getSession({ headers });
 
 		if (!session) {
-			throw unauthorized();
+			throw errors.UNAUTHENTICATED();
 		}
 
 		return next({
@@ -40,12 +39,17 @@ export const withAuth = os
 /* -------------------------------------------------------------------------- */
 
 export const requireSubscription = (tiers: Tier | Tier[]) =>
-	os.$context<AuthContext>().middleware(({ next, context }) => {
+	base.$context<AuthContext>().middleware(({ next, context, errors }) => {
 		const allowed = Array.isArray(tiers) ? tiers : [tiers];
 		const status = context.user.subscriptionStatus as SubscriptionStatus;
 
 		if (!allowed.includes(status as Tier)) {
-			throw subscriptionRequired(allowed[0].toLowerCase());
+			throw errors.SUBSCRIPTION_REQUIRED({
+				data: {
+					required: allowed[0].toLowerCase(),
+					upgrade: true,
+				},
+			});
 		}
 
 		return next({ context });
@@ -56,15 +60,17 @@ export const requireSubscription = (tiers: Tier | Tier[]) =>
 /* -------------------------------------------------------------------------- */
 
 export const requireAdmin = (roles?: Role | Role[]) =>
-	os.$context<AuthContext>().middleware(({ next, context }) => {
+	base.$context<AuthContext>().middleware(({ next, context, errors }) => {
 		const allowed = roles
 			? Array.isArray(roles)
 				? roles
 				: [roles]
-			: ["admin"];
+			: ["ADMIN"];
 
 		if (!allowed.includes(context.user.role as Role)) {
-			throw forbidden("Admin access required");
+			throw errors.FORBIDDEN({
+				message: "Admin access required",
+			});
 		}
 
 		return next({ context });
@@ -75,7 +81,7 @@ export const requireAdmin = (roles?: Role | Role[]) =>
 /* -------------------------------------------------------------------------- */
 
 export const requirePermission = (resource: string, action: string) =>
-	os.$context<AuthContext>().middleware(async ({ next, context }) => {
+	base.$context<AuthContext>().middleware(async ({ next, context, errors }) => {
 		const hasPermission = await userHasPermission(
 			context.user.id,
 			resource,
@@ -83,7 +89,9 @@ export const requirePermission = (resource: string, action: string) =>
 		);
 
 		if (!hasPermission) {
-			throw forbidden(`Permission denied: ${resource}:${action}`);
+			throw errors.FORBIDDEN({
+				message: `Permission denied: ${resource}:${action}`,
+			});
 		}
 
 		return next({ context });
@@ -98,12 +106,12 @@ type RequireOptions = {
 };
 
 export const withRequire = (options: RequireOptions) =>
-	os.$context<Partial<AuthContext>>().middleware(async ({ next }) => {
+	base.$context<Partial<AuthContext>>().middleware(async ({ next, errors }) => {
 		const headers = getRequestHeaders();
 		const session = await auth.api.getSession({ headers });
 
 		if (!session) {
-			throw unauthorized();
+			throw errors.UNAUTHENTICATED();
 		}
 
 		const user = session.user;
@@ -138,5 +146,7 @@ export const withRequire = (options: RequireOptions) =>
 			}
 		}
 
-		throw forbidden("You don't have permission to perform this action");
+		throw errors.FORBIDDEN({
+			message: "You don't have permission to perform this action",
+		});
 	});

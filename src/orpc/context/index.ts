@@ -1,6 +1,10 @@
-import { os } from "@orpc/server";
-import type { AuthContext } from "./middleware";
-import { requireAdmin, requireSubscription, withAuth } from "./middleware";
+import { base } from "../errors/error";
+import type { AuthContext } from "../middleware/middleware";
+import {
+	requireAdmin,
+	requireSubscription,
+	withAuth,
+} from "../middleware/middleware";
 
 /* -------------------------------------------------------------------------- */
 /*                              BASE CONTEXT                                  */
@@ -8,7 +12,8 @@ import { requireAdmin, requireSubscription, withAuth } from "./middleware";
 
 export type ORPCContext = Partial<AuthContext>;
 
-export const publicProcedure = os.$context<ORPCContext>();
+// Use the base with error definitions
+export const publicProcedure = base.$context<ORPCContext>();
 
 /* -------------------------------------------------------------------------- */
 /*                            AUTHED PROCEDURE                                */

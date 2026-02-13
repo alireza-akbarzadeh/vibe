@@ -4,20 +4,16 @@ import "@/polyfill";
 import { SmartCoercionPlugin } from "@orpc/json-schema";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { onError } from "@orpc/server";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { z } from "zod";
+import { ADMIN_ACCESS } from "@/constants/constants";
 import { auth } from "@/lib/better-auth";
 import type { ORPCContext } from "@/orpc/context";
+import type { Role } from "@/orpc/helpers/constants";
 import { router } from "@/orpc/router";
 
 const handler = new OpenAPIHandler(router, {
-	interceptors: [
-		onError((error) => {
-			console.error(error);
-		}),
-	],
 	plugins: [
 		new SmartCoercionPlugin({
 			schemaConverters: [new ZodToJsonSchemaConverter()],
@@ -76,14 +72,14 @@ const handler = new OpenAPIHandler(router, {
 async function handle({ request }: { request: Request }) {
 	const url = new URL(request.url);
 
+	const session = await auth.api.getSession({
+		headers: request.headers,
+	});
+
 	if (url.pathname === "/api") {
-		const session = await auth.api.getSession({
-			headers: request.headers,
-		});
+		const AUTHORIZED = ADMIN_ACCESS.includes(session?.user?.role as Role);
 
-		const isAdmin = session?.user?.role === "admin";
-
-		if (!session || !isAdmin) {
+		if (!session || !AUTHORIZED) {
 			throw redirect({
 				to: "/unauthorized",
 				search: {
@@ -94,10 +90,6 @@ async function handle({ request }: { request: Request }) {
 			});
 		}
 	}
-
-	const session = await auth.api.getSession({
-		headers: request.headers,
-	});
 
 	const context: ORPCContext = {
 		user: session?.user ?? undefined,

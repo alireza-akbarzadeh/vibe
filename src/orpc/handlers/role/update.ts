@@ -1,0 +1,72 @@
+import { os } from "@orpc/server";
+import { z } from "zod";
+import { prisma } from "@/lib/db";
+import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
+import { withRequire } from "@/orpc/middleware/middleware";
+import { RoleSchema, UserRoleSchema } from "@/orpc/models/role";
+import { auditLog } from "../user/audit";
+
+export const updateRole = os
+	.use(withRequire({ role: "ADMIN" }))
+	.input(
+		z.object({
+			id: z.string(),
+			name: z.string().optional(),
+			description: z.string().optional(),
+		}),
+	)
+	.output(ApiResponseSchema(RoleSchema))
+	.handler(async ({ input, context }) => {
+		const role = await prisma.role.update({
+			where: { id: input.id },
+			data: {
+				name: input.name,
+				description: input.description,
+			},
+		});
+
+		await auditLog({
+			userId: context.user.id,
+			action: "UPDATE_ROLE",
+			resource: "Role",
+			resourceId: role.id,
+			metadata: input,
+		});
+
+		return { status: 200, message: "Role updated", data: role };
+	});
+
+export const assignRoleToUser = os
+	.use(withRequire({ role: "ADMIN" }))
+	.input(
+		z.object({
+			userId: z.string(),
+			roleId: z.string(),
+		}),
+	)
+	.output(ApiResponseSchema(UserRoleSchema))
+	.handler(async ({ input, context }) => {
+		const userRole = await prisma.userRole.create({
+			data: {
+				userId: input.userId,
+				roleId: input.roleId,
+				assignedBy: context.user.id,
+			},
+		});
+
+		await auditLog({
+			userId: context.user.id,
+			action: "ASSIGN_ROLE",
+			resource: "UserRole",
+			resourceId: `${input.userId}-${input.roleId}`,
+		});
+
+		return {
+			status: 200,
+			message: "Role assigned to user",
+			data: {
+				...userRole,
+				assignedAt: userRole.assignedAt.toISOString(),
+			},
+		};
+	});

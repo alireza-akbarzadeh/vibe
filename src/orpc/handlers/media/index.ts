@@ -1,6 +1,7 @@
 import { os } from "@orpc/server";
-import { createMedia, deleteMedia, updateMedia } from "./protected";
-import { getMedia, listMedia } from "./public";
+import { deleteMedia } from "./delete";
+import { getMedia, listMedia } from "./get";
+import { createMedia, updateMedia } from "./update";
 
 export const MediaRouter = os.router({
 	list: listMedia,

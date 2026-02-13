@@ -3,8 +3,8 @@ import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { subscribedProcedure } from "@/orpc/context";
-import { ApiResponseSchema } from "@/orpc/schema";
-import { MediaItemSchema } from "./media.schema";
+import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
+import { MediaItemSchema } from "../../models/media.schema";
 
 /* ---------------------------- Get Media by ID ---------------------------- */
 // SUBSCRIBED ONLY - Watch page, details

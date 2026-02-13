@@ -1,6 +1,7 @@
-import { os } from "@orpc/server";
 import { z } from "zod";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
+
+import { base } from "../../errors/error";
 
 /* -------------------------------------------------------------------------- */
 /*                              HEALTH CHECK SCHEMAS                           */
@@ -45,7 +46,7 @@ const DetailedHealthSchema = z.object({
  * Liveness probe - indicates if the app is running
  * Returns 200 if the application is alive
  */
-export const liveness = os
+export const liveness = base
 	.input(z.void())
 	.output(HealthStatusSchema)
 	.handler(async () => {
@@ -65,7 +66,7 @@ export const liveness = os
  * Readiness probe - indicates if the app is ready to serve traffic
  * Checks database connectivity
  */
-export const readiness = os
+export const readiness = base
 	.input(z.void())
 	.output(
 		z.object({
@@ -103,7 +104,7 @@ export const readiness = os
 /**
  * Detailed health check with database response time and system metrics
  */
-export const health = os
+export const health = base
 	.input(z.void())
 	.output(DetailedHealthSchema)
 	.handler(async () => {
@@ -168,7 +169,7 @@ export const health = os
 /**
  * Database-specific metrics and statistics
  */
-export const databaseMetrics = os
+export const databaseMetrics = base
 	.input(z.void())
 	.output(
 		z.object({
@@ -199,7 +200,7 @@ export const databaseMetrics = os
 			testQueryDuration = Date.now() - queryStart;
 			testQuerySuccess = true;
 			dbStatus = "connected";
-		} catch (error) {
+		} catch {
 			testQueryDuration = Date.now() - startTime;
 			dbStatus = "error";
 		}
@@ -227,7 +228,7 @@ export const databaseMetrics = os
 /*                              EXPORT ROUTER                                  */
 /* -------------------------------------------------------------------------- */
 
-export const HealthRouter = os.router({
+export const HealthRouter = base.router({
 	liveness: liveness,
 	readiness: readiness,
 	health: health,

@@ -3,8 +3,8 @@ import { os } from "@orpc/server";
 import { z } from "zod";
 import type { CollectionWhereInput } from "@/generated/prisma/models";
 import { prisma } from "@/lib/db";
-import { withRequire } from "@/orpc/middleware";
-import { ApiResponseSchema } from "@/orpc/schema";
+import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
+import { withRequire } from "@/orpc/middleware/middleware";
 
 /* -------------------------------------------------------------------------- */
 /*                                  CREATE COLLECTION                          */

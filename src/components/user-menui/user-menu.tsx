@@ -1,156 +1,29 @@
-import { Link, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	BadgeCheck,
-	Circle,
-	CircleDot,
 	Crown,
 	Gem,
 	Library,
+	Link2Icon,
 	Loader2,
 	LogOut,
 	Settings,
-	Shield,
-	ShieldCheck,
-	Sparkles,
-	User,
-	Zap
+	Sparkles
 } from "lucide-react";
-import type React from "react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Image } from "@/components/ui/image.tsx";
+import { ADMIN_ACCESS } from "@/constants/constants";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import type { Role } from "@/orpc/helpers/constants";
 import { Route } from "@/routes/__root";
+import { Link } from "../ui/link";
+import { RoleBadge, SubscriptionBadge } from "./subscription-badge";
+import { MenuItem } from "./user-menu-item";
 
-// Subscription badge component
-const SubscriptionBadge = ({ status }: { status: string }) => {
-	const badges = {
-		FREE: {
-			icon: CircleDot,
-			label: "Free",
-			color: "text-slate-400",
-			bg: "bg-slate-500/10",
-			border: "border-slate-500/20",
-		},
-		PRO: {
-			icon: Zap,
-			label: "Pro",
-			color: "text-blue-400",
-			bg: "bg-blue-500/10",
-			border: "border-blue-500/20",
-		},
-		PREMIUM: {
-			icon: Crown,
-			label: "Premium",
-			color: "text-yellow-400",
-			bg: "bg-yellow-500/10",
-			border: "border-yellow-500/20",
-		},
-		CANCELLED: {
-			icon: Circle,
-			label: "Cancelled",
-			color: "text-red-400",
-			bg: "bg-red-500/10",
-			border: "border-red-500/20",
-		},
-	};
 
-	const badge = badges[status as keyof typeof badges] || badges.FREE;
-	const Icon = badge.icon;
-	return (
-		<div className={cn(
-			"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium",
-			badge.bg,
-			badge.border,
-			badge.color
-		)}>
-			<Icon className="size-3.5" />
-			<span>{badge.label}</span>
-		</div>
-	);
-};
-
-// Role badge component
-const RoleBadge = ({ role }: { role: string }) => {
-	const badges = {
-		ADMIN: {
-			icon: ShieldCheck,
-			label: "Admin",
-			color: "text-purple-400",
-			bg: "bg-purple-500/10",
-			border: "border-purple-500/20",
-		},
-		MODERATOR: {
-			icon: Shield,
-			label: "Moderator",
-			color: "text-cyan-400",
-			bg: "bg-cyan-500/10",
-			border: "border-cyan-500/20",
-		},
-		USER: {
-			icon: User,
-			label: "Member",
-			color: "text-green-400",
-			bg: "bg-green-500/10",
-			border: "border-green-500/20",
-		},
-	};
-
-	const badge = badges[role as keyof typeof badges] || badges.USER;
-	const Icon = badge.icon;
-
-	return (
-		<div className={cn(
-			"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium",
-			badge.bg,
-			badge.border,
-			badge.color
-		)}>
-			<Icon className="size-3.5" />
-			<span>{badge.label}</span>
-		</div>
-	);
-};
-function MenuItem({
-	to,
-	icon: Icon,
-	label,
-	description,
-	highlight,
-}: {
-	to: string;
-	icon: React.ElementType;
-	label: string;
-	description?: string;
-	highlight?: boolean;
-}) {
-	return (
-		<Link
-			to={to}
-			className={cn(
-				"flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all group",
-				highlight
-					? "bg-linear-to-r from-indigo-500/20 to-purple-500/20 text-indigo-300 hover:from-indigo-500/30 hover:to-purple-500/30 border border-indigo-500/20"
-					: "text-slate-300 hover:bg-white/5",
-			)}
-		>
-			<div className={cn(
-				"rounded-lg p-1.5",
-				highlight ? "bg-indigo-500/20" : "bg-white/5 group-hover:bg-white/10"
-			)}>
-				<Icon className="size-4" />
-			</div>
-			<div className="flex-1 text-left">
-				<p className="font-medium">{label}</p>
-				{description && (
-					<p className="text-xs text-slate-500">{description}</p>
-				)}
-			</div>
-		</Link>
-	);
-}
 export function UserMenu() {
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
@@ -226,7 +99,7 @@ export function UserMenu() {
 						)}
 					>
 						{/* USER INFO HEADER */}
-						<div className="relative px-4 pt-5 pb-4 bg-gradient-to-br from-white/5 to-transparent">
+						<div className="relative px-4 pt-5 pb-4 bg-linear-to-br from-white/5 to-transparent">
 							<div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
 
 							<div className="flex items-start gap-3">
@@ -303,7 +176,7 @@ export function UserMenu() {
 								description="Your saved content"
 							/>
 							<MenuItem
-								to="/settings"
+								to="/library/setting"
 								icon={Settings}
 								label="Settings"
 								description="Account preferences"
@@ -315,8 +188,19 @@ export function UserMenu() {
 								description={user.subscriptionStatus === "FREE" ? "Get premium features" : "Change your plan"}
 								highlight={user.subscriptionStatus === "FREE"}
 							/>
-						</div>
+							{ADMIN_ACCESS.includes(user.role as Role) && (
+								<MenuItem
+									to="/api/$"
+									icon={Link2Icon}
+									label={"APIs Page"}
+									description={"Manage API system"}
+									onClick={() => {
+										window.location.href = "/api";
+									}}
 
+								/>
+							)}
+						</div>
 						{/* LOGOUT */}
 						<div className="border-t border-white/5 p-2">
 							<motion.button
