@@ -9,6 +9,7 @@ import {
 
 /* -------------- Genre-Based Recommendations (Based on History) ------------- */
 export const getGenreBasedRecommendations = authedProcedure
+	.route({ method: "GET" })
 	.input(genreBasedInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input, context, errors }) => {

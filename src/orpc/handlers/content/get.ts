@@ -9,6 +9,7 @@ import { recommendationOutputSchema } from "@/orpc/models/recommendation";
 
 /* ---------------------------- Latest Releases ---------------------------- */
 export const getLatestReleases = publicProcedure
+	.route({ method: "GET" })
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
@@ -57,6 +58,7 @@ export const getLatestReleases = publicProcedure
 
 /* ---------------------------- Popular Series ---------------------------- */
 export const getPopularSeries = publicProcedure
+	.route({ method: "GET" })
 	.input(popularSeriesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
@@ -150,6 +152,7 @@ export const getPopularSeries = publicProcedure
 
 /* ---------------------------- Animations ---------------------------- */
 export const getAnimations = publicProcedure
+	.route({ method: "GET" })
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {

@@ -6,13 +6,38 @@ import { orpc } from "@/orpc/client";
 export const Route = createFileRoute("/(home)/movies/")({
 	component: RouteComponent,
 	loader: async ({ context }) => {
-		await context.queryClient.ensureQueryData(
-			orpc.media.list.queryOptions({
-				input: {
-					status: ["PUBLISHED"],
-				},
-			}),
-		);
+		await Promise.all([
+			context.queryClient.ensureQueryData(
+				orpc.media.list.queryOptions({
+					input: { status: ["PUBLISHED"] },
+				}),
+			),
+			context.queryClient.ensureQueryData(
+				orpc.content.latestReleases.queryOptions({
+					input: { type: "MOVIE", limit: 10 },
+				}),
+			),
+			context.queryClient.ensureQueryData(
+				orpc.content.popularSeries.queryOptions({
+					input: { limit: 10 },
+				}),
+			),
+			context.queryClient.ensureQueryData(
+				orpc.recommendations.trending.queryOptions({
+					input: { type: "MOVIE", limit: 10, days: 7 },
+				}),
+			),
+			context.queryClient.ensureQueryData(
+				orpc.recommendations.topRated.queryOptions({
+					input: { type: "MOVIE", limit: 10 },
+				}),
+			),
+			context.queryClient.ensureQueryData(
+				orpc.content.animations.queryOptions({
+					input: { limit: 10 },
+				}),
+			),
+		]);
 	},
 });
 
