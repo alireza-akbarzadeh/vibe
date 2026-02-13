@@ -59,7 +59,6 @@ const SubscriptionBadge = ({ status }: { status: string }) => {
 
 	const badge = badges[status as keyof typeof badges] || badges.FREE;
 	const Icon = badge.icon;
-
 	return (
 		<div className={cn(
 			"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium",
@@ -76,21 +75,21 @@ const SubscriptionBadge = ({ status }: { status: string }) => {
 // Role badge component
 const RoleBadge = ({ role }: { role: string }) => {
 	const badges = {
-		admin: {
+		ADMIN: {
 			icon: ShieldCheck,
 			label: "Admin",
 			color: "text-purple-400",
 			bg: "bg-purple-500/10",
 			border: "border-purple-500/20",
 		},
-		moderator: {
+		MODERATOR: {
 			icon: Shield,
 			label: "Moderator",
 			color: "text-cyan-400",
 			bg: "bg-cyan-500/10",
 			border: "border-cyan-500/20",
 		},
-		user: {
+		USER: {
 			icon: User,
 			label: "Member",
 			color: "text-green-400",
@@ -99,7 +98,7 @@ const RoleBadge = ({ role }: { role: string }) => {
 		},
 	};
 
-	const badge = badges[role as keyof typeof badges] || badges.user;
+	const badge = badges[role as keyof typeof badges] || badges.USER;
 	const Icon = badge.icon;
 
 	return (
