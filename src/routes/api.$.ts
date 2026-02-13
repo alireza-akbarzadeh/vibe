@@ -7,10 +7,10 @@ import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { onError } from "@orpc/server";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import z from "zod";
+import { z } from "zod";
 import { auth } from "@/lib/better-auth";
 import type { ORPCContext } from "@/orpc/context";
-import router from "@/orpc/router";
+import { router } from "@/orpc/router";
 
 const handler = new OpenAPIHandler(router, {
 	interceptors: [

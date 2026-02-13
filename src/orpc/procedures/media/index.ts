@@ -1,9 +1,9 @@
 import { os } from "@orpc/server";
 import { createMedia, deleteMedia, updateMedia } from "./protected";
-import { browseMedia, getMedia } from "./public";
+import { getMedia, listMedia } from "./public";
 
 export const MediaRouter = os.router({
-	list: browseMedia,
+	list: listMedia,
 	find: getMedia,
 	create: createMedia,
 	update: updateMedia,

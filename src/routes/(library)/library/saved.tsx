@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Bookmark, Clock, FileText, Filter, Mic, Music, Play, Tv } from 'lucide-react'
+import { Bookmark, Clock, FileText, Mic, Music, Play, Tv } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Typography } from "@/components/ui/typography"

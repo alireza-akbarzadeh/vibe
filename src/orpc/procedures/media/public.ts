@@ -1,4 +1,6 @@
+import { os } from "@orpc/server";
 import { z } from "zod";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { subscribedProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/schema";
@@ -54,9 +56,6 @@ export const listMediaInputSchema = z.object({
 
 	sortBy: z.enum(["NEWEST", "OLDEST", "TITLE", "MANUAL"]).default("NEWEST"),
 });
-
-import { os } from "@orpc/server";
-import type { Prisma } from "@/generated/prisma/client";
 
 /* -------------------------------------------------------------------------- */
 /*                            PUBLIC MEDIA LIST                               */
