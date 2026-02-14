@@ -1,6 +1,6 @@
 import { RootHeader } from "@/components/root-header";
 import Footer from "@/domains/home/footer";
-import { getPlans, PlanType } from "@/domains/plans/plan.server";
+import { getPlans, type PlanType } from "@/domains/plans/plan.server";
 import { Plans } from "@/domains/plans/plans.domains";
 import { type CheckoutInputScheme, checkoutSubscription } from "@/server/subscription";
 import { createFileRoute } from "@tanstack/react-router";
@@ -33,11 +33,13 @@ function RouteComponent() {
       } else {
         toast.error("Unable to start checkout. Please try again.");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       const msg =
-        err?.message?.includes("Unauthorized")
+        err instanceof Error && err.message?.includes("Unauthorized")
           ? "You need an account first. Please sign up or log in."
-          : err?.message || "Something went wrong. Please try again.";
+          : err instanceof Error && err.message
+            ? err.message
+            : "Something went wrong. Please try again.";
       toast.error("Checkout failed", { description: msg });
     }
   };

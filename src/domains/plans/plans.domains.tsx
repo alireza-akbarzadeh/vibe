@@ -25,6 +25,8 @@ export function Plans(props: PlansProps) {
 	const { onCheckout, plans } = props
 	const [isAnnual, setIsAnnual] = useState(false);
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+	const [activeIndex, setActiveIndex] = useState<number | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		const handleMouseMove = (e: MouseEvent) => {
@@ -147,9 +149,21 @@ export function Plans(props: PlansProps) {
 						<PlanCard
 							key={plan.name}
 							plan={plan}
-							onPlanChange={(data) => onCheckout(data)}
+							onPlanChange={async (data) => {
+								if (isLoading) return;
+								setActiveIndex(index);
+								setIsLoading(true);
+								try {
+									await onCheckout(data);
+								} finally {
+									setIsLoading(false);
+								}
+							}}
 							index={index}
 							isAnnual={isAnnual}
+							isActive={activeIndex === index}
+							isLoading={isLoading && activeIndex === index}
+							disabled={isLoading && activeIndex !== index}
 						/>
 					))}
 				</div>

@@ -114,22 +114,22 @@ export const auth = betterAuth({
 			use: [
 				checkout({
 					products: [
-						{ productId: env.POLAR_FREE_PRODUCT_ID, slug: "free" },
+						{ productId: env.POLAR_FREE_PRODUCT_ID, slug: "Free" },
 						{
 							productId: env.POLAR_PREMIUM_MONTHLY_PRODUCT_ID,
-							slug: "premium-monthly",
+							slug: "Premium-Monthly",
 						},
 						{
 							productId: env.POLAR_PREMIUM_YEARLY_PRODUCT_ID,
-							slug: "premium-yearly",
+							slug: "Premium-Yearly",
 						},
 						{
 							productId: env.POLAR_FAMILY_MONTHLY_PRODUCT_ID,
-							slug: "family-monthly",
+							slug: "Family-Monthly",
 						},
 						{
 							productId: env.POLAR_FAMILY_YEARLY_PRODUCT_ID,
-							slug: "family-yearly",
+							slug: "Family-Yearly",
 						},
 					],
 					successUrl: env.POLAR_SUCCESS_URL,
