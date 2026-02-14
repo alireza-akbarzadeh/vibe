@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
 	ArrowLeft,
@@ -20,12 +20,14 @@ export const Route = createFileRoute("/(auth)/verify-email")({
 	component: VerifyPage,
 	validateSearch: (search: Record<string, string>) => ({
 		email: search.email,
+		redirectUrl: typeof search.redirectUrl === 'string' ? search.redirectUrl : undefined
+
 	}),
 });
 
 function VerifyPage() {
 
-	const { email } = Route.useSearch();
+	const { email, redirectUrl } = Route.useSearch();
 	const [resendTimer, setResendTimer] = useState(0);
 	const [isResending, setIsResending] = useState(false);
 

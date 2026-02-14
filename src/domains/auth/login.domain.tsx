@@ -54,7 +54,7 @@ export function LoginDomain(props: LoginDomainProps) {
     const handleSocialSignIn = async (providerId: "google" | "github") => {
         await authClient.signIn.social({
             provider: providerId,
-            callbackURL: "/",
+            callbackURL: redirectUrl || "/",
         });
     };
 

@@ -41,6 +41,7 @@ model Subscription {
     userId      String
     productId   String
     referenceId String?
+    redirectUrl String?
     status      SubscriptionStatus
     startedAt   DateTime           @default(now())
     canceledAt  DateTime?

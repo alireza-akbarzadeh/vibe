@@ -1,11 +1,11 @@
-import { Badge } from "@/components/ui/badge";
-import { CheckoutInputScheme } from "@/server/subscription";
 import { motion } from "framer-motion";
 import { Crown, Sparkles, Zap } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import type { CheckoutInputScheme } from "@/server/subscription";
 import { FaqSection } from "./components/faq-section";
 import { PlanCard } from "./components/plans-card";
-import type { PlanType } from "./plan.server";
+import type { PlanType } from "./plans.constants";
 
 interface PlansProps {
 	onCheckout: (plan: CheckoutInputScheme) => void;
@@ -29,23 +29,33 @@ export function Plans(props: PlansProps) {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
+		let rafId: number;
 		const handleMouseMove = (e: MouseEvent) => {
-			setMousePosition({
-				x: (e.clientX / window.innerWidth - 0.5) * 20,
-				y: (e.clientY / window.innerHeight - 0.5) * 20,
+			// Use requestAnimationFrame to throttle updates
+			if (rafId) cancelAnimationFrame(rafId);
+			rafId = requestAnimationFrame(() => {
+				setMousePosition({
+					x: (e.clientX / window.innerWidth - 0.5) * 20,
+					y: (e.clientY / window.innerHeight - 0.5) * 20,
+				});
 			});
 		};
 		window.addEventListener("mousemove", handleMouseMove);
-		return () => window.removeEventListener("mousemove", handleMouseMove);
+		return () => {
+			window.removeEventListener("mousemove", handleMouseMove);
+			if (rafId) cancelAnimationFrame(rafId);
+		};
 	}, []);
 
-
-
-	const data: PlanWithIcon[] =
-		plans?.map((plan) => ({
-			...plan,
-			icon: iconMap[plan.icon as keyof typeof iconMap],
-		})) ?? [];
+	// Memoize the icon mapping to prevent recalculating on every render
+	const data: PlanWithIcon[] = useMemo(
+		() =>
+			plans?.map((plan) => ({
+				...plan,
+				icon: iconMap[plan.icon as keyof typeof iconMap],
+			})) ?? [],
+		[plans]
+	);
 
 
 	return (
@@ -147,7 +157,7 @@ export function Plans(props: PlansProps) {
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
 					{data.map((plan, index) => (
 						<PlanCard
-							key={plan.productId}
+							key={plan.slug}
 							plan={plan}
 							onPlanChange={async (data) => {
 								if (isLoading) return;

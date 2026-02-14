@@ -764,11 +764,11 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/dashboard/': typeof adminDashboardIndexRoute
-  '/blog': typeof blogBlogIndexRoute
-  '/movies': typeof homeMoviesIndexRoute
+  '/blog/': typeof blogBlogIndexRoute
+  '/movies/': typeof homeMoviesIndexRoute
   '/music/': typeof homeMusicIndexRoute
-  '/reels': typeof homeReelsIndexRoute
-  '/library': typeof libraryLibraryIndexRoute
+  '/reels/': typeof homeReelsIndexRoute
+  '/library/': typeof libraryLibraryIndexRoute
   '/dashboard/media/$mediaId': typeof adminDashboardMediaMediaIdRoute
   '/dashboard/movies/$movieId': typeof adminDashboardMoviesMovieIdRoute
   '/dashboard/movies/create': typeof adminDashboardMoviesCreateRoute
@@ -779,49 +779,49 @@ export interface FileRoutesByFullPath {
   '/dashboard/users/$userId': typeof adminDashboardUsersUserIdRoute
   '/dashboard/users/create': typeof adminDashboardUsersCreateRoute
   '/dashboard/users/edit': typeof adminDashboardUsersEditRoute
-  '/dashboard/ab-tests': typeof adminDashboardAbTestsIndexRoute
-  '/dashboard/analytics': typeof adminDashboardAnalyticsIndexRoute
-  '/dashboard/audit-logs': typeof adminDashboardAuditLogsIndexRoute
-  '/dashboard/backups': typeof adminDashboardBackupsIndexRoute
-  '/dashboard/campaigns': typeof adminDashboardCampaignsIndexRoute
-  '/dashboard/drm': typeof adminDashboardDrmIndexRoute
-  '/dashboard/featured': typeof adminDashboardFeaturedIndexRoute
-  '/dashboard/logs': typeof adminDashboardLogsIndexRoute
-  '/dashboard/media': typeof adminDashboardMediaIndexRoute
-  '/dashboard/monitoring': typeof adminDashboardMonitoringIndexRoute
-  '/dashboard/movies': typeof adminDashboardMoviesIndexRoute
-  '/dashboard/notifications': typeof adminDashboardNotificationsIndexRoute
-  '/dashboard/payments': typeof adminDashboardPaymentsIndexRoute
-  '/dashboard/recommendations': typeof adminDashboardRecommendationsIndexRoute
-  '/dashboard/reports': typeof adminDashboardReportsIndexRoute
-  '/dashboard/roles': typeof adminDashboardRolesIndexRoute
-  '/dashboard/settings': typeof adminDashboardSettingsIndexRoute
-  '/dashboard/streams': typeof adminDashboardStreamsIndexRoute
-  '/dashboard/support': typeof adminDashboardSupportIndexRoute
-  '/dashboard/users': typeof adminDashboardUsersIndexRoute
+  '/dashboard/ab-tests/': typeof adminDashboardAbTestsIndexRoute
+  '/dashboard/analytics/': typeof adminDashboardAnalyticsIndexRoute
+  '/dashboard/audit-logs/': typeof adminDashboardAuditLogsIndexRoute
+  '/dashboard/backups/': typeof adminDashboardBackupsIndexRoute
+  '/dashboard/campaigns/': typeof adminDashboardCampaignsIndexRoute
+  '/dashboard/drm/': typeof adminDashboardDrmIndexRoute
+  '/dashboard/featured/': typeof adminDashboardFeaturedIndexRoute
+  '/dashboard/logs/': typeof adminDashboardLogsIndexRoute
+  '/dashboard/media/': typeof adminDashboardMediaIndexRoute
+  '/dashboard/monitoring/': typeof adminDashboardMonitoringIndexRoute
+  '/dashboard/movies/': typeof adminDashboardMoviesIndexRoute
+  '/dashboard/notifications/': typeof adminDashboardNotificationsIndexRoute
+  '/dashboard/payments/': typeof adminDashboardPaymentsIndexRoute
+  '/dashboard/recommendations/': typeof adminDashboardRecommendationsIndexRoute
+  '/dashboard/reports/': typeof adminDashboardReportsIndexRoute
+  '/dashboard/roles/': typeof adminDashboardRolesIndexRoute
+  '/dashboard/settings/': typeof adminDashboardSettingsIndexRoute
+  '/dashboard/streams/': typeof adminDashboardStreamsIndexRoute
+  '/dashboard/support/': typeof adminDashboardSupportIndexRoute
+  '/dashboard/users/': typeof adminDashboardUsersIndexRoute
   '/dashboard/music/albums/$albumId': typeof adminDashboardMusicAlbumsAlbumIdRoute
   '/dashboard/music/artists/$artistId': typeof adminDashboardMusicArtistsArtistIdRoute
-  '/dashboard/analytics/content': typeof adminDashboardAnalyticsContentIndexRoute
-  '/dashboard/analytics/reports': typeof adminDashboardAnalyticsReportsIndexRoute
-  '/dashboard/analytics/users': typeof adminDashboardAnalyticsUsersIndexRoute
-  '/dashboard/legal/licenses': typeof adminDashboardLegalLicensesIndexRoute
-  '/dashboard/legal/privacy': typeof adminDashboardLegalPrivacyIndexRoute
-  '/dashboard/legal/terms': typeof adminDashboardLegalTermsIndexRoute
-  '/dashboard/media/uploads': typeof adminDashboardMediaUploadsIndexRoute
-  '/dashboard/moderation/dmca': typeof adminDashboardModerationDmcaIndexRoute
-  '/dashboard/moderation/region-blocks': typeof adminDashboardModerationRegionBlocksIndexRoute
-  '/dashboard/moderation/reports': typeof adminDashboardModerationReportsIndexRoute
-  '/dashboard/music/albums': typeof adminDashboardMusicAlbumsIndexRoute
-  '/dashboard/music/artists': typeof adminDashboardMusicArtistsIndexRoute
-  '/dashboard/music/tracks': typeof adminDashboardMusicTracksIndexRoute
-  '/dashboard/notifications/create': typeof adminDashboardNotificationsCreateIndexRoute
-  '/dashboard/playback/errors': typeof adminDashboardPlaybackErrorsIndexRoute
-  '/dashboard/settings/features': typeof adminDashboardSettingsFeaturesIndexRoute
-  '/dashboard/settings/general': typeof adminDashboardSettingsGeneralIndexRoute
-  '/dashboard/settings/integrations': typeof adminDashboardSettingsIntegrationsIndexRoute
-  '/dashboard/settings/localization': typeof adminDashboardSettingsLocalizationIndexRoute
-  '/dashboard/subscriptions/plans': typeof adminDashboardSubscriptionsPlansIndexRoute
-  '/dashboard/subscriptions/users': typeof adminDashboardSubscriptionsUsersIndexRoute
+  '/dashboard/analytics/content/': typeof adminDashboardAnalyticsContentIndexRoute
+  '/dashboard/analytics/reports/': typeof adminDashboardAnalyticsReportsIndexRoute
+  '/dashboard/analytics/users/': typeof adminDashboardAnalyticsUsersIndexRoute
+  '/dashboard/legal/licenses/': typeof adminDashboardLegalLicensesIndexRoute
+  '/dashboard/legal/privacy/': typeof adminDashboardLegalPrivacyIndexRoute
+  '/dashboard/legal/terms/': typeof adminDashboardLegalTermsIndexRoute
+  '/dashboard/media/uploads/': typeof adminDashboardMediaUploadsIndexRoute
+  '/dashboard/moderation/dmca/': typeof adminDashboardModerationDmcaIndexRoute
+  '/dashboard/moderation/region-blocks/': typeof adminDashboardModerationRegionBlocksIndexRoute
+  '/dashboard/moderation/reports/': typeof adminDashboardModerationReportsIndexRoute
+  '/dashboard/music/albums/': typeof adminDashboardMusicAlbumsIndexRoute
+  '/dashboard/music/artists/': typeof adminDashboardMusicArtistsIndexRoute
+  '/dashboard/music/tracks/': typeof adminDashboardMusicTracksIndexRoute
+  '/dashboard/notifications/create/': typeof adminDashboardNotificationsCreateIndexRoute
+  '/dashboard/playback/errors/': typeof adminDashboardPlaybackErrorsIndexRoute
+  '/dashboard/settings/features/': typeof adminDashboardSettingsFeaturesIndexRoute
+  '/dashboard/settings/general/': typeof adminDashboardSettingsGeneralIndexRoute
+  '/dashboard/settings/integrations/': typeof adminDashboardSettingsIntegrationsIndexRoute
+  '/dashboard/settings/localization/': typeof adminDashboardSettingsLocalizationIndexRoute
+  '/dashboard/subscriptions/plans/': typeof adminDashboardSubscriptionsPlansIndexRoute
+  '/dashboard/subscriptions/users/': typeof adminDashboardSubscriptionsUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/success-payment': typeof SuccessPaymentRoute
@@ -1094,11 +1094,11 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/dashboard/'
-    | '/blog'
-    | '/movies'
+    | '/blog/'
+    | '/movies/'
     | '/music/'
-    | '/reels'
-    | '/library'
+    | '/reels/'
+    | '/library/'
     | '/dashboard/media/$mediaId'
     | '/dashboard/movies/$movieId'
     | '/dashboard/movies/create'
@@ -1109,49 +1109,49 @@ export interface FileRouteTypes {
     | '/dashboard/users/$userId'
     | '/dashboard/users/create'
     | '/dashboard/users/edit'
-    | '/dashboard/ab-tests'
-    | '/dashboard/analytics'
-    | '/dashboard/audit-logs'
-    | '/dashboard/backups'
-    | '/dashboard/campaigns'
-    | '/dashboard/drm'
-    | '/dashboard/featured'
-    | '/dashboard/logs'
-    | '/dashboard/media'
-    | '/dashboard/monitoring'
-    | '/dashboard/movies'
-    | '/dashboard/notifications'
-    | '/dashboard/payments'
-    | '/dashboard/recommendations'
-    | '/dashboard/reports'
-    | '/dashboard/roles'
-    | '/dashboard/settings'
-    | '/dashboard/streams'
-    | '/dashboard/support'
-    | '/dashboard/users'
+    | '/dashboard/ab-tests/'
+    | '/dashboard/analytics/'
+    | '/dashboard/audit-logs/'
+    | '/dashboard/backups/'
+    | '/dashboard/campaigns/'
+    | '/dashboard/drm/'
+    | '/dashboard/featured/'
+    | '/dashboard/logs/'
+    | '/dashboard/media/'
+    | '/dashboard/monitoring/'
+    | '/dashboard/movies/'
+    | '/dashboard/notifications/'
+    | '/dashboard/payments/'
+    | '/dashboard/recommendations/'
+    | '/dashboard/reports/'
+    | '/dashboard/roles/'
+    | '/dashboard/settings/'
+    | '/dashboard/streams/'
+    | '/dashboard/support/'
+    | '/dashboard/users/'
     | '/dashboard/music/albums/$albumId'
     | '/dashboard/music/artists/$artistId'
-    | '/dashboard/analytics/content'
-    | '/dashboard/analytics/reports'
-    | '/dashboard/analytics/users'
-    | '/dashboard/legal/licenses'
-    | '/dashboard/legal/privacy'
-    | '/dashboard/legal/terms'
-    | '/dashboard/media/uploads'
-    | '/dashboard/moderation/dmca'
-    | '/dashboard/moderation/region-blocks'
-    | '/dashboard/moderation/reports'
-    | '/dashboard/music/albums'
-    | '/dashboard/music/artists'
-    | '/dashboard/music/tracks'
-    | '/dashboard/notifications/create'
-    | '/dashboard/playback/errors'
-    | '/dashboard/settings/features'
-    | '/dashboard/settings/general'
-    | '/dashboard/settings/integrations'
-    | '/dashboard/settings/localization'
-    | '/dashboard/subscriptions/plans'
-    | '/dashboard/subscriptions/users'
+    | '/dashboard/analytics/content/'
+    | '/dashboard/analytics/reports/'
+    | '/dashboard/analytics/users/'
+    | '/dashboard/legal/licenses/'
+    | '/dashboard/legal/privacy/'
+    | '/dashboard/legal/terms/'
+    | '/dashboard/media/uploads/'
+    | '/dashboard/moderation/dmca/'
+    | '/dashboard/moderation/region-blocks/'
+    | '/dashboard/moderation/reports/'
+    | '/dashboard/music/albums/'
+    | '/dashboard/music/artists/'
+    | '/dashboard/music/tracks/'
+    | '/dashboard/notifications/create/'
+    | '/dashboard/playback/errors/'
+    | '/dashboard/settings/features/'
+    | '/dashboard/settings/general/'
+    | '/dashboard/settings/integrations/'
+    | '/dashboard/settings/localization/'
+    | '/dashboard/subscriptions/plans/'
+    | '/dashboard/subscriptions/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/success-payment'
@@ -1615,14 +1615,14 @@ declare module '@tanstack/react-router' {
     '/(library)/library/': {
       id: '/(library)/library/'
       path: '/library'
-      fullPath: '/library'
+      fullPath: '/library/'
       preLoaderRoute: typeof libraryLibraryIndexRouteImport
       parentRoute: typeof libraryRouteRoute
     }
     '/(home)/reels/': {
       id: '/(home)/reels/'
       path: '/reels'
-      fullPath: '/reels'
+      fullPath: '/reels/'
       preLoaderRoute: typeof homeReelsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -1636,14 +1636,14 @@ declare module '@tanstack/react-router' {
     '/(home)/movies/': {
       id: '/(home)/movies/'
       path: '/movies'
-      fullPath: '/movies'
+      fullPath: '/movies/'
       preLoaderRoute: typeof homeMoviesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(blog)/blog/': {
       id: '/(blog)/blog/'
       path: '/blog'
-      fullPath: '/blog'
+      fullPath: '/blog/'
       preLoaderRoute: typeof blogBlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -1804,140 +1804,140 @@ declare module '@tanstack/react-router' {
     '/(admin)/dashboard/users/': {
       id: '/(admin)/dashboard/users/'
       path: '/users'
-      fullPath: '/dashboard/users'
+      fullPath: '/dashboard/users/'
       preLoaderRoute: typeof adminDashboardUsersIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/support/': {
       id: '/(admin)/dashboard/support/'
       path: '/support'
-      fullPath: '/dashboard/support'
+      fullPath: '/dashboard/support/'
       preLoaderRoute: typeof adminDashboardSupportIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/streams/': {
       id: '/(admin)/dashboard/streams/'
       path: '/streams'
-      fullPath: '/dashboard/streams'
+      fullPath: '/dashboard/streams/'
       preLoaderRoute: typeof adminDashboardStreamsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/settings/': {
       id: '/(admin)/dashboard/settings/'
       path: '/settings'
-      fullPath: '/dashboard/settings'
+      fullPath: '/dashboard/settings/'
       preLoaderRoute: typeof adminDashboardSettingsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/roles/': {
       id: '/(admin)/dashboard/roles/'
       path: '/roles'
-      fullPath: '/dashboard/roles'
+      fullPath: '/dashboard/roles/'
       preLoaderRoute: typeof adminDashboardRolesIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/reports/': {
       id: '/(admin)/dashboard/reports/'
       path: '/reports'
-      fullPath: '/dashboard/reports'
+      fullPath: '/dashboard/reports/'
       preLoaderRoute: typeof adminDashboardReportsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/recommendations/': {
       id: '/(admin)/dashboard/recommendations/'
       path: '/recommendations'
-      fullPath: '/dashboard/recommendations'
+      fullPath: '/dashboard/recommendations/'
       preLoaderRoute: typeof adminDashboardRecommendationsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/payments/': {
       id: '/(admin)/dashboard/payments/'
       path: '/payments'
-      fullPath: '/dashboard/payments'
+      fullPath: '/dashboard/payments/'
       preLoaderRoute: typeof adminDashboardPaymentsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/notifications/': {
       id: '/(admin)/dashboard/notifications/'
       path: '/notifications'
-      fullPath: '/dashboard/notifications'
+      fullPath: '/dashboard/notifications/'
       preLoaderRoute: typeof adminDashboardNotificationsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/movies/': {
       id: '/(admin)/dashboard/movies/'
       path: '/movies'
-      fullPath: '/dashboard/movies'
+      fullPath: '/dashboard/movies/'
       preLoaderRoute: typeof adminDashboardMoviesIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/monitoring/': {
       id: '/(admin)/dashboard/monitoring/'
       path: '/monitoring'
-      fullPath: '/dashboard/monitoring'
+      fullPath: '/dashboard/monitoring/'
       preLoaderRoute: typeof adminDashboardMonitoringIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/media/': {
       id: '/(admin)/dashboard/media/'
       path: '/media'
-      fullPath: '/dashboard/media'
+      fullPath: '/dashboard/media/'
       preLoaderRoute: typeof adminDashboardMediaIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/logs/': {
       id: '/(admin)/dashboard/logs/'
       path: '/logs'
-      fullPath: '/dashboard/logs'
+      fullPath: '/dashboard/logs/'
       preLoaderRoute: typeof adminDashboardLogsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/featured/': {
       id: '/(admin)/dashboard/featured/'
       path: '/featured'
-      fullPath: '/dashboard/featured'
+      fullPath: '/dashboard/featured/'
       preLoaderRoute: typeof adminDashboardFeaturedIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/drm/': {
       id: '/(admin)/dashboard/drm/'
       path: '/drm'
-      fullPath: '/dashboard/drm'
+      fullPath: '/dashboard/drm/'
       preLoaderRoute: typeof adminDashboardDrmIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/campaigns/': {
       id: '/(admin)/dashboard/campaigns/'
       path: '/campaigns'
-      fullPath: '/dashboard/campaigns'
+      fullPath: '/dashboard/campaigns/'
       preLoaderRoute: typeof adminDashboardCampaignsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/backups/': {
       id: '/(admin)/dashboard/backups/'
       path: '/backups'
-      fullPath: '/dashboard/backups'
+      fullPath: '/dashboard/backups/'
       preLoaderRoute: typeof adminDashboardBackupsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/audit-logs/': {
       id: '/(admin)/dashboard/audit-logs/'
       path: '/audit-logs'
-      fullPath: '/dashboard/audit-logs'
+      fullPath: '/dashboard/audit-logs/'
       preLoaderRoute: typeof adminDashboardAuditLogsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/analytics/': {
       id: '/(admin)/dashboard/analytics/'
       path: '/analytics'
-      fullPath: '/dashboard/analytics'
+      fullPath: '/dashboard/analytics/'
       preLoaderRoute: typeof adminDashboardAnalyticsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/ab-tests/': {
       id: '/(admin)/dashboard/ab-tests/'
       path: '/ab-tests'
-      fullPath: '/dashboard/ab-tests'
+      fullPath: '/dashboard/ab-tests/'
       preLoaderRoute: typeof adminDashboardAbTestsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
@@ -2014,147 +2014,147 @@ declare module '@tanstack/react-router' {
     '/(admin)/dashboard/subscriptions/users/': {
       id: '/(admin)/dashboard/subscriptions/users/'
       path: '/subscriptions/users'
-      fullPath: '/dashboard/subscriptions/users'
+      fullPath: '/dashboard/subscriptions/users/'
       preLoaderRoute: typeof adminDashboardSubscriptionsUsersIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/subscriptions/plans/': {
       id: '/(admin)/dashboard/subscriptions/plans/'
       path: '/subscriptions/plans'
-      fullPath: '/dashboard/subscriptions/plans'
+      fullPath: '/dashboard/subscriptions/plans/'
       preLoaderRoute: typeof adminDashboardSubscriptionsPlansIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/settings/localization/': {
       id: '/(admin)/dashboard/settings/localization/'
       path: '/settings/localization'
-      fullPath: '/dashboard/settings/localization'
+      fullPath: '/dashboard/settings/localization/'
       preLoaderRoute: typeof adminDashboardSettingsLocalizationIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/settings/integrations/': {
       id: '/(admin)/dashboard/settings/integrations/'
       path: '/settings/integrations'
-      fullPath: '/dashboard/settings/integrations'
+      fullPath: '/dashboard/settings/integrations/'
       preLoaderRoute: typeof adminDashboardSettingsIntegrationsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/settings/general/': {
       id: '/(admin)/dashboard/settings/general/'
       path: '/settings/general'
-      fullPath: '/dashboard/settings/general'
+      fullPath: '/dashboard/settings/general/'
       preLoaderRoute: typeof adminDashboardSettingsGeneralIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/settings/features/': {
       id: '/(admin)/dashboard/settings/features/'
       path: '/settings/features'
-      fullPath: '/dashboard/settings/features'
+      fullPath: '/dashboard/settings/features/'
       preLoaderRoute: typeof adminDashboardSettingsFeaturesIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/playback/errors/': {
       id: '/(admin)/dashboard/playback/errors/'
       path: '/playback/errors'
-      fullPath: '/dashboard/playback/errors'
+      fullPath: '/dashboard/playback/errors/'
       preLoaderRoute: typeof adminDashboardPlaybackErrorsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/notifications/create/': {
       id: '/(admin)/dashboard/notifications/create/'
       path: '/notifications/create'
-      fullPath: '/dashboard/notifications/create'
+      fullPath: '/dashboard/notifications/create/'
       preLoaderRoute: typeof adminDashboardNotificationsCreateIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/music/tracks/': {
       id: '/(admin)/dashboard/music/tracks/'
       path: '/music/tracks'
-      fullPath: '/dashboard/music/tracks'
+      fullPath: '/dashboard/music/tracks/'
       preLoaderRoute: typeof adminDashboardMusicTracksIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/music/artists/': {
       id: '/(admin)/dashboard/music/artists/'
       path: '/music/artists'
-      fullPath: '/dashboard/music/artists'
+      fullPath: '/dashboard/music/artists/'
       preLoaderRoute: typeof adminDashboardMusicArtistsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/music/albums/': {
       id: '/(admin)/dashboard/music/albums/'
       path: '/music/albums'
-      fullPath: '/dashboard/music/albums'
+      fullPath: '/dashboard/music/albums/'
       preLoaderRoute: typeof adminDashboardMusicAlbumsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/moderation/reports/': {
       id: '/(admin)/dashboard/moderation/reports/'
       path: '/moderation/reports'
-      fullPath: '/dashboard/moderation/reports'
+      fullPath: '/dashboard/moderation/reports/'
       preLoaderRoute: typeof adminDashboardModerationReportsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/moderation/region-blocks/': {
       id: '/(admin)/dashboard/moderation/region-blocks/'
       path: '/moderation/region-blocks'
-      fullPath: '/dashboard/moderation/region-blocks'
+      fullPath: '/dashboard/moderation/region-blocks/'
       preLoaderRoute: typeof adminDashboardModerationRegionBlocksIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/moderation/dmca/': {
       id: '/(admin)/dashboard/moderation/dmca/'
       path: '/moderation/dmca'
-      fullPath: '/dashboard/moderation/dmca'
+      fullPath: '/dashboard/moderation/dmca/'
       preLoaderRoute: typeof adminDashboardModerationDmcaIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/media/uploads/': {
       id: '/(admin)/dashboard/media/uploads/'
       path: '/media/uploads'
-      fullPath: '/dashboard/media/uploads'
+      fullPath: '/dashboard/media/uploads/'
       preLoaderRoute: typeof adminDashboardMediaUploadsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/legal/terms/': {
       id: '/(admin)/dashboard/legal/terms/'
       path: '/legal/terms'
-      fullPath: '/dashboard/legal/terms'
+      fullPath: '/dashboard/legal/terms/'
       preLoaderRoute: typeof adminDashboardLegalTermsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/legal/privacy/': {
       id: '/(admin)/dashboard/legal/privacy/'
       path: '/legal/privacy'
-      fullPath: '/dashboard/legal/privacy'
+      fullPath: '/dashboard/legal/privacy/'
       preLoaderRoute: typeof adminDashboardLegalPrivacyIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/legal/licenses/': {
       id: '/(admin)/dashboard/legal/licenses/'
       path: '/legal/licenses'
-      fullPath: '/dashboard/legal/licenses'
+      fullPath: '/dashboard/legal/licenses/'
       preLoaderRoute: typeof adminDashboardLegalLicensesIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/analytics/users/': {
       id: '/(admin)/dashboard/analytics/users/'
       path: '/analytics/users'
-      fullPath: '/dashboard/analytics/users'
+      fullPath: '/dashboard/analytics/users/'
       preLoaderRoute: typeof adminDashboardAnalyticsUsersIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/analytics/reports/': {
       id: '/(admin)/dashboard/analytics/reports/'
       path: '/analytics/reports'
-      fullPath: '/dashboard/analytics/reports'
+      fullPath: '/dashboard/analytics/reports/'
       preLoaderRoute: typeof adminDashboardAnalyticsReportsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
     '/(admin)/dashboard/analytics/content/': {
       id: '/(admin)/dashboard/analytics/content/'
       path: '/analytics/content'
-      fullPath: '/dashboard/analytics/content'
+      fullPath: '/dashboard/analytics/content/'
       preLoaderRoute: typeof adminDashboardAnalyticsContentIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }

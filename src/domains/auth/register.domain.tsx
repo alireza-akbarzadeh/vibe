@@ -23,10 +23,12 @@ const benefits = [
 	"Access on all your devices",
 ];
 
+interface RegisterDomainProps {
+	redirectUrl?: string;
+}
 
-
-export function RegisterDomain() {
-
+export function RegisterDomain(props: RegisterDomainProps) {
+	const { redirectUrl } = props;
 	const navigate = useNavigate();
 
 	const form = useForm(registerFormSchema, {
@@ -56,7 +58,7 @@ export function RegisterDomain() {
 					);
 					await navigate({
 						to: "/verify-email",
-						search: { email: value.email },
+						search: { email: value.email, redirectUrl },
 					});
 				},
 			}
@@ -68,7 +70,7 @@ export function RegisterDomain() {
 	const handleSocialSignIn = async (providerId: "google" | "github") => {
 		await authClient.signIn.social({
 			provider: providerId,
-			callbackURL: "/",
+			callbackURL: redirectUrl || "/",
 		});
 	};
 	const agreeToTerms = useId();

@@ -1,4 +1,3 @@
-import { useLogger } from "@mantine/hooks";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {

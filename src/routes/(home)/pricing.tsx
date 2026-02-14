@@ -1,34 +1,38 @@
-import { RootHeader } from "@/components/root-header";
-import Footer from "@/domains/home/footer";
-import { getPlans, type PlanType } from "@/domains/plans/plan.server";
-import { Plans } from "@/domains/plans/plans.domains";
-import { useErrorHandler } from "@/lib/app-error";
-import { type CheckoutInputScheme, checkoutSubscription } from "@/server/subscription";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
+import { RootHeader } from "@/components/root-header";
+import Footer from "@/domains/home/footer";
+import { PLANS } from "@/domains/plans/plans.constants";
+import { Plans } from "@/domains/plans/plans.domains";
+import { useErrorHandler } from "@/lib/app-error";
+import { type CheckoutInputScheme, checkoutSubscription } from "@/server/subscription";
 
-interface LoaderData {
-  plans: PlanType[];
+interface PricingSearch {
+  redirectUrl?: string;
 }
 
 export const Route = createFileRoute("/(home)/pricing")({
+  validateSearch: (search: Record<string, unknown>): PricingSearch => ({
+    redirectUrl: typeof search.redirectUrl === 'string' ? search.redirectUrl : undefined
+  }),
   component: RouteComponent,
-  loader: async (): Promise<LoaderData> => {
-    const result = await getPlans();
-    return { plans: result.plans };
-  },
 });
 
 function RouteComponent() {
   const checkoutFn = useServerFn(checkoutSubscription);
-  const { plans } = Route.useLoaderData();
   const { handleError } = useErrorHandler();
+  const { redirectUrl } = Route.useSearch();
 
   const handleCheckout = async (plan: CheckoutInputScheme) => {
-    console.log(plan)
+
     try {
-      const result = await checkoutFn({ data: plan });
+      const result = await checkoutFn({
+        data: {
+          ...plan,
+          redirectUrl
+        }
+      });
       console.log(result)
       if (result?.url) {
         toast.success("Redirecting to checkout...");
@@ -40,14 +44,15 @@ function RouteComponent() {
       handleError(err, {
         showToast: true,
         redirectOnUnauthorized: true,
-        callbackUrl: '/checkout'
+        callbackUrl: redirectUrl ? `/pricing?redirectUrl=${encodeURIComponent(redirectUrl)}` : '/pricing'
       });
     };
   }
+
   return (
     <>
       <RootHeader />
-      <Plans plans={plans} onCheckout={handleCheckout} />
+      <Plans plans={PLANS} onCheckout={handleCheckout} />
       <Footer />
     </>
   );

@@ -1,11 +1,11 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { type CheckoutInputScheme } from "@/server/subscription";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, Loader2 } from "lucide-react";
 import type { ComponentType } from "react";
-import type { PlanType } from "../plan.server";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import type { CheckoutInputScheme } from "@/server/subscription";
+import type { PlanType } from "../plans.constants";
 
 type PlanWithIcon = Omit<PlanType, "icon"> & {
   icon: ComponentType<{ className?: string }>;
@@ -38,7 +38,7 @@ export function PlanCard({
       className={`relative cursor-pointer transition duration-200 ${disabled && !isActive ? "opacity-60 blur-[1px] pointer-events-none select-none" : ""}`}
       onClick={() => {
         if (disabled) return;
-        onPlanChange({ productId: plan.productId, slug: plan.slug });
+        onPlanChange({ slug: plan.slug });
       }}
     >
       {plan.popular && (
@@ -90,7 +90,6 @@ export function PlanCard({
                 e.stopPropagation();
                 if (disabled) return;
                 onPlanChange({
-                  productId: plan.productId,
                   slug: plan.slug,
                 });
               }}

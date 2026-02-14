@@ -11,11 +11,11 @@ export const POLAR_PRODUCT_TO_PLAN: Record<string, string> = {
 };
 
 export const POLAR_SLUG_TO_PRODUCT: Record<string, string> = {
-  "free": env.POLAR_FREE_PRODUCT_ID as string,
-  "premium-monthly": env.POLAR_PREMIUM_MONTHLY_PRODUCT_ID as string,
-  "premium-yearly": env.POLAR_PREMIUM_YEARLY_PRODUCT_ID as string,
-  "family-monthly": env.POLAR_FAMILY_MONTHLY_PRODUCT_ID as string,
-  "family-yearly": env.POLAR_FAMILY_YEARLY_PRODUCT_ID as string,
+  "Free": env.POLAR_FREE_PRODUCT_ID as string,
+  "Premium-Monthly": env.POLAR_PREMIUM_MONTHLY_PRODUCT_ID as string,
+  "Premium-Yearly": env.POLAR_PREMIUM_YEARLY_PRODUCT_ID as string,
+  "Family-Monthly": env.POLAR_FAMILY_MONTHLY_PRODUCT_ID as string,
+  "Family-Yearly": env.POLAR_FAMILY_YEARLY_PRODUCT_ID as string,
 };
 
 export const polarClient = new Polar({

@@ -285,7 +285,7 @@ function RecoveryCodePage() {
 				{/* Try another method */}
 				<div className="text-center">
 					<Link
-						to="/verify-email"
+						to="/tow-fa-setup"
 						className="text-sm text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2"
 					>
 						<Shield className="w-4 h-4" />

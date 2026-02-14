@@ -1,5 +1,11 @@
 // src/server/subscription.ts
 
+import { createServerFn } from "@tanstack/react-start";
+import {
+	getRequestHeaders,
+	setResponseStatus,
+} from "@tanstack/react-start/server";
+import { z } from "zod";
 import {
 	POLAR_SLUG_TO_PRODUCT,
 	polarClient,
@@ -8,22 +14,54 @@ import { AppError, Errors } from "@/lib/app-error";
 import { auth } from "@/lib/better-auth";
 import { prisma } from "@/lib/db";
 import { Http } from "@/orpc/helpers/http";
-import { createServerFn } from "@tanstack/react-start";
-import {
-	getRequestHeaders,
-	setResponseStatus,
-} from "@tanstack/react-start/server";
-import { z } from "zod";
 
 // Checkout Subscription
 const CheckoutInput = z.object({
 	productId: z.string().optional(),
 	slug: z.string().optional(),
 	referenceId: z.string().optional(),
+	redirectUrl: z.string().optional(),
 });
 export type CheckoutInputScheme = z.infer<typeof CheckoutInput>;
 
-// Get Subscription Status
+// Get Redirect URL from latest subscription
+export const getPostPaymentRedirect = createServerFn({
+	method: "GET",
+}).handler(async () => {
+	const headers = getRequestHeaders();
+
+	try {
+		const session = await auth.api.getSession({ headers });
+		if (!session?.user) {
+			return { redirectUrl: null };
+		}
+
+		// Get the most recent subscription with a redirectUrl
+		const subscription = await prisma.subscription.findFirst({
+			where: {
+				userId: session.user.id,
+				redirectUrl: { not: null },
+			},
+			orderBy: { startedAt: "desc" },
+			select: { redirectUrl: true, id: true },
+		});
+
+		if (subscription?.redirectUrl) {
+			await prisma.subscription.update({
+				where: { id: subscription.id },
+				data: { redirectUrl: null },
+			});
+
+			return { redirectUrl: subscription.redirectUrl };
+		}
+
+		return { redirectUrl: null };
+	} catch (error) {
+		console.error("Error fetching redirect URL:", error);
+		return { redirectUrl: null };
+	}
+});
+
 export const getSubscriptionStatus = createServerFn({
 	method: "GET",
 })
@@ -139,7 +177,7 @@ export const checkoutSubscription = createServerFn({
 })
 	.inputValidator(CheckoutInput)
 	.handler(async ({ data }) => {
-		const { productId, slug, referenceId } = data;
+		const { productId, slug, referenceId, redirectUrl } = data;
 
 		if (!productId && !slug) {
 			setResponseStatus(
@@ -173,6 +211,7 @@ export const checkoutSubscription = createServerFn({
 					userId: session.user.id,
 					productId: effectiveProductId,
 					referenceId: checkoutReferenceId,
+					redirectUrl: redirectUrl || null,
 					status: "FREE",
 				},
 			});

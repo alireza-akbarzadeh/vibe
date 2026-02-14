@@ -1,8 +1,36 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+const getRedirectUrl = createServerFn({ method: "GET" }).handler(async () => {
+  const { getRequestHeaders } = await import("@tanstack/react-start/server");
+  const { auth } = await import("@/lib/auth-server");
+  const { prisma } = await import("@/lib/db");
+
+  try {
+    const headers = getRequestHeaders();
+    const session = await auth.api.getSession({ headers });
+
+    if (!session?.user) return null;
+
+    const subscription = await prisma.subscription.findFirst({
+      where: {
+        userId: session.user.id,
+        redirectUrl: { not: null },
+      },
+      orderBy: { startedAt: "desc" },
+      select: { redirectUrl: true },
+    });
+
+    return subscription?.redirectUrl || null;
+  } catch (error) {
+    console.error("Error fetching redirect URL:", error);
+    return null;
+  }
+});
 
 type SuccessSearch = {
   checkout_id?: string;
@@ -17,11 +45,16 @@ export const Route = createFileRoute("/success-payment")({
           : undefined,
     };
   },
+  loader: async () => {
+    const redirectUrl = await getRedirectUrl();
+    return { redirectUrl };
+  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const { checkout_id } = Route.useSearch();
+  const { redirectUrl } = Route.useLoaderData();
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center relative overflow-hidden">
@@ -32,7 +65,7 @@ function RouteComponent() {
         transition={{ duration: 1.2 }}
         className="absolute inset-0"
       >
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-green-600/20 rounded-full blur-[120px]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-125 h-125 bg-green-600/20 rounded-full blur-[120px]" />
       </motion.div>
 
       <motion.div
@@ -94,12 +127,21 @@ function RouteComponent() {
               transition={{ delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-3 justify-center pt-4"
             >
-              <Button asChild size="lg" className="rounded-xl">
-                <Link to="/dashboard">
-                  Go to Dashboard
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Link>
-              </Button>
+              {redirectUrl ? (
+                <Button asChild size="lg" className="rounded-xl">
+                  <a href={redirectUrl}>
+                    Continue Watching
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </a>
+                </Button>
+              ) : (
+                <Button asChild size="lg" className="rounded-xl">
+                  <Link to="/library">
+                    Go to Library
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              )}
 
               <Button
                 variant="outline"

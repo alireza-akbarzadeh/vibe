@@ -1,8 +1,7 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 
-import { Http } from "@/orpc/helpers/http";
-import { redirect } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Http } from "@/orpc/helpers/http";
 export type ErrorCode =
 	| "UNAUTHORIZED"
 	| "FORBIDDEN"
@@ -192,101 +191,43 @@ export function useErrorHandler() {
 			callbackUrl?: string;
 		},
 	) => {
-		const appError = parseError(error);
+		console.error("[Error Handler]:", error);
 
-		console.error("[Error Handler]:", appError);
+		// If it's already AppError, use it directly
+		if (error instanceof AppError) {
+			if (error.isUnauthorized() && options?.redirectOnUnauthorized !== false) {
+				if (options?.showToast !== false) {
+					toast.error("Authentication Required", {
+						description: error.getUserFriendlyMessage(),
+					});
+				}
 
-		// Handle unauthorized
-		if (
-			appError.isUnauthorized() &&
-			options?.redirectOnUnauthorized !== false
-		) {
+				const callbackUrl = options?.callbackUrl || window.location.pathname;
+				const loginUrl = `/login?redirectUrl=${encodeURIComponent(callbackUrl)}`;
+
+				setTimeout(() => {
+					window.location.href = loginUrl;
+				}, 500);
+
+				return;
+			}
+
 			if (options?.showToast !== false) {
-				toast.error("Authentication Required", {
-					description: appError.getUserFriendlyMessage(),
+				toast.error(error.code.replace("_", " "), {
+					description: error.getUserFriendlyMessage(),
 				});
 			}
 
-			const callbackUrl = options?.callbackUrl || window.location.pathname;
-			redirect({
-				to: "/login",
-				search: { redirectUrl: encodeURIComponent(callbackUrl) },
-			});
-			return;
+			return error;
 		}
 
-		// Show toast for other errors if enabled
+		// For unknown errors, show generic message
 		if (options?.showToast !== false) {
-			toast.error(appError.code.replace("_", " "), {
-				description: appError.getUserFriendlyMessage(),
-			});
+			const message =
+				error instanceof Error ? error.message : "An unexpected error occurred";
+			toast.error("Error", { description: message });
 		}
-
-		return appError;
 	};
 
 	return { handleError };
-}
-
-export function parseError(error: unknown): AppError {
-	// If it's already our AppError, return it
-	if (error instanceof AppError) {
-		return error;
-	}
-
-	// Handle your specific error structure
-	if (error && typeof error === "object" && "result" in error) {
-		const err = error as any;
-		if (err.result?.error === "UNAUTHORIZED") {
-			return Errors.unauthorized(err.result?.message, error);
-		}
-		if (err.result?.error) {
-			return new AppError({
-				code: err.result.error,
-				message: err.result.message || "An error occurred",
-				status: err.status || 500,
-				originalError: error,
-			});
-		}
-	}
-
-	// Handle HTTP errors
-	if (error && typeof error === "object" && "status" in error) {
-		const err = error as any;
-		switch (err.status) {
-			case Http.UNAUTHORIZED:
-				return Errors.unauthorized(err.message, error);
-			case Http.FORBIDDEN:
-				return Errors.forbidden(err.message, error);
-			case Http.NOT_FOUND:
-				return Errors.notFound(undefined, error);
-			case Http.TOO_MANY_REQUESTS:
-				return Errors.rateLimited(err.message, error);
-			default:
-				if (err.status >= 500) {
-					return Errors.internal(err.message, error);
-				}
-		}
-	}
-
-	if (error instanceof Error) {
-		const message = error.message.toLowerCase();
-
-		if (
-			message.includes("unauthorized") ||
-			message.includes("invalid_token") ||
-			message.includes("401")
-		) {
-			return Errors.unauthorized(error.message, error);
-		}
-		if (message.includes("network") || message.includes("fetch")) {
-			return Errors.networkError(error);
-		}
-		if (message.includes("timeout")) {
-			return Errors.networkError(error);
-		}
-	}
-
-	// Default to internal error
-	return Errors.internal("An unexpected error occurred", error);
 }
