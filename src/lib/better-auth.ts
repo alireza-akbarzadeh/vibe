@@ -68,11 +68,11 @@ export const auth = betterAuth({
 	appName: env.VITE_APP_TITLE,
 	socialProviders: {
 		google: {
-			clientId: env.GOOGLE_CLIENT_ID!,
 			clientSecret: env.GOOGLE_CLIENT_SECRET,
+			clientId: env.GOOGLE_CLIENT_ID,
 		},
 		github: {
-			clientId: env.GITHUB_CLIENT_ID!,
+			clientId: env.GITHUB_CLIENT_ID,
 			clientSecret: env.GITHUB_CLIENT_SECRET,
 		},
 	},

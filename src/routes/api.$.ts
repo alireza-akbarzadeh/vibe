@@ -1,16 +1,15 @@
 import "@/polyfill";
 
+import { auth } from "@/lib/better-auth";
+import type { ORPCContext } from "@/orpc/context";
+import { Http } from "@/orpc/helpers/http";
+import { router } from "@/orpc/router";
 import { SmartCoercionPlugin } from "@orpc/json-schema";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { ADMIN_ACCESS } from "@/constants/constants";
-import { auth } from "@/lib/better-auth";
-import type { ORPCContext } from "@/orpc/context";
-import type { Role } from "@/orpc/helpers/constants";
-import { router } from "@/orpc/router";
 
 const handler = new OpenAPIHandler(router, {
 	plugins: [
@@ -69,38 +68,63 @@ const handler = new OpenAPIHandler(router, {
 });
 
 async function handle({ request }: { request: Request }) {
-	const url = new URL(request.url);
+	try {
+		const session = await auth.api.getSession({
+			headers: request.headers,
+		});
 
-	const session = await auth.api.getSession({
-		headers: request.headers,
-	});
-
-	if (url.pathname === "/api") {
-		const AUTHORIZED = ADMIN_ACCESS.includes(session?.user?.role as Role);
-
-		if (!session || !AUTHORIZED) {
-			throw redirect({
-				to: "/unauthorized",
-				search: {
-					error: "Admin access required",
-					from: url.pathname,
-					requiredRole: "admin",
-				},
-			});
+		// Admin-only access to /api docs
+		const url = new URL(request.url);
+		if (url.pathname === "/api") {
+			if (
+				!session?.user ||
+				(session.user.role !== "admin" && session.user.role !== "ADMIN")
+			) {
+				return new Response(
+					JSON.stringify({
+						defined: true,
+						code: "FORBIDDEN",
+						status: Http.FORBIDDEN,
+						message: "Admin access required",
+					}),
+					{
+						status: Http.FORBIDDEN,
+						headers: { "Content-Type": "application/json" },
+					},
+				);
+			}
 		}
+
+		const context: ORPCContext = {
+			user: session?.user ?? undefined,
+			session: session?.session ?? undefined,
+		};
+
+		const { response } = await handler.handle(request, {
+			prefix: "/api",
+			context,
+		});
+
+		return response ?? new Response("Not Found", { status: 404 });
+	} catch (error) {
+		const message =
+			error instanceof Error ? error.message : String(error ?? "Unknown error");
+		const stack = error instanceof Error ? error.stack : undefined;
+		const isDev = import.meta.env.DEV;
+		return new Response(
+			JSON.stringify({
+				defined: false,
+				code: "INTERNAL_SERVER_ERROR",
+				status: Http.INTERNAL_SERVER_ERROR,
+				message: isDev ? message : "Internal server error",
+				...(isDev && stack ? { stack } : {}),
+			}),
+			{
+				status: Http.INTERNAL_SERVER_ERROR,
+				headers: { "Content-Type": "application/json" },
+			},
+		);
 	}
-
-	const context: ORPCContext = {
-		user: session?.user ?? undefined,
-		session: session?.session ?? undefined,
-	};
-
-	const { response } = await handler.handle(request, {
-		prefix: "/api",
-		context,
-	});
-
-	return response ?? new Response("Not Found", { status: 404 });
 }
 
 export const Route = createFileRoute("/api/$")({

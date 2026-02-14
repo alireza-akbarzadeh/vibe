@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import type { PlanType } from "../data";
+import { motion } from "framer-motion";
+import { ArrowRight, Check } from "lucide-react";
+import type { ComponentType } from "react";
+import type { PlanType } from "../plan.server";
 
 // The input type expected by checkoutSubscription
 export interface CheckoutInputScheme {
@@ -12,14 +13,18 @@ export interface CheckoutInputScheme {
   referenceId?: string;
 }
 
+type PlanWithIcon = Omit<PlanType, "icon"> & {
+  icon: ComponentType<{ className?: string }>;
+};
+
 interface PlanCardProps {
-  plan: PlanType;
+  plan: PlanWithIcon;
   index: number;
   isAnnual: boolean;
   onPlanChange: (plan: CheckoutInputScheme) => void;
 }
 
-export function PlanCard({ plan, index, isAnnual, onPlanChange }: PlanCardProps) {
+export function PlanCard({ plan, index, onPlanChange }: PlanCardProps) {
   return (
     <motion.div
       onClick={() =>
@@ -43,9 +48,8 @@ export function PlanCard({ plan, index, isAnnual, onPlanChange }: PlanCardProps)
       )}
 
       <Card
-        className={`relative overflow-hidden bg-white/3 backdrop-blur-xl border border-white/10 p-8 h-full transition-all duration-300 hover:bg-white/5 hover:border-white/20 ${
-          plan.popular ? "md:scale-105 border-purple-500/30" : ""
-        }`}
+        className={`relative overflow-hidden bg-white/3 backdrop-blur-xl border border-white/10 p-8 h-full transition-all duration-300 hover:bg-white/5 hover:border-white/20 ${plan.popular ? "md:scale-105 border-purple-500/30" : ""
+          }`}
       >
         <div className="relative">
           {/* Icon */}
@@ -78,11 +82,10 @@ export function PlanCard({ plan, index, isAnnual, onPlanChange }: PlanCardProps)
 
           {/* CTA Button */}
           <Button
-            className={`w-full mb-8 ${
-              plan.popular
-                ? `bg-linear-to-r ${plan.gradient} hover:opacity-90`
-                : "bg-white/5 hover:bg-white/10 border border-white/20"
-            } text-white font-semibold py-6 rounded-xl transition-all duration-300`}
+            className={`w-full mb-8 ${plan.popular
+              ? `bg-linear-to-r ${plan.gradient} hover:opacity-90`
+              : "bg-white/5 hover:bg-white/10 border border-white/20"
+              } text-white font-semibold py-6 rounded-xl transition-all duration-300`}
           >
             {plan.cta}
             <ArrowRight className="w-5 h-5 ml-2" />

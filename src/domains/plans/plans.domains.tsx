@@ -1,18 +1,28 @@
-import { motion } from "framer-motion";
-
-import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-
+import { CheckoutInputScheme } from "@/server/subscription";
+import { motion } from "framer-motion";
+import { Crown, Sparkles, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
 import { FaqSection } from "./components/faq-section";
 import { PlanCard } from "./components/plans-card";
-import { PlanType, plans } from "./data";
+import type { PlanType } from "./plan.server";
 
 interface PlansProps {
-  onCheckout: (plan: PlanType) => void;
+	onCheckout: (plan: CheckoutInputScheme) => void;
+	plans: PlanType[];
 }
 
-export function Plans(props:PlansProps) {
-	const {onCheckout} = props
+export const iconMap = {
+	Sparkles,
+	Zap,
+	Crown,
+};
+type PlanWithIcon = Omit<PlanType, "icon"> & {
+	icon: typeof iconMap[keyof typeof iconMap];
+};
+
+export function Plans(props: PlansProps) {
+	const { onCheckout, plans } = props
 	const [isAnnual, setIsAnnual] = useState(false);
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -26,6 +36,15 @@ export function Plans(props:PlansProps) {
 		window.addEventListener("mousemove", handleMouseMove);
 		return () => window.removeEventListener("mousemove", handleMouseMove);
 	}, []);
+
+
+
+	const data: PlanWithIcon[] =
+		plans?.map((plan) => ({
+			...plan,
+			icon: iconMap[plan.icon as keyof typeof iconMap],
+		})) ?? [];
+
 
 	return (
 		<div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
@@ -100,22 +119,20 @@ export function Plans(props:PlansProps) {
 						<button
 							type="button"
 							onClick={() => setIsAnnual(false)}
-							className={`px-6 py-2 rounded-full font-medium transition-all ${
-								!isAnnual
-									? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
-									: "text-gray-400 hover:text-white"
-							}`}
+							className={`px-6 py-2 rounded-full font-medium transition-all ${!isAnnual
+								? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+								: "text-gray-400 hover:text-white"
+								}`}
 						>
 							Monthly
 						</button>
 						<button
 							type="button"
 							onClick={() => setIsAnnual(true)}
-							className={`px-6 py-2 rounded-full font-medium transition-all ${
-								isAnnual
-									? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
-									: "text-gray-400 hover:text-white"
-							}`}
+							className={`px-6 py-2 rounded-full font-medium transition-all ${isAnnual
+								? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+								: "text-gray-400 hover:text-white"
+								}`}
 						>
 							Annual
 							<Badge className="ml-2 bg-green-500/20 text-green-400 border-green-500/30">
@@ -126,11 +143,11 @@ export function Plans(props:PlansProps) {
 				</motion.div>
 				{/* Pricing Cards */}
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-					{plans.map((plan, index) => (
+					{data.map((plan, index) => (
 						<PlanCard
 							key={plan.name}
 							plan={plan}
-							          onPlanChange={() => onCheckout(plan)}
+							onPlanChange={(data) => onCheckout(data)}
 							index={index}
 							isAnnual={isAnnual}
 						/>

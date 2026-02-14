@@ -8,14 +8,13 @@ import { auth } from "@/lib/better-auth";
 import { prisma } from "@/lib/db";
 import { Http } from "@/orpc/helpers/http";
 
-
 // Checkout Subscription
 const CheckoutInput = z.object({
-      productId: z.string().optional(),
-      slug: z.string().optional(),
-      referenceId: z.string().optional(),
-    })
-    export type CheckoutInputScheme=z.infer<typeof CheckoutInput>
+  productId: z.string().optional(),
+  slug: z.string().optional(),
+  referenceId: z.string().optional(),
+});
+export type CheckoutInputScheme = z.infer<typeof CheckoutInput>;
 
 export const checkoutSubscription = createServerFn({
   method: "POST",
@@ -31,26 +30,22 @@ export const checkoutSubscription = createServerFn({
 
     const headers = getRequestHeaders();
 
-    // Get current session/user
     const session = await auth.api.getSession({ headers });
     if (!session?.user) {
       setResponseStatus(Http.UNAUTHORIZED, "You need an account to proceed. Please sign up or log in.");
       return;
     }
 
-    // Generate a unique referenceId if not provided
-    const checkoutReferenceId = referenceId ?? `ref-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    const checkoutReferenceId =
+      referenceId ?? `ref-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 
-    const effectiveProductId =
-      productId ?? (slug ? POLAR_SLUG_TO_PRODUCT[slug] : undefined);
-
+    const effectiveProductId = productId ?? (slug ? POLAR_SLUG_TO_PRODUCT[slug] : undefined);
     if (!effectiveProductId) {
       setResponseStatus(Http.BAD_REQUEST, "Unknown product slug or productId");
       return;
     }
 
-    // Create a new subscription record
-    const newSubscription = await prisma.subscription.create({
+    await prisma.subscription.create({
       data: {
         userId: session.user.id,
         productId: effectiveProductId,
@@ -59,7 +54,6 @@ export const checkoutSubscription = createServerFn({
       },
     });
 
-    // Call Better Auth / Polar checkout
     const response = await auth.api.checkout({
       body: {
         products: productId ? [productId] : undefined,
@@ -75,7 +69,6 @@ export const checkoutSubscription = createServerFn({
     } else if (response && "url" in response) {
       checkoutUrl = (response as { url: string }).url;
     } else {
-      console.error("Unexpected checkout response:", response);
       setResponseStatus(Http.INTERNAL_SERVER_ERROR, "Unexpected response from checkout");
       return;
     }
@@ -83,16 +76,14 @@ export const checkoutSubscription = createServerFn({
     return { url: checkoutUrl };
   });
 
-// --------------------
 // Get Subscription Status
-// --------------------
 export const getSubscriptionStatus = createServerFn({
   method: "GET",
 })
   .inputValidator(
     z.object({
       sessionToken: z.string().optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const headers = new Headers();
@@ -106,15 +97,12 @@ export const getSubscriptionStatus = createServerFn({
         status: session.user.subscriptionStatus || "NONE",
         customerId: session.user.customerId || null,
       };
-    } catch (error) {
-      console.error("Error fetching subscription status:", error);
+    } catch {
       throw new Error("Not authenticated");
     }
   });
 
-// --------------------
 // Cancel Subscription
-// --------------------
 export const cancelSubscription = createServerFn({
   method: "POST",
 })
@@ -122,17 +110,15 @@ export const cancelSubscription = createServerFn({
     z.object({
       subscriptionId: z.string().optional(),
       sessionToken: z.string().optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const headers = new Headers();
     if (data.sessionToken) headers.set("Authorization", `Bearer ${data.sessionToken}`);
 
-    // Get current session
     const session = await auth.api.getSession({ headers });
     if (!session?.user) throw new Error("Unauthorized");
 
-    // Fetch user from DB
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: {
@@ -144,7 +130,6 @@ export const cancelSubscription = createServerFn({
 
     if (!user) throw new Error("User not found");
 
-    // Determine subscriptionId
     let subscriptionId = data.subscriptionId;
     if (!subscriptionId && user.customerId) {
       try {
@@ -163,13 +148,11 @@ export const cancelSubscription = createServerFn({
     }
 
     try {
-      // Cancel via Polar
       await polarClient.subscriptions.update({
         id: subscriptionId,
         subscriptionUpdate: { cancelAtPeriodEnd: true },
       });
 
-      // Update DB
       await prisma.user.update({
         where: { id: user.id },
         data: { subscriptionStatus: "CANCELLED" },
