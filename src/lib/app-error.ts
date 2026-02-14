@@ -221,10 +221,65 @@ export function useErrorHandler() {
 			return error;
 		}
 
-		// For unknown errors, show generic message
+		// Parse TanStack serialized error format
+		let errorMessage = "";
+		if (error && typeof error === "object") {
+			const err = error as any;
+
+			// Complex nested format: {p: {k: [...], v: [...]}}
+			if (err.p && Array.isArray(err.p.v)) {
+				for (const item of err.p.v) {
+					if (item.s && typeof item.s === "object" && item.s.message) {
+						if (item.s.message.s) {
+							errorMessage = item.s.message.s;
+							break;
+						}
+					}
+				}
+			}
+
+			// Simpler nested format: {s: {message: {s: "text"}}}
+			if (!errorMessage && err.s && err.s.message && err.s.message.s) {
+				errorMessage = err.s.message.s;
+			}
+
+			// Simple format: {message: {s: "text"}}
+			if (!errorMessage && err.message && err.message.s) {
+				errorMessage = err.message.s;
+			}
+		}
+
+		// Check if it's an unauthorized error
+		const isUnauthorized =
+			errorMessage &&
+			(errorMessage.toLowerCase().includes("unauthorized") ||
+				errorMessage.toLowerCase().includes("sign up") ||
+				errorMessage.toLowerCase().includes("log in"));
+
+		if (isUnauthorized && options?.redirectOnUnauthorized !== false) {
+			if (options?.showToast !== false) {
+				toast.error("Authentication Required", {
+					description: errorMessage || "Please sign in to continue",
+				});
+			}
+
+			const callbackUrl = options?.callbackUrl || window.location.pathname;
+			const loginUrl = `/login?redirectUrl=${encodeURIComponent(callbackUrl)}`;
+
+			setTimeout(() => {
+				window.location.href = loginUrl;
+			}, 500);
+
+			return;
+		}
+
+		// For other errors, show generic message
 		if (options?.showToast !== false) {
 			const message =
-				error instanceof Error ? error.message : "An unexpected error occurred";
+				errorMessage ||
+				(error instanceof Error
+					? error.message
+					: "An unexpected error occurred");
 			toast.error("Error", { description: message });
 		}
 	};

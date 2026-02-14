@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
-import { Route as SuccessPaymentRouteImport } from './routes/success-payment'
+import { Route as SuccessRouteImport } from './routes/success'
 import { Route as libraryRouteRouteImport } from './routes/(library)/route'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as homeIndexRouteImport } from './routes/(home)/index'
+import { Route as ApiPortalRouteImport } from './routes/api/portal'
+import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as homeTermsRouteImport } from './routes/(home)/terms'
 import { Route as homeSupportRouteImport } from './routes/(home)/support'
@@ -44,6 +46,7 @@ import { Route as homeMusicIndexRouteImport } from './routes/(home)/music/index'
 import { Route as homeMoviesIndexRouteImport } from './routes/(home)/movies/index'
 import { Route as blogBlogIndexRouteImport } from './routes/(blog)/blog/index'
 import { Route as adminDashboardIndexRouteImport } from './routes/(admin)/dashboard/index'
+import { Route as ApiWebhookPolarRouteImport } from './routes/api/webhook/polar'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as libraryLibraryVideosRouteImport } from './routes/(library)/library/videos'
@@ -124,9 +127,9 @@ const UnauthorizedRoute = UnauthorizedRouteImport.update({
   path: '/unauthorized',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SuccessPaymentRoute = SuccessPaymentRouteImport.update({
-  id: '/success-payment',
-  path: '/success-payment',
+const SuccessRoute = SuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const libraryRouteRoute = libraryRouteRouteImport.update({
@@ -140,6 +143,16 @@ const authRouteRoute = authRouteRouteImport.update({
 const homeIndexRoute = homeIndexRouteImport.update({
   id: '/(home)/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPortalRoute = ApiPortalRouteImport.update({
+  id: '/api/portal',
+  path: '/api/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
+  id: '/api/checkout',
+  path: '/api/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
@@ -291,6 +304,11 @@ const adminDashboardIndexRoute = adminDashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => adminDashboardRouteRoute,
+} as any)
+const ApiWebhookPolarRoute = ApiWebhookPolarRouteImport.update({
+  id: '/api/webhook/polar',
+  path: '/api/webhook/polar',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
@@ -715,7 +733,7 @@ const adminDashboardMusicAlbumsAlbumIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/success-payment': typeof SuccessPaymentRoute
+  '/success': typeof SuccessRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/dashboard': typeof adminDashboardRouteRouteWithChildren
   '/music': typeof homeMusicRouteRouteWithChildren
@@ -741,6 +759,8 @@ export interface FileRoutesByFullPath {
   '/support': typeof homeSupportRoute
   '/terms': typeof homeTermsRoute
   '/api/$': typeof ApiSplatRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/portal': typeof ApiPortalRoute
   '/': typeof homeIndexRoute
   '/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/blog/profile': typeof blogBlogProfileRoute
@@ -763,6 +783,7 @@ export interface FileRoutesByFullPath {
   '/library/videos': typeof libraryLibraryVideosRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/api/webhook/polar': typeof ApiWebhookPolarRoute
   '/dashboard/': typeof adminDashboardIndexRoute
   '/blog/': typeof blogBlogIndexRoute
   '/movies/': typeof homeMoviesIndexRoute
@@ -824,7 +845,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/subscriptions/users/': typeof adminDashboardSubscriptionsUsersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/success-payment': typeof SuccessPaymentRoute
+  '/success': typeof SuccessRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
@@ -848,6 +869,8 @@ export interface FileRoutesByTo {
   '/support': typeof homeSupportRoute
   '/terms': typeof homeTermsRoute
   '/api/$': typeof ApiSplatRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/portal': typeof ApiPortalRoute
   '/': typeof homeIndexRoute
   '/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/blog/profile': typeof blogBlogProfileRoute
@@ -870,6 +893,7 @@ export interface FileRoutesByTo {
   '/library/videos': typeof libraryLibraryVideosRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/api/webhook/polar': typeof ApiWebhookPolarRoute
   '/dashboard': typeof adminDashboardIndexRoute
   '/blog': typeof blogBlogIndexRoute
   '/movies': typeof homeMoviesIndexRoute
@@ -934,7 +958,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(auth)': typeof authRouteRouteWithChildren
   '/(library)': typeof libraryRouteRouteWithChildren
-  '/success-payment': typeof SuccessPaymentRoute
+  '/success': typeof SuccessRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/(admin)/dashboard': typeof adminDashboardRouteRouteWithChildren
   '/(home)/music': typeof homeMusicRouteRouteWithChildren
@@ -960,6 +984,8 @@ export interface FileRoutesById {
   '/(home)/support': typeof homeSupportRoute
   '/(home)/terms': typeof homeTermsRoute
   '/api/$': typeof ApiSplatRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/portal': typeof ApiPortalRoute
   '/(home)/': typeof homeIndexRoute
   '/(blog)/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/(blog)/blog/profile': typeof blogBlogProfileRoute
@@ -982,6 +1008,7 @@ export interface FileRoutesById {
   '/(library)/library/videos': typeof libraryLibraryVideosRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/api/webhook/polar': typeof ApiWebhookPolarRoute
   '/(admin)/dashboard/': typeof adminDashboardIndexRoute
   '/(blog)/blog/': typeof blogBlogIndexRoute
   '/(home)/movies/': typeof homeMoviesIndexRoute
@@ -1045,7 +1072,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/success-payment'
+    | '/success'
     | '/unauthorized'
     | '/dashboard'
     | '/music'
@@ -1071,6 +1098,8 @@ export interface FileRouteTypes {
     | '/support'
     | '/terms'
     | '/api/$'
+    | '/api/checkout'
+    | '/api/portal'
     | '/'
     | '/blog/$blogslug'
     | '/blog/profile'
@@ -1093,6 +1122,7 @@ export interface FileRouteTypes {
     | '/library/videos'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/api/webhook/polar'
     | '/dashboard/'
     | '/blog/'
     | '/movies/'
@@ -1154,7 +1184,7 @@ export interface FileRouteTypes {
     | '/dashboard/subscriptions/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/success-payment'
+    | '/success'
     | '/unauthorized'
     | '/forgot-password'
     | '/login'
@@ -1178,6 +1208,8 @@ export interface FileRouteTypes {
     | '/support'
     | '/terms'
     | '/api/$'
+    | '/api/checkout'
+    | '/api/portal'
     | '/'
     | '/blog/$blogslug'
     | '/blog/profile'
@@ -1200,6 +1232,7 @@ export interface FileRouteTypes {
     | '/library/videos'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/api/webhook/polar'
     | '/dashboard'
     | '/blog'
     | '/movies'
@@ -1263,7 +1296,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/(auth)'
     | '/(library)'
-    | '/success-payment'
+    | '/success'
     | '/unauthorized'
     | '/(admin)/dashboard'
     | '/(home)/music'
@@ -1289,6 +1322,8 @@ export interface FileRouteTypes {
     | '/(home)/support'
     | '/(home)/terms'
     | '/api/$'
+    | '/api/checkout'
+    | '/api/portal'
     | '/(home)/'
     | '/(blog)/blog/$blogslug'
     | '/(blog)/blog/profile'
@@ -1311,6 +1346,7 @@ export interface FileRouteTypes {
     | '/(library)/library/videos'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/api/webhook/polar'
     | '/(admin)/dashboard/'
     | '/(blog)/blog/'
     | '/(home)/movies/'
@@ -1375,7 +1411,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   authRouteRoute: typeof authRouteRouteWithChildren
   libraryRouteRoute: typeof libraryRouteRouteWithChildren
-  SuccessPaymentRoute: typeof SuccessPaymentRoute
+  SuccessRoute: typeof SuccessRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   adminDashboardRouteRoute: typeof adminDashboardRouteRouteWithChildren
   homeMusicRouteRoute: typeof homeMusicRouteRouteWithChildren
@@ -1394,6 +1430,8 @@ export interface RootRouteChildren {
   homeSupportRoute: typeof homeSupportRoute
   homeTermsRoute: typeof homeTermsRoute
   ApiSplatRoute: typeof ApiSplatRoute
+  ApiCheckoutRoute: typeof ApiCheckoutRoute
+  ApiPortalRoute: typeof ApiPortalRoute
   homeIndexRoute: typeof homeIndexRoute
   blogBlogBlogslugRoute: typeof blogBlogBlogslugRoute
   blogBlogProfileRoute: typeof blogBlogProfileRoute
@@ -1402,6 +1440,7 @@ export interface RootRouteChildren {
   homePlayPlayIdRoute: typeof homePlayPlayIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
+  ApiWebhookPolarRoute: typeof ApiWebhookPolarRoute
   blogBlogIndexRoute: typeof blogBlogIndexRoute
   homeMoviesIndexRoute: typeof homeMoviesIndexRoute
   homeReelsIndexRoute: typeof homeReelsIndexRoute
@@ -1416,11 +1455,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthorizedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/success-payment': {
-      id: '/success-payment'
-      path: '/success-payment'
-      fullPath: '/success-payment'
-      preLoaderRoute: typeof SuccessPaymentRouteImport
+    '/success': {
+      id: '/success'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof SuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(library)': {
@@ -1442,6 +1481,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof homeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/portal': {
+      id: '/api/portal'
+      path: '/api/portal'
+      fullPath: '/api/portal'
+      preLoaderRoute: typeof ApiPortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout': {
+      id: '/api/checkout'
+      path: '/api/checkout'
+      fullPath: '/api/checkout'
+      preLoaderRoute: typeof ApiCheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/$': {
@@ -1653,6 +1706,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof adminDashboardIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
+    }
+    '/api/webhook/polar': {
+      id: '/api/webhook/polar'
+      path: '/api/webhook/polar'
+      fullPath: '/api/webhook/polar'
+      preLoaderRoute: typeof ApiWebhookPolarRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/rpc/$': {
       id: '/api/rpc/$'
@@ -2387,7 +2447,7 @@ const homeMusicRouteRouteWithChildren = homeMusicRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   authRouteRoute: authRouteRouteWithChildren,
   libraryRouteRoute: libraryRouteRouteWithChildren,
-  SuccessPaymentRoute: SuccessPaymentRoute,
+  SuccessRoute: SuccessRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   adminDashboardRouteRoute: adminDashboardRouteRouteWithChildren,
   homeMusicRouteRoute: homeMusicRouteRouteWithChildren,
@@ -2406,6 +2466,8 @@ const rootRouteChildren: RootRouteChildren = {
   homeSupportRoute: homeSupportRoute,
   homeTermsRoute: homeTermsRoute,
   ApiSplatRoute: ApiSplatRoute,
+  ApiCheckoutRoute: ApiCheckoutRoute,
+  ApiPortalRoute: ApiPortalRoute,
   homeIndexRoute: homeIndexRoute,
   blogBlogBlogslugRoute: blogBlogBlogslugRoute,
   blogBlogProfileRoute: blogBlogProfileRoute,
@@ -2414,6 +2476,7 @@ const rootRouteChildren: RootRouteChildren = {
   homePlayPlayIdRoute: homePlayPlayIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
+  ApiWebhookPolarRoute: ApiWebhookPolarRoute,
   blogBlogIndexRoute: blogBlogIndexRoute,
   homeMoviesIndexRoute: homeMoviesIndexRoute,
   homeReelsIndexRoute: homeReelsIndexRoute,

@@ -17,6 +17,7 @@ model User {
     // Custom Fields for App Logic
     agreeToTerms       Boolean            @default(false)
     subscriptionStatus SubscriptionStatus @default(FREE)
+    currentPlan        String? // e.g., "Premium-Monthly", "Premium-Yearly", "Family-Monthly", "Family-Yearly"
     customerId         String?
 
     // Auth Relations

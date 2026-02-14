@@ -4,7 +4,7 @@ import type { ComponentType } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import type { CheckoutInputScheme } from "@/server/subscription";
+import type { CheckoutInputScheme } from "@/types/subscription";
 import type { PlanType } from "../plans.constants";
 
 type PlanWithIcon = Omit<PlanType, "icon"> & {

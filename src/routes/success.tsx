@@ -1,14 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { auth } from "@/lib/better-auth";
+import { prisma } from "@/lib/db";
 
 const getRedirectUrl = createServerFn({ method: "GET" }).handler(async () => {
-  const { getRequestHeaders } = await import("@tanstack/react-start/server");
-  const { auth } = await import("@/lib/auth-server");
-  const { prisma } = await import("@/lib/db");
+
 
   try {
     const headers = getRequestHeaders();
@@ -36,7 +37,7 @@ type SuccessSearch = {
   checkout_id?: string;
 };
 
-export const Route = createFileRoute("/success-payment")({
+export const Route = createFileRoute("/success")({
   validateSearch: (search: Record<string, unknown>): SuccessSearch => {
     return {
       checkout_id:

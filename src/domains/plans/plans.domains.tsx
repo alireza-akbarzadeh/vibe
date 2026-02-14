@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Crown, Sparkles, Zap } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import type { CheckoutInputScheme } from "@/server/subscription";
+import type { CheckoutInputScheme } from "@/types/subscription";
 import { FaqSection } from "./components/faq-section";
 import { PlanCard } from "./components/plans-card";
 import type { PlanType } from "./plans.constants";

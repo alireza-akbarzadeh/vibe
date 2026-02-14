@@ -16,7 +16,7 @@ import { useForm } from "@/components/ui/forms/form.tsx";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AuthLayout from "@/domains/auth/auth-layout";
-import { env } from "@/env";
+
 import { requestPasswordReset } from "@/lib/auth-client";
 
 const forgotPasswordSchema = z.object({
@@ -47,7 +47,7 @@ function ForgotPasswordPage() {
 		onSubmit: async ({ value }) => {
 			const { error } = await requestPasswordReset({
 				email: value.email || "",
-				redirectTo: `${env.VITE_APP_URL}/reset-password`,
+				redirectTo: `${import.meta.env.VITE_APP_URL}/reset-password`,
 			});
 			if (error) {
 				toast.error(error.message || "Something went wrong");

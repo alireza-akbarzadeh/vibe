@@ -117,7 +117,7 @@ export function RootHeader() {
 					</div>
 
 					{/* 3. DESKTOP ACTIONS (ENGAGING JOIN NOW) */}
-					<div className="hidden md:flex  items-center gap-3 shrink-0">
+					<div className="hidden lg:flex items-center gap-3 shrink-0">
 						{isLoggedIn ? (
 							<UserMenu />
 						) : (

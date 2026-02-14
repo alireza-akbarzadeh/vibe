@@ -1,23 +1,11 @@
-import { env } from "@/env";
-import type { SubscriptionStatus } from "@/generated/prisma/enums";
-import {
-	POLAR_PRODUCT_TO_PLAN,
-	polarClient,
-} from "@/integrations/polar/polar-client";
-import { getEmailTemplate, sendEmail } from "@/integrations/resend/email";
-import { prisma } from "@/lib/db";
-import {
-	checkout,
-	polar,
-	portal,
-	usage,
-	webhooks,
-} from "@polar-sh/better-auth";
-import { polarClient as betterAuthPolarClient } from "@polar-sh/better-auth/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, apiKey, emailOTP, twoFactor } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { env } from "@/env";
+import { polarClient } from "@/integrations/polar/polar-client";
+import { getEmailTemplate, sendEmail } from "@/integrations/resend/email";
+import { prisma } from "@/lib/db";
 import type { authClient } from "./auth-client";
 
 const emailFrom = "Acme <onboarding@resend.dev>";
@@ -100,89 +88,6 @@ export const auth = betterAuth({
 		twoFactor(),
 		admin(),
 		apiKey(),
-		betterAuthPolarClient(),
-		polar({
-			client: polarClient,
-			createCustomerOnSignUp: true,
-			getCustomerCreateParams: async ({ user }) => ({
-				externalId: user.id,
-				email: user.email,
-				metadata: {
-					name: user.name || "",
-				},
-			}),
-			use: [
-				checkout({
-					products: [
-						{ productId: env.POLAR_FREE_PRODUCT_ID, slug: "Free" },
-						{
-							productId: env.POLAR_PREMIUM_MONTHLY_PRODUCT_ID,
-							slug: "Premium-Monthly",
-						},
-						{
-							productId: env.POLAR_PREMIUM_YEARLY_PRODUCT_ID,
-							slug: "Premium-Yearly",
-						},
-						{
-							productId: env.POLAR_FAMILY_MONTHLY_PRODUCT_ID,
-							slug: "Family-Monthly",
-						},
-						{
-							productId: env.POLAR_FAMILY_YEARLY_PRODUCT_ID,
-							slug: "Family-Yearly",
-						},
-					],
-					successUrl: env.POLAR_SUCCESS_URL,
-					authenticatedUsersOnly: true,
-				}),
-				webhooks({
-					secret: env.POLAR_WEBHOOK_SECRET,
-					async onOrderPaid(payload) {
-						const customerId = payload.data.customer?.externalId;
-						const productId = payload.data.productId;
-
-						if (!customerId || !productId) return;
-
-						const newStatus = POLAR_PRODUCT_TO_PLAN[
-							productId
-						] as SubscriptionStatus;
-						if (!newStatus) return;
-
-						// Update User subscriptionStatus
-						await prisma.user.update({
-							where: { id: customerId },
-							data: { subscriptionStatus: newStatus },
-						});
-
-						// Update Subscription record status
-						await prisma.subscription.updateMany({
-							where: { userId: customerId, productId },
-							data: { status: newStatus, startedAt: new Date() },
-						});
-					},
-					async onSubscriptionCanceled(payload) {
-						const customerId = payload.data.customer?.externalId;
-						const productId = payload.data.productId;
-						if (!customerId) return;
-
-						await prisma.user.update({
-							where: { id: customerId },
-							data: { subscriptionStatus: "CANCELLED" },
-						});
-
-						await prisma.subscription.updateMany({
-							where: {
-								userId: customerId,
-								...(productId ? { productId } : {}),
-							},
-							data: { status: "CANCELLED", canceledAt: new Date() },
-						});
-					},
-				}),
-				portal(),
-				usage(),
-			],
-		}),
 	],
 	user: {
 		deleteUser: {

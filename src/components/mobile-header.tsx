@@ -28,7 +28,7 @@ export function MobileHeader(props: RootHeaderProps) {
     const { open, side = "left", show = false, onOpenChange } = props;
 
     return (
-        <>
+        <div className="space-x-2 flex items-center">
             <Sheet open={open} onOpenChange={onOpenChange}>
                 <SheetTrigger asChild>
                     <button
@@ -115,6 +115,6 @@ export function MobileHeader(props: RootHeaderProps) {
                 </SheetContent>
             </Sheet>
             <UserMenu />
-        </>
+        </div>
     );
 }
