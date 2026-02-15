@@ -37,7 +37,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 
 	// Extract genre IDs for similar movies query
 	const genreIds = media.genres?.map((g) => g.genreId) || [];
-	
+
 	// Fetch similar movies based on genres
 	const { data: similarMovies } = useSuspenseQuery(
 		movieSimilarQueryOptions(movieId, genreIds),
@@ -99,9 +99,9 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 				rating={movieData.rating}
 				votes={movieData.votes}
 				metascore={movieData.metascore}
-				popularity={momovies={similarMovies?.items} vieData.popularity}
-				popularityChange={movieData.popularityChange}
-				revenue={movieData.revenue}
+				popularity={momovies = { similarMovies?.items} vieData.popularity}
+			popularityChange={movieData.popularityChange}
+			revenue={movieData.revenue}
 			/>
 			<Synopsis movie={movieData} />
 			<CastCarousel cast={cast} />

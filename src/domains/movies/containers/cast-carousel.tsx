@@ -47,58 +47,58 @@ export function CastCarousel({ cast }: CastCarouselProps) {
 		}
 	};
 
-return (
-	<section className="relative py-20 bg-linear-to-b from-[#0d0d0d] to-[#0a0a0a] overflow-hidden">
-		<div className="max-w-7xl mx-auto px-6">
-			<motion.div
-				initial={{ opacity: 0, y: 20 }}
-				whileInView={{ opacity: 1, y: 0 }}
-				viewport={{ once: true }}
-				transition={{ duration: 0.8 }}
-			>
-				<div className="flex items-center justify-between mb-8">
-					<div>
-						<h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-							Cast & Crew
-						</h2>
-						<p className="text-gray-400">Starring</p>
-					</div>
-
-					<div className="hidden md:flex gap-2">
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={() => scroll("left")}
-							className="rounded-full bg-white/5 hover:bg-white/10 text-white border border-white/10"
-						>
-							<ChevronLeft className="w-5 h-5" />
-						</Button>
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={() => scroll("right")}
-							className="rounded-full bg-white/5 hover:bg-white/10 text-white border border-white/10"
-						>
-							<ChevronRight className="w-5 h-5" />
-						</Button>
-					</div>
-				</div>
-
-				<div
-					ref={scrollRef}
-					className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 -mx-6 px-6 snap-x snap-mandatory"
-					style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+	return (
+		<section className="relative py-20 bg-linear-to-b from-[#0d0d0d] to-[#0a0a0a] overflow-hidden">
+			<div className="max-w-7xl mx-auto px-6">
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.8 }}
 				>
-					{castList.map((actor, index) => (
-						<CastList actor={actor} index={index} key={actor.name} />
-					))}
-				</div>
-			</motion.div>
-		</div>
+					<div className="flex items-center justify-between mb-8">
+						<div>
+							<h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+								Cast & Crew
+							</h2>
+							<p className="text-gray-400">Starring</p>
+						</div>
 
-		{/* Gradient fade edges */}
-		<div className="absolute left-0 top-0 bottom-0 w-20 bg-linear-to-r from-[#0d0d0d] to-transparent pointer-events-none" />
-		<div className="absolute right-0 top-0 bottom-0 w-20 bg-linear-to-l from-[#0a0a0a] to-transparent pointer-events-none" />
-	</section>
-);
+						<div className="hidden md:flex gap-2">
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={() => scroll("left")}
+								className="rounded-full bg-white/5 hover:bg-white/10 text-white border border-white/10"
+							>
+								<ChevronLeft className="w-5 h-5" />
+							</Button>
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={() => scroll("right")}
+								className="rounded-full bg-white/5 hover:bg-white/10 text-white border border-white/10"
+							>
+								<ChevronRight className="w-5 h-5" />
+							</Button>
+						</div>
+					</div>
+
+					<div
+						ref={scrollRef}
+						className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 -mx-6 px-6 snap-x snap-mandatory"
+						style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+					>
+						{castList.map((actor, index) => (
+							<CastList actor={actor} index={index} key={actor.name} />
+						))}
+					</div>
+				</motion.div>
+			</div>
+
+			{/* Gradient fade edges */}
+			<div className="absolute left-0 top-0 bottom-0 w-20 bg-linear-to-r from-[#0d0d0d] to-transparent pointer-events-none" />
+			<div className="absolute right-0 top-0 bottom-0 w-20 bg-linear-to-l from-[#0a0a0a] to-transparent pointer-events-none" />
+		</section>
+	);
 }

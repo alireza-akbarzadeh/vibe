@@ -83,7 +83,10 @@ export const movieSimilarQueryOptions = (
 		queryKey: ["media", "similar", mediaId, genreIds],
 		queryFn: async () => {
 			if (!genreIds || genreIds.length === 0) {
-				return { items: [], pagination: { page: 1, limit: 6, total: 0, totalPages: 0 } };
+				return {
+					items: [],
+					pagination: { page: 1, limit: 6, total: 0, totalPages: 0 },
+				};
 			}
 
 			const response = await client.media.list({
@@ -94,7 +97,7 @@ export const movieSimilarQueryOptions = (
 				status: ["PUBLISHED"],
 				sortBy: "NEWEST",
 			});
-			
+
 			// Filter out the current movie from results
 			const filteredItems = response.data.items.filter(
 				(item) => item.id !== mediaId,
