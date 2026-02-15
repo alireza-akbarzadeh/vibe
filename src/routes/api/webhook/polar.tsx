@@ -181,6 +181,8 @@ export const Route = createFileRoute("/api/webhook/polar")({
                                 referenceId: subscription.id,
                                 status: subscriptionStatus,
                                 startedAt: new Date(),
+                                canceledAt: subscription.canceledAt,
+                                endedAt: subscription.endedAt,
                             },
                         });
                     }

@@ -1,6 +1,6 @@
+import { client, orpc } from "@/orpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { orpcClient } from "@/lib/orpc-client";
 
 interface SubscriptionStatus {
 	status: "FREE" | "PREMIUM" | "FAMILY" | "CANCELLED" | "NONE";
@@ -13,14 +13,6 @@ interface SubscriptionStatus {
 	currentPeriodEnd?: string | null;
 }
 
-interface CancelResponse {
-	success: boolean;
-	message: string;
-	pendingCancellation?: boolean;
-	alreadyCancelled?: boolean;
-	error?: string;
-}
-
 export function useSubscription() {
 	const queryClient = useQueryClient();
 
@@ -29,56 +21,46 @@ export function useSubscription() {
 		data: subscription,
 		isLoading,
 		error,
-	} = useQuery<SubscriptionStatus>({
-		queryKey: ["subscription", "status"],
-		queryFn: async () => {
-			try {
-				// Get user's subscriptions from Polar
-				const result = await orpcClient.polar.listSubscriptions.query({
-					limit: 1,
-					page: 1,
-				});
-
-				if (!result.subscriptions || result.subscriptions.length === 0) {
-					return {
-						status: "FREE" as const,
-						currentPlan: null,
-						customerId: null,
-					};
-				}
-
-				const sub = result.subscriptions[0];
-				
-				// Map status to our system
-				let status: "FREE" | "PREMIUM" | "FAMILY" | "CANCELLED" | "NONE" = "NONE";
-				if (sub.status === "active") {
-					status = sub.productName.toLowerCase().includes("family") 
-						? "FAMILY" 
-						: "PREMIUM";
-				} else if (sub.status === "canceled" || sub.cancelAtPeriodEnd) {
-					status = "CANCELLED";
-				} else if (sub.status === "trialing") {
-					status = "PREMIUM";
-				}
-
-				return {
-					status,
-					currentPlan: sub.productName,
-					customerId: null,
-					subscriptionId: sub.id,
-					amount: sub.amount,
-					currency: sub.currency,
-					interval: sub.interval,
-					currentPeriodEnd: sub.currentPeriodEnd,
-				};
-			} catch (error) {
-				// If no subscription found or error, return free status
+	} = useQuery({
+		...orpc.polar.listSubscriptions.queryOptions({
+			input: {
+				page: 1,
+				limit: 10,
+			},
+		}),
+		select: (result) => {
+			if (!result?.subscriptions || result.subscriptions.length === 0) {
 				return {
 					status: "FREE" as const,
 					currentPlan: null,
 					customerId: null,
 				};
 			}
+
+			const sub = result.subscriptions[0];
+			
+			// Map status to our system
+			let status: "FREE" | "PREMIUM" | "FAMILY" | "CANCELLED" | "NONE" = "NONE";
+			if (sub.status === "active") {
+				status = sub.productName.toLowerCase().includes("family") 
+					? "FAMILY" 
+					: "PREMIUM";
+			} else if (sub.status === "canceled" || sub.cancelAtPeriodEnd) {
+				status = "CANCELLED";
+			} else if (sub.status === "trialing") {
+				status = "PREMIUM";
+			}
+
+			return {
+				status,
+				currentPlan: sub.productName,
+				customerId: null,
+				subscriptionId: sub.id,
+				amount: sub.amount,
+				currency: sub.currency,
+				interval: sub.interval,
+				currentPeriodEnd: sub.currentPeriodEnd,
+			};
 		},
 		staleTime: 1000 * 60 * 5, // 5 minutes
 	});
@@ -90,16 +72,10 @@ export function useSubscription() {
 				throw new Error("No active subscription found");
 			}
 
-			const result = await orpcClient.polar.cancelSubscription.mutate({
+			return await client.polar.cancelSubscription({
 				subscriptionId: subscription.subscriptionId,
 				immediatelys: false,
 			});
-
-			return {
-				success: result.success,
-				message: result.message,
-				pendingCancellation: true,
-			};
 		},
 		onSuccess: (data) => {
 			// Invalidate and refetch subscription status
@@ -107,15 +83,11 @@ export function useSubscription() {
 			queryClient.invalidateQueries({ queryKey: ["polar", "subscriptions"] });
 
 			// Show success message
-			if (data.alreadyCancelled) {
-				toast.info("Subscription already cancelled");
-			} else if (data.pendingCancellation) {
+			if (data.success) {
 				toast.success(
 					data.message ||
 						"Subscription will end at the end of your billing period",
 				);
-			} else {
-				toast.success(data.message || "Subscription cancelled");
 			}
 		},
 		onError: (error: Error) => {

@@ -1,9 +1,11 @@
 import { useRouter } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+	AppWindow,
 	BadgeCheck,
 	Crown,
 	Gem,
+	LayoutDashboard,
 	Library,
 	Link2Icon,
 	Loader2,
@@ -51,6 +53,8 @@ export function UserMenu() {
 			},
 		});
 	};
+
+	const isAdmin = ADMIN_ACCESS.includes(user?.role as string)
 
 	if (!user) return null;
 
@@ -197,6 +201,7 @@ export function UserMenu() {
 								label="Settings"
 								description="Account preferences"
 							/>
+
 							<MenuItem
 								to="/pricing"
 								icon={Sparkles}
@@ -204,6 +209,14 @@ export function UserMenu() {
 								description={user.subscriptionStatus === "FREE" ? "Get premium features" : "Change your plan"}
 								highlight={user.subscriptionStatus === "FREE"}
 							/>
+							{isAdmin && (
+								<MenuItem
+									to="/dashboard"
+									icon={LayoutDashboard}
+									label="Admin Dashboard"
+									description="Access system overview"
+								/>
+							)}
 							{ADMIN_ACCESS.includes(user.role as Role) && (
 								<MenuItem
 									to="/api/$"

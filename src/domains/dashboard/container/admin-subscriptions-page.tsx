@@ -12,17 +12,18 @@ import {
     useReactTable,
     type ColumnDef,
 } from "@tanstack/react-table";
-import { useState } from "react";
 
 type Subscription = {
     id: string;
-    customerEmail: string;
+    customerEmail: string | null;
     productName: string;
     status: string;
     amount: number;
     currency: string;
-    interval: string;
-    currentPeriodEnd: string;
+    interval: string | null;
+    currentPeriodStart: string;
+    currentPeriodEnd: string | null;
+    cancelAtPeriodEnd: boolean;
 };
 
 const statusOptions = [
@@ -97,8 +98,8 @@ export function AdminSubscriptionsPage() {
         },
     ];
 
-    const table = useReactTable({
-        data: data?.subscriptions || [],
+    const table = useReactTable<Subscription>({
+        data: (data?.subscriptions || []) as Subscription[],
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -117,7 +118,7 @@ export function AdminSubscriptionsPage() {
     });
 
     return (
-        <div className="space-y-8 p-4 md:p-6 lg:p-10 max-w-[1400px] mx-auto">
+        <div className="space-y-8 p-4 md:p-6 lg:p-10 max-w-350 mx-auto">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Subscriptions</h1>
                 <p className="text-muted-foreground">

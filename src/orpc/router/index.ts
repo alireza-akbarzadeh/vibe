@@ -13,6 +13,7 @@ import { RecommendationRouter } from "../handlers/recommendation";
 import { ReviewRouter } from "../handlers/review";
 import { roleRouter } from "../handlers/role";
 import { TestAuthRouter } from "../handlers/test-auth";
+import { userRouter } from "../handlers/user";
 import { ViewingHistoryRouter } from "../handlers/viewing-history";
 import { WatchListRouter } from "../handlers/watchlist";
 import { base } from "../router/base";
@@ -22,6 +23,7 @@ export const router = base.router({
 	media: MediaRouter,
 	collections: CollectionRouter,
 	roles: roleRouter,
+	users: userRouter,
 	testAuth: TestAuthRouter,
 	profiles: ProfileRouter,
 	genres: GenreRouter,

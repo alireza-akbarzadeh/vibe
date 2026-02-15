@@ -19,6 +19,15 @@ const config = defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      external: [
+        'node:stream',
+        'node:stream/web',
+        'node:async_hooks',
+      ],
+    },
+  },
   server: {
     host: true,
     allowedHosts: [

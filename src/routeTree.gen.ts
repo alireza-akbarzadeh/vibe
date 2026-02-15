@@ -92,6 +92,7 @@ import { Route as adminDashboardCampaignsIndexRouteImport } from './routes/(admi
 import { Route as adminDashboardBackupsIndexRouteImport } from './routes/(admin)/dashboard/backups/index'
 import { Route as adminDashboardAuditLogsIndexRouteImport } from './routes/(admin)/dashboard/audit-logs/index'
 import { Route as adminDashboardAnalyticsIndexRouteImport } from './routes/(admin)/dashboard/analytics/index'
+import { Route as adminDashboardAccessControlIndexRouteImport } from './routes/(admin)/dashboard/access-control/index'
 import { Route as adminDashboardAbTestsIndexRouteImport } from './routes/(admin)/dashboard/ab-tests/index'
 import { Route as adminDashboardUsersEditRouteImport } from './routes/(admin)/dashboard/users/edit'
 import { Route as adminDashboardUsersCreateRouteImport } from './routes/(admin)/dashboard/users/create'
@@ -561,6 +562,12 @@ const adminDashboardAnalyticsIndexRoute =
     path: '/analytics/',
     getParentRoute: () => adminDashboardRouteRoute,
   } as any)
+const adminDashboardAccessControlIndexRoute =
+  adminDashboardAccessControlIndexRouteImport.update({
+    id: '/access-control/',
+    path: '/access-control/',
+    getParentRoute: () => adminDashboardRouteRoute,
+  } as any)
 const adminDashboardAbTestsIndexRoute =
   adminDashboardAbTestsIndexRouteImport.update({
     id: '/ab-tests/',
@@ -836,6 +843,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/users/create': typeof adminDashboardUsersCreateRoute
   '/dashboard/users/edit': typeof adminDashboardUsersEditRoute
   '/dashboard/ab-tests/': typeof adminDashboardAbTestsIndexRoute
+  '/dashboard/access-control/': typeof adminDashboardAccessControlIndexRoute
   '/dashboard/analytics/': typeof adminDashboardAnalyticsIndexRoute
   '/dashboard/audit-logs/': typeof adminDashboardAuditLogsIndexRoute
   '/dashboard/backups/': typeof adminDashboardBackupsIndexRoute
@@ -951,6 +959,7 @@ export interface FileRoutesByTo {
   '/dashboard/users/create': typeof adminDashboardUsersCreateRoute
   '/dashboard/users/edit': typeof adminDashboardUsersEditRoute
   '/dashboard/ab-tests': typeof adminDashboardAbTestsIndexRoute
+  '/dashboard/access-control': typeof adminDashboardAccessControlIndexRoute
   '/dashboard/analytics': typeof adminDashboardAnalyticsIndexRoute
   '/dashboard/audit-logs': typeof adminDashboardAuditLogsIndexRoute
   '/dashboard/backups': typeof adminDashboardBackupsIndexRoute
@@ -1071,6 +1080,7 @@ export interface FileRoutesById {
   '/(admin)/dashboard/users/create': typeof adminDashboardUsersCreateRoute
   '/(admin)/dashboard/users/edit': typeof adminDashboardUsersEditRoute
   '/(admin)/dashboard/ab-tests/': typeof adminDashboardAbTestsIndexRoute
+  '/(admin)/dashboard/access-control/': typeof adminDashboardAccessControlIndexRoute
   '/(admin)/dashboard/analytics/': typeof adminDashboardAnalyticsIndexRoute
   '/(admin)/dashboard/audit-logs/': typeof adminDashboardAuditLogsIndexRoute
   '/(admin)/dashboard/backups/': typeof adminDashboardBackupsIndexRoute
@@ -1190,6 +1200,7 @@ export interface FileRouteTypes {
     | '/dashboard/users/create'
     | '/dashboard/users/edit'
     | '/dashboard/ab-tests/'
+    | '/dashboard/access-control/'
     | '/dashboard/analytics/'
     | '/dashboard/audit-logs/'
     | '/dashboard/backups/'
@@ -1305,6 +1316,7 @@ export interface FileRouteTypes {
     | '/dashboard/users/create'
     | '/dashboard/users/edit'
     | '/dashboard/ab-tests'
+    | '/dashboard/access-control'
     | '/dashboard/analytics'
     | '/dashboard/audit-logs'
     | '/dashboard/backups'
@@ -1424,6 +1436,7 @@ export interface FileRouteTypes {
     | '/(admin)/dashboard/users/create'
     | '/(admin)/dashboard/users/edit'
     | '/(admin)/dashboard/ab-tests/'
+    | '/(admin)/dashboard/access-control/'
     | '/(admin)/dashboard/analytics/'
     | '/(admin)/dashboard/audit-logs/'
     | '/(admin)/dashboard/backups/'
@@ -2094,6 +2107,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof adminDashboardAnalyticsIndexRouteImport
       parentRoute: typeof adminDashboardRouteRoute
     }
+    '/(admin)/dashboard/access-control/': {
+      id: '/(admin)/dashboard/access-control/'
+      path: '/access-control'
+      fullPath: '/dashboard/access-control/'
+      preLoaderRoute: typeof adminDashboardAccessControlIndexRouteImport
+      parentRoute: typeof adminDashboardRouteRoute
+    }
     '/(admin)/dashboard/ab-tests/': {
       id: '/(admin)/dashboard/ab-tests/'
       path: '/ab-tests'
@@ -2406,6 +2426,7 @@ interface adminDashboardRouteRouteChildren {
   adminDashboardUsersCreateRoute: typeof adminDashboardUsersCreateRoute
   adminDashboardUsersEditRoute: typeof adminDashboardUsersEditRoute
   adminDashboardAbTestsIndexRoute: typeof adminDashboardAbTestsIndexRoute
+  adminDashboardAccessControlIndexRoute: typeof adminDashboardAccessControlIndexRoute
   adminDashboardAnalyticsIndexRoute: typeof adminDashboardAnalyticsIndexRoute
   adminDashboardAuditLogsIndexRoute: typeof adminDashboardAuditLogsIndexRoute
   adminDashboardBackupsIndexRoute: typeof adminDashboardBackupsIndexRoute
@@ -2466,6 +2487,7 @@ const adminDashboardRouteRouteChildren: adminDashboardRouteRouteChildren = {
   adminDashboardUsersCreateRoute: adminDashboardUsersCreateRoute,
   adminDashboardUsersEditRoute: adminDashboardUsersEditRoute,
   adminDashboardAbTestsIndexRoute: adminDashboardAbTestsIndexRoute,
+  adminDashboardAccessControlIndexRoute: adminDashboardAccessControlIndexRoute,
   adminDashboardAnalyticsIndexRoute: adminDashboardAnalyticsIndexRoute,
   adminDashboardAuditLogsIndexRoute: adminDashboardAuditLogsIndexRoute,
   adminDashboardBackupsIndexRoute: adminDashboardBackupsIndexRoute,

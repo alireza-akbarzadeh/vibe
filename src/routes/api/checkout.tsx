@@ -11,6 +11,7 @@ export const Route = createFileRoute("/api/checkout")({
                 successUrl: `${env.VITE_APP_URL}/success?checkout_id={CHECKOUT_ID}`,
                 returnUrl: `${env.VITE_APP_URL}/pricing`,
                 theme: "dark",
+
             }),
         },
     },

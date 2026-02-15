@@ -11,7 +11,6 @@ import {
     useReactTable,
     type ColumnDef,
 } from "@tanstack/react-table";
-import { useState } from "react";
 
 type Customer = {
     id: string;
@@ -67,7 +66,7 @@ export function AdminCustomersPage() {
     });
 
     return (
-        <div className="space-y-8 p-4 md:p-6 lg:p-10 max-w-[1400px] mx-auto">
+        <div className="space-y-8 p-4 md:p-6 lg:p-10 max-w-350 mx-auto">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Customers</h1>

@@ -26,8 +26,8 @@ export const adminMiddleware = createMiddleware().server(async ({ next, request,
 		throw redirect({ to: "/login" });
 	}
 
-	// Check if user has admin role (from the role field)
-	if (auth.user.role !== "admin") {
+	// Check if user has admin role (case-insensitive)
+	if (auth.user.role?.toLowerCase() !== "admin") {
 		throw redirect({
 			to: "/unauthorized",
 			search: {

@@ -67,7 +67,11 @@ export const requireAdmin = (roles?: Role | Role[]) =>
 				: [roles]
 			: ["ADMIN"];
 
-		if (!allowed.includes(context.user.role as Role)) {
+		// Case-insensitive role comparison
+		const userRole = (context.user.role as string)?.toUpperCase();
+		const allowedRoles = allowed.map(r => r.toUpperCase());
+
+		if (!allowedRoles.includes(userRole)) {
 			throw errors.FORBIDDEN({
 				message: "Admin access required",
 			});

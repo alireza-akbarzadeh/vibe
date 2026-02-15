@@ -87,7 +87,7 @@ export function MovieCard({
 					className="absolute top-4 right-4 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/20"
 				>
 					<Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-					<span className="text-white text-sm font-bold">{movie.rating ?? 0}</span>
+					<span className="text-white text-sm font-bold">{movie.rating?.toFixed(1) ?? 0}</span>
 				</motion.div>
 
 				{/* Content */}
