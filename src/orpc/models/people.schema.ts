@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PersonListItemSchema } from "./person.schema";
 
 /**
  * People Schema - For cast/crew data

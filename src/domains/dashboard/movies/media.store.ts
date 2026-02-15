@@ -204,6 +204,43 @@ export const updateMediaStatusAction = async (
 	}
 };
 
+// Action: Bulk update media status
+export const bulkUpdateMediaStatusAction = async (
+	ids: string[],
+	status: "DRAFT" | "REVIEW" | "PUBLISHED" | "REJECTED",
+) => {
+	mediaUIStore.setState((s) => ({ ...s, isUpdating: true, error: null }));
+	try {
+		// We fetch details for each and update.
+		// In a real app, backend should support bulk update.
+		const updatePromises = ids.map(async (id) => {
+			const details = await client.media.find({ id });
+			if (!details.data) throw new Error(`Could not fetch details for ${id}`);
+			
+			return client.media.update({
+				...details.data,
+				status,
+				genreIds: details.data.genres?.map((g) => g.genre.id),
+				creatorIds: details.data.creators?.map((c) => c.creator.id),
+			});
+		});
+
+		await Promise.all(updatePromises);
+		
+		await fetchMediaAction(mediaUIStore.state.currentPage);
+		mediaUIStore.setState((s) => ({ ...s, isUpdating: false }));
+		return true;
+	} catch (error) {
+		console.error("Bulk update media status error:", error);
+		mediaUIStore.setState((s) => ({
+			...s,
+			error: "Failed to bulk update media status",
+			isUpdating: false,
+		}));
+		return false;
+	}
+};
+
 export const setTypeFilter = (type: string) => {
 	mediaUIStore.setState((s) => ({
 		...s,

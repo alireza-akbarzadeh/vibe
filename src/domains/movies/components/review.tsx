@@ -8,7 +8,7 @@ import type { Reviews } from "@/types/app";
 interface ReviewProps {
 	review: Reviews;
 	index: number;
-	toggleExpanded: (id: number) => void;
+	toggleExpanded: (id: string | number) => void;
 	expandedReviews: Set<unknown>;
 }
 

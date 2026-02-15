@@ -1,53 +1,63 @@
 import { motion } from "framer-motion";
-
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MovieImages } from "@/domains/movies/components";
 import { LightBox } from "../components/light-box";
 import type { MovieImage } from "../movie-types";
+import type { GroupedImages } from "@/orpc/models/media-asset.schema";
 
-type ActiveTabSte = "poster" | "still" | "behind" | "all";
+type ActiveTabSte = "poster" | "still" | "behind" | "all" | "backdrop";
 
-export function ImagesGallery() {
+interface ImagesGalleryProps {
+	images?: GroupedImages;
+}
+
+export function ImagesGallery({ images }: ImagesGalleryProps) {
 	const [activeTab, setActiveTab] = useState<ActiveTabSte>("all");
 	const [lightboxOpen, setLightboxOpen] = useState(false);
 	const [currentImage, setCurrentImage] = useState(0);
 
-	const images: MovieImage[] = [
-		{
-			url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&h=600&fit=crop",
-			type: "still",
-			description: "Epic desert scene from the movie",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&h=600&fit=crop",
-			type: "still",
-			description: "Main character walking through the sand dunes",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&h=600&fit=crop",
-			type: "behind",
-			description: "Director setting up a shot on the set",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&h=600&fit=crop",
-			type: "still",
-			description: "Intense confrontation scene between two characters",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=800&h=600&fit=crop",
-			type: "poster",
-			description: "Official movie poster featuring the lead character",
-		},
-		{
-			url: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=800&h=600&fit=crop",
-			type: "behind",
-			description: "Crew members adjusting lighting on set",
-		},
+	// Transform API images to component format
+	const allImages: MovieImage[] = [
+		...(images?.backdrops.map((img) => ({
+			url: `https://image.tmdb.org/t/p/w1280${img.filePath}`,
+			type: "backdrop" as const,
+			description: `Backdrop image - ${img.width}x${img.height}`,
+		})) || []),
+		...(images?.posters.map((img) => ({
+			url: `https://image.tmdb.org/t/p/w780${img.filePath}`,
+			type: "poster" as const,
+			description: `Poster image - ${img.width}x${img.height}`,
+		})) || []),
+		...(images?.stills.map((img) => ({
+			url: `https://image.tmdb.org/t/p/w1280${img.filePath}`,
+			type: "still" as const,
+			description: `Still image - ${img.width}x${img.height}`,
+		})) || []),
+		...(images?.logos.map((img) => ({
+			url: `https://image.tmdb.org/t/p/w500${img.filePath}`,
+			type: "behind" as const, // Map logos to "behind" for existing UI
+			description: `Logo - ${img.width}x${img.height}`,
+		})) || []),
 	];
+
+	// Show placeholder if no images
+	if (!images || allImages.length === 0) {
+		return (
+			<section className="relative py-20 bg-linear-to-b from-[#0d0d0d] to-[#0a0a0a]">
+				<div className="max-w-7xl mx-auto px-6">
+					<h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+						Images
+					</h2>
+					<p className="text-gray-400">No images available yet.</p>
+				</div>
+			</section>
+		);
+	}
+
 	const filterImage = (value: ActiveTabSte) => {
-		if (value === "all") return images;
-		return images.filter((image) => image.type === value);
+		if (value === "all") return allImages;
+		return allImages.filter((image) => image.type === value);
 	};
 
 	const openLightbox = (index: number) => {
@@ -56,10 +66,13 @@ export function ImagesGallery() {
 	};
 
 	const navigate = (direction: "next" | "prev") => {
+		const displayedImages = filterImage(activeTab);
 		if (direction === "next") {
-			setCurrentImage((prev) => (prev + 1) % images.length);
+			setCurrentImage((prev) => (prev + 1) % displayedImages.length);
 		} else {
-			setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+			setCurrentImage(
+				(prev) => (prev - 1 + displayedImages.length) % displayedImages.length,
+			);
 		}
 	};
 
@@ -83,16 +96,24 @@ export function ImagesGallery() {
 								setActiveTab(value as unknown as ActiveTabSte)
 							}
 							defaultValue={activeTab}
-						>
-							<TabsList className="bg-white/5">
-								<TabsTrigger value="all">All</TabsTrigger>
+									All ({allImages.length})
+								</TabsTrigger>
+								<TabsTrigger value="backdrop">
+									Backdrops ({images?.backdrops.length || 0})
+								</TabsTrigger>
+								<TabsTrigger value="poster">
+									Posters ({images?.posters.length || 0})
+								</TabsTrigger>
+								<TabsTrigger value="still">
+									Stills ({images?.stills.length || 0})
+								rigger>
 								<TabsTrigger value="still">Still</TabsTrigger>
 								<TabsTrigger value="behind">Behind Scenes</TabsTrigger>
 								<TabsTrigger value="poster">Posters</TabsTrigger>
 							</TabsList>
 						</Tabs>
-					</div>
-					<MovieImages
+					</difilterImage(activeTab)[currentImage]?.url || ""}
+				imageLength={filterImage(activeTab)
 						images={filterImage(activeTab)}
 						openLightbox={openLightbox}
 					/>

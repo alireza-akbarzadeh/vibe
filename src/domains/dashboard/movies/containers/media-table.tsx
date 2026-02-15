@@ -5,6 +5,7 @@ import {
     getCoreRowModel,
     type Row,
     useReactTable,
+    type PaginationState,
 } from "@tanstack/react-table";
 import {
     AlertTriangle,
@@ -17,6 +18,7 @@ import {
     Video,
     X,
     XCircle,
+    Edit,
 } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
@@ -29,11 +31,14 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
+    DropdownMenuSeparator,
+    DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { downloadCSV } from "@/lib/utils";
 import { MediaAdvancedFilterContent } from "../components/media-advanced-filter";
 import { mediaColumns } from "../components/media-columns";
-import { bulkDeleteMediaAction, fetchMediaAction, type MediaItem, mediaUIStore } from "../media.store";
+import { bulkDeleteMediaAction, fetchMediaAction, updateMediaStatusAction, type MediaItem, mediaUIStore } from "../media.store";
+import { BulkCreateDialog } from "../components/bulk-create-dialog";
 
 interface MediaManagementTableProps {
     initialData?: {
@@ -48,27 +53,27 @@ interface MediaManagementTableProps {
 }
 
 export function MediaManagementTable({ initialData }: MediaManagementTableProps) {
-    const { media, isLoading, error, currentPage, totalPages, total } = useStore(mediaUIStore);
+    const { media, isLoading, error, currentPage, totalPages, total, isUpdating } = useStore(mediaUIStore);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = React.useState({});
     const [searchQuery, setSearchQuery] = React.useState("");
     const navigate = useNavigate();
 
-    // Sync pagination state with store
-    const [pagination, setPagination] = React.useState({
-        pageIndex: 0,
-        pageSize: 50,
+    // Initialize pagination state
+    const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
+        pageIndex: (initialData?.pagination?.page || 1) - 1,
+        pageSize: initialData?.pagination?.limit || 50,
     });
 
-    // Update pageIndex when store's currentPage changes
-    React.useEffect(() => {
-        setPagination(prev => ({
-            ...prev,
-            pageIndex: (currentPage || 1) - 1,
-        }));
-    }, [currentPage]);
+    const pagination = React.useMemo(
+        () => ({
+            pageIndex,
+            pageSize,
+        }),
+        [pageIndex, pageSize]
+    );
 
-    // Initialize store with server-loaded data for instant display
+    // Initial Data Sync
     React.useEffect(() => {
         if (initialData && media.length === 0) {
             mediaUIStore.setState((s) => ({
@@ -79,11 +84,16 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
                 totalPages: initialData.pagination.totalPages,
                 isLoading: false,
             }));
-        } else if (!initialData) {
-            // Fallback to client-side fetch if no initial data
-            fetchMediaAction();
         }
     }, [initialData, media.length]);
+
+    // Sync store currentPage changes back to local pagination state
+    // This handles cases where the store is updated by other means (e.g. bulk create resets to page 1)
+    React.useEffect(() => {
+        if (currentPage && currentPage !== pageIndex + 1) {
+            setPagination(prev => ({ ...prev, pageIndex: currentPage - 1 }));
+        }
+    }, [currentPage, pageIndex]);
 
     // Debounced search effect
     React.useEffect(() => {
@@ -91,7 +101,7 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
             if (searchQuery !== undefined) {
                 // Reset to page 1 when searching
                 setPagination(prev => ({ ...prev, pageIndex: 0 }));
-                fetchMediaAction(1, pagination.pageSize, searchQuery);
+                fetchMediaAction(1, pageSize, searchQuery);
             }
         }, 500);
 
@@ -101,14 +111,21 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
 
     // Fetch new data when pagination changes (user action)
     React.useEffect(() => {
-        const page = pagination.pageIndex + 1;
-        const limit = initialData?.pagination?.limit || 50;
-        // Only fetch if the page or pageSize actually changed from user interaction
-        if (page > 0 && (page !== currentPage || pagination.pageSize !== limit)) {
-            fetchMediaAction(page, pagination.pageSize, searchQuery);
+        const page = pageIndex + 1;
+        // Avoid fetching if we are just syncing from store (handled by check in previous effect?)
+
+        if (page !== currentPage || pageSize !== mediaUIStore.state.filters.limit) {
+            // We can safely fetch. fetchMediaAction will handle it.
+            // But to avoid double fetch on mount with initialData:
+            if (initialData && page === initialData.pagination.page && media.length > 0 && searchQuery === "") {
+                // Skip initial fetch if data is already there matching params
+                return;
+            }
+            fetchMediaAction(page, pageSize, searchQuery);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pagination.pageIndex, pagination.pageSize, currentPage]);
+    }, [pageIndex, pageSize]);
+
     const applySegment = (segment: "all" | "movies" | "episodes" | "draft" | "published") => {
         switch (segment) {
             case "movies":
@@ -181,10 +198,10 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
     });
 
     const mediaStatusOptions = [
-        { label: "Published", icon: CheckCircle2, color: "text-emerald-500" },
-        { label: "Draft", icon: Clock, color: "text-amber-500" },
-        { label: "Review", icon: Clock, color: "text-blue-500" },
-        { label: "Rejected", icon: XCircle, color: "text-destructive" },
+        { label: "Published", icon: CheckCircle2, color: "text-emerald-500", value: "PUBLISHED" },
+        { label: "Draft", icon: Clock, color: "text-amber-500", value: "DRAFT" },
+        { label: "Review", icon: Clock, color: "text-blue-500", value: "REVIEW" },
+        { label: "Rejected", icon: XCircle, color: "text-destructive", value: "REJECTED" },
     ];
 
     const handleDelete = async (rows: Row<MediaItem>[]) => {
@@ -196,6 +213,25 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
         } else {
             toast.error("Failed to delete media");
         }
+    };
+
+    const handleBulkStatusUpdate = async (status: "DRAFT" | "REVIEW" | "PUBLISHED" | "REJECTED") => {
+        const rows = table.getFilteredSelectedRowModel().rows;
+        const ids = rows.map((row) => row.original.id);
+
+        // Use toast.promise for better UX
+        toast.promise(
+            Promise.all(ids.map(id => updateMediaStatusAction(id, status))),
+            {
+                loading: `Updating ${ids.length} items to ${status}...`,
+                success: (results) => {
+                    const count = results.filter(Boolean).length;
+                    table.toggleAllRowsSelected(false);
+                    return `Updated ${count} items successfully`;
+                },
+                error: "Failed to update some items"
+            }
+        );
     };
 
     const handleDownload = (rows: Row<MediaItem>[]) => {
@@ -335,6 +371,8 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
                     />
 
                     <div className="flex items-center gap-3">
+                        <BulkCreateDialog />
+
                         <Button
                             onClick={handleCreateNew}
                             size="sm"
@@ -343,6 +381,37 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
                             <Plus className="h-3.5 w-3.5" />
                             Add Media
                         </Button>
+
+                        {/* Custom Bulk Update Actions */}
+                        {Object.keys(rowSelection).length > 0 && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="h-8 rounded-lg text-[10px] font-bold uppercase border-border/40 bg-card/50"
+                                        disabled={isUpdating}
+                                    >
+                                        <Edit className="mr-1.5 size-3" />
+                                        Update Status
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-40">
+                                    <DropdownMenuLabel>Change Status To</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    {mediaStatusOptions.map((option) => (
+                                        <DropdownMenuItem
+                                            key={option.value}
+                                            onClick={() => handleBulkStatusUpdate(option.value as any)}
+                                            className="gap-2"
+                                        >
+                                            <option.icon className={`h-3 w-3 ${option.color}`} />
+                                            {option.label}
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
 
                         <Table.BulkActions
                             onDelete={handleDelete}

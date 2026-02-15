@@ -33,20 +33,22 @@ model Media {
     favorites     Favorite[]
     watchList     WatchList[]
     reviews       UserReview[]
+    videos        Video[]
+    images        Image[]
+    cast          MediaCast[]
 
     @@index([title])
     @@index([title, status])
     @@index([title, releaseYear])
     @@index([createdAt])
-    @@map("media")
+    @@map("Media")
 }
 
-// Person model - stores actor/crew data from TMDB
 model Person {
     id                 String   @id @default(cuid())
-    tmdbId             Int      @unique @map("tmdb_id") // TMDB person ID
+    tmdbId             Int      @unique @map("tmdb_id")
     adult              Boolean  @default(false)
-    gender             Int?     @default(0) // 0=not set, 1=female, 2=male, 3=non-binary
+    gender             Int?     @default(0)
     knownForDepartment String?  @map("known_for_department") @db.VarChar(100)
     name               String   @db.VarChar(255)
     originalName       String   @map("original_name") @db.VarChar(255)
@@ -55,20 +57,53 @@ model Person {
     createdAt          DateTime @default(now()) @map("created_at")
     updatedAt          DateTime @updatedAt @map("updated_at")
 
-    knownFor KnownFor[]
+    knownFor  KnownFor[]
+    mediaCast MediaCast[]
 
-    @@index([name]) // For name searches
-    @@index([popularity(sort: Desc)]) // For sorting by popularity
-    @@index([knownForDepartment]) // For filtering by department
-    @@index([tmdbId]) // For TMDB API lookups
+    @@index([name])
+    @@index([popularity(sort: Desc)])
+    @@index([knownForDepartment])
+    @@index([tmdbId])
     @@map("person")
 }
 
-// KnownFor model - stores movies/shows a person is known for
+enum CastType {
+    ACTOR
+    DIRECTOR
+    WRITER
+    PRODUCER
+    CINEMATOGRAPHER
+    COMPOSER
+    EDITOR
+    OTHER
+}
+
+model MediaCast {
+    id           String   @id @default(cuid())
+    mediaId      String   @map("media_id")
+    personId     String   @map("person_id")
+    castType     CastType @map("cast_type")
+    role         String?  @db.VarChar(500) // Character name for actors, job title for crew
+    order        Int      @default(0) // Display order (for actors especially)
+    tmdbCreditId String?  @unique @map("tmdb_credit_id") @db.VarChar(100)
+    createdAt    DateTime @default(now()) @map("created_at")
+    updatedAt    DateTime @updatedAt @map("updated_at")
+
+    media  Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+    @@unique([mediaId, personId, castType, role])
+    @@index([mediaId])
+    @@index([personId])
+    @@index([castType])
+    @@index([order])
+    @@map("media_cast")
+}
+
 model KnownFor {
     id               String    @id @default(cuid())
     personId         String    @map("person_id")
-    tmdbId           Int       @map("tmdb_id") // TMDB movie/show ID
+    tmdbId           Int       @map("tmdb_id")
     adult            Boolean   @default(false)
     backdropPath     String?   @map("backdrop_path") @db.VarChar(500)
     title            String    @db.VarChar(255)
@@ -76,8 +111,8 @@ model KnownFor {
     originalTitle    String?   @map("original_title") @db.VarChar(255)
     overview         String?   @db.Text
     posterPath       String?   @map("poster_path") @db.VarChar(500)
-    mediaType        String    @map("media_type") @db.VarChar(50) // "movie" or "tv"
-    genreIds         String    @map("genre_ids") @db.Text // JSON array of genre IDs
+    mediaType        String    @map("media_type") @db.VarChar(50)
+    genreIds         String    @map("genre_ids") @db.Text
     popularity       Float     @default(0.0)
     releaseDate      DateTime? @map("release_date")
     video            Boolean   @default(false)
@@ -88,13 +123,80 @@ model KnownFor {
 
     person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
 
-    @@unique([personId, tmdbId]) // Prevent duplicates
-    @@index([personId]) // For person lookups
-    @@index([tmdbId]) // For TMDB API lookups
-    @@index([mediaType]) // For filtering by type
-    @@index([popularity(sort: Desc)]) // For sorting
-    @@index([releaseDate(sort: Desc)]) // For sorting by date
+    @@unique([personId, tmdbId])
+    @@index([personId])
+    @@index([tmdbId])
+    @@index([mediaType])
+    @@index([popularity(sort: Desc)])
+    @@index([releaseDate(sort: Desc)])
     @@map("known_for")
+}
+
+model Video {
+    id          String    @id @default(cuid())
+    mediaId     String    @map("media_id")
+    tmdbId      String    @map("tmdb_id")
+    iso6391     String?   @map("iso_639_1") @db.VarChar(10)
+    iso31661    String?   @map("iso_3166_1") @db.VarChar(10)
+    name        String    @db.VarChar(500)
+    key         String    @db.VarChar(255)
+    site        String    @db.VarChar(50)
+    size        Int       @default(1080)
+    type        VideoType
+    official    Boolean   @default(false)
+    publishedAt DateTime  @map("published_at")
+    createdAt   DateTime  @default(now()) @map("created_at")
+    updatedAt   DateTime  @updatedAt @map("updated_at")
+
+    media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+    @@unique([mediaId, tmdbId])
+    @@index([type])
+    @@index([mediaId])
+    @@index([official])
+    @@index([publishedAt(sort: Desc)])
+    @@map("video")
+}
+
+enum VideoType {
+    Trailer
+    Teaser
+    Clip
+    Featurette
+    BehindTheScenes @map("Behind the Scenes")
+    Bloopers
+    Recap
+    Opening
+}
+
+model Image {
+    id          String    @id @default(cuid())
+    mediaId     String    @map("media_id")
+    filePath    String    @map("file_path") @db.VarChar(500)
+    aspectRatio Float     @map("aspect_ratio")
+    height      Int
+    width       Int
+    iso6391     String?   @map("iso_639_1") @db.VarChar(10)
+    voteAverage Float     @default(0) @map("vote_average")
+    voteCount   Int       @default(0) @map("vote_count")
+    type        ImageType
+    createdAt   DateTime  @default(now()) @map("created_at")
+    updatedAt   DateTime  @updatedAt @map("updated_at")
+
+    media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+    @@unique([mediaId, filePath])
+    @@index([mediaId])
+    @@index([type])
+    @@index([voteAverage(sort: Desc)])
+    @@map("image")
+}
+
+enum ImageType {
+    Backdrop
+    Poster
+    Still
+    Logo
 }
 
 model Collection {

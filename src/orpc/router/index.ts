@@ -1,3 +1,4 @@
+import { CastRouter } from "../handlers/cast";
 import { CollectionRouter } from "../handlers/collection";
 import { ContentRouter } from "../handlers/content";
 import { CreatorRouter } from "../handlers/creator";
@@ -5,6 +6,7 @@ import { FavoriteRouter } from "../handlers/favorite";
 import { GenreRouter } from "../handlers/genre";
 import { HealthRouter } from "../handlers/health";
 import { MediaRouter } from "../handlers/media";
+import { MediaAssetRouter } from "../handlers/media-asset";
 import { PermissionRouter } from "../handlers/permission";
 import { PersonRouter } from "../handlers/person";
 import { PolarRouter } from "../handlers/polar";
@@ -22,6 +24,8 @@ import { base } from "../router/base";
 export const router = base.router({
 	health: HealthRouter,
 	media: MediaRouter,
+	mediaAsset: MediaAssetRouter,
+	cast: CastRouter,
 	person: PersonRouter,
 	collections: CollectionRouter,
 	roles: roleRouter,
