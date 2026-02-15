@@ -33,6 +33,68 @@ model Media {
     favorites     Favorite[]
     watchList     WatchList[]
     reviews       UserReview[]
+
+    @@index([title])
+    @@index([title, status])
+    @@index([title, releaseYear])
+    @@index([createdAt])
+    @@map("media")
+}
+
+// Person model - stores actor/crew data from TMDB
+model Person {
+    id                 String   @id @default(cuid())
+    tmdbId             Int      @unique @map("tmdb_id") // TMDB person ID
+    adult              Boolean  @default(false)
+    gender             Int?     @default(0) // 0=not set, 1=female, 2=male, 3=non-binary
+    knownForDepartment String?  @map("known_for_department") @db.VarChar(100)
+    name               String   @db.VarChar(255)
+    originalName       String   @map("original_name") @db.VarChar(255)
+    popularity         Float    @default(0.0)
+    profilePath        String?  @map("profile_path") @db.VarChar(500)
+    createdAt          DateTime @default(now()) @map("created_at")
+    updatedAt          DateTime @updatedAt @map("updated_at")
+
+    knownFor KnownFor[]
+
+    @@index([name]) // For name searches
+    @@index([popularity(sort: Desc)]) // For sorting by popularity
+    @@index([knownForDepartment]) // For filtering by department
+    @@index([tmdbId]) // For TMDB API lookups
+    @@map("person")
+}
+
+// KnownFor model - stores movies/shows a person is known for
+model KnownFor {
+    id               String    @id @default(cuid())
+    personId         String    @map("person_id")
+    tmdbId           Int       @map("tmdb_id") // TMDB movie/show ID
+    adult            Boolean   @default(false)
+    backdropPath     String?   @map("backdrop_path") @db.VarChar(500)
+    title            String    @db.VarChar(255)
+    originalLanguage String?   @map("original_language") @db.VarChar(10)
+    originalTitle    String?   @map("original_title") @db.VarChar(255)
+    overview         String?   @db.Text
+    posterPath       String?   @map("poster_path") @db.VarChar(500)
+    mediaType        String    @map("media_type") @db.VarChar(50) // "movie" or "tv"
+    genreIds         String    @map("genre_ids") @db.Text // JSON array of genre IDs
+    popularity       Float     @default(0.0)
+    releaseDate      DateTime? @map("release_date")
+    video            Boolean   @default(false)
+    voteAverage      Float     @default(0.0) @map("vote_average")
+    voteCount        Int       @default(0) @map("vote_count")
+    createdAt        DateTime  @default(now()) @map("created_at")
+    updatedAt        DateTime  @updatedAt @map("updated_at")
+
+    person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+    @@unique([personId, tmdbId]) // Prevent duplicates
+    @@index([personId]) // For person lookups
+    @@index([tmdbId]) // For TMDB API lookups
+    @@index([mediaType]) // For filtering by type
+    @@index([popularity(sort: Desc)]) // For sorting
+    @@index([releaseDate(sort: Desc)]) // For sorting by date
+    @@map("known_for")
 }
 
 model Collection {

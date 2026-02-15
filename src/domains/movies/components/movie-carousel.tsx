@@ -38,14 +38,20 @@ export function MovieCarousel({
 
 	return (
 		<motion.div
-			initial={{ opacity: 0, y: 50 }}
+			initial={{ opacity: 0, y: 30 }}
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, margin: "-100px" }}
-			transition={{ duration: 0.6 }}
+			transition={{ duration: 0.4, ease: "easeOut" }}
 			className="relative max-w-450 mx-auto px-6"
 		>
 			{/* Header */}
-			<div className="flex items-center justify-between mb-6">
+			<motion.div
+				initial={{ opacity: 0, x: -20 }}
+				whileInView={{ opacity: 1, x: 0 }}
+				viewport={{ once: true }}
+				transition={{ duration: 0.3, delay: 0.1 }}
+				className="flex items-center justify-between mb-6"
+			>
 				<div>
 					<div className="flex items-center gap-3 mb-2">
 						<Link
@@ -87,7 +93,7 @@ export function MovieCarousel({
 						<ChevronRight className="w-5 h-5" />
 					</Button>
 				</div>
-			</div>
+			</motion.div>
 
 			{/* Carousel */}
 			<div className="relative group">
@@ -105,13 +111,24 @@ export function MovieCarousel({
 					}}
 				>
 					{movies.map((movie, index) => (
-						<MovieCard
+						<motion.div
 							key={movie.id}
-							movie={movie}
-							index={index}
-							showProgress={showProgress as boolean}
-							variant={variant}
-						/>
+							initial={{ opacity: 0, y: 60 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-50px" }}
+							transition={{
+								duration: 0.4,
+								delay: Math.floor(index / 3) * 0.1, // Stagger every 3 cards
+								ease: [0.25, 0.46, 0.45, 0.94], // Smooth easing
+							}}
+						>
+							<MovieCard
+								movie={movie}
+								index={index}
+								showProgress={showProgress as boolean}
+								variant={variant}
+							/>
+						</motion.div>
 					))}
 				</div>
 

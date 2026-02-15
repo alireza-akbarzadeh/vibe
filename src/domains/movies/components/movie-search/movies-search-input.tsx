@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Search, TrendingUp, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/storybook";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
 	searchSuggestionsQueryOptions,
@@ -17,7 +17,7 @@ const MIN_QUERY_LENGTH = 2;
 
 export interface MoviesSearchInputProps {
 	searchQuery: string;
-    onSearchChange: (query: string) => void
+	onSearchChange: (query: string) => void
 }
 
 export function MoviesSearchInput({
@@ -82,6 +82,7 @@ export function MoviesSearchInput({
 				{inputValue ? (
 					<Button
 						type="button"
+						variant="text"
 						onClick={handleClear}
 						className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
 					>

@@ -10,12 +10,15 @@ const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
 });
 
+     
+
 const prisma = new PrismaClient({ adapter })
 
 const TMDB_BEARER_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YTQ5Y2I0ODRiYTE4ZjUzYmY5MTBiNTg2ZTFlODU4OSIsIm5iZiI6MTYyMjQwNzYwMi4wMjcsInN1YiI6IjYwYjNmOWIyYWJmOGUyMDAyYmRhMWRmZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ixH4tVwZjRV6EX0p3bI3ZtNL15mxomUknidiiaueMwY';
+
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-const query="love"
+const query="animation"
 
 
 import dns from 'node:dns';

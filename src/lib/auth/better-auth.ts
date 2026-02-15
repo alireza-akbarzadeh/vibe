@@ -14,6 +14,7 @@ export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),
+	trustedOrigins: ["http://localhost:3000", "https://vibeapp.com"],
 	secret: env.BETTER_AUTH_SECRET,
 	baseURL: env.BETTER_AUTH_URL,
 	emailAndPassword: {

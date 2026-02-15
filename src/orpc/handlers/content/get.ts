@@ -225,3 +225,300 @@ export const getAnimations = publicProcedure
 			},
 		};
 	});
+
+/* ---------------------------- TV Series ---------------------------- */
+export const getTVSeries = publicProcedure
+	.route({ method: "GET" })
+	.input(popularSeriesInputSchema)
+	.output(ApiResponseSchema(recommendationOutputSchema))
+	.handler(async ({ input }) => {
+		const { limit } = input;
+
+		const tvSeries = await prisma.media.findMany({
+			where: {
+				status: "PUBLISHED",
+				type: "EPISODE",
+			},
+			include: {
+				genres: {
+					include: {
+						genre: true,
+					},
+				},
+				creators: {
+					include: {
+						creator: true,
+					},
+				},
+				collection: {
+					select: {
+						id: true,
+						title: true,
+						type: true,
+					},
+				},
+			},
+			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			take: limit,
+		});
+
+		return {
+			status: 200,
+			message: "TV series retrieved successfully",
+			data: {
+				items: tvSeries,
+				reason: "Popular TV series",
+			},
+		};
+	});
+
+/* ---------------------------- Horror Movies ---------------------------- */
+export const getHorrorMovies = publicProcedure
+	.route({ method: "GET" })
+	.input(latestReleasesInputSchema)
+	.output(ApiResponseSchema(recommendationOutputSchema))
+	.handler(async ({ input }) => {
+		const { limit } = input;
+
+		const horrorGenre = await prisma.genre.findFirst({
+			where: {
+				name: { equals: "Horror", mode: "insensitive" },
+			},
+		});
+
+		if (!horrorGenre) {
+			return {
+				status: 200,
+				message: "No horror genre found",
+				data: {
+					items: [],
+					reason: "Horror genre not configured",
+				},
+			};
+		}
+
+		const horrorMovies = await prisma.media.findMany({
+			where: {
+				status: "PUBLISHED",
+				type: "MOVIE",
+				genres: {
+					some: {
+						genreId: horrorGenre.id,
+					},
+				},
+			},
+			include: {
+				genres: {
+					include: {
+						genre: true,
+					},
+				},
+				creators: {
+					include: {
+						creator: true,
+					},
+				},
+				collection: {
+					select: {
+						id: true,
+						title: true,
+						type: true,
+					},
+				},
+			},
+			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			take: limit,
+		});
+
+		return {
+			status: 200,
+			message: "Horror movies retrieved successfully",
+			data: {
+				items: horrorMovies,
+				reason: "Thrilling horror movies",
+			},
+		};
+	});
+
+/* ---------------------------- Comedy Movies ---------------------------- */
+export const getComedyMovies = publicProcedure
+	.route({ method: "GET" })
+	.input(latestReleasesInputSchema)
+	.output(ApiResponseSchema(recommendationOutputSchema))
+	.handler(async ({ input }) => {
+		const { limit } = input;
+
+		const comedyGenre = await prisma.genre.findFirst({
+			where: {
+				name: { equals: "Comedy", mode: "insensitive" },
+			},
+		});
+
+		if (!comedyGenre) {
+			return {
+				status: 200,
+				message: "No comedy genre found",
+				data: {
+					items: [],
+					reason: "Comedy genre not configured",
+				},
+			};
+		}
+
+		const comedyMovies = await prisma.media.findMany({
+			where: {
+				status: "PUBLISHED",
+				type: "MOVIE",
+				genres: {
+					some: {
+						genreId: comedyGenre.id,
+					},
+				},
+			},
+			include: {
+				genres: {
+					include: {
+						genre: true,
+					},
+				},
+				creators: {
+					include: {
+						creator: true,
+					},
+				},
+				collection: {
+					select: {
+						id: true,
+						title: true,
+						type: true,
+					},
+				},
+			},
+			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			take: limit,
+		});
+
+		return {
+			status: 200,
+			message: "Comedy movies retrieved successfully",
+			data: {
+				items: comedyMovies,
+				reason: "Hilarious comedy movies",
+			},
+		};
+	});
+
+/* ---------------------------- Romance Movies ---------------------------- */
+export const getRomanceMovies = publicProcedure
+	.route({ method: "GET" })
+	.input(latestReleasesInputSchema)
+	.output(ApiResponseSchema(recommendationOutputSchema))
+	.handler(async ({ input }) => {
+		const { limit } = input;
+
+		const romanceGenre = await prisma.genre.findFirst({
+			where: {
+				name: { equals: "Romance", mode: "insensitive" },
+			},
+		});
+
+		if (!romanceGenre) {
+			return {
+				status: 200,
+				message: "No romance genre found",
+				data: {
+					items: [],
+					reason: "Romance genre not configured",
+				},
+			};
+		}
+
+		const romanceMovies = await prisma.media.findMany({
+			where: {
+				status: "PUBLISHED",
+				type: "MOVIE",
+				genres: {
+					some: {
+						genreId: romanceGenre.id,
+					},
+				},
+			},
+			include: {
+				genres: {
+					include: {
+						genre: true,
+					},
+				},
+				creators: {
+					include: {
+						creator: true,
+					},
+				},
+				collection: {
+					select: {
+						id: true,
+						title: true,
+						type: true,
+					},
+				},
+			},
+			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			take: limit,
+		});
+
+		return {
+			status: 200,
+			message: "Romance movies retrieved successfully",
+			data: {
+				items: romanceMovies,
+				reason: "Heartwarming romance movies",
+			},
+		};
+	});
+
+/* ---------------------------- Top IMDB Rated ---------------------------- */
+export const getTopIMDB = publicProcedure
+	.route({ method: "GET" })
+	.input(latestReleasesInputSchema)
+	.output(ApiResponseSchema(recommendationOutputSchema))
+	.handler(async ({ input }) => {
+		const { type, limit } = input;
+
+		const topRated = await prisma.media.findMany({
+			where: {
+				status: "PUBLISHED",
+				...(type && { type }),
+				rating: { gte: 7.0 }, // IMDB rating >= 7.0
+			},
+			include: {
+				genres: {
+					include: {
+						genre: true,
+					},
+				},
+				creators: {
+					include: {
+						creator: true,
+					},
+				},
+				collection: {
+					select: {
+						id: true,
+						title: true,
+						type: true,
+					},
+				},
+			},
+			orderBy: [{ rating: "desc" }, { viewCount: "desc" }],
+			take: limit,
+		});
+
+		return {
+			status: 200,
+			message: "Top rated content retrieved successfully",
+			data: {
+				items: topRated,
+				reason: "Highest rated on IMDB",
+			},
+		};
+	});

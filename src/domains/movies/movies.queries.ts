@@ -33,9 +33,11 @@ export function trendingSearchesQueryOptions(limit = 8) {
 
 /** Query options for search suggestions (dropdown while typing) */
 export function searchSuggestionsQueryOptions(query: string) {
-	return mediaListQueryOptions({
-		search: query,
-		limit: 6,
-		page: 1,
+	return orpc.media.search.queryOptions({
+		input: {
+			query: query.trim(),
+			limit: 20,
+			status: ["PUBLISHED"],
+		},
 	});
 }

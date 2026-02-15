@@ -6,6 +6,7 @@ import { GenreRouter } from "../handlers/genre";
 import { HealthRouter } from "../handlers/health";
 import { MediaRouter } from "../handlers/media";
 import { PermissionRouter } from "../handlers/permission";
+import { PersonRouter } from "../handlers/person";
 import { PolarRouter } from "../handlers/polar";
 import { PolarAdminRouter } from "../handlers/polar/admin";
 import { ProfileRouter } from "../handlers/profile";
@@ -21,6 +22,7 @@ import { base } from "../router/base";
 export const router = base.router({
 	health: HealthRouter,
 	media: MediaRouter,
+	person: PersonRouter,
 	collections: CollectionRouter,
 	roles: roleRouter,
 	users: userRouter,
