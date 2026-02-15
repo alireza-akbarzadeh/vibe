@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, LogOut, Settings, ShieldCheck, UserCircle } from "lucide-react";
+import { Route as RootRoute } from "@/routes/__root";
+import { authClient } from "@/lib/auth/auth-client";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -18,6 +20,27 @@ interface UserProfileProps {
 export function UserProfile({ variant = "sidebar", isCollapsed = false }: UserProfileProps) {
 	const isHeader = variant === "header";
 
+	// Get real user data from auth context
+	const { auth } = RootRoute.useRouteContext();
+	const user = auth?.user;
+
+	// Fallback values if no user is logged in
+	const avatarSeed = user?.email || "Guest";
+	const userName = user?.name || "Guest User";
+	const userEmail = user?.email || "guest@vibe.app";
+	const userRole = user?.role || "USER";
+	const userId = user?.id || "GUEST";
+
+	const handleSignOut = async () => {
+		await authClient.signOut({
+			fetchOptions: {
+				onSuccess: () => {
+					window.location.href = "/login";
+				},
+			},
+		});
+	};
+
 	return (
 		<div className={cn(
 			"transition-all duration-300",
@@ -35,8 +58,8 @@ export function UserProfile({ variant = "sidebar", isCollapsed = false }: UserPr
 						{/* Avatar Section */}
 						<div className="relative shrink-0">
 							<img
-								alt="Employee"
-								src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+								alt={userName}
+								src={user?.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`}
 								className={cn(
 									"rounded-lg object-cover shadow-sm ring-1 ring-border group-hover:ring-primary/50 transition-all",
 									isHeader ? "w-8 h-8" : "w-9 h-9"
@@ -65,12 +88,12 @@ export function UserProfile({ variant = "sidebar", isCollapsed = false }: UserPr
 										className="flex flex-1 flex-col items-start min-w-0"
 									>
 										<p className="text-sm font-semibold text-foreground truncate w-full text-left leading-none mb-1">
-											Alex Rivera
+											{userName}
 										</p>
 										<div className="flex items-center gap-1.5">
 											<ShieldCheck className="w-3 h-3 text-indigo-500" />
 											<p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
-												Admin
+												{userRole}
 											</p>
 										</div>
 									</motion.div>
@@ -94,8 +117,8 @@ export function UserProfile({ variant = "sidebar", isCollapsed = false }: UserPr
 				>
 					<DropdownMenuLabel className="p-3">
 						<div className="flex flex-col gap-1">
-							<p className="text-xs font-medium text-muted-foreground uppercase tracking-tighter">Employee ID: #E-9921</p>
-							<p className="text-sm font-semibold truncate text-foreground">arivera@vibe.staff</p>
+							<p className="text-xs font-medium text-muted-foreground uppercase tracking-tighter">User ID: {userId.slice(0, 12)}</p>
+							<p className="text-sm font-semibold truncate text-foreground">{userEmail}</p>
 						</div>
 					</DropdownMenuLabel>
 
@@ -122,7 +145,10 @@ export function UserProfile({ variant = "sidebar", isCollapsed = false }: UserPr
 					<DropdownMenuSeparator />
 
 					<div className="p-1">
-						<DropdownMenuItem className="flex items-center gap-3 p-2.5 rounded-lg text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer">
+						<DropdownMenuItem
+							onClick={handleSignOut}
+							className="flex items-center gap-3 p-2.5 rounded-lg text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"
+						>
 							<LogOut size={16} />
 							<span className="font-medium text-sm">Sign out</span>
 						</DropdownMenuItem>

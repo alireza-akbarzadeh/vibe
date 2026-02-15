@@ -129,10 +129,10 @@ export default function MovieDiscovery(props: MovieDiscoveryProps = {}) {
 			</motion.div>
 
 			<SearchHeader
-                searchQuery={searchQuery}
+				searchQuery={searchQuery}
 				onSearchChange={(query) => setSearchQuery({ activeCategory, query })} />
 
-			<HeroBanner />
+			<HeroBanner latestData={latestData.data.items} />
 
 			<div className="relative z-10 max-w-450 mx-auto px-6 mt-20">
 				<CategoryNav

@@ -1,11 +1,9 @@
-import { getRequestHeaders } from "@tanstack/react-start/server";
 import type { SubscriptionStatus } from "@/generated/prisma/enums";
-import { auth } from "@/lib/auth/better-auth";
 import type { Role, Tier } from "../helpers/constants";
 import { userHasPermission } from "../helpers/helper";
 import { base } from "../router/base";
 
-type SessionType = NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>;
+type SessionType = NonNullable<Awaited<ReturnType<typeof import("@/lib/auth/better-auth").auth.api.getSession>>>;
 
 export interface AuthContext {
 	user: SessionType["user"];
@@ -18,18 +16,16 @@ export interface AuthContext {
 
 export const withAuth = base
 	.$context<Partial<AuthContext>>()
-	.middleware(async ({ next, errors }) => {
-		const headers = getRequestHeaders();
-		const session = await auth.api.getSession({ headers });
-
-		if (!session) {
+	.middleware(async ({ next, errors, context }) => {
+		// Use session from context (already set by API handler)
+		if (!context?.user || !context?.session) {
 			throw errors.UNAUTHENTICATED();
 		}
 
 		return next({
 			context: {
-				user: session.user,
-				session: session.session,
+				user: context.user,
+				session: context.session,
 			},
 		});
 	});
@@ -110,15 +106,14 @@ type RequireOptions = {
 };
 
 export const withRequire = (options: RequireOptions) =>
-	base.$context<Partial<AuthContext>>().middleware(async ({ next, errors }) => {
-		const headers = getRequestHeaders();
-		const session = await auth.api.getSession({ headers });
-
-		if (!session) {
+	base.$context<Partial<AuthContext>>().middleware(async ({ next, errors, context }) => {
+		// Use session from context (already set by API handler)
+		if (!context?.user || !context?.session) {
 			throw errors.UNAUTHENTICATED();
 		}
 
-		const user = session.user;
+		const user = context.user;
+		const session = context.session;
 
 		/* ---------------------------------------------------------------------- */
 		/*                                ROLE CHECK                               */
@@ -130,7 +125,7 @@ export const withRequire = (options: RequireOptions) =>
 
 			if (allowedRoles.includes(user.role as Role)) {
 				return next({
-					context: { user, session: session.session },
+					context: { user, session },
 				});
 			}
 		}
@@ -145,7 +140,7 @@ export const withRequire = (options: RequireOptions) =>
 
 			if (hasPermission) {
 				return next({
-					context: { user, session: session.session },
+					context: { user, session },
 				});
 			}
 		}

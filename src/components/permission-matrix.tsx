@@ -10,7 +10,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/tabel";
+} from "@/components/ui/table";
 import { Check, X } from "lucide-react";
 import { useMemo } from "react";
 

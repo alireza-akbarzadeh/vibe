@@ -4,59 +4,26 @@ import { Info, Play, Star, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AddButton } from "@/components/buttons/add-button";
 import { Button, buttonVariants } from "@/components/ui/button";
-import type { FeaturedMovie } from "@/types/app";
+import { MediaList } from "@/orpc/models/media.schema";
 
-export function HeroBanner() {
+
+type HeroBannerProps = {
+	latestData: MediaList[]
+}
+export function HeroBanner({ latestData }: HeroBannerProps) {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [isMuted, setIsMuted] = useState(true);
 
-	const featured: FeaturedMovie[] = [
-		{
-			title: "Dune: Part Two",
-			description:
-				"Paul Atreides unites with Chani and the Fremen while seeking revenge against those who destroyed his family. Facing a choice between the love of his life and the fate of the universe.",
-			image:
-				"https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1920&q=80",
-			rating: 8.8,
-			year: 2024,
-			genres: ["Sci-Fi", "Adventure", "Drama"],
-			runtime: "166 min",
-			movieId: 1,
-		},
-		{
-			title: "Oppenheimer",
-			description:
-				"The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II.",
-			image:
-				"https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1920&q=80",
-			rating: 8.9,
-			year: 2023,
-			genres: ["Biography", "Drama", "History"],
-			runtime: "180 min",
-			movieId: 2,
-		},
-		{
-			title: "Interstellar",
-			description:
-				"A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival as Earth faces environmental collapse.",
-			image:
-				"https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1920&q=80",
-			rating: 8.7,
-			year: 2014,
-			genres: ["Sci-Fi", "Drama", "Adventure"],
-			runtime: "169 min",
-			movieId: 3,
-		},
-	];
+
 
 	useEffect(() => {
 		const timer = setInterval(() => {
-			setCurrentIndex((prev) => (prev + 1) % featured.length);
+			setCurrentIndex((prev) => (prev + 1) % latestData.length);
 		}, 8000);
 		return () => clearInterval(timer);
 	}, []);
 
-	const current = featured[currentIndex];
+	const current = latestData[currentIndex];
 
 	return (
 		<div className="relative h-screen w-full overflow-hidden">
@@ -72,7 +39,7 @@ export function HeroBanner() {
 				>
 					<div className="absolute inset-0">
 						<img
-							src={current.image}
+							src={current.thumbnail}
 							alt={current.title}
 							className="w-full h-full object-cover"
 						/>
@@ -125,16 +92,16 @@ export function HeroBanner() {
 										</span>
 									</div>
 									<span className="text-white font-semibold">
-										{current.year}
+										{current.releaseYear}
 									</span>
-									<span className="text-gray-400">{current.runtime}</span>
+									<span className="text-gray-400">{current.duration}</span>
 									<div className="flex gap-2">
 										{current.genres.slice(0, 3).map((genre) => (
 											<span
-												key={genre}
+												key={genre.genre.id}
 												className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm"
 											>
-												{genre}
+												{genre.genre.name}
 											</span>
 										))}
 									</div>
@@ -159,7 +126,7 @@ export function HeroBanner() {
 								>
 									<Link
 										to="/movies/$movieId"
-										params={{ movieId: current.movieId.toString() }}
+										params={{ movieId: current.id.toString() }}
 										className="h-14 px-8 flex items-center bg-white text-black hover:bg-gray-200 rounded-xl font-bold text-lg group transition-all shadow-2xl shadow-white/20"
 									>
 										<Play className="w-5 h-5 mr-2 fill-black group-hover:scale-110 transition-transform" />
@@ -168,7 +135,7 @@ export function HeroBanner() {
 
 									<Link
 										to="/movies/$movieId"
-										params={{ movieId: current.movieId.toString() }}
+										params={{ movieId: current.id.toString() }}
 										className={buttonVariants({
 											variant: "outline",
 											className:
@@ -199,10 +166,10 @@ export function HeroBanner() {
 
 			{/* Progress indicators */}
 			<div className="absolute bottom-8 right-8 z-20 flex gap-2">
-				{featured.map((movie, index) => (
+				{latestData.map((movie, index) => (
 					<Button
 						variant="text"
-						key={movie.movieId}
+						key={movie.id}
 						onClick={() => setCurrentIndex(index)}
 						className="relative group"
 					>

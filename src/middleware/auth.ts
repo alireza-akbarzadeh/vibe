@@ -22,18 +22,21 @@ export const authMiddleware = createMiddleware().server(async ({ next, context }
 export const adminMiddleware = createMiddleware().server(async ({ next, request, context }) => {
 	const auth = (context as unknown as MyRouterContext).auth;
 
-	if (!auth) {
+	// Check if session exists
+	if (!auth || !auth.user) {
 		throw redirect({ to: "/login" });
 	}
 
-	// Check if user has admin role (case-insensitive)
-	if (auth.user.role?.toLowerCase() !== "admin") {
+
+	// Check if user has ADMIN role (uppercase as stored in DB)
+	const userRole = auth.user.role as string;
+	if (!userRole || userRole !== "ADMIN") {
 		throw redirect({
 			to: "/unauthorized",
 			search: {
 				error: "unauthorized",
 				from: request.url,
-				requiredRole: "admin",
+				requiredRole: "ADMIN",
 			},
 		});
 	}
