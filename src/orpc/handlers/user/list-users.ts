@@ -90,7 +90,11 @@ export const listUsers = authedProcedure
 		const totalPages = Math.ceil(total / limit);
 
 		return {
-			users,
+			users: users.map(user => ({
+				...user,
+				createdAt: user.createdAt.toISOString(),
+				updatedAt: user.updatedAt.toISOString(),
+			})),
 			total,
 			page,
 			limit,

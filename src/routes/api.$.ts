@@ -137,7 +137,10 @@ async function handle({ request }: { request: Request }) {
 		} catch (handlerError) {
 			console.error("❌ ERROR INSIDE handler.handle():", handlerError);
 			console.error("Handler error details:", {
-				message: handlerError instanceof Error ? handlerError.message : String(handlerError),
+				message:
+					handlerError instanceof Error
+						? handlerError.message
+						: String(handlerError),
 				stack: handlerError instanceof Error ? handlerError.stack : undefined,
 			});
 			throw handlerError; // Re-throw to be caught by outer try-catch
