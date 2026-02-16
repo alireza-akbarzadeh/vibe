@@ -64,8 +64,8 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 		backdrop: images?.backdrops[0]?.filePath
 			? `https://image.tmdb.org/t/p/w1280${images.backdrops[0].filePath}`
 			: media.thumbnail,
-		rating: media.rating || 0,
-		votes: reviews?.pagination.total || 0,
+		rating: media.averageRating || media.rating || 0,
+		votes: media.reviewCount || reviews?.pagination.total || 0,
 		duration: `${Math.floor(media.duration / 60)}h ${media.duration % 60}m`,
 		releaseDate: new Date().toISOString(),
 		rating_label: "PG-13",
@@ -80,7 +80,8 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 		trailerUrl: videos?.trailers[0]?.key
 			? `https://www.youtube.com/embed/${videos.trailers[0].key}`
 			: "",
-		popularity: media.reviewCount || 0,
+		metascore: Math.round((media.averageRating || media.rating || 0) * 10),
+		popularity: media.viewCount || 0,
 		popularityChange: 0,
 	};
 
