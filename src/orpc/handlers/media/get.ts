@@ -2,6 +2,7 @@ import { ORPCError } from "@orpc/server";
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { rpcLogger } from "@/lib/rpc-logger";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { listMediaInputSchema } from "@/orpc/models/media.input.schema";
@@ -66,7 +67,7 @@ export const getMedia = publicProcedure
 			if (error instanceof z.ZodError) {
 				throw new ORPCError("BAD_REQUEST", {
 					message: "Data validation error",
-					data: error.errors,
+					data: error.issues,
 				});
 			}
 

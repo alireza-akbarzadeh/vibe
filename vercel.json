@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "outputDirectory": ".output/public",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "functions": {
+    ".output/server/index.mjs": {
+      "runtime": "nodejs20.x",
+      "maxDuration": 15,
+      "memory": 1024
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/_server(.*)",
+      "destination": "/.output/server/index.mjs"
+    },
+    {
+      "source": "/((?!.*\\.).*)",
+      "destination": "/.output/server/index.mjs"
+    }
+  ],
+  "env": {
+    "NODE_OPTIONS": "--import ./.output/server/instrument.server.mjs"
+  }
+}
+

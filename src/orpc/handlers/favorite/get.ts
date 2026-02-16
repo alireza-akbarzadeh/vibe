@@ -2,7 +2,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
-import { base } from "@/orpc/router/base";
+import { MediaListItemSchema } from "@/orpc/models/media.schema";
 
 /**
  * Get all favorites for the authenticated user
@@ -24,13 +24,7 @@ export const listFavorites = authedProcedure
 					userId: z.string(),
 					mediaId: z.string(),
 					createdAt: z.string(),
-					media: z.object({
-						id: z.string(),
-						title: z.string(),
-						description: z.string(),
-						thumbnail: z.string(),
-						type: z.enum(["MOVIE", "EPISODE", "TRACK"]),
-					}),
+					media: MediaListItemSchema,
 				}),
 			),
 		),
@@ -44,12 +38,12 @@ export const listFavorites = authedProcedure
 				where: { userId: context.user.id },
 				include: {
 					media: {
-						select: {
-							id: true,
-							title: true,
-							description: true,
-							thumbnail: true,
-							type: true,
+						include: {
+							genres: { include: { genre: true } },
+							creators: { include: { creator: true } },
+							collection: {
+								select: { id: true, title: true, type: true },
+							},
 						},
 					},
 				},
@@ -71,7 +65,7 @@ export const listFavorites = authedProcedure
 					userId: f.userId,
 					mediaId: f.mediaId,
 					createdAt: f.createdAt.toISOString(),
-					media: f.media,
+					media: f.media as any,
 				})),
 				pagination: {
 					page,

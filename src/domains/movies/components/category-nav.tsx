@@ -23,7 +23,8 @@ export type CategoryVariant =
 	| "movies"
 	| "animation"
 	| "comedy"
-	| "romantic";
+	| "romantic"
+	| "horror";
 
 export type CategoriesType = {
 	id: CategoryVariant;
