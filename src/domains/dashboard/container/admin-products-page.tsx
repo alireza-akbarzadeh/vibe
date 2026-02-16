@@ -1,6 +1,15 @@
-"use client";
-
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <explanation> */
+import {
+    type ColumnDef,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
+import { Loader2, PackagePlus, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import { Table } from "@/components/table/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,6 +22,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/forms/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -22,23 +32,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/forms/textarea";
-import { Table } from "@/components/table/data-table";
 import {
     useAdminArchiveProduct,
     useAdminCreateProduct,
     useAdminProducts,
     useAdminUpdateProduct,
 } from "@/hooks/useAdminPolar";
-import { Loader2, PackagePlus, Pencil, Trash2 } from "lucide-react";
-import { toast } from "sonner";
-import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    useReactTable,
-    type ColumnDef,
-} from "@tanstack/react-table";
 
 type Product = {
     id: string;

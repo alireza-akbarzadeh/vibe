@@ -1,20 +1,17 @@
-"use client";
-
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Table } from "@/components/table/data-table";
-import { client } from "@/orpc/client";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2, Shield, User, Key, Edit } from "lucide-react";
 import {
+    type ColumnDef,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     useReactTable,
-    type ColumnDef,
 } from "@tanstack/react-table";
+import { Edit, Key, Loader2, Shield, User } from "lucide-react";
 import { useState } from "react";
+import { Table } from "@/components/table/data-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
     Sheet,
     SheetContent,
@@ -22,6 +19,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
+import { client } from "@/orpc/client";
 import { UserAccessPanel } from "./user-access-panel";
 
 type UserAccess = {

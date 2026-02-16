@@ -1,5 +1,6 @@
-"use client";
 
+import { Check, X } from "lucide-react";
+import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,8 +12,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Check, X } from "lucide-react";
-import { useMemo } from "react";
 
 type Permission = {
     id: string;

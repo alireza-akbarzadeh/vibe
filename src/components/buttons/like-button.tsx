@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import type { ComponentProps } from "react";
 import { useFavorites } from "@/domains/movies/hooks/useFavorites";
@@ -48,74 +48,92 @@ export function LikeButton({
 			onClick={handleClick}
 			disabled={isLoading || toggleFavorite.isPending}
 			className={cn(
-				"rounded-full w-12 h-12 transition-all duration-300 relative overflow-hidden",
+				"rounded-2xl w-14 h-14 transition-all duration-500 relative overflow-hidden group border border-transparent",
 				isFavorite
-					? "text-pink-500 hover:text-pink-600 bg-pink-500/10"
-					: "text-[#b3b3b3] hover:text-white bg-white/5",
+					? "text-pink-500 bg-pink-500/10 border-pink-500/20 shadow-[0_0_20px_rgba(236,72,153,0.15)]"
+					: "text-white/40 hover:text-white bg-white/5 hover:bg-white/10 border-white/5",
 				(isLoading || toggleFavorite.isPending) && "opacity-50 cursor-not-allowed",
 				className,
 			)}
 			{...props}
 		>
+			{/* Dynamic Glow Background */}
+			<AnimatePresence>
+				{isFavorite && (
+					<motion.div
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						className="absolute inset-0 bg-radial-gradient from-pink-500/20 via-transparent to-transparent"
+					/>
+				)}
+			</AnimatePresence>
+
 			{/* Ripple effect on like */}
-			{isFavorite && (
-				<motion.div
-					key="ripple"
-					initial={{ scale: 0, opacity: 0.5 }}
-					animate={{ scale: 2, opacity: 0 }}
-					transition={{ duration: 0.5, ease: "easeOut" }}
-					className="absolute inset-0 rounded-full bg-pink-500"
-				/>
-			)}
+			<AnimatePresence>
+				{isFavorite && (
+					<motion.div
+						key="ripple"
+						initial={{ scale: 0, opacity: 0.8 }}
+						animate={{ scale: 2.5, opacity: 0 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+						className="absolute inset-0 rounded-full bg-pink-500/30"
+					/>
+				)}
+			</AnimatePresence>
 
 			<motion.div
 				key={isFavorite ? "liked" : "unliked"}
-				initial={{ scale: 1 }}
 				animate={{
-					scale: isFavorite ? [1, 1.5, 1.2, 1] : 1,
-					rotate: isFavorite ? [0, -15, 15, -10, 0] : 0,
-					y: isFavorite ? [0, -3, 0] : 0,
+					scale: isFavorite ? [1, 1.4, 0.9, 1.1, 1] : 1,
+					rotate: isFavorite ? [0, -20, 20, -10, 0] : 0,
 				}}
 				transition={{
-					duration: 0.5,
+					duration: 0.7,
 					type: "spring",
-					stiffness: 400,
-					damping: 15,
+					stiffness: 300,
+					damping: 12,
 				}}
+				className="relative z-10"
 			>
 				<Heart
 					className={cn(
 						mapSized[iconSize],
-						isFavorite && "fill-current drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]",
+						isFavorite && "fill-current drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]",
 						"transition-all duration-300",
 					)}
 				/>
 			</motion.div>
 
-			{/* Particles effect when liked */}
-			{isFavorite &&
-				[...Array(6)].map((_, i) => (
-					<motion.div
-						key={`particle-${i}`}
-						initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
-						animate={{
-							scale: [0, 1, 0],
-							x: Math.cos((i * Math.PI) / 3) * 20,
-							y: Math.sin((i * Math.PI) / 3) * 20,
-							opacity: [1, 0.8, 0],
-						}}
-						transition={{
-							duration: 0.6,
-							ease: "easeOut",
-							delay: 0.1,
-						}}
-						className="absolute w-1 h-1 bg-pink-400 rounded-full"
-						style={{
-							left: "50%",
-							top: "50%",
-						}}
-					/>
-				))}
+			{/* Multi-layered Particles */}
+			<AnimatePresence>
+				{isFavorite && (
+					<div className="absolute inset-0 pointer-events-none">
+						{[...Array(8)].map((_, i) => (
+							<motion.div
+								key={`particle-${mediaId}-${i}`}
+								initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
+								animate={{
+									scale: [0, 1.2, 0],
+									x: Math.cos((i * Math.PI) / 4) * (30 + Math.random() * 10),
+									y: Math.sin((i * Math.PI) / 4) * (30 + Math.random() * 10),
+									opacity: [1, 0.8, 0],
+								}}
+								transition={{
+									duration: 0.8,
+									ease: "easeOut",
+									delay: Math.random() * 0.1,
+								}}
+								className={cn(
+									"absolute w-1 h-1 rounded-full left-1/2 top-1/2",
+									i % 2 === 0 ? "bg-pink-400" : "bg-white"
+								)}
+							/>
+						))}
+					</div>
+				)}
+			</AnimatePresence>
 		</Button>
 	);
 }

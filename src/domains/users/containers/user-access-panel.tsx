@@ -1,13 +1,12 @@
-"use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Check, Loader2, Plus, Shield, X } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { client } from "@/orpc/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Shield, X, Plus, Loader2, Check } from "lucide-react";
-import { useState } from "react";
 import {
     Select,
     SelectContent,
@@ -15,7 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
+import { client } from "@/orpc/client";
 
 type UserAccess = {
     id: string;

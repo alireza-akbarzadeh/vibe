@@ -1,17 +1,17 @@
-"use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Table } from "@/components/table/data-table";
-import { useAdminAllSubscriptions } from "@/hooks/useAdminPolar";
-import { Loader2, CheckCircle2, XCircle, Clock, AlertCircle } from "lucide-react";
+
 import {
+    type ColumnDef,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     useReactTable,
-    type ColumnDef,
 } from "@tanstack/react-table";
+import { AlertCircle, CheckCircle2, Clock, Loader2, XCircle } from "lucide-react";
+import { Table } from "@/components/table/data-table";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { useAdminAllSubscriptions } from "@/hooks/useAdminPolar";
 
 type Subscription = {
     id: string;

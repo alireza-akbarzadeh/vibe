@@ -1,16 +1,15 @@
-"use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Table } from "@/components/table/data-table";
-import { useAdminAllCustomers } from "@/hooks/useAdminPolar";
-import { Loader2, User } from "lucide-react";
 import {
+    type ColumnDef,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     useReactTable,
-    type ColumnDef,
 } from "@tanstack/react-table";
+import { Loader2, User } from "lucide-react";
+import { Table } from "@/components/table/data-table";
+import { Card, CardContent } from "@/components/ui/card";
+import { useAdminAllCustomers } from "@/hooks/useAdminPolar";
 
 type Customer = {
     id: string;

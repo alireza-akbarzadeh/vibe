@@ -3,16 +3,16 @@ import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
 	ChevronRight,
-	Heart,
 	Info,
 	Play,
-	Plus,
 	Share2,
 	Star,
 	Volume2
 } from "lucide-react";
 import type { ReactNode } from "react";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
+import { LikeButton } from "@/components/buttons/like-button";
+import { WatchListButton } from "@/components/buttons/watchlist-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -21,9 +21,7 @@ import {
 	movieCastQueryOptions,
 	movieDetailsQueryOptions,
 	movieImagesQueryOptions,
-	movieReviewsQueryOptions,
 	movieSimilarQueryOptions,
-	movieVideosQueryOptions,
 } from "../movies-details.queries";
 
 interface MovieInfoDialogProps {
@@ -33,12 +31,10 @@ interface MovieInfoDialogProps {
 
 function MovieInfoContent({ mediaId }: { mediaId: string }) {
 	const navigate = useNavigate();
-	const [isLiked, setIsLiked] = useState(false);
 
 	// Fetch all data
 	const { data: media } = useSuspenseQuery(movieDetailsQueryOptions(mediaId));
 	const { data: cast } = useSuspenseQuery(movieCastQueryOptions(mediaId));
-	const { data: videos } = useSuspenseQuery(movieVideosQueryOptions(mediaId));
 	const { data: images } = useSuspenseQuery(movieImagesQueryOptions(mediaId));
 
 	const genreIds = media.genres?.map((g) => g.genre.id) || [];
@@ -105,7 +101,7 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 						<div className="flex flex-wrap items-center gap-4">
 							<Button
 								size="lg"
-								className="bg-white hover:bg-gray-200 text-black font-black uppercase tracking-tighter rounded-xl px-10 h-14 group"
+								className="bg-white hover:bg-gray-200 text-black font-black uppercase tracking-tighter rounded-xl px-10 h-14 group transition-all active:scale-95"
 								onClick={() => navigate({ to: "/movies/$movieId", params: { movieId: mediaId } })}
 							>
 								<Play className="w-5 h-5 fill-black mr-2 transition-transform group-hover:scale-110" />
@@ -113,27 +109,17 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 							</Button>
 
 							<div className="flex items-center gap-2">
+								{/* Next-Gen Reusable Buttons */}
+								<WatchListButton mediaId={mediaId} variant="icon" />
+
+								<LikeButton mediaId={mediaId} iconSize="medium" />
+
 								<Button
 									variant="outline"
 									size="icon"
-									className="w-14 h-14 rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 group"
+									className="w-14 h-14 rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 group active:scale-95 transition-all"
 								>
-									<Plus className="w-6 h-6 text-white transition-transform group-hover:rotate-90" />
-								</Button>
-								<Button
-									variant="outline"
-									size="icon"
-									onClick={() => setIsLiked(!isLiked)}
-									className={`w-14 h-14 rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 group transition-all ${isLiked ? "border-pink-500/50 bg-pink-500/10" : ""}`}
-								>
-									<Heart className={`w-6 h-6 transition-all group-hover:scale-110 ${isLiked ? "fill-pink-500 text-pink-500" : "text-white"}`} />
-								</Button>
-								<Button
-									variant="outline"
-									size="icon"
-									className="w-14 h-14 rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 group"
-								>
-									<Share2 className="w-6 h-6 text-white" />
+									<Share2 className="w-6 h-6 text-white group-hover:text-purple-400 transition-colors" />
 								</Button>
 							</div>
 						</div>
@@ -191,7 +177,7 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 										className="relative"
 									>
 										<img
-											src={actor.person.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${actor.person.name}`}
+											src={actor.person.profilePath ? `https://image.tmdb.org/t/p/w185${actor.person.profilePath}` : `https://api.dicebear.com/7.x/avataaars/svg?seed=${actor.person.name}`}
 											alt={actor.person.name}
 											className="w-16 h-16 rounded-full border-4 border-black object-cover"
 										/>
