@@ -13,15 +13,14 @@ const config = defineConfig({
     }),
     tailwindcss(),
   ],
+  optimizeDeps: {
+    exclude: ['@noble/ciphers'],
+  },
+  ssr: {
+    external: ['@prisma/client', '@noble/ciphers'],
+  },
   build: {
-    chunkSizeWarningLimit: 1000,
     rollupOptions: {
-      onwarn(warning, warn) {
-        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
-          return
-        }
-        warn(warning)
-      },
       external: [
         'node:stream',
         'node:stream/web',
