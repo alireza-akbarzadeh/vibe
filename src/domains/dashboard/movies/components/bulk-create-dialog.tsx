@@ -35,8 +35,8 @@ export function BulkCreateDialog() {
                 setJsonInput("");
             }
         } catch (e: any) {
-            toast.error("Invalid JSON format");
-        }
+      toast.error("Invalid JSON format");
+    }
     };
 
     return (

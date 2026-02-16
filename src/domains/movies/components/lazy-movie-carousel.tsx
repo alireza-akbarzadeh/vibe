@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
-import { useLazySection } from "@/hooks/useLazySection";
+import { useLazyQuerySection } from "@/hooks/useLazySection";
 import type { MediaList } from "@/orpc/models/media.schema";
 import type { MovieVariantCard } from "./movie-carousel";
 import { MovieCarousel } from "./movie-carousel";
@@ -12,7 +12,7 @@ interface LazyMovieCarouselProps {
     showProgress?: boolean;
     queryKey: unknown[];
     queryFn: () => Promise<{ data: { items: MediaList[] } }>;
-    sectionSlug?: string; // Optional explore page section slug
+    sectionSlug?: string;
 }
 
 /**
@@ -29,22 +29,21 @@ export function LazyMovieCarousel({
     queryFn,
     sectionSlug,
 }: LazyMovieCarouselProps) {
-    const { ref, data, isVisible } = useLazySection<{
+    const { ref, data, isVisible, isLoading: isQueryLoading, isError } = useLazyQuerySection<{
         data: { items: MediaList[] };
     }>(
         {
             queryKey,
             queryFn,
-            staleTime: 5 * 60 * 1000, // Cache for 5 minutes
-            gcTime: 10 * 60 * 1000, // Keep in memory for 10 minutes
+            staleTime: 5 * 60 * 1000,
+            gcTime: 10 * 60 * 1000,
         },
-        "300px", // Start loading 300px before viewport
+        "600px",
     );
 
     const movies = data?.data?.items ?? [];
-    const isLoading = !data && isVisible;
+    const isLoading = isQueryLoading && isVisible;
 
-    // Don't render anything if not visible yet (saves DOM nodes)
     if (!isVisible) {
         return (
             <section
@@ -53,6 +52,10 @@ export function LazyMovieCarousel({
                 aria-busy="true"
             />
         );
+    }
+
+    if (isError) {
+        return null;
     }
 
     // Show loading state
