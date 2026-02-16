@@ -1,7 +1,7 @@
 import { useDebouncedValue } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import { Loader2, Search, TrendingUp, X } from "lucide-react";
+import { Search, TrendingUp, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,7 @@ import {
 	trendingSearchesQueryOptions,
 } from "@/domains/movies/movies.queries";
 import type { MediaList } from "@/orpc/models/media.schema";
-import { SuggestionItem } from "./suggestion-item";
+import { SuggestionItem, SuggestionItemSkeleton } from "./suggestion-item";
 
 const SEARCH_DEBOUNCE_MS = 450;
 const MIN_QUERY_LENGTH = 2;
@@ -53,7 +53,7 @@ export function MoviesSearchInput({
 	});
 
 	const { data: searchData, isFetching: searchFetching } = useQuery({
-		...searchSuggestionsQueryOptions(debouncedSearchTerm),
+		...searchSuggestionsQueryOptions(debouncedSearchTerm ? { search: debouncedSearchTerm, limit: 8 } : { search: "", limit: 0 }),
 		enabled: isFocused && showSearchSection,
 	});
 
@@ -103,11 +103,7 @@ export function MoviesSearchInput({
 						{showSearchSection ? (
 							<>
 								<div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-									{searchFetching ? (
-										<Loader2 className="w-4 h-4 text-purple-400 animate-spin shrink-0" />
-									) : (
-										<Search className="w-4 h-4 text-purple-400 shrink-0" />
-									)}
+									<Search className="w-4 h-4 text-purple-400 shrink-0" />
 									<span className="text-sm font-semibold text-white">
 										Search results
 										{searchItems.length > 0 && (
@@ -119,8 +115,10 @@ export function MoviesSearchInput({
 								</div>
 								<div className="overflow-y-auto p-2">
 									{searchFetching && searchItems.length === 0 ? (
-										<div className="flex items-center justify-center py-8 text-gray-400">
-											<Loader2 className="w-8 h-8 animate-spin" />
+										<div className="space-y-0.5">
+											{Array.from({ length: 5 }).map((_, i) => (
+												<SuggestionItemSkeleton key={i} />
+											))}
 										</div>
 									) : searchItems.length === 0 ? (
 										<p className="px-3 py-6 text-center text-gray-400 text-sm">
@@ -138,19 +136,17 @@ export function MoviesSearchInput({
 						) : (
 							<>
 								<div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-									{trendingLoading ? (
-										<Loader2 className="w-4 h-4 text-purple-400 animate-spin shrink-0" />
-									) : (
-										<TrendingUp className="w-4 h-4 text-purple-400 shrink-0" />
-									)}
+									<TrendingUp className="w-4 h-4 text-purple-400 shrink-0" />
 									<span className="text-sm font-semibold text-white">
 										Trending
 									</span>
 								</div>
 								<div className="overflow-y-auto p-2">
 									{trendingLoading ? (
-										<div className="flex items-center justify-center py-8 text-gray-400">
-											<Loader2 className="w-8 h-8 animate-spin" />
+										<div className="space-y-0.5">
+											{Array.from({ length: 5 }).map((_, i) => (
+												<SuggestionItemSkeleton key={i} />
+											))}
 										</div>
 									) : trendingItems.length === 0 ? (
 										<p className="px-3 py-6 text-center text-gray-400 text-sm">

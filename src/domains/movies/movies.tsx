@@ -220,7 +220,6 @@ export default function MovieDiscovery(props: MovieDiscoveryProps = {}) {
 				)
 			) : (
 				<div className="relative z-10 space-y-12 pb-10 mt-5">
-					{/* Latest Releases - Server-side prefetched for fast initial load */}
 					{latestMovies.length > 0 && (
 						<MovieCarousel
 							title="Latest Releases"
@@ -230,115 +229,104 @@ export default function MovieDiscovery(props: MovieDiscoveryProps = {}) {
 						/>
 					)}
 
-					{/* Trending - Lazy loads when scrolled into view */}
-					<div ref={trendingSection.ref} className="min-h-96">
-						{trendingMovies.length > 0 && (
+					{trendingMovies.length > 0 && (
+						<div ref={trendingSection.ref}>
 							<MovieCarousel
 								title="Trending"
 								subtitle="Popular this week"
 								movies={trendingMovies}
 								variant="standard"
 							/>
-						)}
-					</div>
+						</div>
+					)}
 
-					{/* Top Rated - Lazy loads when scrolled into view */}
-					<div ref={topRatedSection.ref} className="min-h-96">
-						{topRated.length > 0 && (
+					{topRated.length > 0 && (
+						<div ref={topRatedSection.ref}>
 							<MovieCarousel
 								title="Top Rated"
 								subtitle="Highest rated by critics and audiences"
 								movies={topRated}
 								variant="standard"
 							/>
-						)}
-					</div>
+						</div>
+					)}
 
-					{/* Popular Series - Lazy loads when scrolled into view */}
-					<div ref={popularSeriesSection.ref} className="min-h-96">
-						{popularSeries.length > 0 && (
+					{popularSeries.length > 0 && (
+						<div ref={popularSeriesSection.ref}>
 							<MovieCarousel
 								title="Popular Series"
 								subtitle="Binge-worthy shows everyone's talking about"
 								movies={popularSeries}
 								variant="standard"
 							/>
-						)}
-					</div>
+						</div>
+					)}
 
-					{/* Animation - Lazy loads when scrolled into view */}
-					<div ref={animationsSection.ref} className="min-h-96">
-						{animation.length > 0 && (
+					{animation.length > 0 && (
+						<div ref={animationsSection.ref}>
 							<MovieCarousel
 								title="Animation"
 								subtitle="Animated masterpieces for all ages"
 								movies={animation}
 								variant="standard"
 							/>
-						)}
-					</div>
+						</div>
+					)}
 
-					{/* TV Series - Lazy loads when scrolled into view */}
-					<div ref={tvSeriesSection.ref} className="min-h-96">
-						{tvSeries.length > 0 && (
+					{tvSeries.length > 0 && (
+						<div ref={tvSeriesSection.ref}>
 							<MovieCarousel
 								title="TV Series"
 								subtitle="Binge-worthy episodes and seasons"
 								movies={tvSeries}
 								variant="standard"
 							/>
-						)}
-					</div>
+						</div>
+					)}
 
-					{/* Horror - Lazy loads when scrolled into view */}
-					<div ref={horrorSection.ref} className="min-h-96">
-						{horror.length > 0 && (
+					{horror.length > 0 && (
+						<div ref={horrorSection.ref}>
 							<MovieCarousel
 								title="Horror"
 								subtitle="Spine-chilling thrills and scares"
 								movies={horror}
 								variant="standard"
 							/>
-						)}
-					</div>
-
-					{/* Comedy - Lazy loads when scrolled into view */}
-					<div ref={comedySection.ref} className="min-h-96">
-						{comedy.length > 0 && (
+						</div>
+					)}
+					{comedy.length > 0 && (
+						<div ref={comedySection.ref}>
 							<MovieCarousel
 								title="Comedy"
 								subtitle="Laugh out loud moments"
 								movies={comedy}
 								variant="standard"
 							/>
-						)}
-					</div>
-
-					{/* Romance - Lazy loads when scrolled into view */}
-					<div ref={romanceSection.ref} className="min-h-96">
-						{romance.length > 0 && (
+						</div>
+					)}
+					{romance.length > 0 && (
+						<div ref={romanceSection.ref}>
 							<MovieCarousel
 								title="Romance"
 								subtitle="Heartwarming love stories"
 								movies={romance}
 								variant="standard"
 							/>
-						)}
-					</div>
+						</div>
+					)}
 
 					{/* Top IMDB - Lazy loads when scrolled into view */}
-					<div ref={topIMDBSection.ref} className="min-h-96">
-						{topIMDB.length > 0 && (
+					{topIMDB.length > 0 && (
+						<div ref={topIMDBSection.ref}>
 							<MovieCarousel
 								title="Top IMDB Rated"
 								subtitle="Highest rated films of all time"
 								movies={topIMDB}
 								variant="standard"
 							/>
-						)}
-					</div>
+						</div>
+					)}
 
-					{/* Recommended - Shows immediately with latest movies */}
 					{recommended.length > 0 && (
 						<MovieCarousel
 							title="Recommended For You"

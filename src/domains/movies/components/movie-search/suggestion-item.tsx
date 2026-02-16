@@ -2,7 +2,22 @@ import { generateSlug } from "@/lib/utils";
 import type { MediaList } from "@/orpc/models/media.schema";
 import { Link } from "@tanstack/react-router";
 
+export function SuggestionItemSkeleton() {
+    return (
+        <div className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl">
+            {/* Thumbnail skeleton */}
+            <div className="w-12 h-[72px] shrink-0 rounded-lg bg-white/10 animate-pulse" />
 
+            {/* Text content skeleton */}
+            <div className="min-w-0 flex-1 space-y-2">
+                {/* Title skeleton */}
+                <div className="h-4 bg-white/10 rounded animate-pulse w-3/4" />
+                {/* Year skeleton */}
+                <div className="h-3 bg-white/10 rounded animate-pulse w-1/4" />
+            </div>
+        </div>
+    );
+}
 
 export function SuggestionItem({ item }: { item: MediaList }) {
     const slug = generateSlug(item.title);

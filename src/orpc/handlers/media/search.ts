@@ -10,7 +10,7 @@ import { MediaListItemSchema } from "@/orpc/models/media.schema";
  * Optimized for autocomplete/search dropdown with:
  * - Full-text search on title and description
  * - Indexed queries for performance
- * - Small result set (max 20 items)
+ * - Small result set (max 50 items)
  * - Minimal data transfer
  */
 export const searchMedia = publicProcedure
@@ -35,20 +35,50 @@ export const searchMedia = publicProcedure
 	.handler(async ({ input }) => {
 		const { query, limit, type, status } = input;
 
-		// Build search conditions
-		const where: Prisma.MediaWhereInput = {
-			AND: [
-				// Use full-text search for better performance with indexed columns
-				{
-					OR: [
-						{ title: { contains: query, mode: "insensitive" } },
-						{ description: { contains: query, mode: "insensitive" } },
-					],
+		// Normalize query: trim, lowercase, collapse spaces, remove special chars
+		const normalizedQuery = query
+			.trim()
+			.toLowerCase()
+			.replace(/\s+/g, " ")
+			.replace(/[^\w\s]/g, " ")
+			.trim();
+
+		// Return empty if query too short
+		if (normalizedQuery.length < 2) {
+			return {
+				status: 200,
+				message: "Query too short",
+				data: {
+					items: [],
+					total: 0,
 				},
-			],
+			};
+		}
+
+		// Split into words
+		const searchWords = normalizedQuery
+			.split(" ")
+			.filter((word) => word.length > 0);
+
+		const where: Prisma.MediaWhereInput = {
+			AND: searchWords.map((word) => ({
+				OR: [
+					{
+						title: {
+							contains: word,
+							mode: "insensitive" as Prisma.QueryMode,
+						},
+					},
+					{
+						description: {
+							contains: word,
+							mode: "insensitive" as Prisma.QueryMode,
+						},
+					},
+				],
+			})),
 		};
 
-		// Add filters
 		if (type) {
 			where.type = type;
 		}
@@ -56,11 +86,9 @@ export const searchMedia = publicProcedure
 		if (status && status.length > 0) {
 			where.status = { in: status };
 		} else {
-			// Default to PUBLISHED for public search
 			where.status = "PUBLISHED";
 		}
 
-		// Execute search with count in parallel for performance
 		const [items, total] = await Promise.all([
 			prisma.media.findMany({
 				where,
@@ -77,7 +105,6 @@ export const searchMedia = publicProcedure
 					createdAt: true,
 					updatedAt: true,
 					status: true,
-					// Include minimal genre data for display
 					genres: {
 						select: {
 							genre: {
@@ -88,9 +115,8 @@ export const searchMedia = publicProcedure
 								},
 							},
 						},
-						take: 3, // Limit genres for performance
+						take: 3,
 					},
-					// Include creators for complete schema
 					creators: {
 						select: {
 							role: true,
@@ -102,9 +128,8 @@ export const searchMedia = publicProcedure
 								},
 							},
 						},
-						take: 3, // Limit for performance
+						take: 3,
 					},
-					// Optional collection
 					collection: {
 						select: {
 							id: true,
@@ -114,9 +139,9 @@ export const searchMedia = publicProcedure
 					},
 				},
 				orderBy: [
-					{ viewCount: "desc" }, // Popular first
-					{ rating: "desc" }, // Then by rating
-					{ createdAt: "desc" }, // Then newest
+					{ viewCount: "desc" },
+					{ rating: "desc" },
+					{ createdAt: "desc" },
 				],
 				take: limit,
 			}),

@@ -36,7 +36,12 @@ export function searchSuggestionsQueryOptions(input: {
 	search?: string;
 	limit?: number;
 }) {
-	if (!input.search || input.search.trim().length === 0) {
+	// Normalize search query to match API expectations
+	// Handle both string and undefined/null cases safely
+	const searchValue = typeof input.search === 'string' ? input.search : '';
+	const normalized = searchValue.trim().replace(/\s+/g, " ");
+	
+	if (!normalized || normalized.length < 2) {
 		return {
 			queryKey: ["media", "search", "empty"],
 			queryFn: async () => ({ data: { items: [], total: 0 }, status: 200, message: "No search query" }),
@@ -46,7 +51,7 @@ export function searchSuggestionsQueryOptions(input: {
 	
 	return orpc.media.search.queryOptions({
 		input: {
-			query: input.search.trim(),
+			query: normalized,
 			limit: input.limit ?? 20,
 			status: ["PUBLISHED"],
 		},
