@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import type { CategoryVariant } from "@/domains/movies/components/category-nav";
 import MovieDiscovery from "@/domains/movies/movies";
-import { defaultMediaListQueryOptions } from "@/domains/movies/movies.queries";
 import { orpc } from "@/orpc/client";
 
 export const Route = createFileRoute("/(home)/movies/")({
@@ -11,7 +10,6 @@ export const Route = createFileRoute("/(home)/movies/")({
 	}),
 	loader: async ({ context }) => {
 		await Promise.all([
-			context.queryClient.ensureQueryData(defaultMediaListQueryOptions),
 			context.queryClient.ensureQueryData(
 				orpc.content.latestReleases.queryOptions({
 					input: { type: "MOVIE", limit: 15 },

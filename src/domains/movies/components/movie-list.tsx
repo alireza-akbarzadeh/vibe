@@ -58,6 +58,7 @@ export function MovieItem(props: MovieListProps) {
 								size="icon"
 							/>
 							<MovieInfoDialog
+								mediaId={movie.id}
 								triggerButton={
 									<Button
 										size="icon"

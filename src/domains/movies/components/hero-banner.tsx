@@ -112,7 +112,7 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 									initial={{ opacity: 0 }}
 									animate={{ opacity: 1 }}
 									transition={{ delay: 0.6 }}
-									className="text-lg text-gray-300 mb-8 leading-relaxed max-w-xl"
+									className="text-lg text-gray-300 mb-8 leading-relaxed max-w-xl line-clamp-2"
 								>
 									{current.description}
 								</motion.p>

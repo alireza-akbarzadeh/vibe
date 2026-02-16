@@ -149,7 +149,7 @@ export function MovieCard({
 								Play
 							</Button>
 							<AddButton />
-							<MovieInfoDialog />
+							<MovieInfoDialog mediaId={movie.id} />
 						</div>
 					</motion.div>
 				</div>

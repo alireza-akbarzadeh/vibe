@@ -32,11 +32,22 @@ export function trendingSearchesQueryOptions(limit = 8) {
 }
 
 /** Query options for search suggestions (dropdown while typing) */
-export function searchSuggestionsQueryOptions(query: string) {
+export function searchSuggestionsQueryOptions(input: {
+	search?: string;
+	limit?: number;
+}) {
+	if (!input.search || input.search.trim().length === 0) {
+		return {
+			queryKey: ["media", "search", "empty"],
+			queryFn: async () => ({ data: { items: [], total: 0 }, status: 200, message: "No search query" }),
+			enabled: false,
+		};
+	}
+	
 	return orpc.media.search.queryOptions({
 		input: {
-			query: query.trim(),
-			limit: 20,
+			query: input.search.trim(),
+			limit: input.limit ?? 20,
 			status: ["PUBLISHED"],
 		},
 	});

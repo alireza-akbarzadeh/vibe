@@ -14,7 +14,7 @@ import {
 import { SearchResultsEmpty } from "./components/movie-search/search-results-empty";
 import { SearchResultsList } from "./components/movie-search/search-results-list";
 import { SearchResultsSkeleton } from "./components/movie-search/search-results-skeleton";
-import { mediaListQueryOptions } from "./movies.queries";
+import { searchSuggestionsQueryOptions } from "./movies.queries";
 
 
 
@@ -39,7 +39,7 @@ export default function MovieDiscovery(props: MovieDiscoveryProps = {}) {
 
 	const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
-	const searchQueryOptions = mediaListQueryOptions({
+	const searchQueryOptions = searchSuggestionsQueryOptions({
 		search: searchQuery || undefined,
 		limit: 20,
 	});

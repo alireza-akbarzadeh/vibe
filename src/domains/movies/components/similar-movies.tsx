@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MovieItem } from "@/domains/movies/components/movie-list.tsx";
-import type { MediaListItem } from "@/orpc/models/media.schema";
+import type { MediaList } from "@/orpc/models/media.schema";
 
 export type SimilarMoviesType = {
-	id: number;
+	id: string;
 	title: string;
 	year: number;
 	rating: number;
@@ -13,25 +13,21 @@ export type SimilarMoviesType = {
 };
 
 interface SimilarMoviesProps {
-	movies?: MediaListItem[];
+	movies?: MediaList[];
 }
 
 export function SimilarMovies({ movies }: SimilarMoviesProps) {
 	// Transform API data to component format
 	const similarMovies: SimilarMoviesType[] =
 		movies?.map((media) => ({
-			id: Number(media.id) || 0,
+			id: media.id,
 			title: media.title,
 			year: media.releaseYear || 0,
 			rating: media.rating || 0,
 			duration: media.duration
 				? `${Math.floor(media.duration / 60)}h ${media.duration % 60}m`
 				: "N/A",
-			poster: media.backdropPath
-				? `https://image.tmdb.org/t/p/w500${media.backdropPath}`
-				: media.posterPath
-					? `https://image.tmdb.org/t/p/w500${media.posterPath}`
-					: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=450&fit=crop",
+			poster: media.thumbnail || "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=450&fit=crop",
 		})) || [];
 
 	// Don't render section if no similar movies

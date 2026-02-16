@@ -1,27 +1,26 @@
-export interface FeaturedMovie {
-	title: string;
-	description: string;
-	image: string;
-	rating: number;
-	year: number;
+import type { MediaList } from "@/orpc/models/media.schema";
+
+/**
+ * Base Media type from Prisma/oRPC
+ * Extends MediaList with additional UI-specific fields
+ */
+
+export interface FeaturedMovie extends Pick<MediaList, "id" | "title" | "description" | "rating" | "releaseYear" | "duration"> {
+	image: string; // thumbnail
 	genres: string[];
-	runtime: string;
-	movieId: number;
+	runtime: string; // formatted duration
+	movieId: number; // for legacy compatibility
 }
 
-export interface MovieTypes {
-	id: number;
-	title: string;
-	year: number;
-	poster: string;
-	backdrop: string;
-	rating: number;
-	votes: number;
-	duration: string;
+export interface MovieTypes extends Pick<MediaList, "id" | "title" | "description" | "rating" | "releaseYear" | "duration" | "reviewCount" | "viewCount"> {
+	year: number; // alias for releaseYear
+	poster: string; // alias for thumbnail
+	backdrop: string; // additional image
+	votes: number; // alias for reviewCount
 	releaseDate: string;
 	rating_label: string;
 	genres: string[];
-	synopsis: string;
+	synopsis: string; // alias for description
 	director: string;
 	writers: string[];
 	stars: string[];
@@ -30,23 +29,19 @@ export interface MovieTypes {
 	revenue: string;
 	trailerUrl: string;
 	metascore: number;
-	popularity: number;
+	popularity: number; // alias for viewCount
 	popularityChange: number;
 }
 
-export type ContinueWatching = {
-	id: number;
-	title: string;
-	poster_path: string;
-	rating: number;
-	year: number;
+export interface ContinueWatching extends Pick<MediaList, "id" | "title" | "rating" | "releaseYear" | "description"> {
+	poster_path: string; // alias for thumbnail
+	year: number; // alias for releaseYear
 	genres: string[];
 	progress?: number;
-	description?: string;
-};
+}
 
 export interface ArtistType {
-	id: number;
+	id: string;
 	name: string;
 	type: "music" | "movie";
 	image: string;
@@ -57,8 +52,8 @@ export interface ArtistType {
 	recommended?: boolean;
 }
 
-export type Reviews = {
-	id: number;
+export interface Reviews {
+	id: string;
 	username: string;
 	avatar: string;
 	rating: number;
@@ -67,4 +62,4 @@ export type Reviews = {
 	date: string;
 	helpful: number;
 	verified: boolean;
-};
+}

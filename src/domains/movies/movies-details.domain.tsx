@@ -1,7 +1,7 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useRef, useState } from "react";
 import { VideoPlayer } from "@/components/video-payler/video-player";
 import { VIDEOS } from "@/constants/media";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useRef, useState } from "react";
 import {
 	MovieHero,
 	ReviewsSection,
@@ -53,7 +53,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 	);
 
 	const movieData = {
-		id: Number.parseInt(media.id) || 0,
+		id: media.id,
 		title: media.title,
 		year: media.releaseYear,
 		poster: media.thumbnail,
@@ -62,7 +62,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 			: media.thumbnail,
 		rating: media.averageRating || media.rating || 0,
 		votes: media.reviewCount || reviews?.pagination.total || 0,
-		duration: `${Math.floor(media.duration / 60)}h ${media.duration % 60}m`,
+		duration: media.duration,
 		releaseDate: new Date().toISOString(),
 		rating_label: "PG-13",
 		genres: media.genres?.map((g) => g.genre.name) || [],
@@ -79,6 +79,10 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 		metascore: Math.round((media.averageRating || media.rating || 0) * 10),
 		popularity: media.viewCount || 0,
 		popularityChange: 0,
+		description: media.description,
+		releaseYear: media.releaseYear,
+		reviewCount: media.reviewCount || reviews?.pagination.total || 0,
+		viewCount: media.viewCount || 0,
 	};
 
 	const videoData = {
@@ -86,7 +90,7 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 		src: media.videoUrl || VIDEOS.demo,
 		videoPoster: media.thumbnail,
 		year: media.releaseYear.toString(),
-		totalTime: movieData.duration,
+		totalTime: `${Math.floor(media.duration / 60)}h ${media.duration % 60}m`,
 		videoName: media.title,
 	};
 

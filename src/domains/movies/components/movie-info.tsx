@@ -152,7 +152,7 @@ export default function MovieInfo(props: MovieInfoProps) {
 					Watch Trailer
 				</Button>
 				<WatchListButton mediaId={movie.id} />
-				<LikeButton />
+				<LikeButton mediaId={movie.id} />
 				<SharedButton />
 			</div>
 		</motion.div>
