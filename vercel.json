@@ -3,22 +3,6 @@
   "outputDirectory": ".output/public",
   "cleanUrls": true,
   "trailingSlash": false,
-  "functions": {
-    "api/index.mjs": {
-      "maxDuration": 10,
-      "memory": 1024
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/_server(.*)",
-      "destination": "/api/index.mjs"
-    },
-    {
-      "source": "/((?!.*\\.).*)",
-      "destination": "/api/index.mjs"
-    }
-  ],
   "env": {
     "NODE_OPTIONS": "--import ./.output/server/instrument.server.mjs"
   }

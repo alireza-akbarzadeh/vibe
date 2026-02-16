@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
@@ -27,6 +28,112 @@ import type { MediaList } from "@/orpc/models/media.schema";
 export const Route = createFileRoute("/(home)/explore/$section")({
 	component: RouteComponent,
 });
+
+interface FilterContentProps {
+	genres: { id: string; name: string }[];
+	selectedGenreIds: string[];
+	setSelectedGenreIds: React.Dispatch<React.SetStateAction<string[]>>;
+	yearRange: [number, number];
+	setYearRange: (val: [number, number]) => void;
+	sortBy: "NEWEST" | "OLDEST" | "TITLE";
+	setSortBy: (val: "NEWEST" | "OLDEST" | "TITLE") => void;
+}
+
+const FilterContent = ({
+	genres,
+	selectedGenreIds,
+	setSelectedGenreIds,
+	yearRange,
+	setYearRange,
+	sortBy,
+	setSortBy,
+}: FilterContentProps) => (
+	<div className="space-y-10">
+		{/* Genres Section */}
+		<div className="space-y-4">
+			<div className="flex items-center gap-2 text-white/40 mb-2">
+				<Filter className="w-4 h-4" />
+				<span className="text-xs font-black uppercase tracking-widest">Genre DNA</span>
+			</div>
+			<div className="flex flex-wrap gap-2 max-h-48 md:max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+				{genres.map((genre) => {
+					const isSelected = selectedGenreIds.includes(genre.id);
+					return (
+						<Button
+							key={genre.id}
+							variant="outline"
+							size="sm"
+							onClick={() => {
+								setSelectedGenreIds(prev =>
+									isSelected ? prev.filter(id => id !== genre.id) : [...prev, genre.id]
+								);
+							}}
+							className={`rounded-full px-4 h-9 border-white/10 transition-all duration-300 ${isSelected ? "bg-purple-500 border-purple-500 text-white" : "bg-transparent text-white/40 hover:text-white"}`}
+						>
+							{genre.name}
+							{isSelected && <Check className="ml-1 w-3 h-3" />}
+						</Button>
+					);
+				})}
+			</div>
+		</div>
+
+		{/* Time Horizon Section */}
+		<div className="space-y-4">
+			<div className="flex items-center gap-2 text-white/40 mb-2">
+				<Calendar className="w-4 h-4" />
+				<span className="text-xs font-black uppercase tracking-widest">Time Horizon</span>
+			</div>
+			<div className="px-2 pt-2">
+				<Slider
+					defaultValue={[1900, 2026]}
+					max={2026}
+					min={1900}
+					step={1}
+					value={yearRange}
+					onValueChange={(val) => setYearRange(val as [number, number])}
+					className="mb-4"
+				/>
+				<div className="flex justify-between text-[10px] font-black tracking-widest text-white/20 uppercase">
+					<span>BCE {yearRange[0]}</span>
+					<span>CE {yearRange[1]}</span>
+				</div>
+			</div>
+		</div>
+
+		{/* Sort Architecture Section */}
+		<div className="space-y-4">
+			<div className="flex items-center gap-2 text-white/40 mb-2">
+				{sortBy === "NEWEST" ? <SortDesc className="w-4 h-4" /> : sortBy === "OLDEST" ? <SortAsc className="w-4 h-4" /> : <LayoutGrid className="w-4 h-4" />}
+				<span className="text-xs font-black uppercase tracking-widest">Sort Architecture</span>
+			</div>
+			<div className="grid grid-cols-1 gap-2">
+				{[
+					{ id: "NEWEST", label: "Chronological (Newest)", icon: SortDesc },
+					{ id: "OLDEST", label: "Legacy (Oldest)", icon: SortAsc },
+					{ id: "TITLE", label: "Alphabetical", icon: LayoutGrid },
+				].map((option) => {
+					const isSelected = sortBy === option.id;
+					const Icon = option.icon;
+					return (
+						<Button
+							key={option.id}
+							variant="ghost"
+							onClick={() => setSortBy(option.id as "NEWEST" | "OLDEST" | "TITLE")}
+							className={`justify-start h-12 rounded-xl transition-all duration-300 ${isSelected ? "bg-white/10 text-white" : "text-white/40 hover:text-white"}`}
+						>
+							<Icon className="w-4 h-4 mr-3" />
+							<span className="font-bold">{option.label}</span>
+							{isSelected && (
+								<motion.div layoutId="sort-active" className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,1)]" />
+							)}
+						</Button>
+					);
+				})}
+			</div>
+		</div>
+	</div>
+);
 
 function RouteComponent() {
 	const { section } = Route.useParams();
@@ -161,11 +268,43 @@ function RouteComponent() {
 				</Link>
 
 				<div className="flex items-center gap-4">
+					<div className="md:hidden">
+						<Drawer>
+							<DrawerTrigger asChild>
+								<Button size="icon" variant="ghost" className="w-10 h-10 rounded-full bg-white/5 border border-white/10">
+									<Filter className="w-5 h-5 text-purple-400" />
+								</Button>
+							</DrawerTrigger>
+							<DrawerContent className="bg-[#0a0a0a] border-white/10 p-6 h-[80vh]">
+								<DrawerHeader className="px-0">
+									<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">Refine Discovery</DrawerTitle>
+									<DrawerDescription className="text-white/40">Adjust parameters for the current frequency.</DrawerDescription>
+								</DrawerHeader>
+								<div className="mt-4 overflow-y-auto pb-10">
+									<FilterContent
+										genres={genres}
+										selectedGenreIds={selectedGenreIds}
+										setSelectedGenreIds={setSelectedGenreIds}
+										yearRange={yearRange}
+										setYearRange={setYearRange}
+										sortBy={sortBy}
+										setSortBy={setSortBy}
+									/>
+								</div>
+							</DrawerContent>
+						</Drawer>
+					</div>
+
 					<div className="hidden md:flex items-center gap-1 p-1 bg-white/5 backdrop-blur-md rounded-xl border border-white/10">
-						<Button size="icon" variant="ghost" className="w-9 h-9 rounded-lg bg-white/10 shadow-xl">
+						<Button size="icon" variant="ghost" className="w-9 h-9 rounded-lg hover:bg-white/5 opacity-40">
 							<LayoutGrid className="w-4 h-4" />
 						</Button>
-						<Button size="icon" variant="ghost" className="w-9 h-9 rounded-lg hover:bg-white/5 opacity-40">
+						<Button
+							size="icon"
+							variant="ghost"
+							onClick={() => setShowFilters(!showFilters)}
+							className={`w-9 h-9 rounded-lg transition-all duration-300 ${showFilters ? "bg-purple-600 shadow-xl opacity-100" : "hover:bg-white/5 opacity-40"}`}
+						>
 							<SlidersHorizontal className="w-4 h-4" />
 						</Button>
 					</div>
@@ -233,119 +372,85 @@ function RouteComponent() {
 											</motion.div>
 										)}
 									</AnimatePresence>
-									<Button
-										onClick={() => setShowFilters(!showFilters)}
-										className={`h-11 px-6 rounded-xl font-bold transition-all duration-300 ${showFilters ? "bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.5)]" : "bg-white/10 text-white/60 hover:bg-white/20"}`}
-									>
-										<SlidersHorizontal className="w-4 h-4 mr-2" />
-										Filters
-										{selectedGenreIds.length > 0 && (
-											<Badge className="ml-2 bg-purple-500 hover:bg-purple-500 text-white border-none h-5 w-5 p-0 flex items-center justify-center rounded-full text-[10px]">
-												{selectedGenreIds.length}
-											</Badge>
-										)}
-									</Button>
+									<div className="hidden md:block">
+										<Button
+											onClick={() => setShowFilters(!showFilters)}
+											className={`h-11 px-6 rounded-xl font-bold transition-all duration-300 ${showFilters ? "bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.5)]" : "bg-white/10 text-white/60 hover:bg-white/20"}`}
+										>
+											<SlidersHorizontal className="w-4 h-4 mr-2" />
+											Filters
+											{selectedGenreIds.length > 0 && (
+												<Badge className="ml-2 bg-purple-500 hover:bg-purple-500 text-white border-none h-5 w-5 p-0 flex items-center justify-center rounded-full text-[10px]">
+													{selectedGenreIds.length}
+												</Badge>
+											)}
+										</Button>
+									</div>
+
+									<div className="md:hidden">
+										<Drawer>
+											<DrawerTrigger asChild>
+												<Button
+													className="h-11 px-4 rounded-xl font-bold bg-white/10 text-white/60 hover:bg-white/20"
+												>
+													<SlidersHorizontal className="w-4 h-4" />
+													{selectedGenreIds.length > 0 && (
+														<Badge className="ml-2 bg-purple-500 hover:bg-purple-500 text-white border-none h-5 w-5 p-0 flex items-center justify-center rounded-full text-[10px]">
+															{selectedGenreIds.length}
+														</Badge>
+													)}
+												</Button>
+											</DrawerTrigger>
+											<DrawerContent className="bg-[#0a0a0a] border-white/10 p-6 h-[80vh]">
+												<DrawerHeader className="px-0">
+													<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">Refine Discovery</DrawerTitle>
+													<DrawerDescription className="text-white/40">Adjust parameters for the current frequency.</DrawerDescription>
+												</DrawerHeader>
+												<div className="mt-4 overflow-y-auto pb-10">
+													<FilterContent
+														genres={genres}
+														selectedGenreIds={selectedGenreIds}
+														setSelectedGenreIds={setSelectedGenreIds}
+														yearRange={yearRange}
+														setYearRange={setYearRange}
+														sortBy={sortBy}
+														setSortBy={setSortBy}
+													/>
+												</div>
+											</DrawerContent>
+										</Drawer>
+									</div>
 								</div>
 							</div>
 
-							{/* Advanced Filter Panel */}
-							<AnimatePresence>
-								{showFilters && (
-									<motion.div
-										initial={{ opacity: 0, height: 0, y: -20 }}
-										animate={{ opacity: 1, height: "auto", y: 0 }}
-										exit={{ opacity: 0, height: 0, y: -20 }}
-										transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-										className="overflow-hidden"
-									>
-										<div className="p-8 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl grid grid-cols-1 md:grid-cols-3 gap-10">
-											{/* Genres Section */}
-											<div className="space-y-4">
-												<div className="flex items-center gap-2 text-white/40 mb-2">
-													<Filter className="w-4 h-4" />
-													<span className="text-xs font-black uppercase tracking-widest">Genre DNA</span>
-												</div>
-												<div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-													{genres.map((genre) => {
-														const isSelected = selectedGenreIds.includes(genre.id);
-														return (
-															<Button
-																key={genre.id}
-																variant="outline"
-																size="sm"
-																onClick={() => {
-																	setSelectedGenreIds(prev =>
-																		isSelected ? prev.filter(id => id !== genre.id) : [...prev, genre.id]
-																	);
-																}}
-																className={`rounded-full px-4 h-9 border-white/10 transition-all duration-300 ${isSelected ? "bg-purple-500 border-purple-500 text-white" : "bg-transparent text-white/40 hover:text-white"}`}
-															>
-																{genre.name}
-																{isSelected && <Check className="ml-1 w-3 h-3" />}
-															</Button>
-														);
-													})}
-												</div>
-											</div>
-
-											{/* Time Horizon Section */}
-											<div className="space-y-4">
-												<div className="flex items-center gap-2 text-white/40 mb-2">
-													<Calendar className="w-4 h-4" />
-													<span className="text-xs font-black uppercase tracking-widest">Time Horizon</span>
-												</div>
-												<div className="px-2 pt-2">
-													<Slider
-														defaultValue={[1900, 2026]}
-														max={2026}
-														min={1900}
-														step={1}
-														value={yearRange}
-														onValueChange={(val) => setYearRange(val as [number, number])}
-														className="mb-4"
+							{/* Advanced Filter Panel (Desktop Only) */}
+							<div className="hidden md:block">
+								<AnimatePresence>
+									{showFilters && (
+										<motion.div
+											initial={{ opacity: 0, height: 0, y: -20 }}
+											animate={{ opacity: 1, height: "auto", y: 0 }}
+											exit={{ opacity: 0, height: 0, y: -20 }}
+											transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+											className="overflow-hidden"
+										>
+											<div className="p-8 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl">
+												<div className="grid grid-cols-3 gap-10">
+													<FilterContent
+														genres={genres}
+														selectedGenreIds={selectedGenreIds}
+														setSelectedGenreIds={setSelectedGenreIds}
+														yearRange={yearRange}
+														setYearRange={setYearRange}
+														sortBy={sortBy}
+														setSortBy={setSortBy}
 													/>
-													<div className="flex justify-between text-[10px] font-black tracking-widest text-white/20 uppercase">
-														<span>BCE {yearRange[0]}</span>
-														<span>CE {yearRange[1]}</span>
-													</div>
 												</div>
 											</div>
-
-											{/* Sort Architecture Section */}
-											<div className="space-y-4">
-												<div className="flex items-center gap-2 text-white/40 mb-2">
-													{sortBy === "NEWEST" ? <SortDesc className="w-4 h-4" /> : sortBy === "OLDEST" ? <SortAsc className="w-4 h-4" /> : <LayoutGrid className="w-4 h-4" />}
-													<span className="text-xs font-black uppercase tracking-widest">Sort Architecture</span>
-												</div>
-												<div className="grid grid-cols-1 gap-2">
-													{[
-														{ id: "NEWEST", label: "Chronological (Newest)", icon: SortDesc },
-														{ id: "OLDEST", label: "Legacy (Oldest)", icon: SortAsc },
-														{ id: "TITLE", label: "Alphabetical", icon: LayoutGrid },
-													].map((option) => {
-														const isSelected = sortBy === option.id;
-														const Icon = option.icon;
-														return (
-															<Button
-																key={option.id}
-																variant="ghost"
-																onClick={() => setSortBy(option.id as "NEWEST" | "OLDEST" | "TITLE")}
-																className={`justify-start h-12 rounded-xl transition-all duration-300 ${isSelected ? "bg-white/10 text-white" : "text-white/40 hover:text-white"}`}
-															>
-																<Icon className="w-4 h-4 mr-3" />
-																<span className="font-bold">{option.label}</span>
-																{isSelected && (
-																	<motion.div layoutId="sort-active" className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,1)]" />
-																)}
-															</Button>
-														);
-													})}
-												</div>
-											</div>
-										</div>
-									</motion.div>
-								)}
-							</AnimatePresence>
+										</motion.div>
+									)}
+								</AnimatePresence>
+							</div>
 						</div>
 					</motion.div>
 				</div>
@@ -355,7 +460,7 @@ function RouteComponent() {
 					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 						{Array.from({ length: 15 }, (_, i) => (
 							<div
-								key={`skeleton-${sectionSlug}-${i}`}
+								key={`loading-skeleton-${sectionSlug}-${i}-${Math.random()}`}
 								className="aspect-2/3 bg-white/5 rounded-2xl animate-pulse relative overflow-hidden"
 							>
 								<div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent" />
@@ -393,16 +498,32 @@ function RouteComponent() {
 							) : (
 								<motion.div
 									layout
-									className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-10 gap-x-6"
+									initial="hidden"
+									animate="show"
+									variants={{
+										show: {
+											transition: {
+												staggerChildren: 0.05
+											}
+										}
+									}}
+									className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-y-10 gap-x-6 md:gap-x-8"
 								>
 									{allMovies.map((movie, index) => (
-										<MovieCard
+										<motion.div
 											key={`${movie.id}-${index}`}
-											movie={movie}
-											variant="standard"
-											index={index % 20}
-											showProgress={false}
-										/>
+											variants={{
+												hidden: { opacity: 0, y: 20 },
+												show: { opacity: 1, y: 0 }
+											}}
+										>
+											<MovieCard
+												movie={movie}
+												variant="standard"
+												index={index % 20}
+												showProgress={false}
+											/>
+										</motion.div>
 									))}
 								</motion.div>
 							)}
@@ -432,13 +553,40 @@ function RouteComponent() {
 				)}
 			</main>
 
-			{/* Mobile Dock Overlay (Optional Visual) */}
+			{/* Mobile Dock Overlay */}
 			<motion.div
 				initial={{ y: 100 }}
 				animate={{ y: 0 }}
-				className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-4 bg-black/40 backdrop-blur-3xl rounded-3xl border border-white/10 shadow-2xl z-50 flex items-center gap-8"
+				className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-4 bg-black/40 backdrop-blur-3xl rounded-3xl border border-white/10 shadow-2xl z-50 flex items-center gap-10"
 			>
-				<Filter className="w-6 h-6 text-purple-400" />
+				<Drawer>
+					<DrawerTrigger asChild>
+						<button type="button" className="relative">
+							<Filter className="w-6 h-6 text-purple-400" />
+							{selectedGenreIds.length > 0 && (
+								<div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full shadow-[0_0_8px_rgba(168,85,247,1)]" />
+							)}
+						</button>
+					</DrawerTrigger>
+					<DrawerContent className="bg-[#0a0a0a] border-white/10 p-6 h-[80vh]">
+						<DrawerHeader className="px-0">
+							<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">Refine Discovery</DrawerTitle>
+							<DrawerDescription className="text-white/40">Adjust parameters for the current frequency.</DrawerDescription>
+						</DrawerHeader>
+						<div className="mt-4 overflow-y-auto pb-10">
+							<FilterContent
+								genres={genres}
+								selectedGenreIds={selectedGenreIds}
+								setSelectedGenreIds={setSelectedGenreIds}
+								yearRange={yearRange}
+								setYearRange={setYearRange}
+								sortBy={sortBy}
+								setSortBy={setSortBy}
+							/>
+						</div>
+					</DrawerContent>
+				</Drawer>
+
 				<LayoutGrid className="w-6 h-6 text-white" />
 				<SlidersHorizontal className="w-6 h-6 text-white/40" />
 			</motion.div>

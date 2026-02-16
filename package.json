@@ -12,7 +12,7 @@
     "dev:ngrok": "ngrok start vibe --config ngrok.yml",
     "dev:raw": "vite dev --port 3000",
     "build": "prisma generate && vite build --ssr",
-    "vercel-build": "prisma generate && prisma migrate deploy && vite build && mkdir -p api && cp .output/server/index.mjs api/index.mjs",
+    "vercel-build": "prisma generate && ((test -n \"$DATABASE_URL\" && prisma migrate deploy) || echo \"Skipping migration\") && NITRO_PRESET=vercel vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "format": "biome format --write",
