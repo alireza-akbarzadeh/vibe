@@ -1,5 +1,4 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: <explanation> */
-"use client"
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import {

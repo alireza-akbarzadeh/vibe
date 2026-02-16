@@ -1,5 +1,3 @@
-"use client"
-
 import type { ColumnDef } from "@tanstack/react-table"
 import {
     AlertCircle,
@@ -162,7 +160,7 @@ export const userColumns: ColumnDef<Transaction>[] = [
     },
     {
         id: "actions",
-        cell: ({ row }) => (
+        cell: () => (
             <div className="text-right">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

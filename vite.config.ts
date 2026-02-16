@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -15,7 +14,14 @@ const config = defineConfig({
     tailwindcss(),
   ],
   build: {
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+          return
+        }
+        warn(warning)
+      },
       external: [
         'node:stream',
         'node:stream/web',
@@ -29,6 +35,7 @@ const config = defineConfig({
       'localhost',
       '.ngrok-free.app',
       'harmless-doe-monthly.ngrok-free.app',
+      "https://vibecinema.vercel.app"
     ],
   },
 })
