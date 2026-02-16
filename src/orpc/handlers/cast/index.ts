@@ -2,6 +2,7 @@ import { base } from "@/orpc/router/base";
 import { bulkCreateCast, createCastMember } from "./cast-create";
 import { deleteAllCast, deleteCastMember } from "./cast-delete";
 import { getMediaCast, listCast } from "./cast-get";
+import { updateCastMember } from "./cast-update";
 
 /**
  * Cast & Crew Router
@@ -16,6 +17,9 @@ import { getMediaCast, listCast } from "./cast-get";
  * - listCast: List with pagination and filters (public)
  * - getMediaCast: Get all cast grouped by type (public)
  *
+ * **Update:**
+ * - updateCastMember: Update cast member details (admin)
+ *
  * **Delete:**
  * - deleteCastMember: Delete single cast member (admin)
  * - deleteAllCast: Delete all cast for a media (admin)
@@ -28,6 +32,9 @@ export const CastRouter = base.router({
 	// Read
 	list: listCast,
 	getMediaCast,
+
+	// Update
+	updateCastMember,
 
 	// Delete
 	deleteCastMember,

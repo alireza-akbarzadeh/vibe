@@ -83,8 +83,8 @@ model MediaCast {
     mediaId      String   @map("media_id")
     personId     String   @map("person_id")
     castType     CastType @map("cast_type")
-    role         String?  @db.VarChar(500) // Character name for actors, job title for crew
-    order        Int      @default(0) // Display order (for actors especially)
+    role         String?  @db.VarChar(500)
+    order        Int      @default(0)
     tmdbCreditId String?  @unique @map("tmdb_credit_id") @db.VarChar(100)
     createdAt    DateTime @default(now()) @map("created_at")
     updatedAt    DateTime @updatedAt @map("updated_at")

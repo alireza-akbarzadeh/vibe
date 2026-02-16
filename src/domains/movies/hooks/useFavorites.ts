@@ -56,16 +56,13 @@ export function useFavorites() {
 			queryKey: favoritesKeys.detail(mediaId),
 			queryFn: async () => {
 				try {
-					const response = await client.favorites.list({
-						page: 1,
-						limit: 100,
-					});
+					const response = await client.favorites.check({ mediaId });
 
 					if (response.status !== 200) {
 						return false;
 					}
 
-					return response.data.items.some((item) => item.mediaId === mediaId);
+					return response.data.isFavorite;
 				} catch {
 					return false;
 				}

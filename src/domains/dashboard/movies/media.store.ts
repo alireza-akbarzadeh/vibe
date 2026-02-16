@@ -1,5 +1,7 @@
 import { Store } from "@tanstack/store";
+import { toast } from "sonner";
 import { client } from "@/orpc/client";
+import { ListMediaInput } from "@/orpc/models/media.input.schema";
 import type { MediaList } from "@/orpc/models/media.schema";
 
 export interface MediaItem extends MediaList {
@@ -35,16 +37,18 @@ export const fetchMediaAction = async (page = 1, limit = 50, search = "") => {
 	mediaUIStore.setState((s) => ({ ...s, isLoading: true, error: null }));
 	const state = mediaUIStore.state;
 	try {
-		const baseParams: {
+		type MediaListParams = {
 			page: number;
 			limit: number;
-			status?: ("DRAFT" | "REVIEW" | "PUBLISHED" | "REJECTED")[];
+			status?: ListMediaInput["status"];
 			search?: string;
-			type?: string;
-		} = {
+			type?: ListMediaInput["type"];
+		};
+
+		const baseParams: MediaListParams = {
 			page,
 			limit,
-			status: state.filters.status as any,
+			status: state.filters.status as ListMediaInput["status"],
 		};
 
 		if (search?.trim()) {
@@ -53,18 +57,14 @@ export const fetchMediaAction = async (page = 1, limit = 50, search = "") => {
 			baseParams.search = state.filters.search.trim();
 		}
 
-		// Handle Type Filter
-		// Note: The API might expect 'type' in a specific way.
-		// Looking at schema, it's MediaList input.
-		// I'll assume the API can filter by type if I pass it, but `list` param in `get.ts` seemed to use `listMediaInputSchema`.
-		// Let's assume for now we filter what we can.
-		// If the API doesn't support type filtering, we might have to filter client side or update API.
-		// But for now, let's just pass status which we know works (it was hardcoded).
-		
-		// The previous hardcoded status was all statuses. 
-		// Now we use `state.filters.status`.
-		// We need to ensure `state.filters.status` is populated correctly.
-		
+		// Only add type if it's a valid value
+		if (
+			state.filters.type &&
+			["MOVIE", "EPISODE", "TRACK"].includes(state.filters.type)
+		) {
+			baseParams.type = state.filters.type as ListMediaInput["type"];
+		}
+
 		const response = await client.media.list(baseParams);
 
 		if (response.data) {
@@ -102,7 +102,6 @@ export const setSearchFilter = (search: string) => {
 	}));
 	// Debouncing should be handled in UI
 };
-
 
 // Action: Delete media
 export const deleteMediaAction = async (id: string) => {
@@ -156,45 +155,36 @@ export const updateMediaStatusAction = async (
 ) => {
 	mediaUIStore.setState((s) => ({ ...s, isUpdating: true }));
 	try {
-		// We need to fetch the item first to get other required fields if update endpoint requires full object
-		// But usually update endpoints allow partial updates or we assume we have data.
-		// Looking at update.ts, it requires createMediaInputSchema.extend({ id: z.string() })
-		// which implies full object replacement or at least all required fields.
-		// However, let's try to just send what we have if the schema allows partials (which zod schema might not).
-		// Wait, the handler implementation:
-		// const { id, genreIds, creatorIds, ...mediaData } = input;
-		// const media = await tx.media.update({ ... data: { ...mediaData } ... })
-		// If the input schema requires all fields, we are in trouble for partial updates.
-		// Let's assume we can fetch -> update.
-
 		const item = mediaUIStore.state.media.find((m) => m.id === id);
 		if (!item) throw new Error("Item not found in store");
 
-		// This is risky if we don't have all fields in the list view.
-		// The list view `MediaListItemSchema` might have fewer fields than `createMediaInputSchema`.
-		// Let's check `MediaListItemSchema`.
-		// It usually has id, title, etc.
-		// If we can't do partial update, we might need a specific `updateStatus` endpoint or `patch`.
-		// For now, let's assume we can't easily do it without full data.
-		// I'll skip implementing `updateMediaStatusAction` for now or implement it by fetching details first.
-
-		// Alternative: Use a specific server action if available? No.
-		// Let's just fetch details then update.
 		const details = await client.media.find({ id });
 		if (!details.data) throw new Error("Could not fetch details");
 
 		await client.media.update({
-			...details.data,
-			status,
+			id,
+			title: details.data.title,
+			description: details.data.description,
+			thumbnail: details.data.thumbnail,
+			duration: details.data.duration,
+			releaseYear: details.data.releaseYear,
+			type: details.data.type,
+			videoUrl: details.data.videoUrl,
+			audioUrl: details.data.audioUrl,
+			collectionId: details.data.collectionId,
+			sortOrder: details.data.sortOrder,
 			genreIds: details.data.genres?.map((g) => g.genre.id),
 			creatorIds: details.data.creators?.map((c) => c.creator.id),
+			status,
 		});
 
 		await fetchMediaAction(mediaUIStore.state.currentPage);
 		mediaUIStore.setState((s) => ({ ...s, isUpdating: false }));
 		return true;
-	} catch (error) {
-		console.error("Update media status error:", error);
+	} catch (_error) {
+		toast.error("Update media status error:", {
+			description: "An error occurred while updating media status.",
+		});
 		mediaUIStore.setState((s) => ({
 			...s,
 			error: "Failed to update media status",
@@ -204,34 +194,43 @@ export const updateMediaStatusAction = async (
 	}
 };
 
-// Action: Bulk update media status
 export const bulkUpdateMediaStatusAction = async (
 	ids: string[],
 	status: "DRAFT" | "REVIEW" | "PUBLISHED" | "REJECTED",
 ) => {
 	mediaUIStore.setState((s) => ({ ...s, isUpdating: true, error: null }));
 	try {
-		// We fetch details for each and update.
-		// In a real app, backend should support bulk update.
 		const updatePromises = ids.map(async (id) => {
 			const details = await client.media.find({ id });
 			if (!details.data) throw new Error(`Could not fetch details for ${id}`);
-			
+
 			return client.media.update({
-				...details.data,
+				id,
+				title: details.data.title,
+				description: details.data.description,
+				thumbnail: details.data.thumbnail,
+				duration: details.data.duration,
+				releaseYear: details.data.releaseYear,
+				type: details.data.type,
+				videoUrl: details.data.videoUrl,
 				status,
+				audioUrl: details.data.audioUrl,
+				collectionId: details.data.collectionId,
+				sortOrder: details.data.sortOrder,
 				genreIds: details.data.genres?.map((g) => g.genre.id),
 				creatorIds: details.data.creators?.map((c) => c.creator.id),
 			});
 		});
 
 		await Promise.all(updatePromises);
-		
+
 		await fetchMediaAction(mediaUIStore.state.currentPage);
 		mediaUIStore.setState((s) => ({ ...s, isUpdating: false }));
 		return true;
-	} catch (error) {
-		console.error("Bulk update media status error:", error);
+	} catch (_error) {
+		toast.error("Bulk update media status error:", {
+			description: "An error occurred while bulk updating media status.",
+		});
 		mediaUIStore.setState((s) => ({
 			...s,
 			error: "Failed to bulk update media status",

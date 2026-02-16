@@ -13,9 +13,13 @@ export const updatePeople = adminProcedure
 	.handler(async ({ input }) => {
 		const { id, ...updateData } = input;
 
-		const person = await prisma.people.update({
+		const cleanUpdateData = Object.fromEntries(
+			Object.entries(updateData).filter(([, value]) => value !== null),
+		);
+
+		const person = await prisma.person.update({
 			where: { id },
-			data: updateData,
+			data: cleanUpdateData,
 		});
 
 		return {

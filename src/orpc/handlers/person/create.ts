@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
@@ -72,7 +73,18 @@ export const bulkCreate = adminProcedure
 	.input(bulkCreatePersonInputSchema)
 	.output(
 		ApiResponseSchema(
-			PersonWithKnownForSchema.pick({ id: true, name: true, tmdbId: true }),
+			z.object({
+				created: z.number(),
+				skipped: z.number(),
+				failed: z.number(),
+				errors: z.array(
+					z.object({
+						index: z.number(),
+						error: z.string(),
+						data: z.any(),
+					}),
+				),
+			}),
 		),
 	)
 	.handler(async ({ input }) => {

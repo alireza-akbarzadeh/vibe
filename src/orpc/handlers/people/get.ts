@@ -16,7 +16,7 @@ export const getPeople = publicProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ApiResponseSchema(PeopleSchema))
 	.handler(async ({ input }) => {
-		const person = await prisma.people.findUnique({
+		const person = await prisma.person.findUnique({
 			where: { id: input.id },
 		});
 
@@ -54,62 +54,45 @@ export const listPeople = publicProcedure
 		),
 	)
 	.handler(async ({ input }) => {
-		const {
-			page,
-			limit,
-			search,
-			person_id,
-			movieId,
-			media_type,
-			sortBy,
-			sortOrder,
-		} = input;
+		const { page, limit, search, sortBy, sortOrder } = input;
 
 		const skip = (page - 1) * limit;
 
 		// Build where clause
-		const where: Prisma.PeopleWhereInput = {
-			...(person_id && { person_id }),
-			...(movieId && { movieId }),
-			...(media_type && { media_type }),
+		const where: Prisma.PersonWhereInput = {
 			...(search && {
 				OR: [
-					{ title: { contains: search, mode: "insensitive" } },
-					{ original_title: { contains: search, mode: "insensitive" } },
-					{ overview: { contains: search, mode: "insensitive" } },
+					{ name: { contains: search, mode: "insensitive" } },
+					{ originalName: { contains: search, mode: "insensitive" } },
 				],
 			}),
 		};
 
 		// Build orderBy clause
-		const orderBy: Prisma.PeopleOrderByWithRelationInput =
-			sortBy === "POPULARITY"
+		const orderBy: Prisma.PersonOrderByWithRelationInput =
+			sortBy === "RATING"
 				? { popularity: sortOrder }
-				: sortBy === "RATING"
-					? { vote_average: sortOrder }
-					: sortBy === "RELEASE_DATE"
-						? { release_date: sortOrder }
-						: { title: sortOrder };
+				: sortBy === "TITLE"
+					? { name: sortOrder }
+					: { createdAt: sortOrder };
 
 		// Execute queries in parallel
 		const [items, total] = await Promise.all([
-			prisma.people.findMany({
+			prisma.person.findMany({
 				where,
 				orderBy,
 				skip,
 				take: limit,
 				select: {
 					id: true,
-					person_id: true,
-					movieId: true,
-					title: true,
-					poster_path: true,
+					tmdbId: true,
+					name: true,
+					profilePath: true,
+					knownForDepartment: true,
 					popularity: true,
-					vote_average: true,
-					release_date: true,
 				},
 			}),
-			prisma.people.count({ where }),
+			prisma.person.count({ where }),
 		]);
 
 		const totalPages = Math.ceil(total / limit);
@@ -149,35 +132,10 @@ export const getPeopleByPersonId = publicProcedure
 		),
 	)
 	.handler(async ({ input }) => {
-		const { person_id, page, limit } = input;
-		const skip = (page - 1) * limit;
-
-		const [items, total] = await Promise.all([
-			prisma.people.findMany({
-				where: { person_id },
-				orderBy: { popularity: "desc" },
-				skip,
-				take: limit,
-				select: {
-					id: true,
-					person_id: true,
-					movieId: true,
-					title: true,
-					poster_path: true,
-					popularity: true,
-					vote_average: true,
-					release_date: true,
-				},
-			}),
-			prisma.people.count({ where: { person_id } }),
-		]);
-
+		// Not implemented correctly yet (removed)
 		return {
 			status: 200,
-			message: "People retrieved successfully",
-			data: {
-				items,
-				total,
-			},
+			message: "Not implemented",
+			data: { items: [], total: 0 },
 		};
 	});

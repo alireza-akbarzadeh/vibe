@@ -4,6 +4,7 @@ import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
 	bulkCreatePeopleInputSchema,
+	type CreatePeopleInput,
 	createPeopleInputSchema,
 } from "@/orpc/models/people.input.schema";
 import { PeopleSchema } from "@/orpc/models/people.schema";
@@ -15,14 +16,33 @@ export const createPeople = adminProcedure
 	.input(createPeopleInputSchema)
 	.output(ApiResponseSchema(PeopleSchema))
 	.handler(async ({ input }) => {
-		const person = await prisma.people.create({
-			data: input,
+		const { knownFor, ...personData } = input;
+
+		const person = await prisma.person.create({
+			data: {
+				...personData,
+				originalName: personData.originalName || "",
+				knownFor:
+					knownFor && knownFor.length > 0
+						? {
+								create: knownFor.map((media) => ({
+									tmdbId: media.tmdbId,
+									mediaType: media.mediaType,
+									title: media.title || "",
+									genreIds: JSON.stringify(media.genreIds || []),
+								})),
+							}
+						: undefined,
+			},
+			include: {
+				knownFor: true,
+			},
 		});
 
 		return {
 			status: 201,
 			message: "Person created successfully",
-			data: person,
+			data: person as unknown as z.infer<typeof PeopleSchema>,
 		};
 	});
 
@@ -65,21 +85,38 @@ export const bulkCreatePeople = adminProcedure
 
 			try {
 				if (skipDuplicates) {
-					// Use createMany with skipDuplicates for better performance
-					const result = await prisma.people.createMany({
-						data: batch,
+					const batchWithoutRelations = batch.map(({ knownFor, ...p }) => ({
+						...p,
+						originalName: p.originalName || "",
+					}));
+
+					const result = await prisma.person.createMany({
+						data: batchWithoutRelations,
 						skipDuplicates: true,
 					});
 					created += result.count;
-					// Approximate skipped count
+
 					skipped += batch.length - result.count;
 				} else {
-					// Process individually to capture errors
 					for (let j = 0; j < batch.length; j++) {
-						const personData = batch[j];
+						const { knownFor, ...personData } = batch[j];
 						try {
-							await prisma.people.create({
-								data: personData,
+							await prisma.person.create({
+								data: {
+									...personData,
+									originalName: personData.originalName || "",
+									knownFor:
+										knownFor && knownFor.length > 0
+											? {
+													create: knownFor.map((media) => ({
+														tmdbId: media.tmdbId,
+														mediaType: media.mediaType,
+														title: media.title || "",
+														genreIds: JSON.stringify(media.genreIds || []),
+													})),
+												}
+											: undefined,
+								},
 							});
 							created++;
 						} catch (error: unknown) {
@@ -89,14 +126,14 @@ export const bulkCreatePeople = adminProcedure
 								skipped++;
 								errors.push({
 									index: i + j,
-									error: "Duplicate entry (person_id + movieId exists)",
-									data: personData,
+									error: "Duplicate entry (tmdbId exists)",
+									data: batch[j],
 								});
 							} else {
 								errors.push({
 									index: i + j,
 									error: err.message || "Unknown error",
-									data: personData,
+									data: batch[j],
 								});
 							}
 						}

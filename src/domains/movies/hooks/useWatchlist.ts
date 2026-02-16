@@ -56,23 +56,16 @@ export function useWatchlist() {
 		return useQuery({
 			queryKey: watchlistKeys.detail(mediaId),
 			queryFn: async () => {
-				try {
-					const response = await client.watchlist.list({
-						page: 1,
-						limit: 100,
-					});
+				const response = await client.watchlist.check({ mediaId });
 
-					if (response.status !== 200) {
-						return false;
-					}
-
-					return response.data.items.some((item) => item.mediaId === mediaId);
-				} catch {
+				if (response.status !== 200) {
 					return false;
 				}
+
+				return response.data.inWatchlist;
 			},
 			enabled: !!mediaId,
-			staleTime: 1000 * 60 * 5,
+			staleTime: 1000 * 60 * 5, // 5 minutes
 		});
 	};
 

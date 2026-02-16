@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Loader2, Plus } from "lucide-react";
 import { startTransition, useOptimistic } from "react";

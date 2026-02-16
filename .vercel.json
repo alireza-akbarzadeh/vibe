@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm run vercel-build",
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs22.x"
+    }
+  }
+}

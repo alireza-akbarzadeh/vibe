@@ -15,6 +15,7 @@ export const createMediaInputSchema = z.object({
 	duration: z.number(),
 	releaseYear: z.number(),
 	type: z.enum(["MOVIE", "EPISODE", "TRACK"]),
+	status: z.enum(["DRAFT", "REVIEW", "PUBLISHED", "REJECTED"]).default("DRAFT"),
 	collectionId: z.string().nullable().optional(),
 	sortOrder: z.number().nullable().optional(),
 	genreIds: z.array(z.string()).optional(),
@@ -60,3 +61,5 @@ export const listMediaInputSchema = z.object({
 
 	sortBy: z.enum(["NEWEST", "OLDEST", "TITLE", "MANUAL"]).default("NEWEST"),
 });
+
+export type ListMediaInput = z.infer<typeof listMediaInputSchema>;

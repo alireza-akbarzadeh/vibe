@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import type { ComponentProps } from "react";

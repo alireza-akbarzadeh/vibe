@@ -3,22 +3,22 @@ import { useStore } from "@tanstack/react-store";
 import {
     type ColumnFiltersState,
     getCoreRowModel,
+    type PaginationState,
     type Row,
     useReactTable,
-    type PaginationState,
 } from "@tanstack/react-table";
 import {
     AlertTriangle,
     CheckCircle2,
     ChevronDown,
     Clock,
+    Edit,
     Filter,
     Plus,
     SlidersHorizontal,
     Video,
     X,
     XCircle,
-    Edit,
 } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
@@ -30,15 +30,15 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
-    DropdownMenuSeparator,
     DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { downloadCSV } from "@/lib/utils";
+import { BulkCreateDialog } from "../components/bulk-create-dialog";
 import { MediaAdvancedFilterContent } from "../components/media-advanced-filter";
 import { mediaColumns } from "../components/media-columns";
-import { bulkDeleteMediaAction, fetchMediaAction, updateMediaStatusAction, type MediaItem, mediaUIStore } from "../media.store";
-import { BulkCreateDialog } from "../components/bulk-create-dialog";
+import { bulkDeleteMediaAction, fetchMediaAction, type MediaItem, mediaUIStore, updateMediaStatusAction } from "../media.store";
 
 interface MediaManagementTableProps {
     initialData?: {
@@ -87,15 +87,13 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
         }
     }, [initialData, media.length]);
 
-    // Sync store currentPage changes back to local pagination state
-    // This handles cases where the store is updated by other means (e.g. bulk create resets to page 1)
+
     React.useEffect(() => {
         if (currentPage && currentPage !== pageIndex + 1) {
             setPagination(prev => ({ ...prev, pageIndex: currentPage - 1 }));
         }
     }, [currentPage, pageIndex]);
 
-    // Debounced search effect
     React.useEffect(() => {
         const timer = setTimeout(() => {
             if (searchQuery !== undefined) {
@@ -107,24 +105,20 @@ export function MediaManagementTable({ initialData }: MediaManagementTableProps)
 
         return () => clearTimeout(timer);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchQuery]);
+    }, [searchQuery, pageSize]);
 
-    // Fetch new data when pagination changes (user action)
+
     React.useEffect(() => {
         const page = pageIndex + 1;
-        // Avoid fetching if we are just syncing from store (handled by check in previous effect?)
 
-        if (page !== currentPage || pageSize !== mediaUIStore.state.filters.limit) {
-            // We can safely fetch. fetchMediaAction will handle it.
-            // But to avoid double fetch on mount with initialData:
+        if (page !== currentPage) {
             if (initialData && page === initialData.pagination.page && media.length > 0 && searchQuery === "") {
-                // Skip initial fetch if data is already there matching params
                 return;
             }
             fetchMediaAction(page, pageSize, searchQuery);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageIndex, pageSize]);
+    }, [pageIndex, pageSize, currentPage, initialData, media.length, searchQuery]);
+
 
     const applySegment = (segment: "all" | "movies" | "episodes" | "draft" | "published") => {
         switch (segment) {

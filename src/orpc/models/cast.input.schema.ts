@@ -53,6 +53,27 @@ export const listCastInputSchema = z.object({
 });
 
 /**
+ * Update cast member input
+ */
+export const updateCastMemberInputSchema = z.object({
+	id: z.string(),
+	role: z.string().optional(),
+	order: z.number().optional(),
+	castType: z
+		.enum([
+			"ACTOR",
+			"DIRECTOR",
+			"WRITER",
+			"PRODUCER",
+			"CINEMATOGRAPHER",
+			"COMPOSER",
+			"EDITOR",
+			"OTHER",
+		])
+		.optional(),
+});
+
+/**
  * Get cast for a specific media (grouped by type)
  */
 export const getMediaCastInputSchema = z.object({
@@ -86,3 +107,4 @@ export type ListCastInput = z.infer<typeof listCastInputSchema>;
 export type GetMediaCastInput = z.infer<typeof getMediaCastInputSchema>;
 export type DeleteCastMemberInput = z.infer<typeof deleteCastMemberInputSchema>;
 export type DeleteAllCastInput = z.infer<typeof deleteAllCastInputSchema>;
+export type UpdateCastMemberInput = z.infer<typeof updateCastMemberInputSchema>;

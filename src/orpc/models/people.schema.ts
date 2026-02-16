@@ -1,45 +1,48 @@
 import { z } from "zod";
-import { PersonListItemSchema } from "./person.schema";
 
 /**
- * People Schema - For cast/crew data
+ * KnownFor Item Schema
+ */
+export const KnownForSchema = z.object({
+	id: z.string(),
+	personId: z.string(),
+	tmdbId: z.number(),
+	mediaType: z.string(),
+	mediaDetails: z.any(), // JSON
+	createdAt: z.date(),
+	updatedAt: z.date(),
+});
+
+/**
+ * People Schema
  */
 export const PeopleSchema = z.object({
 	id: z.string(),
-	person_id: z.number(),
+	tmdbId: z.number(),
+	name: z.string(),
+	originalName: z.string(),
+	knownForDepartment: z.string().nullable(),
 	adult: z.boolean(),
-	backdrop_path: z.string().nullable(),
-	movieId: z.number(),
-	title: z.string(),
-	original_language: z.string().nullable(),
-	original_title: z.string().nullable(),
-	overview: z.string().nullable(),
-	poster_path: z.string().nullable(),
-	media_type: z.string().nullable(),
-	genre_ids: z.array(z.number()),
+	gender: z.number().nullable(),
 	popularity: z.number(),
-	release_date: z.date().nullable(),
-	video: z.boolean(),
-	vote_average: z.number(),
-	vote_count: z.number(),
-	created_at: z.date(),
-	updated_at: z.date(),
+	profilePath: z.string().nullable(),
+	createdAt: z.date(),
+	updatedAt: z.date(),
+
+	// Relation
+	knownFor: z.array(KnownForSchema).optional(),
 });
 
 export type People = z.infer<typeof PeopleSchema>;
+export type KnownFor = z.infer<typeof KnownForSchema>;
 
-/**
- * People List Item - Minimal data for list views
- */
 export const PeopleListItemSchema = z.object({
 	id: z.string(),
-	person_id: z.number(),
-	movieId: z.number(),
-	title: z.string(),
-	poster_path: z.string().nullable(),
+	tmdbId: z.number(),
+	name: z.string(),
+	profilePath: z.string().nullable(),
+	knownForDepartment: z.string().nullable(),
 	popularity: z.number(),
-	vote_average: z.number(),
-	release_date: z.date().nullable(),
 });
 
-export type PersonListItem = z.infer<typeof PersonListItemSchema>;
+export type PersonListItem = z.infer<typeof PeopleListItemSchema>;

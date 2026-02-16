@@ -10,7 +10,7 @@ export const deletePeople = adminProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ApiResponseSchema(z.object({ id: z.string() })))
 	.handler(async ({ input }) => {
-		await prisma.people.delete({
+		await prisma.person.delete({
 			where: { id: input.id },
 		});
 
@@ -28,7 +28,7 @@ export const bulkDeletePeople = adminProcedure
 	.input(z.object({ ids: z.array(z.string()).min(1) }))
 	.output(ApiResponseSchema(z.object({ deletedCount: z.number() })))
 	.handler(async ({ input }) => {
-		const result = await prisma.people.deleteMany({
+		const result = await prisma.person.deleteMany({
 			where: {
 				id: { in: input.ids },
 			},

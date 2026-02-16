@@ -20,6 +20,22 @@ export interface StatsBarProps {
 
 export interface MovieImage {
 	url: string;
-	type: "still" | "behind" | "poster";
+	type: "still" | "behind" | "poster" | "backdrop";
 	description: string;
+}
+
+export interface ImageDetail {
+	filePath: string;
+	width: number;
+	height: number;
+	aspectRatio: number;
+	voteAverage: number;
+	voteCount: number;
+}
+
+export interface GroupedImages {
+	backdrops: ImageDetail[];
+	posters: ImageDetail[];
+	stills: ImageDetail[];
+	logos: ImageDetail[];
 }

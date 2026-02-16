@@ -4,6 +4,41 @@ import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 
 /**
+ * Get all check list items for the authenticated user
+ */
+export const checkWatchList = authedProcedure
+	.input(
+		z.object({
+			mediaId: z.string(),
+		}),
+	)
+	.output(
+		ResponseSchema.ApiResponseSchema(
+			z.object({
+				inWatchlist: z.boolean(),
+			}),
+		),
+	)
+	.handler(async ({ input, context }) => {
+		const { mediaId } = input;
+
+		const count = await prisma.watchList.count({
+			where: {
+				userId: context.user.id,
+				mediaId,
+			},
+		});
+
+		return {
+			status: 200,
+			message: "Check watchlist status successfully",
+			data: {
+				inWatchlist: count > 0,
+			},
+		};
+	});
+
+/**
  * Get all watch list items for the authenticated user
  */
 export const listWatchList = authedProcedure

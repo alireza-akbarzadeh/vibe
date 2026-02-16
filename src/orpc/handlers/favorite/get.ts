@@ -5,6 +5,41 @@ import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { MediaListItemSchema } from "@/orpc/models/media.schema";
 
 /**
+ * Check if a media is in favorites
+ */
+export const checkFavorite = authedProcedure
+	.input(
+		z.object({
+			mediaId: z.string(),
+		}),
+	)
+	.output(
+		ResponseSchema.ApiResponseSchema(
+			z.object({
+				isFavorite: z.boolean(),
+			}),
+		),
+	)
+	.handler(async ({ input, context }) => {
+		const { mediaId } = input;
+
+		const count = await prisma.favorite.count({
+			where: {
+				userId: context.user.id,
+				mediaId,
+			},
+		});
+
+		return {
+			status: 200,
+			message: "Check favorite status successfully",
+			data: {
+				isFavorite: count > 0,
+			},
+		};
+	});
+
+/**
  * Get all favorites for the authenticated user
  */
 export const listFavorites = authedProcedure
