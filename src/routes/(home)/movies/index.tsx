@@ -15,6 +15,11 @@ export const Route = createFileRoute("/(home)/movies/")({
 					input: { type: "MOVIE", limit: 15 },
 				}),
 			),
+			context.queryClient.ensureQueryData(
+				orpc.recommendations.trending.queryOptions({
+					input: { type: "MOVIE", limit: 15, days: 7 },
+				}),
+			),
 		]);
 	},
 	component: RouteComponent,

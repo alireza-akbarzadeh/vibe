@@ -13,19 +13,20 @@ export const movieDetailsQueryOptions = (mediaId: string) =>
 			try {
 				const response = await client.media.find({ id: mediaId });
 				return response.data;
-			} catch (error: unknown) {
-				// Handle subscription errors gracefully
-				if (
-					typeof error === "object" &&
-					error !== null &&
-					"code" in error &&
-					error.code === "SUBSCRIPTION_REQUIRED"
-				) {
+			} catch (error: any) {
+				// Handle ORPC errors or fetch errors
+				if (error?.status === 404) {
+					throw new Error("Movie not found");
+				}
+
+				if (error?.code === "SUBSCRIPTION_REQUIRED") {
 					throw new Error(
 						"A subscription is required to view this content. Please upgrade your plan.",
 					);
 				}
-				throw error;
+
+				const message = error?.message || "Failed to load movie details";
+				throw new Error(message);
 			}
 		},
 		staleTime: 5 * 60 * 1000, // 5 minutes

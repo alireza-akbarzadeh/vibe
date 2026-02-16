@@ -1,3 +1,4 @@
+import { ORPCError } from "@orpc/server";
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
@@ -15,32 +16,65 @@ export const getMedia = publicProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ApiResponseSchema(MediaItemSchema))
 	.handler(async ({ input }) => {
-		const media = await prisma.media.findUnique({
-			where: { id: input.id },
-			include: {
-				genres: { include: { genre: true } },
-				creators: { include: { creator: true } },
-				collection: {
-					include: {
-						media: {
-							select: { id: true, title: true, thumbnail: true, type: true },
-							orderBy: { sortOrder: "asc" },
+		try {
+			const media = await prisma.media.findUnique({
+				where: { id: input.id },
+				include: {
+					genres: { include: { genre: true } },
+					creators: { include: { creator: true } },
+					collection: {
+						include: {
+							media: {
+								select: { id: true, title: true, thumbnail: true, type: true },
+								orderBy: { sortOrder: "asc" },
+							},
 						},
 					},
 				},
-			},
-		});
+			});
 
-		if (!media)
-			throw { code: "NOT_FOUND", status: 404, message: "Media not found" };
+			if (!media) {
+				throw new ORPCError("NOT_FOUND", {
+					message: "Media not found",
+				});
+			}
 
-		const parsedMedia = MediaItemSchema.parse(media);
+			// Background task to increment view count
+			// We don't await this to keep the response fast
+			prisma.media
+				.update({
+					where: { id: input.id },
+					data: { viewCount: { increment: 1 } },
+				})
+				.catch((err) =>
+					rpcLogger.error(
+						{ err, id: input.id },
+						"Failed to increment view count",
+					),
+				);
 
-		return {
-			status: 200,
-			message: "Media retrieved successfully",
-			data: parsedMedia,
-		};
+			const parsedMedia = MediaItemSchema.parse(media);
+
+			return {
+				status: 200,
+				message: "Media retrieved successfully",
+				data: parsedMedia,
+			};
+		} catch (error) {
+			if (error instanceof ORPCError) throw error;
+
+			if (error instanceof z.ZodError) {
+				throw new ORPCError("BAD_REQUEST", {
+					message: "Data validation error",
+					data: error.errors,
+				});
+			}
+
+			throw new ORPCError("INTERNAL_SERVER_ERROR", {
+				message: "Failed to retrieve media details",
+				cause: error,
+			});
+		}
 	});
 
 export const listMedia = publicProcedure
@@ -104,7 +138,6 @@ export const listMedia = publicProcedure
 					break;
 
 				case "ANIMATION": {
-					// Find Animation genre
 					const animationGenre = await prisma.genre.findFirst({
 						where: { name: { equals: "Animation", mode: "insensitive" } },
 					});
@@ -113,6 +146,60 @@ export const listMedia = publicProcedure
 							some: { genreId: animationGenre.id },
 						};
 					}
+					break;
+				}
+
+				case "TV_SERIES": {
+					where.collection = {
+						type: "SERIES",
+					};
+					break;
+				}
+
+				case "HORROR": {
+					const horrorGenre = await prisma.genre.findFirst({
+						where: { name: { equals: "Horror", mode: "insensitive" } },
+					});
+					if (horrorGenre) {
+						where.genres = {
+							some: { genreId: horrorGenre.id },
+						};
+					}
+					break;
+				}
+
+				case "COMEDY": {
+					const comedyGenre = await prisma.genre.findFirst({
+						where: { name: { equals: "Comedy", mode: "insensitive" } },
+					});
+					if (comedyGenre) {
+						where.genres = {
+							some: { genreId: comedyGenre.id },
+						};
+					}
+					break;
+				}
+
+				case "ROMANCE": {
+					const romanceGenre = await prisma.genre.findFirst({
+						where: { name: { equals: "Romance", mode: "insensitive" } },
+					});
+					if (romanceGenre) {
+						where.genres = {
+							some: { genreId: romanceGenre.id },
+						};
+					}
+					break;
+				}
+
+				case "TOP_IMDB": {
+					// We don't have a direct IMDB rating, so we use rating as proxy
+					orderBy = { rating: "desc" };
+					break;
+				}
+
+				case "TOP_RATED": {
+					orderBy = { rating: "desc" };
 					break;
 				}
 

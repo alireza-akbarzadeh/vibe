@@ -4,7 +4,6 @@ import { Info, Play, Star } from "lucide-react";
 import { AddButton } from "@/components/buttons/add-button";
 import { Button } from "@/components/ui/button";
 import type { SimilarMoviesType } from "@/domains/movies/components/similar-movies.tsx";
-import { generateSlug } from "@/lib/utils";
 import { MovieInfoDialog } from "./movie-info-dialog";
 
 interface MovieListProps {
@@ -42,7 +41,7 @@ export function MovieItem(props: MovieListProps) {
 							onClick={() =>
 								navigate({
 									to: "/movies/$movieId",
-									params: { movieId: generateSlug(movie.title) },
+									params: { movieId: movie.id },
 								})
 							}
 							size="sm"

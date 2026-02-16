@@ -12,6 +12,7 @@ interface LazyMovieCarouselProps {
     showProgress?: boolean;
     queryKey: unknown[];
     queryFn: () => Promise<{ data: { items: MediaList[] } }>;
+    sectionSlug?: string; // Optional explore page section slug
 }
 
 /**
@@ -26,6 +27,7 @@ export function LazyMovieCarousel({
     showProgress,
     queryKey,
     queryFn,
+    sectionSlug,
 }: LazyMovieCarouselProps) {
     const { ref, data, isVisible } = useLazySection<{
         data: { items: MediaList[] };
@@ -86,6 +88,7 @@ export function LazyMovieCarousel({
                 movies={movies}
                 variant={variant}
                 showProgress={showProgress}
+                sectionSlug={sectionSlug}
             />
         </section>);
 }

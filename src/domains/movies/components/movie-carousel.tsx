@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { generateSlug } from "@/lib/utils";
 import type { MediaList } from "@/orpc/models/media.schema";
 import { MovieCard } from "./movie-card";
 
@@ -19,6 +18,7 @@ interface MovieCarouselProps {
 	showProgress?: boolean;
 	variant: MovieVariantCard;
 	movies: MediaList[];
+	sectionSlug?: string; // Optional explore page section slug
 }
 export function MovieCarousel({
 	title,
@@ -26,6 +26,7 @@ export function MovieCarousel({
 	movies,
 	showProgress,
 	variant = "standard",
+	sectionSlug,
 }: MovieCarouselProps) {
 	const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -54,14 +55,20 @@ export function MovieCarousel({
 			>
 				<div>
 					<div className="flex items-center gap-3 mb-2">
-						<Link
-							to="/explore/$section"
-							params={{ section: generateSlug(title) }}
-						>
+						{sectionSlug ? (
+							<Link
+								to="/explore/$section"
+								params={{ section: sectionSlug }}
+							>
+								<h2 className="text-2xl md:text-3xl font-bold text-white hover:text-purple-400 transition-colors">
+									{title}
+								</h2>
+							</Link>
+						) : (
 							<h2 className="text-2xl md:text-3xl font-bold text-white">
 								{title}
 							</h2>
-						</Link>
+						)}
 						{variant === "personalized" && (
 							<motion.div
 								animate={{ rotate: [0, 360] }}

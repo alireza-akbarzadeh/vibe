@@ -16,4 +16,6 @@ ngrok.yml
 # /src/services/endpoints
 
 .idea
-src/generated
+
+# Generate Prisma Client
+src/generated/

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/(home)/movies/$movieId")({
 	loader: async ({ context, params }) => {
 		const { movieId } = params;
 
-		// First, fetch media data to get genre IDs
+		// First, fetch media data to get genre IDs (CRITICAL)
 		const mediaData = await context.queryClient.ensureQueryData(
 			movieDetailsQueryOptions(movieId),
 		);
@@ -22,8 +22,8 @@ export const Route = createFileRoute("/(home)/movies/$movieId")({
 		// Extract genre IDs for similar movies
 		const genreIds = mediaData.genres?.map((g) => g.genre.id) || [];
 
-		// Prefetch all remaining data in parallel
-		await Promise.all([
+		// Prefetch all remaining data in parallel (NON-CRITICAL - don't crash the whole page)
+		await Promise.allSettled([
 			context.queryClient.ensureQueryData(movieCastQueryOptions(movieId)),
 			context.queryClient.ensureQueryData(movieVideosQueryOptions(movieId)),
 			context.queryClient.ensureQueryData(movieImagesQueryOptions(movieId)),

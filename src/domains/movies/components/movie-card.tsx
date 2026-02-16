@@ -5,7 +5,6 @@ import { useState } from "react";
 import { AddButton } from "@/components/buttons/add-button";
 import { Button } from "@/components/ui/button";
 import type { MediaList } from "@/orpc/models/media.schema";
-import { generateSlug } from "@/lib/utils";
 import type { MovieVariantCard } from "./movie-carousel";
 import { MovieInfoDialog } from "./movie-info-dialog";
 
@@ -139,7 +138,7 @@ export function MovieCard({
 								onClick={() => {
 									navigate({
 										to: "/movies/$movieId",
-										params: { movieId: generateSlug(movie.title) },
+										params: { movieId: movie.id },
 									});
 								}}
 								size="sm"

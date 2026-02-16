@@ -30,6 +30,12 @@ export const MediaCategorySchema = z.enum([
 	"TRENDING",
 	"RECENT",
 	"MY_LIST",
+	"TOP_RATED",
+	"TV_SERIES",
+	"HORROR",
+	"COMEDY",
+	"ROMANCE",
+	"TOP_IMDB",
 ]);
 
 export const listMediaInputSchema = z.object({
