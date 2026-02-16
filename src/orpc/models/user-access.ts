@@ -57,6 +57,8 @@ export const UserAccessOutput = z.object({
 	roles: z.array(RoleOutput),
 	permissions: z.array(PermissionOutput),
 	createdAt: z.string(),
+	updatedAt: z.string(),
+	banned: z.boolean(),
 });
 
 export const ListUsersWithAccessOutput = z.object({

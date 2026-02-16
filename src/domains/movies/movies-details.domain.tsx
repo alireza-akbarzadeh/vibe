@@ -35,8 +35,20 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 		movieReviewsQueryOptions(movieId),
 	);
 
+	// Transform reviews to match component expectations
+	const transformedReviews = reviews
+		? {
+			...reviews,
+			items: reviews.items.map((review) => ({
+				...review,
+				title: null,
+				content: review.review || "",
+			})),
+		}
+		: undefined;
+
 	// Extract genre IDs for similar movies query
-	const genreIds = media.genres?.map((g) => g.genreId) || [];
+	const genreIds = media.genres?.map((g) => g.genre.id) || [];
 
 	// Fetch similar movies based on genres
 	const { data: similarMovies } = useSuspenseQuery(
@@ -53,27 +65,27 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 			? `https://image.tmdb.org/t/p/w1280${images.backdrops[0].filePath}`
 			: media.thumbnail,
 		rating: media.rating || 0,
-		votes: media.reviewCount || 0,
+		votes: reviews?.pagination.total || 0,
 		duration: `${Math.floor(media.duration / 60)}h ${media.duration % 60}m`,
-		releaseDate: new Date().toISOString(), // TODO: Add release date to Media model
-		rating_label: media.status,
+		releaseDate: new Date().toISOString(),
+		rating_label: "PG-13",
 		genres: media.genres?.map((g) => g.genre.name) || [],
 		synopsis: media.description,
 		director: cast?.directors[0]?.person.name || "Unknown",
 		writers: cast?.writers.map((w) => w.person.name) || [],
 		stars: cast?.actors.slice(0, 3).map((a) => a.person.name) || [],
-		productionCo: "Loading...", // TODO: Add to Media model
-		budget: "Loading...", // TODO: Add to Media model
+		productionCo: "N/A",
+		budget: "N/A",
 		revenue: "TBD",
 		trailerUrl: videos?.trailers[0]?.key
 			? `https://www.youtube.com/embed/${videos.trailers[0].key}`
 			: "",
-		metascore: media.criticalScore || 0,
-		popularity: 0, // TODO: Calculate popularity
+		popularity: media.reviewCount || 0,
 		popularityChange: 0,
 	};
 
 	const videoData = {
+		videoId: media.id,
 		src: media.videoUrl || VIDEOS.demo,
 		videoPoster: media.thumbnail,
 		year: media.releaseYear.toString(),
@@ -99,15 +111,15 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 				rating={movieData.rating}
 				votes={movieData.votes}
 				metascore={movieData.metascore}
-				popularity={momovies = { similarMovies?.items} vieData.popularity}
-			popularityChange={movieData.popularityChange}
-			revenue={movieData.revenue}
+				popularity={movieData.popularity}
+				popularityChange={movieData.popularityChange}
+				revenue={movieData.revenue}
 			/>
 			<Synopsis movie={movieData} />
 			<CastCarousel cast={cast} />
-			<ReviewsSection reviews={reviews} mediaId={movieId} />
+			<ReviewsSection reviews={transformedReviews} mediaId={movieId} />
 			<ImagesGallery images={images} />
-			<SimilarMovies />
+			<SimilarMovies movies={similarMovies?.items} />
 		</div>
 	);
 }

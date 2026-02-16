@@ -10,10 +10,33 @@ export const movieDetailsQueryOptions = (mediaId: string) =>
 	queryOptions({
 		queryKey: ["media", "details", mediaId],
 		queryFn: async () => {
-			const response = await client.media.find({ id: mediaId });
-			return response.data;
+			try {
+				const response = await client.media.find({ id: mediaId });
+				return response.data;
+			} catch (error: any) {
+				// Handle subscription errors gracefully
+				if (error?.code === "SUBSCRIPTION_REQUIRED") {
+					throw new Error(
+						"A subscription is required to view this content. Please upgrade your plan.",
+					);
+				}
+				throw error;
+			}
 		},
 		staleTime: 5 * 60 * 1000, // 5 minutes
+		retry: (failureCount, error: unknown) => {
+			// Don't retry subscription errors
+			if (
+				typeof error === "object" &&
+				error !== null &&
+				"code" in error &&
+				error.code === "SUBSCRIPTION_REQUIRED"
+			) {
+				return false;
+			}
+			// Retry other errors up to 2 times
+			return failureCount < 2;
+		},
 	});
 
 // Fetch cast and crew

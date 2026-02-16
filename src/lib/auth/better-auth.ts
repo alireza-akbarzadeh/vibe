@@ -99,6 +99,8 @@ export const auth = betterAuth({
 			subscriptionStatus: { type: "string", defaultValue: "FREE" },
 			customerId: { type: "string", required: false },
 			currentPlan: { type: "string", required: false },
+			banned: { type: "boolean", required: false },
+			updatedAt: { type: "date", required: false },
 			agreeToTerms: {
 				type: "boolean",
 				required: true,

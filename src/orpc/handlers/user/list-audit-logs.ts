@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { authedProcedure } from "@/orpc/context";
 
@@ -36,7 +37,7 @@ export const listAuditLogs = authedProcedure
 		const skip = (page - 1) * limit;
 
 		// Build where clause
-		const where: any = {};
+		const where: Prisma.AuditLogWhereInput = {};
 
 		if (userId) {
 			where.userId = userId;

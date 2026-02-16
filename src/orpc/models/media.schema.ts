@@ -57,6 +57,12 @@ export const MediaItemSchema = z.object({
 	sortOrder: z.number().nullable().optional(),
 	genres: z.array(MediaGenreSchema),
 	creators: z.array(MediaCreatorSchema),
+	// Rating and stats
+	rating: z.number().nullable().optional(),
+	reviewCount: z.number().default(0),
+	criticalScore: z.number().nullable().optional(),
+	viewCount: z.number().default(0),
+	averageRating: z.number().nullable().optional(),
 });
 
 /* -------------------------------------------------------------------------- */

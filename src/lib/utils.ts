@@ -366,3 +366,8 @@ export const getEmailProviderLink = (email: string, isSpam: boolean) => {
 	// Default fallback if unknown
 	return "https://mail.google.com";
 };
+
+export const getCurrentUrl = () => {
+	if (typeof window === "undefined") return "";
+	return window.location.href;
+};

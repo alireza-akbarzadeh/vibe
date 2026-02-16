@@ -1,6 +1,10 @@
-import { adminProcedure } from "@/orpc/context";
-import { ListUsersWithAccessOutput, listUsersWithAccessInput } from "@/orpc/models/user-access";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { adminProcedure } from "@/orpc/context";
+import {
+	ListUsersWithAccessOutput,
+	listUsersWithAccessInput,
+} from "@/orpc/models/user-access";
 
 export const listUsersWithAccess = adminProcedure
 	.input(listUsersWithAccessInput)
@@ -9,9 +13,8 @@ export const listUsersWithAccess = adminProcedure
 		const { search, roleId, page, limit } = input;
 		const skip = (page - 1) * limit;
 
-		// Build where clause
-		const where: any = {};
-		
+		const where: Prisma.UserWhereInput = {};
+
 		if (search) {
 			where.OR = [
 				{ name: { contains: search, mode: "insensitive" } },
@@ -85,12 +88,12 @@ export const listUsersWithAccess = adminProcedure
 
 			// Get permissions from roles (deduplicate by permission ID)
 			const permissionMap = new Map();
-			
+
 			// Add direct permissions first
 			for (const perm of directPermissions) {
 				permissionMap.set(perm.id, perm);
 			}
-			
+
 			// Add role permissions (if not already direct)
 			for (const userRole of user.roles) {
 				for (const rolePerm of userRole.role.permissions) {
@@ -126,6 +129,8 @@ export const listUsersWithAccess = adminProcedure
 				roles,
 				permissions: Array.from(permissionMap.values()),
 				createdAt: user.createdAt.toISOString(),
+				updatedAt: user.updatedAt.toISOString(),
+				banned: user.banned,
 			};
 		});
 

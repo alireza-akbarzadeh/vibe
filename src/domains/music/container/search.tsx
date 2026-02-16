@@ -230,6 +230,7 @@ export function SearchView() {
 											);
 										})}
 									</div>
+								)}
 							</section>
 						</div>
 					</motion.div>
@@ -285,67 +286,66 @@ export function SearchView() {
 								))}
 							</div>
 						)}
-					</div>
 					</section>
 				)}
 
-			{/* 5. Albums Section */}
-			{(activeFilter === "All" || activeFilter === "Albums") && (
-				<section className="mb-12">
-					<div className="flex items-center justify-between mb-4">
-						<h2 className="text-2xl font-bold text-white">Albums</h2>
-						{activeFilter === "All" && (
-							<button
-								type="button"
-								className="text-sm font-bold text-gray-400 hover:underline"
-							>
-								Show all
-							</button>
-						)}
-					</div>
-					{isLoading ? (
-						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-							{[...Array(6)].map((_, i) => (
-								<div key={i} className="bg-[#181818] p-4 rounded-xl h-60 animate-pulse" />
-							))}
-						</div>
-					) : albums.length > 0 ? (
-						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-							{albums.map((album) => (
-								<div
-									key={album.id}
-									className="bg-[#181818] p-4 rounded-xl hover:bg-[#282828] transition-colors cursor-pointer group"
+				{/* 5. Albums Section */}
+				{(activeFilter === "All" || activeFilter === "Albums") && (
+					<section className="mb-12">
+						<div className="flex items-center justify-between mb-4">
+							<h2 className="text-2xl font-bold text-white">Albums</h2>
+							{activeFilter === "All" && (
+								<button
+									type="button"
+									className="text-sm font-bold text-gray-400 hover:underline"
 								>
-									<div className="relative mb-4">
-										<img
-											src={album.art}
-											className="w-full aspect-square rounded-lg shadow-lg object-cover"
-											alt=""
-										/>
-										<button
-											type="button"
-											className="absolute bottom-2 right-2 w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all"
-										>
-											<Play className="w-5 h-5 text-white fill-white ml-0.5" />
-										</button>
-									</div>
-									<div className="text-white font-bold text-sm truncate">
-										{album.title}
-									</div>
-									<div className="text-gray-400 text-xs mt-1">
-										{album.year} • {album.artist}
-									</div>
-								</div>
-							))}
+									Show all
+								</button>
+							)}
 						</div>
-					) : (
-						<div className="bg-[#181818] p-8 rounded-xl text-white/50 text-center">
-							No albums found
-						</div>
-					)}
-				</section>
-			)}
-		</AnimatePresence>
-	</div >
-);
+						{isLoading ? (
+							<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+								{[...Array(6)].map((_, i) => (
+									<div key={i} className="bg-[#181818] p-4 rounded-xl h-60 animate-pulse" />
+								))}
+							</div>
+						) : albums.length > 0 ? (
+							<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+								{albums.map((album) => (
+									<div
+										key={album.id}
+										className="bg-[#181818] p-4 rounded-xl hover:bg-[#282828] transition-colors cursor-pointer group"
+									>
+										<div className="relative mb-4">
+											<img
+												src={album.art}
+												className="w-full aspect-square rounded-lg shadow-lg object-cover"
+												alt=""
+											/>
+											<button
+												type="button"
+												className="absolute bottom-2 right-2 w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all"
+											>
+												<Play className="w-5 h-5 text-white fill-white ml-0.5" />
+											</button>
+										</div>
+										<div className="text-white font-bold text-sm truncate">
+											{album.title}
+										</div>
+										<div className="text-gray-400 text-xs mt-1">
+											{album.year} • {album.artist}
+										</div>
+									</div>
+								))}
+							</div>
+						) : (
+							<div className="bg-[#181818] p-8 rounded-xl text-white/50 text-center">
+								No albums found
+							</div>
+						)}
+					</section>
+				)}
+			</AnimatePresence>
+		</div >
+	);
 }

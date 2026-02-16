@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { authedProcedure } from "@/orpc/context";
 
@@ -8,7 +9,7 @@ const ListUsersInputSchema = z.object({
 	search: z.string().optional(),
 	role: z.enum(["ADMIN", "MODERATOR", "USER"]).optional(),
 	subscriptionStatus: z
-		.enum(["FREE", "PRO", "PREMIUM", "CANCELLED"])
+		.enum(["FREE", "PREMIUM", "FAMILY", "CANCELLED"])
 		.optional(),
 });
 
@@ -44,7 +45,7 @@ export const listUsers = authedProcedure
 		const skip = (page - 1) * limit;
 
 		// Build where clause
-		const where: any = {};
+		const where: Prisma.UserWhereInput = {};
 
 		if (search) {
 			where.OR = [

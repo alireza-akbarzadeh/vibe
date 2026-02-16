@@ -1,7 +1,10 @@
-import { polarClient } from "@/integrations/polar/polar-client";
 import { env } from "@/env";
+import { polarClient } from "@/integrations/polar/polar-client";
 import { authedProcedure } from "@/orpc/context";
-import { CheckoutCreateInputSchema, CheckoutResponseSchema } from "../../models/polar";
+import {
+	CheckoutCreateInputSchema,
+	CheckoutResponseSchema,
+} from "../../models/polar";
 
 /**
  * Create a checkout session for a product
@@ -12,17 +15,17 @@ export const createCheckout = authedProcedure
 	.handler(async ({ input, context, errors }) => {
 		try {
 			const successUrl =
-				input.successUrl || env.POLAR_SUCCESS_URL || `${env.VITE_APP_URL}/success`;
+				input.successUrl ||
+				env.POLAR_SUCCESS_URL ||
+				`${env.VITE_APP_URL}/success`;
 
 			const checkout = await polarClient.checkouts.create({
 				products: [input.productPriceId],
 				successUrl,
 				...(input.customerEmail && { customerEmail: input.customerEmail }),
-				// Attach customer if they have one
 				...(context.user.customerId && {
 					customerId: context.user.customerId,
 				}),
-				// Auto-fill email from authenticated user
 				...(!input.customerEmail &&
 					context.user.email && { customerEmail: context.user.email }),
 			});

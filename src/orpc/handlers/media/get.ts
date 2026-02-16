@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
-import { publicProcedure, subscribedProcedure } from "@/orpc/context";
+import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { listMediaInputSchema } from "@/orpc/models/media.input.schema";
 import {
@@ -10,8 +10,8 @@ import {
 } from "@/orpc/models/media.schema";
 
 /* ---------------------------- Get Media by ID ---------------------------- */
-// SUBSCRIBED ONLY - Watch page, details
-export const getMedia = subscribedProcedure
+// PUBLIC - Allow browsing details, subscription required for playback
+export const getMedia = publicProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ApiResponseSchema(MediaItemSchema))
 	.handler(async ({ input }) => {
@@ -324,7 +324,11 @@ export const getTrendingSearches = publicProcedure
 	.handler(async ({ input }) => {
 		const items = await prisma.media.findMany({
 			where: { status: "PUBLISHED" },
-			orderBy: [{ viewCount: "desc" }, { rating: "desc" }, { createdAt: "desc" }],
+			orderBy: [
+				{ viewCount: "desc" },
+				{ rating: "desc" },
+				{ createdAt: "desc" },
+			],
 			take: input.limit,
 			select: {
 				id: true,

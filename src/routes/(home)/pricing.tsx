@@ -1,13 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { toast } from "sonner";
 import { RootHeader } from "@/components/root-header";
 import Footer from "@/domains/home/footer";
 import { PLANS } from "@/domains/plans/plans.constants";
 import { Plans } from "@/domains/plans/plans.domains";
 import { useCreateCheckout } from "@/hooks/usePolar";
 import { logger } from "@/lib/logger";
-import { Route as RootRoute } from "@/routes/__root";
+import { getCurrentUrl } from "@/lib/utils";
 import type { CheckoutInputScheme } from "@/types/subscription";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 interface PricingSearch {
   redirectUrl?: string;
@@ -22,39 +22,40 @@ export const Route = createFileRoute("/(home)/pricing")({
 
 function RouteComponent() {
   const { redirectUrl } = Route.useSearch();
-  const { auth } = RootRoute.useRouteContext();
-  const user = auth?.user;
+  const router = useRouter();
+  const navigate = useNavigate()
+  const auth = router.options.context?.auth;
+  const user = auth?.user
   const createCheckout = useCreateCheckout();
-
-  // Debug logging (can remove later)
-  if (import.meta.env.DEV) {
-    console.log('[Pricing Page] User Data:', {
-      userId: user?.id,
-      email: user?.email,
-      subscriptionStatus: user?.subscriptionStatus,
-      currentPlan: user?.currentPlan,
-    });
-  }
 
   const handleCheckout = async (plan: CheckoutInputScheme) => {
     try {
-      // Skip checkout for free plan
+      const redirectPath = getCurrentUrl()
+      if (!user) {
+        toast.error("Authentication required", {
+          description: "Please log in or create an account to continue with your subscription.",
+        });
+        navigate({ to: "/login", search: { redirectUrl: redirectPath } })
+        return;
+      }
       if (plan.slug === "Free") {
-        toast.info("You're already on the free plan");
+        toast.info("You're currently on the Free plan.", {
+          description: "Upgrade anytime to unlock premium features.",
+        });
         return;
       }
 
       // Ensure plan has priceId
-      if (!plan.priceId) {
-        toast.error("Invalid plan", {
-          description: "Plan is missing pricing information"
+      if (!plan.productId) {
+        toast.error("Plan unavailable", {
+          description: "This subscription option is temporarily unavailable. Please try again later.",
         });
         return;
       }
 
       // Create Polar checkout session
       const result = await createCheckout.mutateAsync({
-        productPriceId: plan.priceId,
+        productPriceId: plan.productId,
         successUrl: redirectUrl || `${window.location.origin}/library/subscription`,
       });
 

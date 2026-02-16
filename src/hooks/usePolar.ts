@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { client } from "@/orpc/client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 /**
  * Fetch all available products
@@ -85,7 +85,6 @@ export function useCreateCheckout() {
 			customerEmail?: string;
 		}) => client.polar.createCheckout(params),
 		onSuccess: (data) => {
-			// Automatically redirect to checkout
 			window.location.href = data.url;
 		},
 	});
@@ -98,10 +97,8 @@ export function useCancelSubscription() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (params: {
-			subscriptionId: string;
-			immediately?: boolean;
-		}) => client.polar.cancelSubscription(params),
+		mutationFn: (params: { subscriptionId: string; immediately?: boolean }) =>
+			client.polar.cancelSubscription(params),
 		onSuccess: () => {
 			// Invalidate subscriptions cache
 			queryClient.invalidateQueries({ queryKey: ["polar", "subscriptions"] });

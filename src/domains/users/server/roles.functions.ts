@@ -31,7 +31,7 @@ export async function getStaffWithAccess(
 
 			// Determine status based on user properties
 			let status: "online" | "offline" | "flagged" = "offline";
-			if (user.banned) {
+			if (user?.banned) {
 				status = "flagged";
 			}
 
@@ -39,11 +39,11 @@ export async function getStaffWithAccess(
 				id: user.id,
 				name: user.name || "Unknown",
 				email: user.email,
-				phone: "+1 (555) 000-0000", // Not in schema, placeholder
+				phone: "N/A",
 				role: primaryRole,
 				status,
 				lastActive: new Date(user.updatedAt).toLocaleString(),
-				ipAddress: "N/A", // Not in schema
+				ipAddress: "N/A",
 				activePerms,
 			};
 		});

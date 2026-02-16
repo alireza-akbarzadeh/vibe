@@ -22,10 +22,14 @@ const handler = new RPCHandler(router, {
 async function handle({ request }: { request: Request }) {
 	try {
 		const url = new URL(request.url);
-		if (request.method === "GET" && (url.pathname === "/api/rpc" || url.pathname === "/api/rpc/")) {
+		if (
+			request.method === "GET" &&
+			(url.pathname === "/api/rpc" || url.pathname === "/api/rpc/")
+		) {
 			return new Response(
 				JSON.stringify({
-					message: "oRPC endpoint. Use POST for procedure calls. OpenAPI dashboard: /api",
+					message:
+						"oRPC endpoint. Use POST for procedure calls. OpenAPI dashboard: /api",
 				}),
 				{ status: 200, headers: { "Content-Type": "application/json" } },
 			);

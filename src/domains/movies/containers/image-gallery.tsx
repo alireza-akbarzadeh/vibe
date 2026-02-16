@@ -89,44 +89,44 @@ export function ImagesGallery({ images }: ImagesGalleryProps) {
 						<h2 className="text-3xl md:text-4xl font-bold text-white">
 							Images
 						</h2>
-						{/* Image Grid */}
-						<Tabs
-							value={activeTab}
-							onValueChange={(value) =>
-								setActiveTab(value as unknown as ActiveTabSte)
-							}
-							defaultValue={activeTab}
-							All ({allImages.length})
-					</TabsTrigger>
-					<TabsTrigger value="backdrop">
-						Backdrops ({images?.backdrops.length || 0})
-					</TabsTrigger>
-					<TabsTrigger value="poster">
-						Posters ({images?.posters.length || 0})
-					</TabsTrigger>
-					<TabsTrigger value="still">
-						Stills ({images?.stills.length || 0})
-								rigger>
-						<TabsTrigger value="still">Still</TabsTrigger>
-						<TabsTrigger value="behind">Behind Scenes</TabsTrigger>
-						<TabsTrigger value="poster">Posters</TabsTrigger>
-					</TabsList>
-				</Tabs>
-			</difilterImage(activeTab)[currentImage]?.url || ""}
-			imageLength={filterImage(activeTab)
+					</div>
+					{/* Image Grid */}
+					<Tabs
+						value={activeTab}
+						onValueChange={(value) =>
+							setActiveTab(value as ActiveTabSte)
+						}
+						defaultValue={activeTab}
+					>
+						<TabsList>
+							<TabsTrigger value="all">
+								All ({allImages.length})
+							</TabsTrigger>
+							<TabsTrigger value="backdrop">
+								Backdrops ({images?.backdrops.length || 0})
+							</TabsTrigger>
+							<TabsTrigger value="poster">
+								Posters ({images?.posters.length || 0})
+							</TabsTrigger>
+							<TabsTrigger value="still">
+								Stills ({images?.stills.length || 0})
+							</TabsTrigger>
+						</TabsList>
+					</Tabs>
+					<MovieImages
 						images={filterImage(activeTab)}
-			openLightbox={openLightbox}
+						openLightbox={openLightbox}
 					/>
-		</motion.div>
-			</div >
-		<LightBox
-			src={images[currentImage].url}
-			imageLength={images.length}
-			currentImage={currentImage}
-			navigate={navigate}
-			setLightboxOpen={setLightboxOpen}
-			lightboxOpen={lightboxOpen}
-		/>
-		</section >
+				</motion.div>
+			</div>
+			<LightBox
+				src={filterImage(activeTab)[currentImage]?.url || ""}
+				imageLength={filterImage(activeTab).length}
+				currentImage={currentImage}
+				navigate={navigate}
+				setLightboxOpen={setLightboxOpen}
+				lightboxOpen={lightboxOpen}
+			/>
+		</section>
 	);
 }
