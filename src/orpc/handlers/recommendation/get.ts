@@ -132,7 +132,8 @@ export const getTrending = publicProcedure
 	.input(trendingInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { type, limit, days } = input;
+		const { type, limit, days, page } = input;
+		const skip = (page - 1) * limit;
 
 		const dateThreshold = new Date();
 		dateThreshold.setDate(dateThreshold.getDate() - days);
@@ -158,6 +159,7 @@ export const getTrending = publicProcedure
 				},
 			},
 			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			skip,
 			take: limit,
 		});
 
@@ -176,7 +178,8 @@ export const getTopRated = publicProcedure
 	.input(trendingInputSchema.omit({ days: true }))
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { type, limit } = input;
+		const { type, limit, page } = input;
+		const skip = (page - 1) * limit;
 
 		const topRated = await prisma.media.findMany({
 			where: {
@@ -197,6 +200,7 @@ export const getTopRated = publicProcedure
 				},
 			},
 			orderBy: [{ rating: "desc" }, { reviewCount: "desc" }],
+			skip,
 			take: limit,
 		});
 

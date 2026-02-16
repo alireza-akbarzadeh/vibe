@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { useDebouncedValue } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
@@ -17,12 +18,14 @@ const MIN_QUERY_LENGTH = 2;
 
 export interface MoviesSearchInputProps {
 	searchQuery: string;
-	onSearchChange: (query: string) => void
+	onSearchChange: (query: string) => void;
+	autoFocus?: boolean;
 }
 
 export function MoviesSearchInput({
 	searchQuery,
 	onSearchChange,
+	autoFocus = false,
 }: MoviesSearchInputProps) {
 	const [isFocused, setIsFocused] = useState(false);
 	const [inputValue, setInputValue] = useState(() => searchQuery ?? "");
@@ -31,6 +34,7 @@ export function MoviesSearchInput({
 	onSearchChangeRef.current = onSearchChange;
 
 	const trimmedInput = inputValue.trim();
+	// Debounce only for API calls, not for URL updates
 	const [debouncedSearchTerm] = useDebouncedValue(trimmedInput, SEARCH_DEBOUNCE_MS);
 
 	useEffect(() => {
@@ -39,11 +43,12 @@ export function MoviesSearchInput({
 		lastSentRef.current = fromUrl;
 	}, [searchQuery]);
 
+	// Update URL immediately on input change (no debounce)
 	useEffect(() => {
-		if (debouncedSearchTerm === lastSentRef.current) return;
-		lastSentRef.current = debouncedSearchTerm;
-		onSearchChangeRef.current(debouncedSearchTerm || "");
-	}, [debouncedSearchTerm]);
+		if (trimmedInput === lastSentRef.current) return;
+		lastSentRef.current = trimmedInput;
+		onSearchChangeRef.current(trimmedInput || "");
+	}, [trimmedInput]);
 
 	const showSearchSection = debouncedSearchTerm.length >= MIN_QUERY_LENGTH;
 
@@ -78,6 +83,7 @@ export function MoviesSearchInput({
 					placeholder="Search movies, series, or actors..."
 					className="pl-12 pr-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all"
 					autoComplete="off"
+					autoFocus={autoFocus}
 				/>
 				{inputValue ? (
 					<Button

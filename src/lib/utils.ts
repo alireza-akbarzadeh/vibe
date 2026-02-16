@@ -240,7 +240,7 @@ export function createMetadata(metadata: Metadata): Meta[] {
 
 export function generateSlug(slug: string) {
 	const split = slug.split(" ");
-	return split.join("-");
+	return split.join("-").toLowerCase();
 }
 
 export function toCamelCase(value: string) {

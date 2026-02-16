@@ -42,6 +42,7 @@ export default function MovieDiscovery(props: MovieDiscoveryProps = {}) {
 	const searchQueryOptions = searchSuggestionsQueryOptions({
 		search: searchQuery || undefined,
 		limit: 20,
+		category: activeCategory,
 	});
 	const {
 		data: searchResponse,

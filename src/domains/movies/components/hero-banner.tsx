@@ -69,7 +69,7 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 									initial={{ opacity: 0, x: -50 }}
 									animate={{ opacity: 1, x: 0 }}
 									transition={{ delay: 0.2, duration: 0.8 }}
-									className="text-6xl md:text-8xl font-bold text-white mb-6 leading-tight"
+									className="text-2xl md:text-4xl font-bold text-white mb-6 leading-tight"
 									style={{
 										textShadow:
 											"0 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.3)",
@@ -94,7 +94,7 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 									<span className="text-white font-semibold">
 										{current.releaseYear}
 									</span>
-									<span className="text-gray-400">{current.duration}</span>
+									<span className="text-gray-400">{current.duration}m</span>
 									<div className="flex gap-2">
 										{current.genres.slice(0, 3).map((genre) => (
 											<span

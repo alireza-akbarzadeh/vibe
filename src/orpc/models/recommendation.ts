@@ -18,6 +18,7 @@ export const trendingInputSchema = z.object({
 	type: z.enum(["MOVIE", "EPISODE", "TRACK"]).optional(),
 	limit: z.number().min(1).max(50).default(20),
 	days: z.number().min(1).max(90).default(7), // Views in last X days
+	page: z.number().min(1).default(1),
 });
 
 /* --------------------------------- Outputs --------------------------------- */

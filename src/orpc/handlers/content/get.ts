@@ -13,7 +13,8 @@ export const getLatestReleases = publicProcedure
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { type, limit } = input;
+		const { type, limit, page } = input;
+		const skip = (page - 1) * limit;
 
 		const latestReleases = await prisma.media.findMany({
 			where: {
@@ -43,6 +44,7 @@ export const getLatestReleases = publicProcedure
 				{ createdAt: "desc" }, // Most recent first
 				{ releaseYear: "desc" },
 			],
+			skip,
 			take: limit,
 		});
 
@@ -156,7 +158,8 @@ export const getAnimations = publicProcedure
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { type, limit } = input;
+		const { type, limit, page } = input;
+		const skip = (page - 1) * limit;
 
 		// Find Animation genre
 		const animationGenre = await prisma.genre.findFirst({
@@ -213,6 +216,7 @@ export const getAnimations = publicProcedure
 				{ rating: "desc" },
 				{ createdAt: "desc" },
 			],
+			skip,
 			take: limit,
 		});
 
@@ -232,7 +236,8 @@ export const getTVSeries = publicProcedure
 	.input(popularSeriesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { limit } = input;
+		const { limit, page } = input;
+		const skip = (page - 1) * limit;
 
 		const tvSeries = await prisma.media.findMany({
 			where: {
@@ -259,6 +264,7 @@ export const getTVSeries = publicProcedure
 				},
 			},
 			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			skip,
 			take: limit,
 		});
 
@@ -278,7 +284,8 @@ export const getHorrorMovies = publicProcedure
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { limit } = input;
+		const { limit, page } = input;
+		const skip = (page - 1) * limit;
 
 		const horrorGenre = await prisma.genre.findFirst({
 			where: {
@@ -327,6 +334,7 @@ export const getHorrorMovies = publicProcedure
 				},
 			},
 			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			skip,
 			take: limit,
 		});
 
@@ -346,7 +354,8 @@ export const getComedyMovies = publicProcedure
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { limit } = input;
+		const { limit, page } = input;
+		const skip = (page - 1) * limit;
 
 		const comedyGenre = await prisma.genre.findFirst({
 			where: {
@@ -395,6 +404,7 @@ export const getComedyMovies = publicProcedure
 				},
 			},
 			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			skip,
 			take: limit,
 		});
 
@@ -414,7 +424,8 @@ export const getRomanceMovies = publicProcedure
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { limit } = input;
+		const { limit, page } = input;
+		const skip = (page - 1) * limit;
 
 		const romanceGenre = await prisma.genre.findFirst({
 			where: {
@@ -463,6 +474,7 @@ export const getRomanceMovies = publicProcedure
 				},
 			},
 			orderBy: [{ viewCount: "desc" }, { rating: "desc" }],
+			skip,
 			take: limit,
 		});
 
@@ -482,7 +494,8 @@ export const getTopIMDB = publicProcedure
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
-		const { type, limit } = input;
+		const { type, limit, page } = input;
+		const skip = (page - 1) * limit;
 
 		const topRated = await prisma.media.findMany({
 			where: {
@@ -510,6 +523,7 @@ export const getTopIMDB = publicProcedure
 				},
 			},
 			orderBy: [{ rating: "desc" }, { viewCount: "desc" }],
+			skip,
 			take: limit,
 		});
 
