@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/db";
+import { subscribedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
-import { authedProcedure } from "@/orpc/context";
 import { addToWatchListInput, watchListOutput } from "@/orpc/models/watchlist";
 
-export const addToWatchList = authedProcedure
+export const addToWatchList = subscribedProcedure
 	.input(addToWatchListInput)
 	.output(ResponseSchema.ApiResponseSchema(watchListOutput))
 	.handler(async ({ input, context, errors }) => {

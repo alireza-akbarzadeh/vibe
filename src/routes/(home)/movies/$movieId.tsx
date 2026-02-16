@@ -20,7 +20,7 @@ export const Route = createFileRoute("/(home)/movies/$movieId")({
 		);
 
 		// Extract genre IDs for similar movies
-		const genreIds = mediaData.genres?.map((g) => g.genreId) || [];
+		const genreIds = mediaData.genres?.map((g) => g.genre.id) || [];
 
 		// Prefetch all remaining data in parallel
 		await Promise.all([

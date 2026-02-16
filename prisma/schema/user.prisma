@@ -10,7 +10,7 @@ model User {
 
     // --- Core Better Auth Plugin Fields (FIXES THE ERROR) ---
     twoFactorEnabled Boolean @default(false)
-    role             String  @default("user")
+    role             String  @default("USER")
     banned           Boolean @default(false)
     // -------------------------------------------------------
 

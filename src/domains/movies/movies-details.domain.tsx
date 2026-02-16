@@ -35,7 +35,6 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 		movieReviewsQueryOptions(movieId),
 	);
 
-	// Transform reviews to match component expectations
 	const transformedReviews = reviews
 		? {
 			...reviews,
@@ -47,15 +46,12 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 		}
 		: undefined;
 
-	// Extract genre IDs for similar movies query
 	const genreIds = media.genres?.map((g) => g.genre.id) || [];
 
-	// Fetch similar movies based on genres
 	const { data: similarMovies } = useSuspenseQuery(
 		movieSimilarQueryOptions(movieId, genreIds),
 	);
 
-	// Transform API data to match UI component expectations
 	const movieData = {
 		id: Number.parseInt(media.id) || 0,
 		title: media.title,

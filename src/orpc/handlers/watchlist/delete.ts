@@ -1,10 +1,10 @@
-import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { subscribedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
-import { authedProcedure } from "@/orpc/context";
 import { removeFromWatchListInput } from "@/orpc/models/watchlist";
+import { z } from "zod";
 
-export const removeFromWatchList = authedProcedure
+export const removeFromWatchList = subscribedProcedure
 	.input(removeFromWatchListInput)
 	.output(
 		ResponseSchema.ApiResponseSchema(

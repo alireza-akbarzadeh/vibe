@@ -1,21 +1,14 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { useStore } from "@tanstack/react-store";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, MoreHorizontal, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 // Import your stores and types
-import { musicAction, musicStore } from "@/domains/music/music.store";
+import { musicAction, musicStore, type Song } from "@/domains/music/music.store";
 import { client } from "@/orpc/client";
 import { MusicSearch } from "../components/music-search";
 
 // Define types for search results
-interface Song {
-	id: number;
-	title: string;
-	artist: string;
-	album: string;
-	albumArt: string;
-	duration: number;
-}
 
 interface Artist {
 	id: string;
@@ -59,23 +52,22 @@ export function SearchView() {
 				const response = await client.media.list({
 					page: 1,
 					limit: 50,
-					type: "MUSIC",
+					type: "TRACK",
 				});
 
 				// Transform API response to songs format
-				const transformedSongs: Song[] = response.media.map((item, index) => ({
-					id: parseInt(item.id) || index,
+				const transformedSongs: Song[] = response.data.items.map((item) => ({
+					id: item.id,
 					title: item.title,
-					artist: item.creators?.[0] || "Unknown Artist",
-					album: "Album Name", // Not in schema
+					artist: item.creators?.[0]?.creator.name || "Unknown Artist",
+					album: item.collection?.title || "Unknown Album",
 					albumArt: item.thumbnail || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300",
 					duration: item.duration || 200,
+					mediaId: item.id,
 				}));
 
 				setSongs(transformedSongs);
 
-				// For now, use placeholder data for artists and albums
-				// You'd need separate API endpoints for these
 				setArtists([
 					{
 						id: "a1",

@@ -34,7 +34,7 @@ export const adminProcedure = publicProcedure.use(withAuth).use(requireAdmin());
 
 export const subscribedProcedure = publicProcedure
 	.use(withAuth)
-	.use(requireSubscription(["PRO"]));
+	.use(requireSubscription(["PREMIUM", "FAMILY"]));
 
 /* -------------------------------------------------------------------------- */
 /*                        PREMIUM ONLY PROCEDURE                              */
@@ -42,7 +42,7 @@ export const subscribedProcedure = publicProcedure
 
 export const premiumProcedure = publicProcedure
 	.use(withAuth)
-	.use(requireSubscription("PRO"));
+	.use(requireSubscription(["PREMIUM", "FAMILY"]));
 
 /* -------------------------------------------------------------------------- */
 /*                      COLLECTION ADMIN PROCEDURES                           */

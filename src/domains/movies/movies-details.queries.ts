@@ -13,9 +13,14 @@ export const movieDetailsQueryOptions = (mediaId: string) =>
 			try {
 				const response = await client.media.find({ id: mediaId });
 				return response.data;
-			} catch (error: any) {
+			} catch (error: unknown) {
 				// Handle subscription errors gracefully
-				if (error?.code === "SUBSCRIPTION_REQUIRED") {
+				if (
+					typeof error === "object" &&
+					error !== null &&
+					"code" in error &&
+					error.code === "SUBSCRIPTION_REQUIRED"
+				) {
 					throw new Error(
 						"A subscription is required to view this content. Please upgrade your plan.",
 					);
@@ -136,26 +141,24 @@ export const movieSimilarQueryOptions = (
 	});
 
 // Fetch watchlist status
-export const movieWatchlistStatusQueryOptions = (
-	mediaId: string,
-	profileId?: string,
-) =>
+export const movieWatchlistStatusQueryOptions = (mediaId: string) =>
 	queryOptions({
-		queryKey: ["watchlist", "status", mediaId, profileId],
+		queryKey: ["watchlist", "status", mediaId],
 		queryFn: async () => {
-			if (!profileId) return { inWatchlist: false };
+			try {
+				const response = await client.watchlist.list({
+					page: 1,
+					limit: 100,
+				});
 
-			const response = await client.watchlist.list({
-				profileId,
-				page: 1,
-				limit: 100,
-			});
-
-			const inWatchlist = response.data.items.some(
-				(item) => item.mediaId === mediaId,
-			);
-			return { inWatchlist };
+				const inWatchlist = response.data.items.some(
+					(item) => item.mediaId === mediaId,
+				);
+				return { inWatchlist };
+			} catch (error) {
+				// Not authenticated or error - return false
+				return { inWatchlist: false };
+			}
 		},
-		enabled: !!profileId,
 		staleTime: 30 * 1000, // 30 seconds
 	});

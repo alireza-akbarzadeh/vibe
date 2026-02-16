@@ -9,7 +9,7 @@ import {
 	Search,
 	X
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "@/components/logo";
 import { Input } from "@/components/ui/input";
 import {
@@ -40,6 +40,11 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 
 	const [isSearching, setIsSearching] = useState(false);
 	const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+	// Load library data from API on mount
+	useEffect(() => {
+		musicAction.loadLibrary();
+	}, []);
 
 	const filteredLibrary = library.filter((item) => {
 		const matchesSearch = item.title
