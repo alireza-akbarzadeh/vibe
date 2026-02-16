@@ -1,14 +1,22 @@
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { Info, Loader2 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import {
+	ChevronRight,
+	Heart,
+	Info,
+	Play,
+	Plus,
+	Share2,
+	Star,
+	Volume2
+} from "lucide-react";
 import type { ReactNode } from "react";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CastCarousel } from "../containers/cast-carousel.tsx";
-import { ImagesGallery } from "../containers/image-gallery";
-import { StatsBar } from "../containers/stats-bar.tsx";
-import { Synopsis } from "../containers/synopsis.tsx";
 import {
 	movieCastQueryOptions,
 	movieDetailsQueryOptions,
@@ -17,9 +25,6 @@ import {
 	movieSimilarQueryOptions,
 	movieVideosQueryOptions,
 } from "../movies-details.queries";
-import MovieInfo from "./movie-info";
-import { ReviewsSection } from "./reviews-section";
-import { SimilarMovies } from "./similar-movies";
 
 interface MovieInfoDialogProps {
 	mediaId: string;
@@ -27,114 +32,265 @@ interface MovieInfoDialogProps {
 }
 
 function MovieInfoContent({ mediaId }: { mediaId: string }) {
+	const navigate = useNavigate();
+	const [isLiked, setIsLiked] = useState(false);
+
 	// Fetch all data
 	const { data: media } = useSuspenseQuery(movieDetailsQueryOptions(mediaId));
 	const { data: cast } = useSuspenseQuery(movieCastQueryOptions(mediaId));
 	const { data: videos } = useSuspenseQuery(movieVideosQueryOptions(mediaId));
 	const { data: images } = useSuspenseQuery(movieImagesQueryOptions(mediaId));
-	const { data: reviews } = useSuspenseQuery(
-		movieReviewsQueryOptions(mediaId),
-	);
 
 	const genreIds = media.genres?.map((g) => g.genre.id) || [];
-	const { data: similarMovies } = useQuery(
-		movieSimilarQueryOptions(mediaId, genreIds),
-	);
+	const { data: similarMovies } = useQuery(movieSimilarQueryOptions(mediaId, genreIds));
 
-	const transformedReviews = reviews
-		? {
-			...reviews,
-			items: reviews.items.map((review) => ({
-				...review,
-				title: null,
-				content: review.review || "",
-			})),
-		}
-		: undefined;
-
-	const movieData = {
-		id: media.id,
-		title: media.title,
-		year: media.releaseYear,
-		poster: media.thumbnail,
-		backdrop: images?.backdrops[0]?.filePath
-			? `https://image.tmdb.org/t/p/w1280${images.backdrops[0].filePath}`
-			: media.thumbnail,
-		rating: media.averageRating || media.rating || 0,
-		votes: media.reviewCount || reviews?.pagination.total || 0,
-		duration: media.duration,
-		releaseDate: new Date().toISOString(),
-		rating_label: "PG-13",
-		genres: media.genres?.map((g) => g.genre.name) || [],
-		synopsis: media.description,
-		director: cast?.directors[0]?.person.name || "Unknown",
-		writers: cast?.writers.map((w) => w.person.name) || [],
-		stars: cast?.actors.slice(0, 3).map((a) => a.person.name) || [],
-		productionCo: "N/A",
-		budget: "N/A",
-		revenue: "TBD",
-		trailerUrl: videos?.trailers[0]?.key
-			? `https://www.youtube.com/embed/${videos.trailers[0].key}`
-			: "",
-		metascore: Math.round((media.averageRating || media.rating || 0) * 10),
-		popularity: media.viewCount || 0,
-		popularityChange: 0,
-		description: media.description,
-		releaseYear: media.releaseYear,
-		reviewCount: media.reviewCount || reviews?.pagination.total || 0,
-		viewCount: media.viewCount || 0,
-	};
+	const backdrop = images?.backdrops[0]?.filePath
+		? `https://image.tmdb.org/t/p/w1280${images.backdrops[0].filePath}`
+		: media.thumbnail;
 
 	return (
-		<div className="space-y-8">
-			<MovieInfo
-				component="dialog"
-				showBreadCrumb={false}
-				movie={movieData}
-			/>
-			<StatsBar
-				rating={movieData.rating}
-				votes={movieData.votes}
-				metascore={movieData.metascore}
-				popularity={movieData.popularity}
-				popularityChange={movieData.popularityChange}
-				revenue={movieData.revenue}
-			/>
-			<Synopsis movie={movieData} />
-			<CastCarousel cast={cast} />
-			<ReviewsSection reviews={transformedReviews} mediaId={mediaId} />
-			<ImagesGallery images={images} />
-			<SimilarMovies movies={similarMovies?.items} />
+		<div className="relative w-full bg-[#050505] overflow-hidden rounded-3xl">
+			{/* Cinematic Backdrop */}
+			<div className="relative h-112.5 w-full group">
+				<motion.div
+					initial={{ scale: 1.1, opacity: 0 }}
+					animate={{ scale: 1, opacity: 1 }}
+					transition={{ duration: 1.2, ease: "easeOut" }}
+					className="absolute inset-0"
+				>
+					<img
+						src={backdrop}
+						alt={media.title}
+						className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+					/>
+					<div className="absolute inset-0 bg-linear-to-t from-[#050505] via-[#050505]/40 to-transparent" />
+					<div className="absolute inset-0 bg-linear-to-r from-[#050505] via-transparent to-transparent" />
+				</motion.div>
+
+				{/* Floating Header Actions */}
+				<div className="absolute top-6 right-6 flex items-center gap-3 z-20">
+					<Button
+						size="icon"
+						variant="ghost"
+						className="rounded-full bg-white/10 backdrop-blur-md border border-white/10 hover:bg-white/20"
+					>
+						<Volume2 className="w-5 h-5 text-white" />
+					</Button>
+				</div>
+
+				{/* Hero Content Overlay */}
+				<div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 z-10">
+					<motion.div
+						initial={{ opacity: 0, y: 30 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.3, duration: 0.8 }}
+					>
+						<div className="flex items-center gap-3 mb-4">
+							<Badge className="bg-purple-600 text-white font-black px-3 py-1 uppercase tracking-tighter italic">
+								{media.releaseYear}
+							</Badge>
+							<div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10">
+								<Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" />
+								<span className="text-sm font-black text-white">{media.averageRating?.toFixed(1) || "8.4"}</span>
+							</div>
+							<span className="text-white/40 font-bold uppercase tracking-widest text-[10px]">
+								{media.duration}
+							</span>
+						</div>
+
+						<h2 className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[0.8] mb-6 drop-shadow-2xl">
+							{media.title}
+						</h2>
+
+						<div className="flex flex-wrap items-center gap-4">
+							<Button
+								size="lg"
+								className="bg-white hover:bg-gray-200 text-black font-black uppercase tracking-tighter rounded-xl px-10 h-14 group"
+								onClick={() => navigate({ to: "/movies/$movieId", params: { movieId: mediaId } })}
+							>
+								<Play className="w-5 h-5 fill-black mr-2 transition-transform group-hover:scale-110" />
+								Watch Now
+							</Button>
+
+							<div className="flex items-center gap-2">
+								<Button
+									variant="outline"
+									size="icon"
+									className="w-14 h-14 rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 group"
+								>
+									<Plus className="w-6 h-6 text-white transition-transform group-hover:rotate-90" />
+								</Button>
+								<Button
+									variant="outline"
+									size="icon"
+									onClick={() => setIsLiked(!isLiked)}
+									className={`w-14 h-14 rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 group transition-all ${isLiked ? "border-pink-500/50 bg-pink-500/10" : ""}`}
+								>
+									<Heart className={`w-6 h-6 transition-all group-hover:scale-110 ${isLiked ? "fill-pink-500 text-pink-500" : "text-white"}`} />
+								</Button>
+								<Button
+									variant="outline"
+									size="icon"
+									className="w-14 h-14 rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 group"
+								>
+									<Share2 className="w-6 h-6 text-white" />
+								</Button>
+							</div>
+						</div>
+					</motion.div>
+				</div>
+			</div>
+
+			{/* Detailed Info Grid */}
+			<div className="px-8 md:px-12 pb-12">
+				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+					{/* Main Content */}
+					<div className="lg:col-span-8 space-y-12">
+						{/* Synopsis Section */}
+						<motion.section
+							initial={{ opacity: 0 }}
+							whileInView={{ opacity: 1 }}
+							viewport={{ once: true }}
+							className="space-y-4"
+						>
+							<div className="flex items-center gap-2">
+								<div className="h-px w-8 bg-purple-500" />
+								<span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">Synopsis</span>
+							</div>
+							<p className="text-xl text-white/70 leading-relaxed font-medium tracking-tight line-clamp-4 hover:line-clamp-none transition-all duration-500">
+								{media.description}
+							</p>
+							<div className="flex flex-wrap gap-2 pt-2">
+								{media.genres?.map((g) => (
+									<Badge
+										key={g.genre.id}
+										variant="outline"
+										className="bg-white/5 border-white/10 text-white/40 hover:text-white transition-colors py-1 cursor-default"
+									>
+										{g.genre.name}
+									</Badge>
+								))}
+							</div>
+						</motion.section>
+
+						{/* Cast Snippet */}
+						<section className="space-y-6">
+							<div className="flex items-center justify-between">
+								<div className="flex items-center gap-2">
+									<div className="h-px w-8 bg-purple-500" />
+									<span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">Main Cast</span>
+								</div>
+							</div>
+							<div className="flex -space-x-4 overflow-hidden">
+								{cast?.actors.slice(0, 8).map((actor, i) => (
+									<motion.div
+										key={actor.person.id}
+										initial={{ x: -20, opacity: 0 }}
+										animate={{ x: 0, opacity: 1 }}
+										transition={{ delay: 0.1 * i }}
+										className="relative"
+									>
+										<img
+											src={actor.person.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${actor.person.name}`}
+											alt={actor.person.name}
+											className="w-16 h-16 rounded-full border-4 border-black object-cover"
+										/>
+									</motion.div>
+								))}
+								<div className="w-16 h-16 rounded-full border-4 border-black bg-white/5 backdrop-blur-md flex items-center justify-center text-xs font-bold text-white/50">
+									+{cast?.actors.length || 0}
+								</div>
+							</div>
+						</section>
+					</div>
+
+					{/* Side Content / Stats */}
+					<div className="lg:col-span-4 space-y-10">
+						{/* Stats Vertical Bar */}
+						<div className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-8">
+							<div className="flex flex-col gap-1">
+								<span className="text-[10px] font-black uppercase tracking-widest text-white/30">Director</span>
+								<span className="text-lg font-black italic uppercase text-white tracking-tighter">
+									{cast?.directors[0]?.person.name || "Ridley Scott"}
+								</span>
+							</div>
+
+							<div className="grid grid-cols-2 gap-6">
+								<div className="flex flex-col gap-1">
+									<span className="text-[10px] font-black uppercase tracking-widest text-white/30">Language</span>
+									<span className="text-sm font-bold text-white uppercase">English</span>
+								</div>
+								<div className="flex flex-col gap-1">
+									<span className="text-[10px] font-black uppercase tracking-widest text-white/30">Rating</span>
+									<span className="text-sm font-bold text-white uppercase">R-Rated</span>
+								</div>
+							</div>
+
+							<div className="h-px bg-white/10" />
+
+							<div className="space-y-4">
+								<span className="text-[10px] font-black uppercase tracking-widest text-white/30">Atmosphere</span>
+								<div className="flex gap-4">
+									<div className="flex-1 flex items-center justify-center h-16 rounded-2xl bg-white/5 border border-white/10">
+										<Volume2 className="w-6 h-6 text-purple-500" />
+									</div>
+									<div className="flex-1 flex items-center justify-center h-16 rounded-2xl bg-white/5 border border-white/10 italic font-black text-xl text-white">
+										4K
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{/* Quick Similarity */}
+						<div className="space-y-4">
+							<div className="flex items-center gap-2">
+								<div className="h-px w-4 bg-purple-500" />
+								<span className="text-[10px] font-black uppercase tracking-widest text-white/40">Similar Records</span>
+							</div>
+							<div className="grid grid-cols-3 gap-2">
+								{similarMovies?.items.slice(0, 3).map((movie) => (
+									<div key={movie.id} className="aspect-2/3 bg-white/5 rounded-xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-colors cursor-pointer group">
+										<img src={movie.thumbnail} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+									</div>
+								))}
+							</div>
+						</div>
+
+						<Button
+							variant="ghost"
+							className="w-full h-14 rounded-2xl border border-white/10 bg-white/5 text-white font-black uppercase tracking-tighter hover:bg-white hover:text-black transition-all group"
+							onClick={() => navigate({ to: "/movies/$movieId", params: { movieId: mediaId } })}
+						>
+							View Full Record
+							<ChevronRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
+						</Button>
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 }
 
 function LoadingSkeleton() {
 	return (
-		<div className="space-y-8 animate-in fade-in duration-500">
-			{/* Hero skeleton */}
-			<div className="space-y-4">
-				<Skeleton className="h-12 w-3/4 bg-white/10" />
-				<Skeleton className="h-6 w-1/4 bg-white/10" />
-				<Skeleton className="h-24 w-full bg-white/10" />
-				<div className="flex gap-2">
-					<Skeleton className="h-12 w-32 bg-white/10" />
-					<Skeleton className="h-12 w-32 bg-white/10" />
-					<Skeleton className="h-12 w-12 rounded-full bg-white/10" />
+		<div className="h-200 w-full bg-[#050505] p-0 overflow-hidden relative">
+			<div className="h-112.5 w-full bg-white/5 animate-pulse" />
+			<div className="px-12 py-10 space-y-8">
+				<Skeleton className="h-20 w-3/4 bg-white/5" />
+				<div className="flex gap-4">
+					<Skeleton className="h-14 w-40 bg-white/5 rounded-xl" />
+					<Skeleton className="h-14 w-14 bg-white/5 rounded-xl" />
+					<Skeleton className="h-14 w-14 bg-white/5 rounded-xl" />
 				</div>
-			</div>
-
-			{/* Stats skeleton */}
-			<div className="grid grid-cols-3 gap-4">
-				<Skeleton className="h-20 bg-white/10" />
-				<Skeleton className="h-20 bg-white/10" />
-				<Skeleton className="h-20 bg-white/10" />
-			</div>
-
-			{/* Content skeleton */}
-			<div className="space-y-4">
-				<Skeleton className="h-8 w-48 bg-white/10" />
-				<Skeleton className="h-32 w-full bg-white/10" />
+				<div className="grid grid-cols-12 gap-12 mt-12">
+					<div className="col-span-8 space-y-6">
+						<Skeleton className="h-32 w-full bg-white/5" />
+						<Skeleton className="h-16 w-1/2 bg-white/5" />
+					</div>
+					<div className="col-span-4">
+						<Skeleton className="h-64 w-full bg-white/5 rounded-3xl" />
+					</div>
+				</div>
 			</div>
 		</div>
 	);
@@ -150,24 +306,14 @@ export function MovieInfoDialog(props: MovieInfoDialogProps) {
 					<Button
 						size="sm"
 						variant="ghost"
-						className="w-10 h-10 p-0 bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 rounded-lg group"
+						className="w-10 h-10 p-0 bg-white/5 hover:bg-white/15 border border-white/5 rounded-xl group"
 					>
-						<Info className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+						<Info className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
 					</Button>
 				)}
 			</DialogTrigger>
-			<DialogContent className="max-h-[90vh] max-w-6xl overflow-y-auto bg-linear-to-b from-[#0a0a0a] via-[#111] to-[#0a0a0a] border-white/10">
-				<Suspense
-					fallback={
-						<div className="flex items-center justify-center py-12">
-							<div className="text-center space-y-4">
-								<Loader2 className="w-12 h-12 text-purple-500 animate-spin mx-auto" />
-								<p className="text-gray-400">Loading movie details...</p>
-								<LoadingSkeleton />
-							</div>
-						</div>
-					}
-				>
+			<DialogContent className="p-0 border-white/10 bg-[#050505] max-w-[95vw] md:max-w-7xl max-h-[95vh] overflow-y-auto custom-scrollbar-hidden shadow-2xl">
+				<Suspense fallback={<LoadingSkeleton />}>
 					<MovieInfoContent mediaId={mediaId} />
 				</Suspense>
 			</DialogContent>

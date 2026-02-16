@@ -1,10 +1,6 @@
 {
   "version": 2,
-  "outputDirectory": ".output/public",
   "cleanUrls": true,
-  "trailingSlash": false,
-  "env": {
-    "NODE_OPTIONS": "--import ./.output/server/instrument.server.mjs"
-  }
+  "trailingSlash": false
 }
 
