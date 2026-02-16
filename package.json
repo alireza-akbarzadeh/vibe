@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "concurrently \"npm:dev:vite\" \"npm:dev:ngrok\" \"npm:db:studio\"",
     "dev:vite": "vite dev --port 3000 | pino-pretty",
-    "postinstall": "dotenv -e .env -e .env.local -- prisma generate",
     "dev:ngrok": "ngrok start vibe --config ngrok.yml",
     "dev:raw": "vite dev --port 3000",
     "kill": "lsof -ti:3000 | xargs kill -9",
