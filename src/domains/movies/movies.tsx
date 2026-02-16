@@ -13,7 +13,6 @@ import { useMovieDiscovery } from "./hooks/use-movie-discovery";
 
 
 
-/** Min height for search results area to avoid layout shift and support LCP */
 export const SEARCH_RESULTS_MIN_HEIGHT = 420;
 
 
@@ -68,18 +67,13 @@ export default function MovieDiscovery(props: MovieDiscoveryProps = {}) {
 
 			<SearchHeader
 				searchQuery={searchQuery}
-				onSearchChange={(query) => setSearchQuery({ activeCategory, query })}
+				onSearchChange={(query) => setSearchQuery({ query })}
 			/>
 
 			{latestMovies.length > 0 && <HeroBanner latestData={latestMovies} />}
 
 			<div className="relative z-10 max-w-450 mx-auto px-6 mt-20">
-				<CategoryNav
-					activeCategory={activeCategory}
-					onCategoryChange={(value) =>
-						setSearchQuery({ activeCategory: value, query: searchQuery })
-					}
-				/>
+				<CategoryNav />
 			</div>
 
 			{showSearchResults ? (

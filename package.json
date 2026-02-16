@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "concurrently \"npm:dev:vite\" \"npm:dev:ngrok\" \"npm:db:studio\"",
@@ -11,7 +11,9 @@
     "postinstall": "prisma generate",
     "dev:ngrok": "ngrok start vibe --config ngrok.yml",
     "dev:raw": "vite dev --port 3000",
-    "build": "prisma generate && vite build --ssr",    "vercel-build": "prisma generate && prisma migrate deploy && vite build",    "preview": "vite preview",
+    "build": "prisma generate && vite build --ssr",
+    "vercel-build": "prisma generate && prisma migrate deploy && vite build && mkdir -p api && cp .output/server/index.mjs api/index.mjs",
+    "preview": "vite preview",
     "test": "vitest run",
     "format": "biome format --write",
     "lint": "biome lint",

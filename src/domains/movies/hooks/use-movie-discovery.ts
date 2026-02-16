@@ -6,6 +6,7 @@ import { orpc } from "@/orpc/client";
 import type { MediaList } from "@/orpc/models/media.schema";
 import type { MovieSearchQuery } from "@/routes/(home)/movies";
 import { searchSuggestionsQueryOptions } from "../movies.queries";
+import { useMoviesStore } from "../store";
 
 export interface UseMovieDiscoveryProps {
 	searchQueryProp?: MovieSearchQuery;
@@ -20,7 +21,7 @@ export function useMovieDiscovery({
 	const { scrollYProgress } = useScroll();
 
 	const searchQuery = searchQueryProp?.query ?? "";
-	const activeCategory = searchQueryProp?.activeCategory ?? "all";
+	const activeCategory = useMoviesStore((state) => state.activeCategory);
 	const setSearchQuery = onSearchChange ?? (() => {});
 
 	const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);

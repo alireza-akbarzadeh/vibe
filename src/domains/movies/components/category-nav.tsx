@@ -9,10 +9,7 @@ import {
 	Tv,
 } from "lucide-react";
 
-interface CategoryNavProps {
-	activeCategory: CategoryVariant;
-	onCategoryChange: (value: CategoryVariant) => void
-}
+import { setCategory, useMoviesStore } from "../store";
 
 export type CategoryVariant =
 	| "all"
@@ -31,8 +28,9 @@ export type CategoriesType = {
 	label: string;
 	icon: LucideIcon;
 };
-export function CategoryNav(props: CategoryNavProps) {
-	const { activeCategory, onCategoryChange } = props;
+
+export function CategoryNav() {
+	const activeCategory = useMoviesStore((state) => state.activeCategory);
 
 	const categories: CategoriesType[] = [
 		{ id: "all", label: "All", icon: Sparkles },
@@ -57,7 +55,7 @@ export function CategoryNav(props: CategoryNavProps) {
 						initial={{ opacity: 0, scale: 0.8 }}
 						animate={{ opacity: 1, scale: 1 }}
 						transition={{ delay: 0.4 + index * 0.05 }}
-						onClick={() => onCategoryChange(category.id)}
+						onClick={() => setCategory(category.id)}
 						className={`relative flex items-center gap-2 px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all ${activeCategory === category.id
 							? "text-white"
 							: "text-gray-400 hover:text-white"

@@ -4,6 +4,7 @@ import { client } from "@/orpc/client";
 export type SectionSlug =
 	| "latest-releases"
 	| "trending"
+	| "trending-now"
 	| "top-rated"
 	| "popular-series"
 	| "animation"
@@ -11,7 +12,8 @@ export type SectionSlug =
 	| "horror"
 	| "comedy"
 	| "romance"
-	| "top-imdb-rated";
+	| "top-imdb-rated"
+	| "my-list";
 
 export type SectionConfig = {
 	title: string;
@@ -41,6 +43,12 @@ export const SECTION_CONFIG: Record<SectionSlug, SectionConfig> = {
 	trending: {
 		title: "Trending",
 		subtitle: "Popular this week",
+		apiKey: "trending",
+		endpoint: "recommendations",
+	},
+	"trending-now": {
+		title: "Trending Now",
+		subtitle: "What's popular this week",
 		apiKey: "trending",
 		endpoint: "recommendations",
 	},
@@ -92,11 +100,18 @@ export const SECTION_CONFIG: Record<SectionSlug, SectionConfig> = {
 		apiKey: "topIMDB",
 		endpoint: "content",
 	},
+	"my-list": {
+		title: "My List",
+		subtitle: "Your personal collection",
+		apiKey: "latestReleases", // Not really used but needs to be one of the keys
+		endpoint: "content",
+	},
 };
 
 const sectionToCategory: Record<SectionSlug, string> = {
 	"latest-releases": "RECENT",
 	trending: "TRENDING",
+	"trending-now": "TRENDING",
 	"top-rated": "TOP_RATED",
 	"popular-series": "SERIES",
 	animation: "ANIMATION",
@@ -105,6 +120,7 @@ const sectionToCategory: Record<SectionSlug, string> = {
 	comedy: "COMEDY",
 	romance: "ROMANCE",
 	"top-imdb-rated": "TOP_IMDB",
+	"my-list": "MY_LIST",
 };
 
 /** Get infinite query options for a specific section */
@@ -112,11 +128,17 @@ export function getSectionInfiniteQueryOptions(
 	section: SectionSlug,
 	limit = 20,
 	search?: string,
+	filters?: {
+		genreIds?: string[];
+		releaseYearFrom?: number;
+		releaseYearTo?: number;
+		sortBy?: "NEWEST" | "OLDEST" | "TITLE" | "MANUAL";
+	},
 ) {
 	const category = sectionToCategory[section];
 
 	return {
-		queryKey: ["section", section, limit, search] as const,
+		queryKey: ["section", section, limit, search, filters] as const,
 		queryFn: async ({ pageParam = 1 }) => {
 			const response = await client.media.list({
 				limit,
@@ -124,6 +146,10 @@ export function getSectionInfiniteQueryOptions(
 				category: category as any,
 				search: search || undefined,
 				type: "MOVIE",
+				genreIds: filters?.genreIds,
+				releaseYearFrom: filters?.releaseYearFrom,
+				releaseYearTo: filters?.releaseYearTo,
+				sortBy: filters?.sortBy || "NEWEST",
 			});
 			return response;
 		},

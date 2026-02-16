@@ -4,7 +4,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    ".output/server/index.mjs": {
+    "api/index.mjs": {
       "maxDuration": 10,
       "memory": 1024
     }
@@ -12,11 +12,11 @@
   "rewrites": [
     {
       "source": "/_server(.*)",
-      "destination": "/.output/server/index.mjs"
+      "destination": "/api/index.mjs"
     },
     {
       "source": "/((?!.*\\.).*)",
-      "destination": "/.output/server/index.mjs"
+      "destination": "/api/index.mjs"
     }
   ],
   "env": {
