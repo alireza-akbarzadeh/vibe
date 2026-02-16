@@ -5,8 +5,7 @@
   "trailingSlash": false,
   "functions": {
     ".output/server/index.mjs": {
-      "runtime": "nodejs20.x",
-      "maxDuration": 15,
+      "maxDuration": 10,
       "memory": 1024
     }
   },

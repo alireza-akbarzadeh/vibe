@@ -2,6 +2,9 @@
   "name": "vibe",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "concurrently \"npm:dev:vite\" \"npm:dev:ngrok\" \"npm:db:studio\"",
     "dev:vite": "vite dev --port 3000 | pino-pretty",

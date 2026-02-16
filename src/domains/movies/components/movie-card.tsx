@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Play, Star } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AddButton } from "@/components/buttons/add-button";
 import { Button } from "@/components/ui/button";
 import type { MediaList } from "@/orpc/models/media.schema";
@@ -22,14 +22,38 @@ export function MovieCard({
 	variant = "standard",
 }: MovieCardProps) {
 	const navigate = useNavigate();
-
+	const containerRef = useRef<HTMLDivElement>(null);
 	const [isHovered, setIsHovered] = useState(false);
+
+	// 3D Parallax effect
+	const x = useMotionValue(0);
+	const y = useMotionValue(0);
+
+	const mouseXSpring = useSpring(x);
+	const mouseYSpring = useSpring(y);
+
+	const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [10, -10]);
+	const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [-10, 10]);
+
+	const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+		if (!containerRef.current) return;
+		const rect = containerRef.current.getBoundingClientRect();
+		const width = rect.width;
+		const height = rect.height;
+		const mouseX = event.clientX - rect.left;
+		const mouseY = event.clientY - rect.top;
+		const xPct = mouseX / width - 0.5;
+		const yPct = mouseY / height - 0.5;
+		x.set(xPct);
+		y.set(yPct);
+	};
 
 	const handleMouseLeave = () => {
 		setIsHovered(false);
+		x.set(0);
+		y.set(0);
 	};
 
-	// Size based on variant
 	const sizeClasses = {
 		large: "w-[400px] h-[225px]",
 		featured: "w-[320px] h-[480px]",
@@ -39,135 +63,160 @@ export function MovieCard({
 
 	return (
 		<motion.div
-			initial={{ opacity: 0, x: 50 }}
-			whileInView={{ opacity: 1, x: 0 }}
+			ref={containerRef}
+			initial={{ opacity: 0, y: 40 }}
+			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, margin: "-50px" }}
-			transition={{ delay: index * 0.05, duration: 0.5 }}
+			transition={{
+				delay: index * 0.05,
+				duration: 0.8,
+				ease: [0.215, 0.61, 0.355, 1.0]
+			}}
+			onMouseMove={handleMouseMove}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={handleMouseLeave}
 			className={`relative shrink-0 ${sizeClasses[variant]} group cursor-pointer`}
 			style={{ perspective: 1000 }}
 		>
 			<motion.div
-				animate={{
-					scale: isHovered ? 1.05 : 1,
-					z: isHovered ? 50 : 0,
+				style={{
+					rotateX,
+					rotateY,
+					transformStyle: "preserve-3d",
 				}}
-				transition={{ type: "spring", stiffness: 300, damping: 30 }}
-				className="relative w-full h-full rounded-2xl overflow-hidden"
+				animate={{
+					scale: isHovered ? 1.02 : 1,
+				}}
+				transition={{ type: "spring", stiffness: 400, damping: 30 }}
+				className="relative w-full h-full rounded-2xl overflow-hidden bg-[#1a1a1a]"
 			>
-				{/* Movie poster */}
-				<img
+				{/* Background Image with Parallax Zoom */}
+				<motion.img
 					src={movie.thumbnail}
 					alt={movie.title}
-					className="w-full h-full object-cover"
+					animate={{
+						scale: isHovered ? 1.1 : 1,
+						filter: isHovered ? "brightness(0.7) blur(2px)" : "brightness(1) blur(0px)",
+					}}
+					transition={{ duration: 0.6 }}
+					className="absolute inset-0 w-full h-full object-cover"
 				/>
 
-				{/* Gradient overlay */}
-				<div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />
+				{/* Intelligent Overlays */}
+				<div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent opacity-80" />
 
-				{/* Continue watching progress (optional; not on MediaList schema) */}
+				{/* Play Icon Reveal */}
+				<motion.div
+					initial={{ opacity: 0, scale: 0.5 }}
+					animate={{
+						opacity: isHovered ? 1 : 0,
+						scale: isHovered ? 1 : 0.5,
+						y: isHovered ? 0 : 20
+					}}
+					className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+				>
+					<div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-2xl">
+						<Play className="w-8 h-8 fill-white text-white ml-1" />
+					</div>
+				</motion.div>
+
+				{/* Progress Bar */}
 				{showProgress && "progress" in movie && typeof (movie as { progress?: number }).progress === "number" && (
-					<div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+					<div className="absolute bottom-0 left-0 right-0 h-1.5 bg-white/10 z-30">
 						<motion.div
 							initial={{ width: 0 }}
 							animate={{ width: `${(movie as { progress: number }).progress}%` }}
-							transition={{ duration: 1, delay: 0.3 }}
-							className="h-full bg-linear-to-r from-purple-600 to-pink-600"
+							className="h-full bg-linear-to-r from-purple-500 via-pink-500 to-red-500"
 						/>
 					</div>
 				)}
 
-				{/* Rating badge */}
+				{/* Premium Rating Badge */}
 				<motion.div
-					initial={{ opacity: 0, scale: 0.8 }}
-					animate={{ opacity: 1, scale: 1 }}
-					transition={{ delay: index * 0.05 + 0.2 }}
-					className="absolute top-4 right-4 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-sm border border-white/20"
+					style={{ transform: "translateZ(30px)" }}
+					className="absolute top-4 left-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-xl z-30"
 				>
-					<Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-					<span className="text-white text-sm font-bold">{movie.rating?.toFixed(1) ?? 0}</span>
+					<Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" />
+					<span className="text-white text-xs font-black tracking-tighter">
+						{movie.rating?.toFixed(1) ?? "0.0"}
+					</span>
 				</motion.div>
 
-				{/* Content */}
-				<div className="absolute inset-0 p-6 flex flex-col justify-end">
-					{/* Title */}
-					<motion.h3
-						animate={{
-							y: isHovered ? -20 : 0,
-						}}
-						transition={{ duration: 0.3 }}
-						className="text-xl font-bold text-white mb-2 line-clamp-2"
-					>
-						{movie.title}
-					</motion.h3>
-
-					{/* Metadata */}
-					<div className="flex items-center gap-2 mb-3">
-						<span className="text-sm text-gray-300">{movie.releaseYear}</span>
-						<span className="text-gray-500">•</span>
-						<div className="flex gap-1">
-							{movie.genres.slice(0, 2).map((g) => (
-								<span key={g.genre.id} className="text-xs text-gray-400">
-									{g.genre.name}
-								</span>
-							))}
-						</div>
-					</div>
-
-					{/* Hover content */}
+				{/* Content Container */}
+				<div className="absolute inset-0 p-5 flex flex-col justify-end z-20">
 					<motion.div
-						initial={{ opacity: 0, y: 20 }}
+						style={{ transform: "translateZ(50px)" }}
 						animate={{
-							opacity: isHovered ? 1 : 0,
-							y: isHovered ? 0 : 20,
+							y: isHovered ? -10 : 0,
 						}}
-						transition={{ duration: 0.3 }}
-						className="space-y-3"
+						transition={{ duration: 0.4, ease: "easeOut" }}
 					>
-						{/* Description */}
-						{movie.description ? (
-							<p className="text-sm text-gray-300 line-clamp-3">
-								{movie.description}
-							</p>
-						) : null}
+						{/* Title */}
+						<h3 className="text-xl font-bold text-white mb-2 leading-tight drop-shadow-lg line-clamp-2">
+							{movie.title}
+						</h3>
 
-						{/* Action buttons */}
-						<div className="flex gap-2">
-							<Button
-								onClick={() => {
-									navigate({
-										to: "/movies/$movieId",
-										params: { movieId: movie.id },
-									});
-								}}
-								size="sm"
-								className="flex-1 bg-white h-10 text-black hover:bg-gray-200 rounded-lg font-semibold group"
-							>
-								<Play className="w-4 h-4 mr-1 fill-black group-hover:scale-110 transition-transform" />
-								Play
-							</Button>
-							<AddButton />
-							<MovieInfoDialog mediaId={movie.id} />
+						{/* Metadata Row */}
+						<div className="flex items-center gap-3 mb-4">
+							<span className="text-xs font-bold text-purple-400 uppercase tracking-widest">
+								{movie.releaseYear}
+							</span>
+							<div className="h-1 w-1 rounded-full bg-white/30" />
+							<div className="flex gap-2">
+								{movie.genres.slice(0, 1).map((g) => (
+									<span
+										key={g.genre.id}
+										className="text-[10px] font-medium text-white/70 px-2 py-0.5 rounded-full border border-white/10"
+									>
+										{g.genre.name}
+									</span>
+								))}
+							</div>
 						</div>
+
+						{/* Hover Actions */}
+						<motion.div
+							initial={{ opacity: 0, height: 0 }}
+							animate={{
+								opacity: isHovered ? 1 : 0,
+								height: isHovered ? "auto" : 0,
+							}}
+							className="overflow-hidden"
+						>
+							<p className="text-xs text-white/60 mb-4 line-clamp-2 leading-relaxed italic">
+								{movie.description || "No description available."}
+							</p>
+
+							<div className="flex items-center gap-2">
+								<Button
+									size="sm"
+									onClick={(e) => {
+										e.stopPropagation();
+										navigate({
+											to: "/movies/$movieId",
+											params: { movieId: movie.id },
+										});
+									}}
+									className="flex-1 bg-white hover:bg-white/90 text-black border-none h-9 font-bold rounded-xl transition-all active:scale-95"
+								>
+									Watch Now
+								</Button>
+								<div className="flex gap-1.5">
+									<AddButton />
+									<MovieInfoDialog mediaId={movie.id} />
+								</div>
+							</div>
+						</motion.div>
 					</motion.div>
 				</div>
 
-				{/* Glow effect on hover */}
-				{/* <motion.div
-					initial={{ opacity: 0 }}
-					animate={{ opacity: isHovered ? 1 : 0 }}
-					className="absolute inset-0 rounded-2xl"
-					style={{
-						boxShadow:
-							"0 0 60px rgba(139, 92, 246, 0.6), inset 0 0 60px rgba(139, 92, 246, 0.1)",
-					}}
-				/> */}
-
-				{/* 3D lighting effect */}
+				{/* Interaction Glow */}
 				<motion.div
-					animate={{ opacity: isHovered ? 0.3 : 0 }}
-					className="absolute inset-0 bg-linear-to-br from-white/30 via-transparent to-transparent pointer-events-none"
+					animate={{
+						opacity: isHovered ? 0.4 : 0,
+						scale: isHovered ? 1.2 : 1
+					}}
+					className="absolute -inset-20 bg-linear-to-tr from-purple-500/20 via-pink-500/20 to-transparent pointer-events-none blur-3xl z-10"
 				/>
 			</motion.div>
 		</motion.div>
