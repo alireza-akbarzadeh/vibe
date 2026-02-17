@@ -83,6 +83,49 @@ export function useAdminAllSubscriptions(params: {
 	});
 }
 
+// Admin: Cancel any subscription
+export function useAdminCancelSubscription() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: async (input: {
+			subscriptionId: string;
+			immediately?: boolean;
+			reason?: string;
+		}) => {
+			return client.polarAdmin.cancelSubscription(input);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["admin", "subscriptions"] });
+			queryClient.invalidateQueries({ queryKey: ["admin", "stats"] });
+		},
+	});
+}
+
+// Admin: Get subscription detail
+export function useAdminSubscriptionDetail(subscriptionId: string | undefined) {
+	return useQuery({
+		queryKey: ["admin", "subscription", subscriptionId],
+		queryFn: async () => {
+			return client.polarAdmin.getSubscriptionDetail({
+				subscriptionId: subscriptionId!,
+			});
+		},
+		enabled: !!subscriptionId,
+	});
+}
+
+// Admin: Get subscription stats / analytics
+export function useAdminSubscriptionStats() {
+	return useQuery({
+		queryKey: ["admin", "stats"],
+		queryFn: async () => {
+			return client.polarAdmin.getSubscriptionStats();
+		},
+		staleTime: 60 * 1000, // 1 minute
+	});
+}
+
 // Admin Customers
 export function useAdminAllCustomers(params: { limit?: number; page?: number }) {
 	return useQuery({

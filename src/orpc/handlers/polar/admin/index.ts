@@ -1,9 +1,12 @@
 import { base } from "../../../router/base";
+import { adminCancelSubscription } from "./cancel-subscription";
 import { createProduct } from "./create-product";
-import { updateProduct } from "./update-product";
-import { archiveProduct } from "./archive-product";
-import { listAllSubscriptions } from "./list-all-subscriptions";
+import { getSubscriptionDetail } from "./get-subscription-detail";
+import { getSubscriptionStats } from "./get-subscription-stats";
 import { listAllCustomers } from "./list-all-customers";
+import { listAllSubscriptions } from "./list-all-subscriptions";
+import { archiveProduct } from "./archive-product";
+import { updateProduct } from "./update-product";
 
 export const PolarAdminRouter = base.router({
 	// Product Management
@@ -14,4 +17,9 @@ export const PolarAdminRouter = base.router({
 	// Admin Views
 	listAllSubscriptions,
 	listAllCustomers,
+
+	// Subscription Management
+	cancelSubscription: adminCancelSubscription,
+	getSubscriptionDetail,
+	getSubscriptionStats,
 });
