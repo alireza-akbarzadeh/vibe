@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
 import { Clock, Heart, Pause, Play } from "lucide-react";
-import { libraryActions } from "@/domains/library/store/library-actions.ts";
-import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import type { Track } from "@/domains/library/store/library-store-types.ts";
 import { cn, formatDuration } from "@/lib/utils";
 
@@ -20,9 +18,6 @@ export const TrackRow = ({
 	isActive,
 	onPlay,
 }: TrackRowProps) => {
-	const isLiked = useLibraryStore((state) =>
-		state.likes.tracks.includes(track.id),
-	);
 
 	return (
 		<motion.div
@@ -94,16 +89,10 @@ export const TrackRow = ({
 					whileTap={{ scale: 0.9 }}
 					onClick={(e) => {
 						e.stopPropagation();
-						libraryActions.toggleLike("tracks", track.id);
 					}}
-					className={cn(
-						"transition-colors",
-						isLiked
-							? "text-accent"
-							: "text-muted-foreground hover:text-foreground",
-					)}
+					className="text-muted-foreground hover:text-foreground transition-colors"
 				>
-					<Heart className="w-4 h-4" fill={isLiked ? "currentColor" : "none"} />
+					<Heart className="w-4 h-4" />
 				</motion.button>
 			</div>
 		</motion.div>

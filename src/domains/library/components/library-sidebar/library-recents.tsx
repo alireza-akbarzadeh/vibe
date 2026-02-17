@@ -1,16 +1,48 @@
 import { motion } from "framer-motion";
 import { Pause, Play } from "lucide-react";
-import { type Recents, recents } from "@/domains/library/library-mock-data.ts";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
+import type { Track } from "@/domains/library/store/library-store-types.ts";
 import { cn } from "@/lib/utils.ts";
+
+interface RecentItem extends Track {
+	type: "track" | "podcast";
+	img: string;
+	publishedAt?: string;
+}
+
+// Placeholder recents — replace with real API data when available
+const recentItems: RecentItem[] = [
+	{
+		id: "t1",
+		title: "Midnight City",
+		artist: "M83",
+		album: "Hurry Up, We're Dreaming",
+		cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300",
+		img: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300",
+		duration: 244,
+		genre: "Electronic",
+		type: "track",
+	},
+	{
+		id: "t2",
+		title: "Lofi Beats",
+		artist: "ChilledCow",
+		album: "Late Night Vibes",
+		cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300",
+		img: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300",
+		duration: 180,
+		genre: "Lo-Fi",
+		type: "podcast",
+	},
+];
 
 export const LibraryRecent = ({ isOpen }: { isOpen: boolean }) => {
 	const currentTrackId = useLibraryStore((s) => s.player.currentTrack?.id);
 	const currentPodcastId = useLibraryStore((s) => s.player.currentPodcast?.id);
 	const isPlaying = useLibraryStore((s) => s.player.isPlaying);
 
-	const handlePlay = (item: Recents) => {
+	const handlePlay = (item: RecentItem) => {
 		if (item.type === "track") {
 			libraryActions.playTrack({
 				id: item.id,
@@ -29,7 +61,9 @@ export const LibraryRecent = ({ isOpen }: { isOpen: boolean }) => {
 				cover: item.cover,
 				duration: item.duration,
 				category: "movies",
-				publishedAt: item.publishedAt,
+				publishedAt: item.publishedAt || "",
+				genres: "",
+				artist: item.artist,
 			});
 		}
 	};
@@ -49,7 +83,7 @@ export const LibraryRecent = ({ isOpen }: { isOpen: boolean }) => {
 					isOpen ? "gap-0 px-2" : "flex-col gap-3",
 				)}
 			>
-				{recents.map((item, i) => {
+				{recentItems.map((item, i) => {
 					const isActive =
 						item.id === currentTrackId || item.id === currentPodcastId;
 

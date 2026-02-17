@@ -5,6 +5,7 @@ import { CreatorRouter } from "../handlers/creator";
 import { FavoriteRouter } from "../handlers/favorite";
 import { GenreRouter } from "../handlers/genre";
 import { HealthRouter } from "../handlers/health";
+import { LibraryRouter } from "../handlers/library";
 import { MediaRouter } from "../handlers/media";
 import { MediaAssetRouter } from "../handlers/media-asset";
 import { PermissionRouter } from "../handlers/permission";
@@ -43,4 +44,5 @@ export const router = base.router({
 	content: ContentRouter,
 	polar: PolarRouter,
 	polarAdmin: PolarAdminRouter,
+	library: LibraryRouter,
 });

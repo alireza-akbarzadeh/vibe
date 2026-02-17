@@ -17,7 +17,7 @@ import {
 	Sparkles,
 	User2,
 } from "lucide-react";
-import React, { useMemo } from "react";
+import React from "react";
 import {
 	CommandDialog,
 	CommandEmpty,
@@ -37,11 +37,11 @@ import type { LibraryNav } from "@/domains/library/library-types.ts";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import type { Track } from "@/domains/library/store/library-store-types";
+import { useSession } from "@/integrations/auth/auth-client.ts";
 import { cn } from "@/lib/utils";
 import { LibraryMoodSelector } from "../components/library-sidebar/library-mood-selector";
 import { LibrarySidebarNowPlaying } from "../components/library-sidebar/library-sidebar-mow-playing";
 import { SidebarSearchTrigger } from "../components/library-sidebar/sidebar-search-trigger";
-import { mockTracks } from "../library-mock-data";
 
 
 interface Mood {
@@ -121,18 +121,8 @@ const pinnedItems: PinnedTrack[] = [
 
 export const LibraryAppSidebar = () => {
 	const isOpen = useLibraryStore((state) => state.sidebarOpen);
-	const user = useLibraryStore((state) => state.user);
-
-	const likedIds = useLibraryStore((state) => state.likes.tracks);
-	const historyIds = useLibraryStore((state) => state.history.tracks);
-
-	const searchableTracks = useMemo(() => {
-		const uniqueIds = Array.from(new Set([...likedIds, ...historyIds]));
-
-		return uniqueIds
-			.map(id => mockTracks.find(track => track.id === id))
-			.filter((track): track is Track => !!track);
-	}, [likedIds, historyIds]);
+	const { data: session } = useSession();
+	const user = session?.user;
 
 	const [open, setOpen] = React.useState(false);
 
@@ -232,7 +222,7 @@ export const LibraryAppSidebar = () => {
 							<div className="px-4">
 								<Link to="/library/profile" className={cn("flex items-center gap-3 p-3 rounded-[1.5rem] bg-white/3 border border-white/5 hover:bg-white/10 transition-all", !isOpen && "justify-center")}>
 									<div className="relative shrink-0">
-										<img src={user?.avatar || "https://avatar.vercel.sh/user"} className="w-8 h-8 rounded-full ring-2 ring-primary/20" alt="Avatar" />
+										<img src={user?.image || "https://avatar.vercel.sh/user"} className="w-8 h-8 rounded-full ring-2 ring-primary/20" alt="Avatar" />
 										<div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-zinc-950 rounded-full" />
 									</div>
 									{isOpen && (
@@ -306,27 +296,6 @@ export const LibraryAppSidebar = () => {
 							</CommandItem>
 						))}
 					</CommandGroup>
-
-					{searchableTracks.length > 0 && (
-						<>
-							<CommandSeparator className="bg-white/5" />
-							<CommandGroup heading="Recent & Liked">
-								{searchableTracks.map((track) => (
-									<CommandItem
-										key={track.id}
-										onSelect={() => runCommand(() => { libraryActions.playTrack(track); })}
-										className="aria-selected:bg-white/5"
-									>
-										<Music className="mr-2 h-4 w-4 text-primary" />
-										<div className="flex flex-col">
-											<span className="text-sm font-bold leading-tight">{track.title}</span>
-											<span className="text-[10px] text-muted-foreground">{track.artist}</span>
-										</div>
-									</CommandItem>
-								))}
-							</CommandGroup>
-						</>
-					)}
 
 					<CommandSeparator className="bg-white/5" />
 					<CommandGroup heading="System">

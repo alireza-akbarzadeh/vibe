@@ -9,6 +9,7 @@ import {
 	getTopIMDB,
 	getTVSeries,
 } from "./get";
+import { searchContent } from "./search";
 
 export const ContentRouter = base.router({
 	latestReleases: getLatestReleases,
@@ -19,4 +20,5 @@ export const ContentRouter = base.router({
 	comedy: getComedyMovies,
 	romance: getRomanceMovies,
 	topIMDB: getTopIMDB,
+	search: searchContent,
 });

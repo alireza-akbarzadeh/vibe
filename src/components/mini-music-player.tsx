@@ -21,11 +21,6 @@ import { cn, formatPayerTime } from "@/lib/utils";
 
 export const MiniPlayer = () => {
 	const player = useLibraryStore((state) => state.player);
-	const isLiked = useLibraryStore((state) =>
-		player.currentTrack
-			? state.likes.tracks.includes(player.currentTrack.id)
-			: false,
-	);
 	const [isMuted, setIsMuted] = useState(false);
 	const [prevVolume, setPrevVolume] = useState(0.8);
 
@@ -109,19 +104,10 @@ export const MiniPlayer = () => {
 						<motion.button
 							whileHover={{ scale: 1.1 }}
 							whileTap={{ scale: 0.9 }}
-							onClick={() =>
-								libraryActions.toggleLike("tracks", player.currentTrack!.id)
-							}
-							className={cn(
-								"ml-2 transition-colors",
-								isLiked
-									? "text-primary"
-									: "text-muted-foreground hover:text-foreground",
-							)}
+							className="ml-2 text-muted-foreground hover:text-primary transition-colors"
 						>
 							<Heart
 								className="w-4 h-4"
-								fill={isLiked ? "currentColor" : "none"}
 							/>
 						</motion.button>
 					)}

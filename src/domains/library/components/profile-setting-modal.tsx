@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLibraryStore } from "@/domains/library/store/library-store.ts";
+import { useSession } from "@/integrations/auth/auth-client.ts";
 import { cn } from "@/lib/utils";
 
 export function ProfileSettingsModal() {
-    const user = useLibraryStore((state) => state.user);
+    const { data: session } = useSession();
+    const user = session?.user;
     const [activeTab, setActiveTab] = useState("profile");
 
     const tabs = [
@@ -80,7 +81,7 @@ export function ProfileSettingsModal() {
                                         <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-white/5 border border-white/5">
                                             <div className="relative group shrink-0">
                                                 <Image
-                                                    src={user?.avatar}
+                                                    src={user?.image}
                                                     className="w-20 h-20 rounded-full object-cover ring-2 ring-white/10 group-hover:ring-primary/50 transition-all"
                                                 />
                                                 <div className="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">

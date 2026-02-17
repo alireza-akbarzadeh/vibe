@@ -1,4 +1,4 @@
-// Actions
+// Actions — player + sidebar UI state only
 import { appStore } from "@/domains/library/store/library-store.ts";
 import type {
 	Podcast,
@@ -17,13 +17,6 @@ export const libraryActions = {
 				currentPodcast: null,
 				progress: 0,
 			},
-			history: {
-				...state.history,
-				tracks: [
-					track.id,
-					...state.history.tracks.filter((id) => id !== track.id),
-				].slice(0, 50),
-			},
 		}));
 	},
 
@@ -36,13 +29,6 @@ export const libraryActions = {
 				currentPodcast: podcast,
 				currentTrack: null,
 				progress: 0,
-			},
-			history: {
-				...state.history,
-				podcasts: [
-					podcast.id,
-					...state.history.podcasts.filter((id) => id !== podcast.id),
-				].slice(0, 50),
 			},
 		}));
 	},
@@ -108,61 +94,6 @@ export const libraryActions = {
 			player: {
 				...state.player,
 				queue: [...state.player.queue, track],
-			},
-		}));
-	},
-
-	// Like actions
-	toggleLike: (
-		type: "tracks" | "videos" | "blogs" | "podcasts",
-		id: string,
-	) => {
-		appStore.setState((state) => {
-			const likes = state.likes[type];
-			const isLiked = likes.includes(id);
-			return {
-				...state,
-				likes: {
-					...state.likes,
-					[type]: isLiked ? likes.filter((l) => l !== id) : [...likes, id],
-				},
-			};
-		});
-	},
-
-	// Bookmark actions
-	toggleBookmark: (
-		type: "tracks" | "videos" | "blogs" | "podcasts",
-		id: string,
-	) => {
-		appStore.setState((state) => {
-			const bookmarks = state.bookmarks[type];
-			const isBookmarked = bookmarks.includes(id);
-			return {
-				...state,
-				bookmarks: {
-					...state.bookmarks,
-					[type]: isBookmarked
-						? bookmarks.filter((b) => b !== id)
-						: [...bookmarks, id],
-				},
-			};
-		});
-	},
-
-	// History actions
-	addToHistory: (
-		type: "tracks" | "videos" | "blogs" | "podcasts",
-		id: string,
-	) => {
-		appStore.setState((state) => ({
-			...state,
-			history: {
-				...state.history,
-				[type]: [id, ...state.history[type].filter((h) => h !== id)].slice(
-					0,
-					50,
-				),
 			},
 		}));
 	},

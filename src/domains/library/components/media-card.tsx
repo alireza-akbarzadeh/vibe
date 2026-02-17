@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { Bookmark, Headphones, Heart, Mic2, Play } from "lucide-react";
 import { scaleIn } from "@/components/motion/motion-page.tsx";
-import { libraryActions } from "@/domains/library/store/library-actions.ts";
-import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import { cn } from "@/lib/utils";
 
 
@@ -31,17 +29,6 @@ export const MediaCard = ({
 	meta,
 	className,
 }: MediaCardProps) => {
-	const typeMap = {
-		track: "tracks",
-		video: "videos",
-		blog: "blogs",
-		podcast: "podcasts",
-	} as const;
-
-	const storeType = typeMap[type];
-	const isLiked = useLibraryStore((state) => state.likes[storeType].includes(id));
-	const isBookmarked = useLibraryStore((state) => state.bookmarks[storeType].includes(id));
-
 	const isPodcast = type === "podcast";
 	const finalAspectRatio = isPodcast ? "aspect-[4/5]" : "aspect-square";
 
@@ -70,20 +57,16 @@ export const MediaCard = ({
 
 					{/* Top Action Bar */}
 					<div className="absolute top-4 inset-x-4 flex justify-between items-start">
-						{/* FIXED: Changed </p> to </div> on the line below */}
 						<div className="bg-black/40 backdrop-blur-xl border border-white/10 px-3 py-1 rounded-full text-[10px] font-black text-white/90 uppercase tracking-widest">
 							{type}
 						</div>
 
 						<div className="flex gap-2 translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
 							<button
-								onClick={(e) => { e.stopPropagation(); libraryActions.toggleLike(storeType, id); }}
-								className={cn(
-									"p-2.5 rounded-full backdrop-blur-xl border border-white/10 transition-all active:scale-90",
-									isLiked ? "bg-red-500 text-white border-red-400" : "bg-black/40 text-white/70 hover:bg-white/20"
-								)}
+								onClick={(e) => { e.stopPropagation(); }}
+								className="p-2.5 rounded-full backdrop-blur-xl border border-white/10 bg-black/40 text-white/70 hover:bg-white/20 transition-all active:scale-90"
 							>
-								<Heart className={cn("size-4", isLiked && "fill-current")} />
+								<Heart className="size-4" />
 							</button>
 						</div>
 					</div>
@@ -114,13 +97,10 @@ export const MediaCard = ({
 						) : <div />}
 
 						<button
-							onClick={(e) => { e.stopPropagation(); libraryActions.toggleBookmark(storeType, id); }}
-							className={cn(
-								"p-2 rounded-full backdrop-blur-md transition-colors",
-								isBookmarked ? "text-primary" : "text-white/50 hover:text-white"
-							)}
+							onClick={(e) => { e.stopPropagation(); }}
+							className="p-2 rounded-full backdrop-blur-md text-white/50 hover:text-white transition-colors"
 						>
-							<Bookmark className={cn("size-4", isBookmarked && "fill-current")} />
+							<Bookmark className="size-4" />
 						</button>
 					</div>
 				</div>
