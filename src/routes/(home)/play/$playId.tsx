@@ -1,83 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { VideoPlayer } from "@/components/video-payler/video-player";
 import { VIDEOS } from "@/constants/media";
-import { useEffect, useRef, useState } from "react";
-import { getWatchTogetherSocket } from "@/lib/watch-together-client";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
-function generateSessionId() {
-	return Math.random().toString(36).slice(2, 10);
-}
 
-function WatchTogetherBar({ playId }: { playId: string }) {
-	const [sessionId, setSessionId] = useState<string | null>(null);
-	const [copied, setCopied] = useState(false);
-	const [joined, setJoined] = useState(false);
-	const [users, setUsers] = useState<any[]>([]);
-	const [playback, setPlayback] = useState<{ time: number; playing: boolean }>({ time: 0, playing: false });
-	const socketRef = useRef<any>(null);
 
-	const url = sessionId
-		? `${window.location.origin}/play/${playId}?together=${sessionId}`
-		: "";
-
-	useEffect(() => {
-		const params = new URLSearchParams(window.location.search);
-		const together = params.get("together");
-		if (together) {
-			setSessionId(together);
-		}
-	}, []);
-
-	useEffect(() => {
-		if (!sessionId) return;
-		const socket = getWatchTogetherSocket();
-		socketRef.current = socket;
-		socket.emit("join-room", { roomId: sessionId, user: { name: "User" } });
-		socket.on("user-joined", (user) => setUsers((u) => [...u, user]));
-		socket.on("user-left", ({ id }) => setUsers((u) => u.filter((x) => x.id !== id)));
-		socket.on("playback-state", (state) => setPlayback(state));
-		setJoined(true);
-		return () => { socket.disconnect(); };
-	}, [sessionId]);
-
-	const handleCreate = () => {
-		const id = generateSessionId();
-		setSessionId(id);
-		window.history.replaceState({}, "", `?together=${id}`);
-	};
-
-	return (
-		<div className="mb-4 flex flex-col md:flex-row items-center gap-3 bg-zinc-900/80 rounded-xl p-4 border border-white/10">
-			{!sessionId ? (
-				<Button onClick={handleCreate} variant="secondary">Watch Together</Button>
-			) : (
-				<div className="flex flex-col md:flex-row items-center gap-2 w-full">
-					<Input value={url} readOnly className="w-full md:w-96" />
-					<Button
-						onClick={() => {
-							navigator.clipboard.writeText(url);
-							setCopied(true);
-							setTimeout(() => setCopied(false), 1200);
-						}}
-						variant="outline"
-					>
-						{copied ? "Copied!" : "Copy Link"}
-					</Button>
-					{joined && <span className="text-xs text-muted-foreground">{users.length + 1} watching</span>}
-				</div>
-			)}
-		</div>
-	);
-}
 
 export const Route = createFileRoute("/(home)/play/$playId")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const playId = "s"; // TODO: get from params
+	const playId = "s";
 	const videoData = {
 		src: VIDEOS.demo,
 		videoPoster:
@@ -86,10 +22,34 @@ function RouteComponent() {
 		totalTime: "2:49:00",
 		videoName: "Interstellar",
 	};
+
 	return (
-		<>
-			<WatchTogetherBar playId={playId} />
+		<div className="relative">
+			{/* Watch Together Tech/Help Popover */}
+			<div className="absolute top-4 left-4 z-50">
+				<Popover>
+					<PopoverTrigger asChild>
+						<Button size="icon" variant="ghost" aria-label="Watch Together Info">
+							<Info className="w-5 h-5" />
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent className="w-80">
+						<div className="font-bold text-base mb-1 flex items-center gap-2">
+							<Info className="w-4 h-4 text-purple-500" />
+							Watch Together Tips
+						</div>
+						<ul className="text-sm text-zinc-300 list-disc pl-5 space-y-1">
+							<li>Share the session link to invite friends to watch together in real time.</li>
+							<li>Playback is synced for all viewers in the session.</li>
+							<li>Use the chat button to open the sidebar and talk live.</li>
+							<li>Avatars show who is currently watching with you.</li>
+							<li>For best experience, use a modern browser and stable internet.</li>
+						</ul>
+						<div className="mt-3 text-xs text-zinc-400">Having issues? Refresh the page or check your connection.</div>
+					</PopoverContent>
+				</Popover>
+			</div>
 			<VideoPlayer videoId={playId} {...videoData} />
-		</>
+		</div>
 	);
 }

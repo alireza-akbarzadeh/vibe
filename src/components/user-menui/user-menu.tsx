@@ -178,7 +178,7 @@ function DesktopMenu({
 }) {
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
-	const timeout = useRef<ReturnType<typeof setTimeout>>();
+	const timeout = useRef<ReturnType<typeof setTimeout>>(null);
 
 	const handleEnter = useCallback(() => {
 		clearTimeout(timeout.current);

@@ -1,5 +1,9 @@
+import { Skeleton } from "@/components/ui/skeleton";
+import { WatchTogetherChatPlaceholder } from "./watch-together-chat-placeholder";
+import { WatchTogetherChat } from "./watch-together-chat";
+import { MessageCircle, Play, Volume2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Play, Volume2 } from "lucide-react";
+import { getWatchTogetherSocket } from "@/lib/watch-together-client";
 import { useEffect, useRef, useState } from "react";
 import { PlayerControls } from "./play-control";
 import { useVideoController } from "./useVideoController";
@@ -22,9 +26,12 @@ export function VideoPlayer({
 	videoId = "13123",
 }: VideoPlayerProps) {
 	const videoRef = useRef<HTMLVideoElement | null>(null);
+	const [videoLoading, setVideoLoading] = useState(true);
 	const [isHovered, setIsHovered] = useState(false);
 	const [isIdle, setIsIdle] = useState(false);
 	const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+	const [sessionId, setSessionId] = useState<string | null>(null);
+	const isSyncingRef = useRef(false);
 
 	// Logic extraction (Now includes isWaiting)
 	const { isPlaying, currentTime, duration, togglePlay, skip, isWaiting } =
@@ -47,14 +54,12 @@ export function VideoPlayer({
 
 	const [buffered, setBuffered] = useState(0);
 
-	// Run this on timeUpdate or progress event
 	const handleProgress = () => {
-		if (videoRef.current && duration > 0) {
+		if (videoRef.current) {
 			const video = videoRef.current;
 			if (video.buffered.length > 0) {
-				// Get the end time of the last buffered range
 				const lastBufferedTime = video.buffered.end(video.buffered.length - 1);
-				setBuffered((lastBufferedTime / duration) * 100);
+				setBuffered((lastBufferedTime / video.duration) * 100);
 			}
 		}
 	};
@@ -106,6 +111,65 @@ export function VideoPlayer({
 		return () => video.removeEventListener("ratechange", handleRateChange);
 	}, []);
 
+	// --- Watch Together Sync ---
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		const params = new URLSearchParams(window.location.search);
+		const together = params.get("together");
+		if (together) setSessionId(together);
+	}, []);
+
+	useEffect(() => {
+		if (!sessionId) return;
+		const socket = getWatchTogetherSocket();
+		const video = videoRef.current;
+		if (!video) return;
+
+		const emitState = () => {
+			if (!isSyncingRef.current) {
+				socket.emit("playback-update", {
+					roomId: sessionId,
+					time: video.currentTime,
+					playing: !video.paused,
+				});
+			}
+		};
+
+		const onPlay = () => emitState();
+		const onPause = () => emitState();
+		const onSeeked = () => emitState();
+
+		video.addEventListener("play", onPlay);
+		video.addEventListener("pause", onPause);
+		video.addEventListener("seeked", onSeeked);
+
+		socket.on("playback-state", ({ time, playing }) => {
+			if (!video) return;
+			isSyncingRef.current = true;
+			if (Math.abs(video.currentTime - time) > 0.5) {
+				video.currentTime = time;
+			}
+			if (playing && video.paused) {
+				video.play().catch(() => { });
+			} else if (!playing && !video.paused) {
+				video.pause();
+			}
+			setTimeout(() => {
+				isSyncingRef.current = false;
+			}, 500);
+		});
+
+		return () => {
+			video.removeEventListener("play", onPlay);
+			video.removeEventListener("pause", onPause);
+			video.removeEventListener("seeked", onSeeked);
+			socket.off("playback-state");
+		};
+	}, [sessionId]);
+
+	const [showChat, setShowChat] = useState(false);
+	const [chatLoading, setChatLoading] = useState(false);
+
 	return (
 		// biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
 		<div
@@ -118,12 +182,18 @@ export function VideoPlayer({
 			onMouseMove={handleMouseMove}
 			onDoubleClick={toggleFullscreen}
 		>
+			{videoLoading && (
+				<div className="absolute inset-0 z-30 flex items-center justify-center bg-black">
+					<Skeleton className="w-[70vw] h-[40vw] max-w-4xl max-h-[60vh] rounded-2xl" />
+				</div>
+			)}
 			<Video
 				ref={videoRef}
 				src={src}
 				onProgress={handleProgress}
 				onTimeUpdate={handleProgress}
 				className="w-full h-full object-contain"
+				onLoadedData={() => setVideoLoading(false)}
 			/>
 
 			{/* Poster layer */}
@@ -213,6 +283,26 @@ export function VideoPlayer({
 					videoRef={videoRef}
 				/>
 			</VideoOverlay>
+
+			{/* Chat Toggle Button */}
+			{sessionId && !showChat && (
+				<button
+					className="absolute top-4 right-4 z-50 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full p-2 shadow-lg flex items-center"
+					onClick={() => {
+						setChatLoading(true);
+						setShowChat(true);
+						setTimeout(() => setChatLoading(false), 800); // Simulate loading
+					}}
+					aria-label="Open chat"
+				>
+					<MessageCircle className="w-6 h-6" />
+				</button>
+			)}
+
+			{/* Watch Together Chat Sidebar (toggleable) */}
+			{sessionId && showChat && (
+				chatLoading ? <WatchTogetherChatPlaceholder /> : <WatchTogetherChat sessionId={sessionId} />
+			)}
 		</div>
 	);
 }
