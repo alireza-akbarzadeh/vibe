@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Typography } from "@/components/ui/typography";
+import { useLazySection } from "@/hooks/useLazySection";
 import type { MediaList } from "@/orpc/models/media.schema";
 import {
     comedyQueryOptions,
@@ -106,11 +107,13 @@ function GenreMovieCard({
 
 export default function GenreShowcaseSection() {
     const [activeCategory, setActiveCategory] = useState<CategoryId>("trending");
+    const { ref: sectionRef, isVisible } = useLazySection("300px");
 
-    const { data: trendingData } = useQuery(trendingQueryOptions(8));
-    const { data: topIMDBData } = useQuery(topIMDBQueryOptions(8));
-    const { data: horrorData } = useQuery(horrorQueryOptions(8));
-    const { data: comedyData } = useQuery(comedyQueryOptions(8));
+    // Only fetch the active tab's data (+ trending which is the default)
+    const { data: trendingData } = useQuery(trendingQueryOptions(8, isVisible));
+    const { data: topIMDBData } = useQuery(topIMDBQueryOptions(8, isVisible && activeCategory === "top-imdb"));
+    const { data: horrorData } = useQuery(horrorQueryOptions(8, isVisible && activeCategory === "horror"));
+    const { data: comedyData } = useQuery(comedyQueryOptions(8, isVisible && activeCategory === "comedy"));
 
     const categoryData: Record<CategoryId, MediaList[]> = {
         trending: trendingData?.data?.items ?? [],
@@ -122,7 +125,7 @@ export default function GenreShowcaseSection() {
     const currentItems = categoryData[activeCategory];
 
     return (
-        <section className="relative py-28 bg-[#0a0a0a] overflow-hidden">
+        <section ref={sectionRef} className="relative py-28 bg-[#0a0a0a] overflow-hidden">
             {/* Background */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-1/2 left-0 w-1/2 h-96 bg-purple-600/6 rounded-full blur-[120px] -translate-y-1/2" />

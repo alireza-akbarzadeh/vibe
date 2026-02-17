@@ -1,19 +1,12 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import {
     ArrowDownToLine,
-    Laptop,
     Layers,
     MonitorPlay,
     Shield,
-    Smartphone,
     Sparkles,
-    Tablet,
-    Tv,
-    Wifi,
     Zap,
 } from "lucide-react";
-import { useRef } from "react";
-import { Image } from "@/components/ui/image";
 import { Typography } from "@/components/ui/typography";
 
 // ─── Feature Highlights ────────────────────────────────────────
@@ -54,13 +47,6 @@ const features = [
         desc: "Stream on up to 4 screens simultaneously. Family sharing built right in.",
         gradient: "from-indigo-500 to-purple-500",
     },
-];
-
-const devices = [
-    { icon: Smartphone, label: "Mobile", sub: "iOS & Android" },
-    { icon: Tablet, label: "Tablet", sub: "iPad & Android" },
-    { icon: Laptop, label: "Desktop", sub: "Mac & Windows" },
-    { icon: Tv, label: "Smart TV", sub: "All brands" },
 ];
 
 // ─── Feature Card ──────────────────────────────────────────────
@@ -104,101 +90,6 @@ function FeatureCard({
                 />
             </div>
         </motion.div>
-    );
-}
-
-// ─── Device Section ────────────────────────────────────────────
-function DeviceShowcase() {
-    const ref = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "end start"],
-    });
-    const rotateX = useTransform(scrollYProgress, [0, 0.5], [8, 0]);
-    const scale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1]);
-
-    return (
-        <div ref={ref} className="mt-28">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7 }}
-                className="text-center mb-14"
-            >
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 mb-5">
-                    <Wifi className="w-4 h-4 text-cyan-400" />
-                    <span className="text-sm text-gray-300">
-                        Seamless sync across all devices
-                    </span>
-                </div>
-
-                <Typography.H2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-                    One Account.{" "}
-                    <span className="bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                        Everywhere.
-                    </span>
-                </Typography.H2>
-                <Typography.P className="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Start on your phone, continue on your TV. Your experience follows
-                    you.
-                </Typography.P>
-            </motion.div>
-
-            {/* TV Mockup */}
-            <motion.div
-                style={{ rotateX, scale, perspective: 1200 }}
-                className="relative mx-auto w-full max-w-4xl"
-            >
-                <div className="relative aspect-video rounded-3xl bg-linear-to-br from-gray-800 to-gray-900 p-1.5 shadow-2xl shadow-purple-500/10 border border-white/6">
-                    <div className="relative h-full rounded-2xl overflow-hidden bg-black">
-                        <Image
-                            src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=675&fit=crop"
-                            alt="Streaming content"
-                            className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/20" />
-                        <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
-                            <div className="flex items-center gap-2 mb-2">
-                                <div className="w-8 h-8 rounded-lg bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">V</span>
-                                </div>
-                                <span className="text-white/60 text-xs md:text-sm">
-                                    Now Playing
-                                </span>
-                            </div>
-                            <Typography.H3 className="text-white text-lg md:text-2xl font-bold">
-                                Interstellar: Beyond Time
-                            </Typography.H3>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Stand */}
-                <div className="mx-auto w-32 h-3 bg-linear-to-r from-gray-800 via-gray-700 to-gray-800 rounded-b-lg" />
-                <div className="mx-auto w-48 h-1 bg-gray-800 rounded-full" />
-            </motion.div>
-
-            {/* Devices grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14 max-w-2xl mx-auto">
-                {devices.map((device, index) => (
-                    <motion.div
-                        key={device.label}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
-                        className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/3 border border-white/6 hover:bg-white/6 hover:border-white/12 transition-all"
-                    >
-                        <device.icon className="w-6 h-6 text-purple-400" />
-                        <span className="text-white text-sm font-medium">
-                            {device.label}
-                        </span>
-                        <span className="text-gray-500 text-xs">{device.sub}</span>
-                    </motion.div>
-                ))}
-            </div>
-        </div>
     );
 }
 
@@ -251,8 +142,6 @@ export default function FeatureShowcaseSection() {
                     ))}
                 </div>
 
-                {/* Device showcase */}
-                <DeviceShowcase />
             </div>
         </section>
     );

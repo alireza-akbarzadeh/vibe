@@ -173,12 +173,12 @@ export function useFavorites() {
 						description: message,
 					});
 				} else if (message.includes("Authentication")) {
-					toast.error("Sign In Required", {
+					toast.error("Login In Required", {
 						description: message,
 						action: {
-							label: "Sign In",
+							label: "Login In",
 							onClick: () => {
-								window.location.href = "/sign-in";
+								window.location.href = "/login";
 							},
 						},
 					});

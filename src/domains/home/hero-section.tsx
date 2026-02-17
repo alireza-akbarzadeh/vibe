@@ -1,5 +1,6 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: index keys fine for static lists */
 
+import { useIntersection } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
@@ -18,6 +19,7 @@ import {
 	Star,
 	TrendingUp,
 	Tv,
+	Video,
 	Volume2,
 	Zap,
 } from "lucide-react";
@@ -26,40 +28,41 @@ import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { cn } from "@/lib/utils";
 import type { MediaList } from "@/orpc/models/media.schema";
-import { trendingQueryOptions } from "./home.queries";
+import {
+	platformStatsQueryOptions,
+	trendingQueryOptions,
+} from "./home.queries";
 
-// ─── Animated Number Counter ───────────────────────────────────
+interface AnimatedNumberProps {
+	value: number;
+	suffix?: string;
+	duration?: number;
+}
+
 function AnimatedNumber({
 	value,
 	suffix = "",
 	duration = 2,
-}: { value: number; suffix?: string; duration?: number }) {
+}: AnimatedNumberProps) {
 	const [display, setDisplay] = useState(0);
-	const ref = useRef<HTMLSpanElement>(null);
 	const [hasAnimated, setHasAnimated] = useState(false);
+	const { ref, entry } = useIntersection({ threshold: 0.3 });
+	const isIntersecting = entry?.isIntersecting ?? false;
 
 	useEffect(() => {
-		if (hasAnimated) return;
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting) {
-					setHasAnimated(true);
-					const start = performance.now();
-					const animate = (now: number) => {
-						const elapsed = (now - start) / 1000;
-						const progress = Math.min(elapsed / duration, 1);
-						const eased = 1 - (1 - progress) ** 3;
-						setDisplay(Math.floor(eased * value));
-						if (progress < 1) requestAnimationFrame(animate);
-					};
-					requestAnimationFrame(animate);
-				}
-			},
-			{ threshold: 0.3 },
-		);
-		if (ref.current) observer.observe(ref.current);
-		return () => observer.disconnect();
-	}, [value, duration, hasAnimated]);
+		if (hasAnimated || value <= 0 || !isIntersecting) return;
+
+		setHasAnimated(true);
+		const start = performance.now();
+		const animate = (now: number) => {
+			const elapsed = (now - start) / 1000;
+			const progress = Math.min(elapsed / duration, 1);
+			const eased = 1 - (1 - progress) ** 3;
+			setDisplay(Math.floor(eased * value));
+			if (progress < 1) requestAnimationFrame(animate);
+		};
+		requestAnimationFrame(animate);
+	}, [value, duration, hasAnimated, isIntersecting]);
 
 	return (
 		<span ref={ref}>
@@ -155,7 +158,12 @@ function StatItem({
 	value,
 	suffix,
 	label,
-}: { icon: React.ReactNode; value: number; suffix: string; label: string }) {
+}: {
+	icon: React.ReactNode;
+	value: number;
+	suffix: string;
+	label: string;
+}) {
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
@@ -188,7 +196,12 @@ export default function HeroSection() {
 	const sectionRef = useRef<HTMLElement>(null);
 
 	const { data: trendingData } = useQuery(trendingQueryOptions(8));
+	const { data: statsData } = useQuery(platformStatsQueryOptions());
 	const trendingItems = trendingData?.data?.items ?? [];
+
+	const totalUsers = statsData?.totalUsers ?? 0;
+	const totalTracks = statsData?.totalTracks ?? 0;
+	const totalMovies = statsData?.totalMovies ?? 0;
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -235,18 +248,33 @@ export default function HeroSection() {
 			<div className="absolute inset-0 pointer-events-none">
 				<div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(6,182,212,0.12),rgba(0,0,0,0))]" />
 				<motion.div
-					animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.15, 1], x: [0, 25, -15, 0], y: [0, -15, 25, 0] }}
+					animate={{
+						opacity: [0.2, 0.5, 0.2],
+						scale: [1, 1.15, 1],
+						x: [0, 25, -15, 0],
+						y: [0, -15, 25, 0],
+					}}
 					transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
 					className="absolute top-[8%] left-[18%] w-112.5 h-112.5 rounded-full blur-[100px] bg-cyan-500/30"
 				/>
 				<motion.div
 					animate={{ opacity: [0.15, 0.4, 0.15], scale: [1, 1.2, 1] }}
-					transition={{ duration: 12, delay: 2, repeat: Infinity, ease: "easeInOut" }}
+					transition={{
+						duration: 12,
+						delay: 2,
+						repeat: Infinity,
+						ease: "easeInOut",
+					}}
 					className="absolute top-[35%] right-[12%] w-87.5 h-87.5 rounded-full blur-[100px] bg-purple-500/25"
 				/>
 				<motion.div
 					animate={{ opacity: [0.1, 0.3, 0.1], scale: [1, 1.1, 1] }}
-					transition={{ duration: 8, delay: 4, repeat: Infinity, ease: "easeInOut" }}
+					transition={{
+						duration: 8,
+						delay: 4,
+						repeat: Infinity,
+						ease: "easeInOut",
+					}}
 					className="absolute bottom-[15%] left-[28%] w-70 h-70 rounded-full blur-[100px] bg-pink-500/20"
 				/>
 				<motion.div
@@ -260,7 +288,12 @@ export default function HeroSection() {
 							key={i}
 							className="absolute w-125 h-125 rounded-full border border-cyan-500/10"
 							animate={{ opacity: [0, 0.4, 0], scale: [0.7, 1.6, 2.2] }}
-							transition={{ duration: 5, delay: i * 1.5, repeat: Infinity, ease: "easeOut" }}
+							transition={{
+								duration: 5,
+								delay: i * 1.5,
+								repeat: Infinity,
+								ease: "easeOut",
+							}}
 						/>
 					))}
 				</div>
@@ -269,10 +302,26 @@ export default function HeroSection() {
 			{/* Floating spotlight cards */}
 			{trendingItems.length >= 4 && (
 				<>
-					<SpotlightCard movie={trendingItems[0]} className="top-[14%] left-[6%] xl:left-[10%]" delay={0.6} />
-					<SpotlightCard movie={trendingItems[1]} className="top-[20%] right-[6%] xl:right-[10%]" delay={0.8} />
-					<SpotlightCard movie={trendingItems[2]} className="bottom-[28%] left-[8%] xl:left-[14%]" delay={1.0} />
-					<SpotlightCard movie={trendingItems[3]} className="bottom-[26%] right-[7%] xl:right-[12%]" delay={1.2} />
+					<SpotlightCard
+						movie={trendingItems[0]}
+						className="top-[14%] left-[6%] xl:left-[10%]"
+						delay={0.6}
+					/>
+					<SpotlightCard
+						movie={trendingItems[1]}
+						className="top-[20%] right-[6%] xl:right-[10%]"
+						delay={0.8}
+					/>
+					<SpotlightCard
+						movie={trendingItems[2]}
+						className="bottom-[28%] left-[8%] xl:left-[14%]"
+						delay={1.0}
+					/>
+					<SpotlightCard
+						movie={trendingItems[3]}
+						className="bottom-[26%] right-[7%] xl:right-[12%]"
+						delay={1.2}
+					/>
 				</>
 			)}
 
@@ -281,7 +330,12 @@ export default function HeroSection() {
 				style={{ rotateX, rotateY, perspective: 1200 }}
 				className="relative z-10 min-h-screen flex flex-col justify-center items-center px-6 py-20"
 			>
-				<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="text-center max-w-5xl">
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 1 }}
+					className="text-center max-w-5xl"
+				>
 					{/* Badge */}
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
@@ -290,7 +344,9 @@ export default function HeroSection() {
 						className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/4 backdrop-blur-xl border border-white/10 mb-10 shadow-2xl shadow-cyan-500/5"
 					>
 						<AudioVisualizer />
-						<span className="text-xs tracking-[0.2em] uppercase text-gray-300 font-semibold">Now Streaming</span>
+						<span className="text-xs tracking-[0.2em] uppercase text-gray-300 font-semibold">
+							Now Streaming
+						</span>
 						<motion.div
 							className="w-2 h-2 rounded-full bg-emerald-500"
 							animate={{ opacity: [1, 0.4, 1], scale: [1, 1.3, 1] }}
@@ -340,7 +396,8 @@ export default function HeroSection() {
 						Experience the next generation of entertainment with{" "}
 						<span className="text-cyan-400 font-medium">spatial audio</span>,{" "}
 						<span className="text-blue-400 font-medium">4K visuals</span>, and{" "}
-						<span className="text-purple-400 font-medium">zero latency</span> streaming.
+						<span className="text-purple-400 font-medium">zero latency</span>{" "}
+						streaming.
 					</motion.p>
 
 					{/* CTAs */}
@@ -358,7 +415,11 @@ export default function HeroSection() {
 								<motion.div
 									className="absolute inset-0 bg-linear-to-r from-white/0 via-white/25 to-white/0"
 									animate={{ x: ["-100%", "200%"] }}
-									transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3 }}
+									transition={{
+										duration: 2.5,
+										repeat: Infinity,
+										repeatDelay: 3,
+									}}
 								/>
 								<span className="relative z-10 flex items-center gap-2">
 									<Play className="w-5 h-5 fill-current" />
@@ -386,11 +447,26 @@ export default function HeroSection() {
 						transition={{ delay: 0.9 }}
 						className="flex justify-center gap-8 md:gap-16"
 					>
-						<StatItem icon={<TrendingUp className="w-4 h-4 text-emerald-400" />} value={50000} suffix="+" label="Active Users" />
+						<StatItem
+							icon={<TrendingUp className="w-4 h-4 text-emerald-400" />}
+							value={totalUsers}
+							suffix="+"
+							label="Active Users"
+						/>
 						<div className="w-px bg-white/10" />
-						<StatItem icon={<Headphones className="w-4 h-4 text-purple-400" />} value={100000} suffix="+" label="Songs" />
+						<StatItem
+							icon={<Headphones className="w-4 h-4 text-purple-400" />}
+							value={totalTracks}
+							suffix="+"
+							label="Songs"
+						/>
 						<div className="w-px bg-white/10" />
-						<StatItem icon={<Film className="w-4 h-4 text-cyan-400" />} value={4000} suffix="+" label="Movies" />
+						<StatItem
+							icon={<Film className="w-4 h-4 text-cyan-400" />}
+							value={totalMovies}
+							suffix="+"
+							label="Movies"
+						/>
 					</motion.div>
 				</motion.div>
 
@@ -402,10 +478,31 @@ export default function HeroSection() {
 					className="mt-16 flex flex-wrap justify-center gap-3 md:gap-4 p-3 rounded-3xl bg-white/2 border border-white/5 backdrop-blur-md"
 				>
 					{[
-						{ icon: Headphones, label: "Music", color: "from-blue-500 to-cyan-500" },
-						{ icon: Film, label: "Cinema", color: "from-purple-500 to-pink-500" },
-						{ icon: Tv, label: "Series", color: "from-emerald-500 to-teal-500" },
-						{ icon: Volume2, label: "Podcasts", color: "from-pink-500 to-rose-500" },
+						{
+							icon: Headphones,
+							label: "Music",
+							color: "from-blue-500 to-cyan-500",
+						},
+						{
+							icon: Film,
+							label: "Cinema",
+							color: "from-purple-500 to-pink-500",
+						},
+						{
+							icon: Tv,
+							label: "Series",
+							color: "from-emerald-500 to-teal-500",
+						},
+						{
+							icon: Volume2,
+							label: "Podcasts",
+							color: "from-pink-500 to-rose-500",
+						},
+						{
+							icon: Video,
+							label: "Reels",
+							color: "from-fuchsia-500 to-pink-500",
+						},
 					].map((item, index) => (
 						<motion.div
 							key={item.label}
@@ -416,7 +513,12 @@ export default function HeroSection() {
 							whileTap={{ scale: 0.95 }}
 							className="flex flex-col items-center gap-2 px-5 py-3 rounded-2xl cursor-pointer hover:bg-white/5 transition-all duration-300"
 						>
-							<div className={cn("p-3 rounded-xl bg-linear-to-br shadow-lg", item.color)}>
+							<div
+								className={cn(
+									"p-3 rounded-xl bg-linear-to-br shadow-lg",
+									item.color,
+								)}
+							>
 								<item.icon className="w-5 h-5 text-white" />
 							</div>
 							<span className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500">
@@ -431,12 +533,18 @@ export default function HeroSection() {
 			<div className="absolute bottom-0 inset-x-0 h-40 bg-linear-to-t from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
 			<motion.div
 				className="absolute top-20 left-10 w-px h-32 bg-linear-to-b from-cyan-500/40 to-transparent"
-				animate={{ opacity: [0.2, 0.6, 0.2], height: ["100px", "140px", "100px"] }}
+				animate={{
+					opacity: [0.2, 0.6, 0.2],
+					height: ["100px", "140px", "100px"],
+				}}
 				transition={{ duration: 4, repeat: Infinity }}
 			/>
 			<motion.div
 				className="absolute top-20 right-10 w-px h-32 bg-linear-to-b from-purple-500/40 to-transparent"
-				animate={{ opacity: [0.2, 0.6, 0.2], height: ["100px", "140px", "100px"] }}
+				animate={{
+					opacity: [0.2, 0.6, 0.2],
+					height: ["100px", "140px", "100px"],
+				}}
 				transition={{ duration: 4, repeat: Infinity, delay: 2 }}
 			/>
 		</motion.section>

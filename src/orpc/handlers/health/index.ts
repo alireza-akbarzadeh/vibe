@@ -230,9 +230,12 @@ export const databaseMetrics = base
 /*                              EXPORT ROUTER                                  */
 /* -------------------------------------------------------------------------- */
 
+import { getPlatformStats } from "./platform-stats";
+
 export const HealthRouter = base.router({
 	liveness: liveness,
 	readiness: readiness,
 	health: health,
 	database: databaseMetrics,
+	platformStats: getPlatformStats,
 });

@@ -1,44 +1,50 @@
 import { orpc } from "@/orpc/client";
 
 /** Trending content - movies/shows that are hot right now */
-export function trendingQueryOptions(limit = 10) {
+export function trendingQueryOptions(limit = 10, enabled = true) {
 	return orpc.recommendations.trending.queryOptions({
 		input: { limit, days: 7, page: 1 },
+		enabled,
 	});
 }
 
 /** Top rated content of all time */
-export function topRatedQueryOptions(limit = 10) {
+export function topRatedQueryOptions(limit = 10, enabled = true) {
 	return orpc.recommendations.topRated.queryOptions({
 		input: { limit, page: 1 },
+		enabled,
 	});
 }
 
 /** Latest releases */
-export function latestReleasesQueryOptions(limit = 10) {
+export function latestReleasesQueryOptions(limit = 10, enabled = true) {
 	return orpc.content.latestReleases.queryOptions({
 		input: { limit, page: 1 },
+		enabled,
 	});
 }
 
 /** Top IMDB rated */
-export function topIMDBQueryOptions(limit = 10) {
+export function topIMDBQueryOptions(limit = 10, enabled = true) {
 	return orpc.content.topIMDB.queryOptions({
 		input: { limit, page: 1 },
+		enabled,
 	});
 }
 
 /** Horror content */
-export function horrorQueryOptions(limit = 10) {
+export function horrorQueryOptions(limit = 10, enabled = true) {
 	return orpc.content.horror.queryOptions({
 		input: { limit, page: 1 },
+		enabled,
 	});
 }
 
 /** Comedy content */
-export function comedyQueryOptions(limit = 10) {
+export function comedyQueryOptions(limit = 10, enabled = true) {
 	return orpc.content.comedy.queryOptions({
 		input: { limit, page: 1 },
+		enabled,
 	});
 }
 
@@ -60,6 +66,14 @@ export function movieStatsQueryOptions() {
 export function trackStatsQueryOptions() {
 	return orpc.media.list.queryOptions({
 		input: { status: ["PUBLISHED"], type: "TRACK", page: 1, limit: 1 },
+	});
+}
+
+/** Platform stats (users, movies, tracks) - public endpoint */
+export function platformStatsQueryOptions(enabled = true) {
+	return orpc.health.platformStats.queryOptions({
+		input: undefined,
+		enabled,
 	});
 }
 

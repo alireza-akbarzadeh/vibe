@@ -10,6 +10,9 @@ const GenreShowcaseSection = lazy(() => import("./genre-showcase-section"));
 const FeatureShowcaseSection = lazy(
     () => import("./feature-showcase-section"),
 );
+const DeviceExperienceSection = lazy(
+    () => import("./device-experience-section"),
+);
 const CTASection = lazy(() => import("./cta-Section"));
 
 function SectionFallback({ height = "h-96" }: { height?: string }) {
@@ -37,9 +40,14 @@ export default function Home() {
                 <GenreShowcaseSection />
             </Suspense>
 
-            {/* Feature highlights + device showcase */}
+            {/* Feature highlights */}
             <Suspense fallback={<SectionFallback />}>
                 <FeatureShowcaseSection />
+            </Suspense>
+
+            {/* Device experience showcase */}
+            <Suspense fallback={<SectionFallback />}>
+                <DeviceExperienceSection />
             </Suspense>
 
             {/* Final CTA */}

@@ -1,12 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import {
-	BookText,
-	Clapperboard,
-	CreditCard,
 	LogIn,
-	Music,
-	PlaySquare,
 	Sparkles,
 } from "lucide-react";
 import { useState } from "react";
@@ -16,17 +11,11 @@ import { Route } from "@/routes/__root";
 import { JoinButton } from "./buttons/join-button";
 import { Logo } from "./logo";
 import { MobileHeader } from "./mobile-header";
-
-export const navLinks = [
-	{ label: "Music", href: "/music", icon: Music },
-	{ label: "Movies", href: "/movies", icon: Clapperboard },
-	{ label: "Shorts", href: "/reels", icon: PlaySquare },
-	{ label: "Weblog", href: "/blog", icon: BookText },
-	{ label: "Pricing", href: "/pricing", icon: CreditCard },
-];
+import { navLinks } from "./nav-links";
 
 export function RootHeader() {
 	const [isOpen, setIsOpen] = useState(false);
+	const [scrolled, setScrolled] = useState(false);
 	const { scrollY } = useScroll();
 	const location = useLocation();
 	const { auth } = Route.useRouteContext();
@@ -34,20 +23,24 @@ export function RootHeader() {
 	const user = auth?.user;
 	const isLoggedIn = !!user;
 
+	useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 20));
 
-	const headerWidth = useTransform(scrollY, [0, 80], ["100%", "92%"]);
-	const headerY = useTransform(scrollY, [0, 80], [0, 12]);
+	const headerWidth = useTransform(scrollY, [0, 80], ["100%", "90%"]);
+	const headerY = useTransform(scrollY, [0, 80], [0, 14]);
 	const headerBorder = useTransform(
 		scrollY,
 		[0, 80],
-		["rgba(255,255,255,0)", "rgba(255,255,255,0.08)"],
+		["rgba(255,255,255,0)", "rgba(255,255,255,0.06)"],
 	);
 	const headerShadow = useTransform(
 		scrollY,
 		[0, 80],
-		["0px 0px 0px rgba(0,0,0,0)", "0px 25px 50px -12px rgba(0,0,0,0.5)"],
+		[
+			"0px 0px 0px rgba(0,0,0,0)",
+			"0px 20px 60px -15px rgba(0,0,0,0.6), 0px 0px 40px -10px rgba(139,92,246,0.08)",
+		],
 	);
-	const bgOpacity = useTransform(scrollY, [0, 80], [0, 0.4]);
+	const bgOpacity = useTransform(scrollY, [0, 80], [0, 0.55]);
 
 	return (
 		<motion.header
@@ -59,21 +52,31 @@ export function RootHeader() {
 			}}
 			className={cn(
 				"fixed left-1/2 -translate-x-1/2 z-100 transition-all duration-700 ease-out",
-				"backdrop-blur-xl md:rounded-[2.5rem] border",
+				"backdrop-blur-2xl md:rounded-full border",
 				"md:max-w-7xl mx-auto top-0 overflow-visible",
 			)}
 		>
+			{/* Glass fill */}
 			<motion.div
 				style={{ opacity: bgOpacity }}
-				className="absolute inset-0 bg-linear-to-b from-white/8 to-transparent md:rounded-[2.5rem] -z-10"
+				className="absolute inset-0 bg-linear-to-b from-white/8 to-white/3 md:rounded-full -z-10"
 			/>
-			<div className="absolute inset-0 bg-[#0a0a0b]/80 md:rounded-[2.5rem] -z-20" />
+			<div className="absolute inset-0 bg-[#060608]/85 md:rounded-full -z-20" />
 
-			<nav className="px-5 py-2.5 relative">
-				<div className="flex items-center justify-between gap-4">
+			{/* Accent top line — appears on scroll */}
+			<motion.div
+				initial={false}
+				animate={{ opacity: scrolled ? 1 : 0, scaleX: scrolled ? 1 : 0 }}
+				transition={{ duration: 0.5 }}
+				className="absolute top-0 left-[10%] right-[10%] h-px bg-linear-to-r from-transparent via-purple-500/40 to-transparent"
+			/>
+
+			<nav className="px-4 md:px-5 py-2 md:py-2.5 relative">
+				<div className="flex items-center justify-between gap-3">
 					<Logo />
-					{/* 2. DESKTOP NAV PILL */}
-					<div className="hidden lg:flex items-center bg-white/3 hover:bg-white/5 border border-white/5 backdrop-blur-2xl rounded-full p-1.5 gap-0.5 transition-colors duration-300">
+
+					{/* ── DESKTOP NAV ────────────────────────────── */}
+					<div className="hidden lg:flex items-center bg-white/3 hover:bg-white/5 border border-white/5 backdrop-blur-2xl rounded-full p-1 gap-0.5 transition-colors duration-300">
 						{navLinks.map((link) => {
 							const isActive = location.pathname === link.href;
 							const Icon = link.icon;
@@ -91,17 +94,17 @@ export function RootHeader() {
 									{isActive && (
 										<motion.div
 											layoutId="nav-pill-active"
-											className="absolute inset-0 bg-white/8 border border-white/10 rounded-full"
+											className="absolute inset-0 bg-linear-to-r from-purple-500/15 to-cyan-500/10 border border-white/10 rounded-full"
 											transition={{
 												type: "spring",
-												bounce: 0.25,
+												bounce: 0.2,
 												duration: 0.5,
 											}}
 										/>
 									)}
 									<Icon
 										className={cn(
-											"size-4 transition-transform duration-300 group-hover:scale-110",
+											"size-3.5 transition-all duration-300 group-hover:scale-110",
 											isActive
 												? "text-purple-400"
 												: "text-slate-500 group-hover:text-slate-300",
@@ -109,14 +112,14 @@ export function RootHeader() {
 									/>
 									<span className="relative z-10">{link.label}</span>
 									{link.label === "Pricing" && (
-										<Sparkles className="size-3 text-yellow-500 animate-bounce" />
+										<Sparkles className="size-3 text-yellow-500 animate-pulse" />
 									)}
 								</Link>
 							);
 						})}
 					</div>
 
-					{/* 3. DESKTOP ACTIONS (ENGAGING JOIN NOW) */}
+					{/* ── DESKTOP ACTIONS ─────────────────────────── */}
 					<div className="hidden lg:flex items-center gap-3 shrink-0">
 						{isLoggedIn ? (
 							<UserMenu />
@@ -124,9 +127,9 @@ export function RootHeader() {
 							<>
 								<Link
 									to="/login"
-									className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-2"
+									className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-2 group"
 								>
-									<LogIn className="size-4" />
+									<LogIn className="size-3.5 group-hover:text-cyan-400 transition-colors" />
 									Login
 								</Link>
 								<motion.div
@@ -136,40 +139,39 @@ export function RootHeader() {
 									whileTap="tap"
 									className="relative"
 								>
-									{/* The Glowing Aura - keep it subtle so the focus stays on the arrow */}
+									{/* Glow */}
 									<motion.div
 										animate={{
-											scale: [1, 1.15, 1],
-											opacity: [0.2, 0.4, 0.2],
+											scale: [1, 1.2, 1],
+											opacity: [0.15, 0.35, 0.15],
 										}}
 										transition={{
 											duration: 3,
-											repeat: Infinity,
+											repeat: Number.POSITIVE_INFINITY,
 											ease: "easeInOut",
 										}}
-										className="absolute inset-0 bg-indigo-500 rounded-full blur-md -z-10"
+										className="absolute inset-0 bg-linear-to-r from-purple-500 to-cyan-500 rounded-full blur-lg -z-10"
 									/>
 
 									<Link
 										to="/register"
 										className={cn(
-											"relative flex items-center gap-2 px-7 py-2.5 rounded-full font-black text-[11px] uppercase tracking-tighter shadow-xl overflow-hidden",
-											"bg-white text-black transition-all duration-300",
+											"relative flex items-center gap-2 px-6 py-2.5 rounded-full font-black text-[11px] uppercase tracking-tight shadow-xl overflow-hidden",
+											"bg-white text-black hover:bg-white/95 transition-all duration-300",
 										)}
 									>
-										{/* Shimmer Effect */}
+										{/* Shimmer */}
 										<motion.div
 											animate={{ x: ["-100%", "200%"] }}
 											transition={{
 												duration: 3,
-												repeat: Infinity,
-												repeatDelay: 1,
+												repeat: Number.POSITIVE_INFINITY,
+												repeatDelay: 1.5,
 											}}
-											className="absolute inset-0 bg-linear-to-r from-transparent via-indigo-500/10 to-transparent skew-x-12"
+											className="absolute inset-0 bg-linear-to-r from-transparent via-purple-500/10 to-transparent skew-x-12"
 										/>
 
 										<span className="relative z-10">Join Now</span>
-
 										<JoinButton />
 									</Link>
 								</motion.div>
@@ -177,7 +179,7 @@ export function RootHeader() {
 						)}
 					</div>
 
-					{/* 4. MOBILE TRIGGER */}
+					{/* ── MOBILE TRIGGER ──────────────────────────── */}
 					<div className="lg:hidden flex items-center">
 						<MobileHeader
 							side="bottom"

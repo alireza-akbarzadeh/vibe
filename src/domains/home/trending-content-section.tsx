@@ -17,6 +17,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Typography } from "@/components/ui/typography";
+import { useLazySection } from "@/hooks/useLazySection";
 import type { MediaList } from "@/orpc/models/media.schema";
 import {
     latestReleasesQueryOptions,
@@ -225,9 +226,10 @@ function ContentRow({
 
 // ─── Main Section ──────────────────────────────────────────────
 export default function TrendingContentSection() {
-    const { data: trendingData } = useQuery(trendingQueryOptions(15));
-    const { data: topRatedData } = useQuery(topRatedQueryOptions(15));
-    const { data: latestData } = useQuery(latestReleasesQueryOptions(15));
+    const { ref: sectionRef, isVisible } = useLazySection("400px");
+    const { data: trendingData } = useQuery(trendingQueryOptions(15, isVisible));
+    const { data: topRatedData } = useQuery(topRatedQueryOptions(15, isVisible));
+    const { data: latestData } = useQuery(latestReleasesQueryOptions(15, isVisible));
 
     const trendingItems = trendingData?.data?.items ?? [];
     const topRatedItems = topRatedData?.data?.items ?? [];
@@ -238,10 +240,10 @@ export default function TrendingContentSection() {
         topRatedItems.length > 0 ||
         latestItems.length > 0;
 
-    if (!hasContent) return null;
+    if (!hasContent) return <div ref={sectionRef} />;
 
     return (
-        <section className="relative py-28 bg-linear-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] overflow-hidden">
+        <section ref={sectionRef} className="relative py-28 bg-linear-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] overflow-hidden">
             {/* Background accent */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-1/3 left-0 w-1/2 h-96 bg-purple-600/6 rounded-full blur-[120px]" />

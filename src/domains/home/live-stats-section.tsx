@@ -12,10 +12,9 @@ import {
     Zap,
 } from "lucide-react";
 import { Typography } from "@/components/ui/typography";
+import { useLazySection } from "@/hooks/useLazySection";
 import {
-    allMediaStatsQueryOptions,
-    movieStatsQueryOptions,
-    trackStatsQueryOptions,
+    platformStatsQueryOptions,
 } from "./home.queries";
 
 // ─── Stats Card ────────────────────────────────────────────────
@@ -78,31 +77,31 @@ function StatCard({
 }
 
 export default function LiveStatsSection() {
-    const { data: _allMediaData } = useQuery(allMediaStatsQueryOptions());
-    const { data: movieData } = useQuery(movieStatsQueryOptions());
-    const { data: trackData } = useQuery(trackStatsQueryOptions());
+    const { ref: sectionRef, isVisible } = useLazySection("300px");
+    const { data: statsData } = useQuery(platformStatsQueryOptions(isVisible));
 
-    const totalMovies = movieData?.data?.pagination?.total ?? 0;
-    const totalTracks = trackData?.data?.pagination?.total ?? 0;
+    const totalMovies = statsData?.totalMovies ?? 0;
+    const totalTracks = statsData?.totalTracks ?? 0;
+    const totalUsers = statsData?.totalUsers ?? 0;
 
     const stats = [
         {
             icon: Film,
-            value: totalMovies > 0 ? totalMovies.toLocaleString() : "4,200+",
+            value: totalMovies > 0 ? totalMovies.toLocaleString() : "—",
             label: "Movies & Shows",
             subtitle: "From blockbusters to indie gems",
             gradient: "from-cyan-500 to-blue-600",
         },
         {
             icon: Headphones,
-            value: totalTracks > 0 ? totalTracks.toLocaleString() : "100K+",
+            value: totalTracks > 0 ? totalTracks.toLocaleString() : "—",
             label: "Songs & Tracks",
             subtitle: "Every genre, every mood",
             gradient: "from-purple-500 to-pink-600",
         },
         {
             icon: Users,
-            value: "50M+",
+            value: totalUsers > 0 ? totalUsers.toLocaleString() : "—",
             label: "Active Users",
             subtitle: "Growing community worldwide",
             gradient: "from-emerald-500 to-teal-600",
@@ -125,7 +124,7 @@ export default function LiveStatsSection() {
     ];
 
     return (
-        <section className="relative py-28 bg-[#0a0a0a] overflow-hidden">
+        <section ref={sectionRef} className="relative py-28 bg-[#0a0a0a] overflow-hidden">
             {/* Top divider */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-linear-to-r from-transparent via-cyan-500/40 to-transparent" />
 
