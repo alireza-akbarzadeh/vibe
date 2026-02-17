@@ -1,8 +1,13 @@
 import { Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
-export function SharedButton() {
+interface SharedButtonProps {
+	className?: string;
+}
+export function SharedButton(props: SharedButtonProps) {
+	const { className } = props;
 	const handleShare = async () => {
 		try {
 			const url = window.location.href;
@@ -18,7 +23,7 @@ export function SharedButton() {
 			onClick={handleShare}
 			size="lg"
 			variant="ghost"
-			className="bg-white/5 hover:bg-white/10 text-white rounded-full"
+			className={cn("bg-white/5 hover:bg-white/10 text-white rounded-full", className)}
 		>
 			<Share2 className="w-5 h-5" />
 		</Button>

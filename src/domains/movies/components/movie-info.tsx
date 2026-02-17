@@ -116,7 +116,7 @@ export default function MovieInfo(props: MovieInfoProps) {
 			</p>
 
 			{/* Action Buttons */}
-			<div className="flex flex-wrap gap-4 pt-4">
+			<div className="flex flex-wrap gap-4 pt-4 items-center">
 				<Button
 					onClick={() => {
 						if (component === "dialog") {
@@ -151,9 +151,9 @@ export default function MovieInfo(props: MovieInfoProps) {
 					<Play className="w-5 h-5 mr-2 fill-current group-hover:scale-110 transition-transform" />
 					Watch Trailer
 				</Button>
-				<WatchListButton mediaId={movie.id} />
-				<LikeButton mediaId={movie.id} />
-				<SharedButton />
+				<WatchListButton className="h-10 rounded-full" mediaId={movie.id} />
+				<LikeButton className="h-12 w-12 rounded-full" mediaId={movie.id} />
+				<SharedButton className="h-12 w-12 rounded-full" />
 			</div>
 		</motion.div>
 	);
