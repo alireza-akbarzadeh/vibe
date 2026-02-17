@@ -1,37 +1,51 @@
 import { lazy, Suspense } from "react";
 import HeroSection from "./hero-section";
 
-// Lazy load below-the-fold content to improve initial load performance
-const ParamSection = lazy(() => import("./cta-Section"));
-const DeviceExperience = lazy(() => import("./device-experience"));
-const FeaturedContent = lazy(() => import("./featured-content"));
-const RecommendationsShowcase = lazy(() => import("./recommendation"));
-const ValueProposition = lazy(() => import("./value-proposition"));
+// Lazy load below-the-fold sections for optimal initial load
+const LiveStatsSection = lazy(() => import("./live-stats-section"));
+const TrendingContentSection = lazy(
+    () => import("./trending-content-section"),
+);
+const GenreShowcaseSection = lazy(() => import("./genre-showcase-section"));
+const FeatureShowcaseSection = lazy(
+    () => import("./feature-showcase-section"),
+);
+const CTASection = lazy(() => import("./cta-Section"));
+
+function SectionFallback({ height = "h-96" }: { height?: string }) {
+    return <div className={`${height} bg-[#0a0a0a]`} />;
+}
 
 export default function Home() {
-	return (
-		<div className="bg-[#0a0a0a] min-h-screen">
-			<HeroSection />
+    return (
+        <div className="bg-[#0a0a0a] min-h-screen">
+            {/* Hero loads eagerly — first paint */}
+            <HeroSection />
 
-			<Suspense fallback={<div className="h-96" />}>
-				<ValueProposition />
-			</Suspense>
+            {/* Platform stats with real API data */}
+            <Suspense fallback={<SectionFallback />}>
+                <LiveStatsSection />
+            </Suspense>
 
-			<Suspense fallback={<div className="h-96" />}>
-				<RecommendationsShowcase />
-			</Suspense>
+            {/* Trending / Top Rated / Latest rows */}
+            <Suspense fallback={<SectionFallback />}>
+                <TrendingContentSection />
+            </Suspense>
 
-			<Suspense fallback={<div className="h-96" />}>
-				<FeaturedContent />
-			</Suspense>
+            {/* Genre tabs with real content */}
+            <Suspense fallback={<SectionFallback />}>
+                <GenreShowcaseSection />
+            </Suspense>
 
-			<Suspense fallback={<div className="h-96" />}>
-				<DeviceExperience />
-			</Suspense>
+            {/* Feature highlights + device showcase */}
+            <Suspense fallback={<SectionFallback />}>
+                <FeatureShowcaseSection />
+            </Suspense>
 
-			<Suspense fallback={<div className="h-40" />}>
-				<ParamSection />
-			</Suspense>
-		</div>
-	);
+            {/* Final CTA */}
+            <Suspense fallback={<SectionFallback height="h-64" />}>
+                <CTASection />
+            </Suspense>
+        </div>
+    );
 }

@@ -1,12 +1,34 @@
 import { defineConfig } from 'vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
   plugins: [
+    tanstackRouter({
+      autoCodeSplitting: true,
+      codeSplittingOptions: {
+        defaultBehavior: [
+          ['component', 'pendingComponent'], // Main UI components together
+          ['errorComponent'],
+          ['notFoundComponent'],
+        ],
+        // Admin routes get their own splitting strategy
+        splitBehavior: ({ routeId }: { routeId: string }) => {
+          // Admin dashboard routes - split aggressively
+          if (routeId.startsWith('/(admin)')) {
+            return [['component'], ['errorComponent'], ['notFoundComponent']]
+          }
+          // Heavy static pages - split everything separately
+          if (routeId.includes('/terms') || routeId.includes('/privacy') || routeId.includes('/license')) {
+            return [['component']]
+          }
+        },
+      },
+    }),
     tanstackStart(),
     devtools(),
     viteTsConfigPaths({

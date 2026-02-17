@@ -1,112 +1,86 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: index keys fine for static lists */
 
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import {
 	AnimatePresence,
 	motion,
 	useMotionValue,
+	useScroll,
 	useSpring,
 	useTransform,
 } from "framer-motion";
 import {
-	Clapperboard,
+	ChevronRight,
 	Film,
-	Globe,
 	Headphones,
-	Music,
 	Play,
-	PlaySquare,
+	Star,
+	TrendingUp,
 	Tv,
 	Volume2,
+	Zap,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Image } from "@/components/ui/image";
 import { cn } from "@/lib/utils";
+import type { MediaList } from "@/orpc/models/media.schema";
+import { trendingQueryOptions } from "./home.queries";
 
-// Floating media card component
-function FloatingMediaCard({
-	className,
-	delay = 0,
-	duration = 20,
-	image,
-	title,
-	type,
-}: {
-	className?: string;
-	delay?: number;
-	duration?: number;
-	image: string;
-	title: string;
-	type: "movie" | "music" | "series";
-}) {
-	const typeIcons = {
-		movie: Film,
-		music: Music,
-		series: Tv,
-	};
-	const Icon = typeIcons[type];
+// ─── Animated Number Counter ───────────────────────────────────
+function AnimatedNumber({
+	value,
+	suffix = "",
+	duration = 2,
+}: { value: number; suffix?: string; duration?: number }) {
+	const [display, setDisplay] = useState(0);
+	const ref = useRef<HTMLSpanElement>(null);
+	const [hasAnimated, setHasAnimated] = useState(false);
+
+	useEffect(() => {
+		if (hasAnimated) return;
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setHasAnimated(true);
+					const start = performance.now();
+					const animate = (now: number) => {
+						const elapsed = (now - start) / 1000;
+						const progress = Math.min(elapsed / duration, 1);
+						const eased = 1 - (1 - progress) ** 3;
+						setDisplay(Math.floor(eased * value));
+						if (progress < 1) requestAnimationFrame(animate);
+					};
+					requestAnimationFrame(animate);
+				}
+			},
+			{ threshold: 0.3 },
+		);
+		if (ref.current) observer.observe(ref.current);
+		return () => observer.disconnect();
+	}, [value, duration, hasAnimated]);
 
 	return (
-		<motion.div
-			initial={{ opacity: 0, scale: 0.8 }}
-			animate={{
-				opacity: [0, 1, 1, 0],
-				scale: [0.8, 1, 1, 0.8],
-				y: [0, -20, -40, -60],
-				rotate: [0, 2, -2, 0],
-			}}
-			transition={{
-				duration,
-				delay,
-				repeat: Infinity,
-				ease: "easeInOut",
-			}}
-			className={cn(
-				"absolute w-32 h-44 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 border border-white/10 backdrop-blur-sm",
-				className,
-			)}
-		>
-			<div
-				className="absolute inset-0 bg-cover bg-center"
-				style={{ backgroundImage: `url(${image})` }}
-			/>
-			<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-			<div className="absolute bottom-2 left-2 right-2">
-				<div className="flex items-center gap-1 mb-1">
-					<Icon className="w-3 h-3 text-cyan-400" />
-					<span className="text-[10px] text-cyan-400 uppercase tracking-wider">
-						{type}
-					</span>
-				</div>
-				<p className="text-xs font-semibold text-white truncate">{title}</p>
-			</div>
-			<motion.div
-				className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-				animate={{ x: ["-100%", "200%"] }}
-				transition={{
-					duration: 2,
-					delay: delay + 1,
-					repeat: Infinity,
-					repeatDelay: 4,
-				}}
-			/>
-		</motion.div>
+		<span ref={ref}>
+			{display.toLocaleString()}
+			{suffix}
+		</span>
 	);
 }
 
-// Audio visualizer bars
-function AudioVisualizer({ className }: { className?: string }) {
+// ─── Audio Visualizer ──────────────────────────────────────────
+function AudioVisualizer() {
 	return (
-		<div className={cn("flex items-end gap-1 h-8", className)}>
+		<div className="flex items-end gap-0.75 h-6">
 			{[...Array(5)].map((_, i) => (
 				<motion.div
 					key={i}
-					className="w-1 bg-gradient-to-t from-cyan-500 to-blue-500 rounded-full"
-					animate={{
-						height: ["40%", "100%", "60%", "80%", "40%"],
-					}}
+					className="w-0.75 bg-linear-to-t from-cyan-500 to-blue-400 rounded-full"
+					animate={{ height: ["30%", "100%", "50%", "80%", "30%"] }}
 					transition={{
-						duration: 0.8,
-						delay: i * 0.1,
+						duration: 0.7,
+						delay: i * 0.08,
 						repeat: Infinity,
 						ease: "easeInOut",
 					}}
@@ -116,88 +90,90 @@ function AudioVisualizer({ className }: { className?: string }) {
 	);
 }
 
-// Glowing orb particle
-function GlowingOrb({
+// ─── Spotlight Card (real trending movie) ──────────────────────
+function SpotlightCard({
+	movie,
 	className,
-	color,
-	size = 200,
 	delay = 0,
 }: {
+	movie: MediaList;
 	className?: string;
-	color: string;
-	size?: number;
 	delay?: number;
 }) {
 	return (
 		<motion.div
-			initial={{ opacity: 0, scale: 0.5 }}
-			animate={{
-				opacity: [0.3, 0.6, 0.3],
-				scale: [1, 1.2, 1],
-				x: [0, 30, -20, 0],
-				y: [0, -20, 30, 0],
-			}}
-			transition={{
-				duration: 8,
-				delay,
-				repeat: Infinity,
-				ease: "easeInOut",
-			}}
+			initial={{ opacity: 0, scale: 0.85, y: 30 }}
+			animate={{ opacity: 1, scale: 1, y: 0 }}
+			transition={{ delay, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+			whileHover={{ scale: 1.05, y: -8 }}
 			className={cn(
-				"absolute rounded-full blur-[80px] pointer-events-none",
+				"absolute hidden lg:block w-36 h-52 rounded-2xl overflow-hidden shadow-2xl shadow-black/60 border border-white/10 group cursor-pointer z-10",
 				className,
 			)}
-			style={{
-				width: size,
-				height: size,
-				background: color,
-			}}
-		/>
-	);
-}
-
-// Pulsing ring motion
-function PulsingRings() {
-	return (
-		<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-			{[...Array(3)].map((_, i) => (
-				<motion.div
-					key={i}
-					className="absolute w-[600px] h-[600px] rounded-full border border-cyan-500/20"
-					initial={{ opacity: 0, scale: 0.8 }}
-					animate={{
-						opacity: [0, 0.5, 0],
-						scale: [0.8, 1.5, 2],
-					}}
-					transition={{
-						duration: 4,
-						delay: i * 1.3,
-						repeat: Infinity,
-						ease: "easeOut",
-					}}
+		>
+			<Link to="/movies/$movieId" params={{ movieId: movie.id }}>
+				<Image
+					src={movie.thumbnail}
+					alt={movie.title}
+					className="absolute inset-0 w-full h-full object-cover"
 				/>
-			))}
-		</div>
+				<div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent" />
+				<div className="absolute top-2 right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-black/50 backdrop-blur-sm">
+					<Star className="w-2.5 h-2.5 fill-yellow-500 text-yellow-500" />
+					<span className="text-[10px] text-white font-bold">
+						{movie.rating?.toFixed(1) ?? "N/A"}
+					</span>
+				</div>
+				<div className="absolute bottom-2 left-2 right-2">
+					<div className="flex items-center gap-1 mb-0.5">
+						{movie.type === "TRACK" ? (
+							<Headphones className="w-2.5 h-2.5 text-cyan-400" />
+						) : (
+							<Film className="w-2.5 h-2.5 text-cyan-400" />
+						)}
+						<span className="text-[9px] text-cyan-400 uppercase tracking-wider font-medium">
+							{movie.type === "TRACK" ? "Music" : "Movie"}
+						</span>
+					</div>
+					<p className="text-[11px] font-semibold text-white truncate leading-tight">
+						{movie.title}
+					</p>
+				</div>
+				<motion.div
+					className="absolute inset-0 bg-linear-to-r from-transparent via-white/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
+					animate={{ x: ["-100%", "200%"] }}
+					transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
+				/>
+			</Link>
+		</motion.div>
 	);
 }
 
-// Stats counter with motion
-function AnimatedCounter({ value, label }: { value: string; label: string }) {
+// ─── Stat Item ─────────────────────────────────────────────────
+function StatItem({
+	icon,
+	value,
+	suffix,
+	label,
+}: { icon: React.ReactNode; value: number; suffix: string; label: string }) {
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.6, delay: 1.2 }}
+			transition={{ duration: 0.5, delay: 1.0 }}
 			className="text-center"
 		>
-			<motion.div
-				className="text-2xl md:text-3xl font-bold text-white"
-				initial={{ scale: 0 }}
-				animate={{ scale: 1 }}
-				transition={{ type: "spring", stiffness: 200, delay: 1.4 }}
-			>
-				{value}
-			</motion.div>
+			<div className="flex items-center justify-center gap-1.5 mb-1">
+				{icon}
+				<motion.div
+					className="text-2xl md:text-3xl font-bold text-white"
+					initial={{ scale: 0 }}
+					animate={{ scale: 1 }}
+					transition={{ type: "spring", stiffness: 200, delay: 1.2 }}
+				>
+					<AnimatedNumber value={value} suffix={suffix} />
+				</motion.div>
+			</div>
 			<div className="text-xs text-gray-500 uppercase tracking-wider">
 				{label}
 			</div>
@@ -205,31 +181,32 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
 	);
 }
 
+// ─── Main Hero ─────────────────────────────────────────────────
 export default function HeroSection() {
 	const [currentWord, setCurrentWord] = useState(0);
 	const words = ["MUSIC", "MOVIES", "SHOWS", "LIVE"];
+	const sectionRef = useRef<HTMLElement>(null);
 
-	// Rotate featured words
+	const { data: trendingData } = useQuery(trendingQueryOptions(8));
+	const trendingItems = trendingData?.data?.items ?? [];
+
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCurrentWord((prev) => (prev + 1) % words.length);
-		}, 3000);
+		}, 2800);
 		return () => clearInterval(interval);
 	}, []);
 
-	// Physics-based mouse tracking
 	const mouseX = useMotionValue(0);
 	const mouseY = useMotionValue(0);
-	const springConfig = { damping: 25, stiffness: 150 };
+	const springConfig = { damping: 30, stiffness: 120 };
 	const dx = useSpring(mouseX, springConfig);
 	const dy = useSpring(mouseY, springConfig);
 
 	const handleMouseMove = useCallback(
 		(e: MouseEvent) => {
-			const xPct = (e.clientX / window.innerWidth - 0.5) * 100;
-			const yPct = (e.clientY / window.innerHeight - 0.5) * 100;
-			mouseX.set(xPct);
-			mouseY.set(yPct);
+			mouseX.set((e.clientX / window.innerWidth - 0.5) * 60);
+			mouseY.set((e.clientY / window.innerHeight - 0.5) * 60);
 		},
 		[mouseX, mouseY],
 	);
@@ -239,257 +216,181 @@ export default function HeroSection() {
 		return () => window.removeEventListener("mousemove", handleMouseMove);
 	}, [handleMouseMove]);
 
-	// 3D tilt transforms
-	const rotateX = useTransform(dy, [-50, 50], [3, -3]);
-	const rotateY = useTransform(dx, [-50, 50], [-3, 3]);
-
-	const floatingCards = [
-		{
-			image:
-				"https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=400&fit=crop",
-			title: "Inception",
-			type: "movie" as const,
-			className: "top-[15%] left-[5%] md:left-[10%]",
-			delay: 0,
-		},
-		{
-			image:
-				"https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&h=400&fit=crop",
-			title: "Chill Beats",
-			type: "music" as const,
-			className: "top-[25%] right-[5%] md:right-[12%]",
-			delay: 2,
-		},
-		{
-			image:
-				"https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=400&fit=crop",
-			title: "Breaking Bad",
-			type: "series" as const,
-			className: "bottom-[25%] left-[8%] md:left-[15%]",
-			delay: 4,
-		},
-		{
-			image:
-				"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=400&fit=crop",
-			title: "Electronic",
-			type: "music" as const,
-			className: "bottom-[30%] right-[8%] md:right-[10%]",
-			delay: 6,
-		},
-	];
-
-	const categories = [
-		{
-			icon: Music,
-			label: "Music",
-			color: "from-blue-500 to-cyan-500",
-			glow: "group-hover:shadow-blue-500/30",
-		},
-		{
-			icon: Clapperboard,
-			label: "Cinema",
-			color: "from-purple-500 to-pink-500",
-			glow: "group-hover:shadow-purple-500/30",
-		},
-		{
-			icon: Headphones,
-			label: "Spatial",
-			color: "from-emerald-500 to-teal-500",
-			glow: "group-hover:shadow-emerald-500/30",
-		},
-		{
-			icon: PlaySquare,
-			label: "Shorts",
-			color: "from-pink-500 to-rose-500",
-			glow: "group-hover:shadow-pink-500/30",
-		},
-		{
-			icon: Globe,
-			label: "Global",
-			color: "from-orange-500 to-amber-500",
-			glow: "group-hover:shadow-orange-500/30",
-		},
-	];
+	const { scrollYProgress } = useScroll({
+		target: sectionRef,
+		offset: ["start start", "end start"],
+	});
+	const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+	const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+	const rotateX = useTransform(dy, [-30, 30], [2, -2]);
+	const rotateY = useTransform(dx, [-30, 30], [-2, 2]);
 
 	return (
-		<section className="relative min-h-screen w-full overflow-hidden bg-[#030303] selection:bg-cyan-500/30">
-			{/* Dynamic Background */}
+		<motion.section
+			ref={sectionRef}
+			style={{ opacity: heroOpacity, scale: heroScale }}
+			className="relative min-h-screen w-full overflow-hidden bg-[#030303] selection:bg-cyan-500/30"
+		>
+			{/* Background */}
 			<div className="absolute inset-0 pointer-events-none">
-				<div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(6,182,212,0.15),rgba(0,0,0,0))]" />
-
-				{/* Animated Orbs */}
-				<GlowingOrb
-					color="rgba(6, 182, 212, 0.4)"
-					size={400}
-					className="top-[10%] left-[20%]"
-					delay={0}
+				<div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(6,182,212,0.12),rgba(0,0,0,0))]" />
+				<motion.div
+					animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.15, 1], x: [0, 25, -15, 0], y: [0, -15, 25, 0] }}
+					transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+					className="absolute top-[8%] left-[18%] w-112.5 h-112.5 rounded-full blur-[100px] bg-cyan-500/30"
 				/>
-				<GlowingOrb
-					color="rgba(139, 92, 246, 0.3)"
-					size={300}
-					className="top-[40%] right-[15%]"
-					delay={2}
+				<motion.div
+					animate={{ opacity: [0.15, 0.4, 0.15], scale: [1, 1.2, 1] }}
+					transition={{ duration: 12, delay: 2, repeat: Infinity, ease: "easeInOut" }}
+					className="absolute top-[35%] right-[12%] w-87.5 h-87.5 rounded-full blur-[100px] bg-purple-500/25"
 				/>
-				<GlowingOrb
-					color="rgba(236, 72, 153, 0.2)"
-					size={250}
-					className="bottom-[20%] left-[30%]"
-					delay={4}
+				<motion.div
+					animate={{ opacity: [0.1, 0.3, 0.1], scale: [1, 1.1, 1] }}
+					transition={{ duration: 8, delay: 4, repeat: Infinity, ease: "easeInOut" }}
+					className="absolute bottom-[15%] left-[28%] w-70 h-70 rounded-full blur-[100px] bg-pink-500/20"
 				/>
-
-				{/* Mouse-following spotlight */}
 				<motion.div
 					style={{ x: dx, y: dy, translateX: "-50%", translateY: "-50%" }}
-					className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-cyan-500/10 rounded-full blur-[150px]"
+					className="absolute top-1/2 left-1/2 w-175 h-175 bg-cyan-500/6 rounded-full blur-[150px]"
 				/>
+				<div className="absolute inset-0 bg-[linear-gradient(to_right,#80808006_1px,transparent_1px),linear-gradient(to_bottom,#80808006_1px,transparent_1px)] bg-size-[64px_64px] mask-[radial-gradient(ellipse_70%_50%_at_50%_0%,#000_60%,transparent_100%)]" />
+				<div className="absolute inset-0 flex items-center justify-center">
+					{[...Array(3)].map((_, i) => (
+						<motion.div
+							key={i}
+							className="absolute w-125 h-125 rounded-full border border-cyan-500/10"
+							animate={{ opacity: [0, 0.4, 0], scale: [0.7, 1.6, 2.2] }}
+							transition={{ duration: 5, delay: i * 1.5, repeat: Infinity, ease: "easeOut" }}
+						/>
+					))}
+				</div>
 			</div>
 
-			{/* Grid Pattern */}
-			<div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-
-			{/* Pulsing Rings */}
-			<PulsingRings />
-
-			{/* Floating Media Cards */}
-			<div className="hidden md:block">
-				{floatingCards.map((card, i) => (
-					<FloatingMediaCard key={i} {...card} />
-				))}
-			</div>
+			{/* Floating spotlight cards */}
+			{trendingItems.length >= 4 && (
+				<>
+					<SpotlightCard movie={trendingItems[0]} className="top-[14%] left-[6%] xl:left-[10%]" delay={0.6} />
+					<SpotlightCard movie={trendingItems[1]} className="top-[20%] right-[6%] xl:right-[10%]" delay={0.8} />
+					<SpotlightCard movie={trendingItems[2]} className="bottom-[28%] left-[8%] xl:left-[14%]" delay={1.0} />
+					<SpotlightCard movie={trendingItems[3]} className="bottom-[26%] right-[7%] xl:right-[12%]" delay={1.2} />
+				</>
+			)}
 
 			{/* Main Content */}
 			<motion.div
 				style={{ rotateX, rotateY, perspective: 1200 }}
 				className="relative z-10 min-h-screen flex flex-col justify-center items-center px-6 py-20"
 			>
-				<motion.div
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transition={{ duration: 1 }}
-					className="text-center max-w-5xl"
-				>
-					{/* Premium Badge with Audio Visualizer */}
+				<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="text-center max-w-5xl">
+					{/* Badge */}
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: 0.2 }}
-						className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/[0.03] backdrop-blur-xl border border-white/10 mb-10 shadow-2xl shadow-cyan-500/5"
+						transition={{ duration: 0.5, delay: 0.2 }}
+						className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/4 backdrop-blur-xl border border-white/10 mb-10 shadow-2xl shadow-cyan-500/5"
 					>
 						<AudioVisualizer />
-						<span className="text-xs tracking-[0.2em] uppercase text-gray-300 font-semibold">
-							Now Streaming
-						</span>
+						<span className="text-xs tracking-[0.2em] uppercase text-gray-300 font-semibold">Now Streaming</span>
 						<motion.div
-							className="w-2 h-2 rounded-full bg-cyan-500"
-							animate={{ opacity: [1, 0.5, 1], scale: [1, 1.2, 1] }}
-							transition={{ duration: 2, repeat: Infinity }}
+							className="w-2 h-2 rounded-full bg-emerald-500"
+							animate={{ opacity: [1, 0.4, 1], scale: [1, 1.3, 1] }}
+							transition={{ duration: 1.5, repeat: Infinity }}
 						/>
 					</motion.div>
 
-					{/* Main Headline */}
-					<h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 leading-[0.95]">
+					{/* Headline */}
+					<h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 leading-[0.92]">
 						<motion.span
 							initial={{ opacity: 0, y: 40 }}
 							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.8, delay: 0.3 }}
+							transition={{ duration: 0.7, delay: 0.3 }}
 							className="text-white block"
 						>
 							STREAM YOUR
 						</motion.span>
-
-						{/* Animated Word Carousel */}
-						<span className="relative h-[1.2em] flex items-center justify-center overflow-hidden">
+						<span className="relative h-[1.15em] flex items-center justify-center overflow-hidden">
 							<AnimatePresence mode="wait">
 								<motion.span
 									key={currentWord}
-									initial={{ y: 80, opacity: 0, rotateX: -40 }}
+									initial={{ y: 80, opacity: 0, rotateX: -45 }}
 									animate={{ y: 0, opacity: 1, rotateX: 0 }}
-									exit={{ y: -80, opacity: 0, rotateX: 40 }}
-									transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-									className="absolute bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent"
+									exit={{ y: -80, opacity: 0, rotateX: 45 }}
+									transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+									className="absolute bg-linear-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent"
 								>
 									{words[currentWord]}
 								</motion.span>
 							</AnimatePresence>
 						</span>
 					</h1>
-					{/* Animated Underline */}
+
 					<motion.div
 						initial={{ width: 0, opacity: 0 }}
-						animate={{ width: "200px", opacity: 1 }}
-						transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-						className="h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 rounded-full mx-auto mb-8"
+						animate={{ width: "180px", opacity: 1 }}
+						transition={{ delay: 0.7, duration: 1, ease: "easeOut" }}
+						className="h-1 bg-linear-to-r from-cyan-500 via-blue-500 to-purple-500 rounded-full mx-auto mb-8"
 					/>
 
-					{/* Subtitle */}
 					<motion.p
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.6, duration: 0.8 }}
+						transition={{ delay: 0.5, duration: 0.7 }}
 						className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
 					>
 						Experience the next generation of entertainment with{" "}
 						<span className="text-cyan-400 font-medium">spatial audio</span>,{" "}
-						<span className="text-blue-400 font-medium">8K visuals</span>, and{" "}
-						<span className="text-purple-400 font-medium">zero latency</span>.
+						<span className="text-blue-400 font-medium">4K visuals</span>, and{" "}
+						<span className="text-purple-400 font-medium">zero latency</span> streaming.
 					</motion.p>
 
-					{/* CTA Buttons */}
+					{/* CTAs */}
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.8, duration: 0.6 }}
-						className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+						transition={{ delay: 0.7, duration: 0.5 }}
+						className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-14"
 					>
-						<Button
-							size="lg"
-							className="h-14 px-8 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-lg font-bold group relative overflow-hidden shadow-lg shadow-cyan-500/25 border-0"
-						>
-							<motion.div
-								className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0"
-								animate={{ x: ["-100%", "200%"] }}
-								transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-							/>
-							<span className="relative z-10 flex items-center gap-2">
-								<motion.div
-									animate={{ scale: [1, 1.2, 1] }}
-									transition={{ duration: 1, repeat: Infinity }}
-								>
-									<Play className="w-5 h-5 fill-current" />
-								</motion.div>
-								Start Free Trial
-							</span>
-						</Button>
-
-						<Button
-							variant="ghost"
-							size="lg"
-							className="h-14 px-8 text-white/70 hover:text-white hover:bg-white/5 text-lg font-semibold group"
-						>
-							<Volume2 className="w-5 h-5 mr-2 group-hover:text-cyan-400 transition-colors" />
-							Watch Preview
-							<motion.span
-								className="inline-block ml-2"
-								animate={{ x: [0, 5, 0] }}
-								transition={{ duration: 1.5, repeat: Infinity }}
+						<Link to="/movies">
+							<Button
+								size="lg"
+								className="h-14 px-8 rounded-xl bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-lg font-bold group relative overflow-hidden shadow-lg shadow-cyan-500/25 border-0"
 							>
-								→
-							</motion.span>
-						</Button>
+								<motion.div
+									className="absolute inset-0 bg-linear-to-r from-white/0 via-white/25 to-white/0"
+									animate={{ x: ["-100%", "200%"] }}
+									transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3 }}
+								/>
+								<span className="relative z-10 flex items-center gap-2">
+									<Play className="w-5 h-5 fill-current" />
+									Start Free Trial
+								</span>
+							</Button>
+						</Link>
+						<Link to="/pricing">
+							<Button
+								variant="ghost"
+								size="lg"
+								className="h-14 px-8 text-white/70 hover:text-white hover:bg-white/5 text-lg font-semibold group border border-white/10"
+							>
+								<Zap className="w-5 h-5 mr-2 group-hover:text-cyan-400 transition-colors" />
+								View Plans
+								<ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+							</Button>
+						</Link>
 					</motion.div>
 
-					{/* Stats Row */}
+					{/* Stats */}
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
-						transition={{ delay: 1 }}
-						className="flex justify-center gap-8 md:gap-16 mb-16"
+						transition={{ delay: 0.9 }}
+						className="flex justify-center gap-8 md:gap-16"
 					>
-						<AnimatedCounter value="50M+" label="Active Users" />
+						<StatItem icon={<TrendingUp className="w-4 h-4 text-emerald-400" />} value={50000} suffix="+" label="Active Users" />
 						<div className="w-px bg-white/10" />
-						<AnimatedCounter value="100K+" label="Songs" />
+						<StatItem icon={<Headphones className="w-4 h-4 text-purple-400" />} value={100000} suffix="+" label="Songs" />
 						<div className="w-px bg-white/10" />
-						<AnimatedCounter value="4K+" label="Movies" />
+						<StatItem icon={<Film className="w-4 h-4 text-cyan-400" />} value={4000} suffix="+" label="Movies" />
 					</motion.div>
 				</motion.div>
 
@@ -497,63 +398,47 @@ export default function HeroSection() {
 				<motion.div
 					initial={{ opacity: 0, y: 40 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 1.2, duration: 0.8 }}
-					className="flex flex-wrap justify-center gap-3 md:gap-4 p-3 rounded-3xl bg-white/[0.02] border border-white/5 backdrop-blur-md"
+					transition={{ delay: 1.1, duration: 0.7 }}
+					className="mt-16 flex flex-wrap justify-center gap-3 md:gap-4 p-3 rounded-3xl bg-white/2 border border-white/5 backdrop-blur-md"
 				>
-					{categories.map((item, index) => (
-						<motion.button
+					{[
+						{ icon: Headphones, label: "Music", color: "from-blue-500 to-cyan-500" },
+						{ icon: Film, label: "Cinema", color: "from-purple-500 to-pink-500" },
+						{ icon: Tv, label: "Series", color: "from-emerald-500 to-teal-500" },
+						{ icon: Volume2, label: "Podcasts", color: "from-pink-500 to-rose-500" },
+					].map((item, index) => (
+						<motion.div
 							key={item.label}
 							initial={{ opacity: 0, scale: 0.8 }}
 							animate={{ opacity: 1, scale: 1 }}
-							transition={{ delay: 1.4 + index * 0.1 }}
-							whileHover={{ y: -6, scale: 1.05 }}
+							transition={{ delay: 1.3 + index * 0.08 }}
+							whileHover={{ y: -5, scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
-							className={cn(
-								"group flex flex-col items-center gap-2 px-5 py-3 rounded-2xl transition-all duration-300 cursor-pointer",
-								"hover:bg-white/[0.05]",
-								item.glow,
-								"hover:shadow-xl",
-							)}
+							className="flex flex-col items-center gap-2 px-5 py-3 rounded-2xl cursor-pointer hover:bg-white/5 transition-all duration-300"
 						>
-							<motion.div
-								className={cn(
-									"p-3 rounded-xl bg-gradient-to-br",
-									item.color,
-									"shadow-lg",
-								)}
-								whileHover={{ rotate: [0, -10, 10, 0] }}
-								transition={{ duration: 0.5 }}
-							>
+							<div className={cn("p-3 rounded-xl bg-linear-to-br shadow-lg", item.color)}>
 								<item.icon className="w-5 h-5 text-white" />
-							</motion.div>
-							<span className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 group-hover:text-white transition-colors">
+							</div>
+							<span className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500">
 								{item.label}
 							</span>
-						</motion.button>
+						</motion.div>
 					))}
 				</motion.div>
 			</motion.div>
 
-			{/* Bottom Gradient Fade */}
-			<div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#030303] to-transparent z-20 pointer-events-none" />
-
-			{/* Animated corner accents */}
+			{/* Bottom fade + corner accents */}
+			<div className="absolute bottom-0 inset-x-0 h-40 bg-linear-to-t from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
 			<motion.div
-				className="absolute top-20 left-10 w-px h-32 bg-gradient-to-b from-cyan-500/50 to-transparent"
-				animate={{
-					opacity: [0.3, 0.7, 0.3],
-					height: ["100px", "150px", "100px"],
-				}}
-				transition={{ duration: 3, repeat: Infinity }}
+				className="absolute top-20 left-10 w-px h-32 bg-linear-to-b from-cyan-500/40 to-transparent"
+				animate={{ opacity: [0.2, 0.6, 0.2], height: ["100px", "140px", "100px"] }}
+				transition={{ duration: 4, repeat: Infinity }}
 			/>
 			<motion.div
-				className="absolute top-20 right-10 w-px h-32 bg-gradient-to-b from-purple-500/50 to-transparent"
-				animate={{
-					opacity: [0.3, 0.7, 0.3],
-					height: ["100px", "150px", "100px"],
-				}}
-				transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+				className="absolute top-20 right-10 w-px h-32 bg-linear-to-b from-purple-500/40 to-transparent"
+				animate={{ opacity: [0.2, 0.6, 0.2], height: ["100px", "140px", "100px"] }}
+				transition={{ duration: 4, repeat: Infinity, delay: 2 }}
 			/>
-		</section>
+		</motion.section>
 	);
 }
