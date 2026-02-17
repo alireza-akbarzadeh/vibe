@@ -55,7 +55,6 @@ export function UserMenu() {
 	};
 
 	const isAdmin = ADMIN_ACCESS.includes(user?.role as string)
-	console.log(user?.role)
 	if (!user) return null;
 
 	return (
