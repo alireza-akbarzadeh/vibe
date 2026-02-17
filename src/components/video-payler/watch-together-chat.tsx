@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { getWatchTogetherSocket } from "@/lib/watch-together-client";
 import { useRouteContext } from "@tanstack/react-router";
 
-export function WatchTogetherChat({ sessionId }: { sessionId: string }) {
+export function WatchTogetherChat({ sessionId, layout = "overlay" }: { sessionId: string; layout?: "overlay" | "sidebar" }) {
     const [messages, setMessages] = useState<any[]>([]);
     const [input, setInput] = useState("");
     const { auth } = useRouteContext({ from: "__root__" });
@@ -35,8 +35,11 @@ export function WatchTogetherChat({ sessionId }: { sessionId: string }) {
         setInput("");
     };
 
+    const baseClasses = "h-full w-80 bg-zinc-900/95 border-l border-zinc-800 flex flex-col z-40 transition-all duration-300";
+    const layoutClasses = layout === "overlay" ? "absolute right-0 top-0" : "relative shrink-0";
+
     return (
-        <aside className="absolute right-0 top-0 h-full w-80 bg-zinc-900/95 border-l border-zinc-800 flex flex-col z-40">
+        <aside className={`${baseClasses} ${layoutClasses}`}>
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
                 {messages.map((msg, i) => (
                     <div key={i} className="flex items-start gap-2">

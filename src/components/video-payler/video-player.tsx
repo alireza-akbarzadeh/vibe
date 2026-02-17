@@ -301,7 +301,7 @@ export function VideoPlayer({
 
 			{/* Watch Together Chat Sidebar (toggleable) */}
 			{sessionId && showChat && (
-				chatLoading ? <WatchTogetherChatPlaceholder /> : <WatchTogetherChat sessionId={sessionId} />
+				chatLoading ? <WatchTogetherChatPlaceholder /> : <WatchTogetherChat sessionId={sessionId} layout="sidebar" />
 			)}
 		</div>
 	);
