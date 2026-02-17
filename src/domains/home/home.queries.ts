@@ -1,3 +1,5 @@
+import { Film, Headphones, LucideIcon, Tv, Video, Volume2 } from "lucide-react";
+import { ValidLink } from "@/components/ui/link";
 import { orpc } from "@/orpc/client";
 
 /** Trending content - movies/shows that are hot right now */
@@ -83,3 +85,43 @@ export function genreListQueryOptions() {
 		input: {},
 	});
 }
+
+type HeroSectionLink = {
+	icon: LucideIcon;
+	link: ValidLink;
+	color: string;
+	label: string;
+};
+
+export const HERO_SECTION_LINK: HeroSectionLink[] = [
+	{
+		icon: Headphones,
+		label: "Music",
+		color: "from-blue-500 to-cyan-500",
+		link: "/music",
+	},
+	{
+		icon: Film,
+		label: "Cinema",
+		color: "from-purple-500 to-pink-500",
+		link: "/movies",
+	},
+	{
+		icon: Tv,
+		label: "Series",
+		color: "from-emerald-500 to-teal-500",
+		link: "/movies",
+	},
+	{
+		icon: Volume2,
+		label: "Podcasts",
+		color: "from-pink-500 to-rose-500",
+		link: "/music",
+	},
+	{
+		icon: Video,
+		label: "Reels",
+		color: "from-fuchsia-500 to-pink-500",
+		link: "/reels",
+	},
+];

@@ -2,7 +2,7 @@
 
 import { useIntersection } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/components/ui/link";
 import {
 	AnimatePresence,
 	motion,
@@ -18,9 +18,6 @@ import {
 	Play,
 	Star,
 	TrendingUp,
-	Tv,
-	Video,
-	Volume2,
 	Zap,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -29,6 +26,7 @@ import { Image } from "@/components/ui/image";
 import { cn } from "@/lib/utils";
 import type { MediaList } from "@/orpc/models/media.schema";
 import {
+	HERO_SECTION_LINK,
 	platformStatsQueryOptions,
 	trendingQueryOptions,
 } from "./home.queries";
@@ -477,33 +475,7 @@ export default function HeroSection() {
 					transition={{ delay: 1.1, duration: 0.7 }}
 					className="mt-16 flex flex-wrap justify-center gap-3 md:gap-4 p-3 rounded-3xl bg-white/2 border border-white/5 backdrop-blur-md"
 				>
-					{[
-						{
-							icon: Headphones,
-							label: "Music",
-							color: "from-blue-500 to-cyan-500",
-						},
-						{
-							icon: Film,
-							label: "Cinema",
-							color: "from-purple-500 to-pink-500",
-						},
-						{
-							icon: Tv,
-							label: "Series",
-							color: "from-emerald-500 to-teal-500",
-						},
-						{
-							icon: Volume2,
-							label: "Podcasts",
-							color: "from-pink-500 to-rose-500",
-						},
-						{
-							icon: Video,
-							label: "Reels",
-							color: "from-fuchsia-500 to-pink-500",
-						},
-					].map((item, index) => (
+					{HERO_SECTION_LINK.map((item, index) => (
 						<motion.div
 							key={item.label}
 							initial={{ opacity: 0, scale: 0.8 }}
@@ -513,17 +485,19 @@ export default function HeroSection() {
 							whileTap={{ scale: 0.95 }}
 							className="flex flex-col items-center gap-2 px-5 py-3 rounded-2xl cursor-pointer hover:bg-white/5 transition-all duration-300"
 						>
-							<div
-								className={cn(
-									"p-3 rounded-xl bg-linear-to-br shadow-lg",
-									item.color,
-								)}
-							>
-								<item.icon className="w-5 h-5 text-white" />
-							</div>
-							<span className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500">
-								{item.label}
-							</span>
+							<Link to={item.link}>
+								<div
+									className={cn(
+										"p-3 rounded-xl bg-linear-to-br shadow-lg",
+										item.color,
+									)}
+								>
+									<item.icon className="w-5 h-5 text-white" />
+								</div>
+								<span className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500">
+									{item.label}
+								</span>
+							</Link>
 						</motion.div>
 					))}
 				</motion.div>

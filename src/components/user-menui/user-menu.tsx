@@ -1,7 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-	AppWindow,
 	BadgeCheck,
 	Crown,
 	Gem,
