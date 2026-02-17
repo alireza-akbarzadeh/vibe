@@ -25,9 +25,9 @@ function LibraryLayout() {
 			state.player.currentPodcast !== null,
 	);
 
-	const sidebarWidth = sidebarOpen ? 280 : 88;
-	const sidebarLeftOffset = 16;
-	const gap = 24;
+	const sidebarWidth = sidebarOpen ? 260 : 72;
+	const sidebarLeftOffset = 12;
+	const gap = 20;
 	const totalOffset = sidebarWidth + sidebarLeftOffset + gap;
 
 	return (
