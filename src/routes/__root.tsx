@@ -103,16 +103,37 @@ function PendingComponent() {
 	);
 }
 
-function ErrorComponent({ error }: ErrorComponentProps) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
 	return (
-		<div className="space-y-6 flex flex-col justify-center items-center h-screen px-4 text-center">
-			<Typography.H1 className="block bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent text-5xl font-black">
-				Error
-			</Typography.H1>
-			<p className="text-destructive max-w-md font-mono text-sm bg-destructive/10 p-4 rounded-lg">
-				{error.message}
-			</p>
-			<BackButton />
+		<div className="space-y-8 flex flex-col justify-center items-center h-screen px-4 text-center">
+			<div className="space-y-2">
+				<Typography.H1 className="block bg-linear-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent text-5xl font-black">
+					Oops!
+				</Typography.H1>
+				<p className="text-gray-400 font-medium">Something went wrong on our end.</p>
+			</div>
+
+			<div className="w-full max-w-lg space-y-4">
+				<div className="text-destructive font-mono text-sm bg-destructive/5 border border-destructive/20 p-6 rounded-xl overflow-auto max-h-[300px] text-left">
+					<div className="font-bold border-b border-destructive/10 pb-2 mb-2 uppercase tracking-wider text-[10px]">Error Details</div>
+					{error instanceof Error ? error.message : String(error)}
+					{process.env.NODE_ENV === 'development' && error instanceof Error && error.stack && (
+						<pre className="mt-4 text-[10px] opacity-50 overflow-x-auto">
+							{error.stack}
+						</pre>
+					)}
+				</div>
+
+				<div className="flex items-center justify-center gap-4">
+					<button
+						onClick={() => window.location.reload()}
+						className="px-6 py-2 bg-white text-black rounded-full font-bold hover:bg-gray-200 transition-colors"
+					>
+						Try Again
+					</button>
+					<BackButton />
+				</div>
+			</div>
 		</div>
 	);
 }

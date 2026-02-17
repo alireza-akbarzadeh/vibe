@@ -19,14 +19,21 @@ const config = defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    exclude: ['@prisma/client', '.prisma/client', '@noble/ciphers', 'better-auth'],
+  },
   build: {
     rollupOptions: {
       external: [
         'node:stream',
         'node:stream/web',
         'node:async_hooks',
+        '@prisma/client',
       ],
     },
+  },
+  ssr: {
+    external: ['@prisma/client', '.prisma/client', 'better-auth', '@noble/ciphers'],
   },
   server: {
     host: true,
