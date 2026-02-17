@@ -4,7 +4,6 @@ import { useState } from "react";
 import { MotionPage } from "@/components/motion/motion-page";
 import { Button } from "@/components/ui/button";
 import { useFavorites, useToggleFavorite } from "@/hooks/useLibrary";
-import { cn } from "@/lib/utils";
 
 export const LikedLibraryDomain = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -25,7 +24,7 @@ export const LikedLibraryDomain = () => {
         : items;
 
     const handleRemoveFavorite = (mediaId: string) => {
-        toggleFavorite.mutate({ mediaId });
+        toggleFavorite.mutate(mediaId);
     };
 
     return (

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLibraryDashboard } from "@/hooks/useLibrary";
-import { useSession, signOut } from "@/lib/auth/auth-client";
+import { signOut } from "@/lib/auth/auth-client";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/(library)/library/profile")({
@@ -23,14 +23,14 @@ export const Route = createFileRoute("/(library)/library/profile")({
 });
 
 function ProfilePage() {
-	const { data: session, isPending: sessionLoading } = useSession();
+	const { auth: session } = Route.useRouteContext();
 	const { data: dashboard, isLoading: dashboardLoading } =
 		useLibraryDashboard();
 
 	const user = session?.user;
 	const stats = dashboard?.data;
 
-	const isLoading = sessionLoading || dashboardLoading;
+	const isLoading = dashboardLoading;
 
 	const statCards = [
 		{

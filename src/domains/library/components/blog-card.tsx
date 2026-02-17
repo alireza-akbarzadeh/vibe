@@ -1,7 +1,17 @@
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { scaleIn } from "@/components/motion/motion-page.tsx";
-import type { Blog } from "@/domains/library/store/library-store-types.ts";
+interface Blog {
+	id: string;
+	title: string;
+	excerpt: string;
+	cover: string;
+	author: string;
+	authorAvatar: string;
+	publishedAt: string;
+	readTime: number;
+	category: "music" | "movies";
+}
 import { formatDistanceToNow } from "@/lib/date.ts";
 import { cn } from "@/lib/utils";
 

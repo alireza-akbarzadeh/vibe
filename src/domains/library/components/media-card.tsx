@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Bookmark, Headphones, Heart, Mic2, Play } from "lucide-react";
+import { Bookmark, Heart, Play } from "lucide-react";
 import { scaleIn } from "@/components/motion/motion-page.tsx";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +19,7 @@ interface MediaCardProps {
 }
 
 export const MediaCard = ({
-	id,
+	id: _id,
 	title,
 	subtitle,
 	image,

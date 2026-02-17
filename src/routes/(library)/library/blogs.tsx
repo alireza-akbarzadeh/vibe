@@ -14,7 +14,7 @@ export const Route = createFileRoute("/(library)/library/blogs")({
 
 function BlogsPage() {
 	const { data: topRatedData, isLoading } = useTopRated({ limit: 12 });
-	const items = topRatedData?.data ?? [];
+	const items = topRatedData?.data?.items ?? [];
 	const featured = items[0];
 	const rest = items.slice(1);
 

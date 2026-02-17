@@ -37,7 +37,7 @@ import type { LibraryNav } from "@/domains/library/library-types.ts";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import type { Track } from "@/domains/library/store/library-store-types";
-import { useSession } from "@/integrations/auth/auth-client.ts";
+import { useRouteContext } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { LibraryMoodSelector } from "../components/library-sidebar/library-mood-selector";
 import { LibrarySidebarNowPlaying } from "../components/library-sidebar/library-sidebar-mow-playing";
@@ -121,7 +121,7 @@ const pinnedItems: PinnedTrack[] = [
 
 export const LibraryAppSidebar = () => {
 	const isOpen = useLibraryStore((state) => state.sidebarOpen);
-	const { data: session } = useSession();
+	const { auth: session } = useRouteContext({ from: "__root__" });
 	const user = session?.user;
 
 	const [open, setOpen] = React.useState(false);

@@ -90,14 +90,10 @@ export const MiniPlayer = () => {
 					</motion.div>
 					<div className="min-w-0">
 						<p className="text-sm font-bold text-foreground truncate tracking-tight">
-							{"title" in currentMedia ? currentMedia.title : ""}
+							{currentMedia.title}
 						</p>
 						<p className="text-[11px] font-medium text-muted-foreground truncate uppercase tracking-wider">
-							{"artist" in currentMedia
-								? currentMedia.artist
-								: "show" in currentMedia
-									? currentMedia.show
-									: ""}
+							{currentMedia.artist}
 						</p>
 					</div>
 					{player.currentTrack && (

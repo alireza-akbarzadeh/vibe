@@ -1,4 +1,33 @@
-import type { Blog, Podcast, Track, Video } from "./store/library-store-types";
+import type { Podcast, Track } from "./store/library-store-types";
+
+// Deprecated types — kept only for backward compatibility with this mock file
+interface Video {
+	id: number;
+	title: string;
+	poster_path: string;
+	duration: number;
+	views: number;
+	channel: string;
+	channelAvatar: string;
+	publishedAt: string;
+	category: string;
+	rating: number;
+	year: number;
+	genres: string[];
+	progress: number;
+}
+
+interface Blog {
+	id: string;
+	title: string;
+	excerpt: string;
+	cover: string;
+	author: string;
+	authorAvatar: string;
+	publishedAt: string;
+	readTime: number;
+	category: "music" | "movies";
+}
 
 // Mock Tracks
 export const mockTracks: Track[] = [

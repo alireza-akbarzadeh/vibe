@@ -10,7 +10,21 @@ import {
 } from "@/components/motion/motion-page.tsx";
 import { Image } from "@/components/ui/image";
 import { Link } from "@/components/ui/link";
-import type { Video } from "@/domains/library/store/library-store-types";
+interface Video {
+    id: number;
+    title: string;
+    poster_path: string;
+    duration: number;
+    views: number;
+    channel: string;
+    channelAvatar: string;
+    publishedAt: string;
+    category: string;
+    rating: number;
+    year: number;
+    genres: string[];
+    progress: number;
+}
 
 
 

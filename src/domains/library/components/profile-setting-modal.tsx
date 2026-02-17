@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSession } from "@/integrations/auth/auth-client.ts";
+import { useRouteContext } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
 export function ProfileSettingsModal() {
-    const { data: session } = useSession();
+    const { auth: session } = useRouteContext({ from: "__root__" });
     const user = session?.user;
     const [activeTab, setActiveTab] = useState("profile");
 

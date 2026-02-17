@@ -35,7 +35,6 @@ import {
   authClient,
   changePassword,
   signOut,
-  useSession,
 } from "@/lib/auth/auth-client";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
@@ -45,7 +44,7 @@ export const Route = createFileRoute("/(library)/library/setting")({
 });
 
 function SettingsPage() {
-  const { data: session, isPending: sessionLoading } = useSession();
+  const { auth: session } = Route.useRouteContext();
   const { subscription, isActive, isFree } = useSubscription();
   const theme = useTheme();
 
@@ -123,14 +122,6 @@ function SettingsPage() {
       fetchOptions: { onSuccess: () => window.location.replace("/") },
     });
   };
-
-  if (sessionLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   const planLabel = isActive
     ? subscription?.currentPlan ?? "Premium"
