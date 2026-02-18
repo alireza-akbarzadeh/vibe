@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, Maximize2, Music2, Volume2, VolumeX } from 'lucide-react';
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import { useReelInteractions } from '../hooks/use-reel-interactions';
 import { useVideoPlayer } from '../hooks/use-reel-player';
 import {
     reelsStore,
@@ -11,7 +12,6 @@ import {
     toggleFocusVideo,
     toggleFollow,
     toggleMute,
-    updateReelAction
 } from '../reels.store';
 import type { VideoReel } from '../reels.types';
 import { ReelMoreMenu } from './reel-more-menu';
@@ -37,6 +37,7 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
     const isMenuOpen = moreMenuVideoId === video.id;
 
     const { videoRef, progress, togglePlayPause } = useVideoPlayer(isActive);
+    const { toggleLike, toggleSave } = useReelInteractions(video);
 
     const pressTimer = React.useRef<NodeJS.Timeout | null>(null);
     const clickTimer = React.useRef<NodeJS.Timeout | null>(null);
@@ -97,7 +98,7 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
             clearTimeout(clickTimer.current);
             clickTimer.current = null;
         }
-        updateReelAction(video.id, 'like');
+        toggleLike();
     };
 
     const handleSeek = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
@@ -173,7 +174,14 @@ export function VideoCard({ video, isActive, onVideoEnd }: VideoCardProps) {
             </div>
 
             <div className={cn("no-pause absolute right-2 bottom-20 z-30 transition-opacity duration-300", isPressing ? "opacity-0" : "opacity-100")}>
-                <SidebarActions video={video} onMore={() => setMoreMenuVideo(video.id)} isFocused={isFocused} onToggleFocus={() => toggleFocusVideo(video.id)} />
+                <SidebarActions
+                    video={video}
+                    onMore={() => setMoreMenuVideo(video.id)}
+                    isFocused={isFocused}
+                    onToggleFocus={() => toggleFocusVideo(video.id)}
+                    onLike={toggleLike}
+                    onSave={toggleSave}
+                />
             </div>
 
             {/** biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}

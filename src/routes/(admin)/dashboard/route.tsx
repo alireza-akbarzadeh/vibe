@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { AppSidebarLayout } from '@/domains/dashboard/components/app-sidebar-layout'
@@ -6,6 +6,24 @@ import { getSidebarData } from '@/domains/dashboard/server/dashboard.functions'
 
 export const Route = createFileRoute('/(admin)/dashboard')({
     component: RouteComponent,
+    beforeLoad: ({ context, location }) => {
+        if (!context.auth) {
+            throw redirect({
+                to: "/login",
+                search: {
+                    redirect: location.href,
+                },
+            });
+        }
+
+        const role = context.auth.user.role;
+        // Check for allowed roles (ADMIN or MODERATOR)
+        if (role !== "ADMIN" && role !== "MODERATOR") {
+            throw redirect({
+                to: "/unauthorized",
+            });
+        }
+    },
     loader: async ({ context }) => {
         const role = context.auth?.user?.role;
         await context.queryClient.ensureQueryData({

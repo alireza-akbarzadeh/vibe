@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { MiniPlayer } from "@/components/mini-music-player.tsx";
 import { LibraryAppSidebar } from "@/domains/library/layouts/library-app-sidebar.tsx";
@@ -11,6 +11,16 @@ import { authMiddleware } from "@/middleware/auth";
 
 export const Route = createFileRoute("/(library)")({
 	component: LibraryLayout,
+	beforeLoad: ({ context, location }) => {
+		if (!context.auth) {
+			throw redirect({
+				to: "/login",
+				search: {
+					redirect: location.href,
+				},
+			});
+		}
+	},
 	server: {
 		middleware: [authMiddleware],
 	},

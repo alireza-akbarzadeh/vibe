@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { navLinks } from "./nav-links";
-import { UserMenu } from "./user-menui/user-menu";
+import { UserMenu } from "./user-menu/user-menu";
 
 type RootHeaderProps = {
     onOpenChange: (open: boolean) => void;

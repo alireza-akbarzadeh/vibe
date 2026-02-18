@@ -9,12 +9,12 @@ import {
     DrawerTitle
 } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
+import { client } from '@/orpc/client';
 import { layoutSize } from '../reels.domain';
 import { closeComments, reelsStore } from '../reels.store';
 import type { CommentItem } from '../reels.types';
-import { getReelComments } from '../server/reels.functions';
 
-export default function CommentModal({ videoId }: { videoId: number }) {
+export default function CommentModal({ videoId }: { videoId: string }) {
     const [comment, setComment] = React.useState('');
 
     const commentModalOpen = useStore(reelsStore, (s) => s.commentModalOpen);
@@ -23,7 +23,20 @@ export default function CommentModal({ videoId }: { videoId: number }) {
 
     const { data: comments, isLoading } = useQuery({
         queryKey: ['reels', 'comments', videoId],
-        queryFn: () => getReelComments(),
+        queryFn: async () => {
+            const res = await client.reviews.list({ mediaId: videoId, limit: 50, page: 1 });
+            return res.items.map((item) => ({
+                id: item.id,
+                user: {
+                    username: item.user.name || "Unknown",
+                    avatar: item.user.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${item.user.name || item.id}`,
+                },
+                text: item.review || "",
+                likes: item.helpful,
+                isLiked: false,
+                timestamp: new Date(item.createdAt).toLocaleDateString(),
+            }));
+        },
         enabled: commentModalOpen,
     });
 

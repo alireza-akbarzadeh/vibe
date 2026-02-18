@@ -74,6 +74,7 @@ export const MediaListItemSchema = z.object({
 	title: z.string(),
 	description: z.string(),
 	thumbnail: z.string(),
+	videoUrl: z.string().nullable().optional(),
 	type: z.enum(["MOVIE", "EPISODE", "TRACK"]),
 	duration: z.number(),
 	releaseYear: z.number(),

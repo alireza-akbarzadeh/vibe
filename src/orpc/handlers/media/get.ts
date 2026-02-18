@@ -341,6 +341,7 @@ export const listMedia = publicProcedure
 					title: true,
 					description: true,
 					thumbnail: true,
+					videoUrl: true,
 					type: true,
 					duration: true,
 					releaseYear: true,

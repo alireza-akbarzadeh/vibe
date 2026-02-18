@@ -31,6 +31,8 @@ interface SidebarActionsProps {
     onMore: () => void;
     isFocused: boolean;
     onToggleFocus: () => void;
+    onLike: () => void;
+    onSave: () => void;
 }
 
 
@@ -49,7 +51,9 @@ export const SidebarActions = ({
     video,
     onMore,
     isFocused,
-    onToggleFocus
+    onToggleFocus,
+    onLike,
+    onSave
 }: SidebarActionsProps) => {
     const reactions = useStore(reelsStore, (s) => s.reactions);
     const isMuted = useStore(reelsStore, (s) => s.isMuted);
@@ -67,7 +71,7 @@ export const SidebarActions = ({
             <ActionButton
                 icon={<Heart className={cn("transition-colors", video.isLiked ? 'fill-rose-500 text-rose-500' : 'text-white')} />}
                 label={formatNumber(video.likes)}
-                onClick={() => updateReelAction(video.id, 'like')}
+                onClick={onLike}
             />
 
             {/* Comments Action */}
@@ -94,7 +98,7 @@ export const SidebarActions = ({
             <ActionButton
                 icon={<Bookmark className={cn("transition-colors", video.isSaved ? 'fill-yellow-400 text-yellow-400' : 'text-white')} />}
                 label={video.isSaved ? "Saved" : "Save"}
-                onClick={() => updateReelAction(video.id, 'save')}
+                onClick={onSave}
             />
 
             {/* Quick Reactions */}

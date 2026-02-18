@@ -5,7 +5,7 @@ import {
 	Sparkles,
 } from "lucide-react";
 import { useState } from "react";
-import { UserMenu } from "@/components/user-menui/user-menu";
+import { UserMenu } from "@/components/user-menu/user-menu";
 import { cn } from "@/lib/utils";
 import { Route } from "@/routes/__root";
 import { JoinButton } from "./buttons/join-button";
