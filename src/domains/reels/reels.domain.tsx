@@ -4,6 +4,7 @@ import { useStore } from '@tanstack/react-store';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Loader2, Search } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { client } from '@/orpc/client';
 import CommentModal from './components/reel-comment';
@@ -23,13 +24,11 @@ export function ReelsDomain() {
     const containerRef = useRef<HTMLDivElement>(null);
     const observerRef = useRef<IntersectionObserver | null>(null);
 
-    // Use the imported useIntersection hook properly
     const { ref: intersectionRef, entry } = useIntersection({
         root: containerRef.current,
         threshold: 0.5,
     });
 
-    // Infinite Query for Media List with error handling
     const {
         data,
         fetchNextPage,
@@ -46,14 +45,15 @@ export function ReelsDomain() {
             const response = await client.media.list({
                 page: pageParam,
                 limit: 5,
-                category: category as any
+                category: category,
+                hasVideo: true,
             });
 
             return response;
         },
         getNextPageParam: (lastPage) => {
-            if (lastPage.pagination.page < lastPage.pagination.totalPages) {
-                return lastPage.pagination.page + 1;
+            if (lastPage.data.pagination.page < lastPage.data.pagination.totalPages) {
+                return lastPage.data.pagination.page + 1;
             }
             return undefined;
         },
@@ -66,7 +66,7 @@ export function ReelsDomain() {
     useEffect(() => {
         if (data) {
             const mappedVideos: VideoReel[] = data.pages.flatMap((page) =>
-                page.items
+                page.data.items
                     .filter(item => item.videoUrl) // Filter out items without video URL
                     .map((item) => ({
                         id: item.id,
@@ -106,14 +106,11 @@ export function ReelsDomain() {
         }
     }, [entry?.isIntersecting, hasNextPage, fetchNextPage, isLoading]);
 
-    // Clean up and set up Intersection Observer for video visibility
     useEffect(() => {
-        // Clean up previous observer
         if (observerRef.current) {
             observerRef.current.disconnect();
         }
 
-        // Create new observer
         observerRef.current = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -128,21 +125,18 @@ export function ReelsDomain() {
             { threshold: 0.6 }
         );
 
-        // Observe all video elements
         const elements = containerRef.current?.querySelectorAll('[data-reel]');
         elements?.forEach((el) => {
             observerRef.current?.observe(el);
         });
 
-        // Cleanup function
         return () => {
             if (observerRef.current) {
                 observerRef.current.disconnect();
             }
         };
-    }, [videos]); // Re-run when videos change
+    }, []);
 
-    // Handle smooth scrolling to next video
     const scrollToNext = useCallback(() => {
         if (currentVideoIndex < videos.length - 1) {
             const nextIndex = currentVideoIndex + 1;
@@ -151,7 +145,6 @@ export function ReelsDomain() {
         }
     }, [currentVideoIndex, videos.length]);
 
-    // Handle keyboard navigation
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'ArrowUp') {
@@ -177,7 +170,37 @@ export function ReelsDomain() {
     if (isLoading && videos.length === 0) {
         return (
             <div className="h-screen w-full flex items-center justify-center bg-[#0a0a0a]">
-                <Loader2 className="size-10 text-white animate-spin" />
+                <div className="relative h-full w-full max-w-xl mx-auto">
+                    {/* Header Skeleton */}
+                    <div className="absolute top-0 w-full z-50 flex items-center justify-between px-6 pt-12 pb-4">
+                        <Skeleton className="size-6 rounded-full bg-white/10" />
+                        <div className="flex gap-6">
+                            <Skeleton className="h-6 w-20 bg-white/10 rounded-full" />
+                            <Skeleton className="h-6 w-20 bg-white/10 rounded-full" />
+                        </div>
+                        <div className="size-6" />
+                    </div>
+
+                    {/* Video Skeleton */}
+                    <Skeleton className="h-full w-full bg-zinc-900" />
+
+                    {/* Sidebar Actions Skeleton */}
+                    <div className="absolute right-2 bottom-20 z-30 flex flex-col gap-4 items-center">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                            <Skeleton key={i} className="size-10 rounded-full bg-white/10" />
+                        ))}
+                    </div>
+
+                    {/* Bottom Info Skeleton */}
+                    <div className="absolute bottom-14 left-4 right-20 z-20">
+                        <div className="flex items-center gap-3 mb-4">
+                            <Skeleton className="size-11 rounded-full bg-white/10" />
+                            <Skeleton className="h-4 w-32 bg-white/10 rounded" />
+                        </div>
+                        <Skeleton className="h-4 w-3/4 bg-white/10 rounded mb-2" />
+                        <Skeleton className="h-4 w-1/2 bg-white/10 rounded" />
+                    </div>
+                </div>
             </div>
         );
     }

@@ -106,6 +106,7 @@ export const listMedia = publicProcedure
 			status,
 			releaseYearFrom,
 			releaseYearTo,
+			hasVideo,
 			sortBy,
 		} = input;
 
@@ -272,6 +273,7 @@ export const listMedia = publicProcedure
 			status: { in: status },
 			type,
 			collectionId,
+			...(hasVideo ? { videoUrl: { not: null } } : {}),
 			...categoryFilters.where,
 			AND: [
 				search

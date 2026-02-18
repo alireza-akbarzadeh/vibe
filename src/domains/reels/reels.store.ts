@@ -85,7 +85,6 @@ export const updateReelAction = (videoId: string, action: "like" | "save") => {
 	reelsStore.setState((s) => {
 		const video = s.videos.find((v) => v.id === videoId);
 
-		// If liking a video that wasn't liked yet, trigger heart motion
 		if (action === "like" && video && !video.isLiked) {
 			triggerLikeAnimation(videoId);
 		}

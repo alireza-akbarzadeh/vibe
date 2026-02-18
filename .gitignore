@@ -19,3 +19,5 @@ ngrok.yml
 
 # Generate Prisma Client
 src/generated/
+.vercel
+.env*.local

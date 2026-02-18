@@ -1,7 +1,6 @@
 import { useLocation, useNavigate, useRouteContext, useRouter } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
-	Bell,
 	ChevronLeft,
 	ChevronRight,
 	Command,
@@ -11,7 +10,7 @@ import { useRef, useState } from "react";
 import { NotificationCenter } from "@/components/notification/notification";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/components/ui/link";
-import { UserMenu } from "@/components/user-menui/user-menu";
+import { UserMenu } from "@/components/user-menu/user-menu";
 import { cn } from "@/lib/utils";
 import { breadcrumbMap } from "../library-constants";
 
