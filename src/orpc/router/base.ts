@@ -1,11 +1,12 @@
 import { os } from "@orpc/server";
 import { z } from "zod";
+import { sentryMiddleware } from "../middleware/sentry";
 
 /**
  * Base ORPC instance with common error definitions
  * These errors are available across all procedures
  */
-export const base = os.errors({
+export const base = os.use(sentryMiddleware).errors({
 	UNAUTHENTICATED: {
 		message: "Authentication required",
 	},

@@ -9,10 +9,10 @@ import {
 } from '@/components/ui/popover'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { actions, dashboardStore } from '@/domains/dashboard/store/dashboard.store'
 import { cn } from '@/lib/utils'
-import { actions, dashboardStore } from '../store/dashboard.store'
 
-export default function NotificationCenter() {
+export function NotificationCenter() {
     const notifications = useStore(dashboardStore, (state) => state.notifications)
     const messages = useStore(dashboardStore, (state) => state.messages)
     const isOpen = useStore(dashboardStore, (state) => state.notificationOpen)
@@ -24,7 +24,7 @@ export default function NotificationCenter() {
     return (
         <Popover open={isOpen} onOpenChange={actions.setNotificationOpen}>
             <PopoverTrigger asChild>
-                <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl relative hover:bg-muted group">
+                <Button size="icon" variant="ghost" className="h-12 w-12 rounded-full bg-linear-to-r from-primary to-secondary relative hover:bg-muted group">
                     <motion.div
                         animate={totalUnread > 0 ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
                         transition={{ repeat: totalUnread > 0 ? Infinity : 0, repeatDelay: 4, duration: 0.5 }}

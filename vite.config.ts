@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { devtools } from '@tanstack/devtools-vite'
+import { sentryTanstackStart } from "@sentry/tanstackstart-react";
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import viteReact from '@vitejs/plugin-react'
@@ -30,6 +31,11 @@ const config = defineConfig({
       },
     }),
     tanstackStart(),
+    sentryTanstackStart({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
     devtools(),
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
@@ -68,3 +74,5 @@ const config = defineConfig({
 })
 
 export default config
+
+

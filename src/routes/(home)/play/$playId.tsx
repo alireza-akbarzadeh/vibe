@@ -1,15 +1,37 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { VideoPlayer } from "@/components/video-payler/video-player";
-import { VIDEOS } from "@/constants/media";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { VideoPlayer } from "@/components/video-payler/video-player";
+import { VIDEOS } from "@/constants/media";
 
 
 
 
 export const Route = createFileRoute("/(home)/play/$playId")({
 	component: RouteComponent,
+	beforeLoad: ({ context, location }) => {
+		// 1. Check if authenticated
+		if (!context.auth) {
+			throw redirect({
+				to: "/login",
+				search: {
+					redirect: location.href,
+				},
+			});
+		}
+
+		// 2. Check for subscription (PRO or FAMILY)
+		const status = context.auth.user.subscriptionStatus;
+		if (status !== "PREMIUM" && status !== "FAMILY") {
+			throw redirect({
+				to: "/pricing",
+				search: {
+					redirectUrl: location.href,
+				},
+			});
+		}
+	},
 });
 
 function RouteComponent() {

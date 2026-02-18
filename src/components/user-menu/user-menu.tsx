@@ -1,4 +1,5 @@
 import { useRouter } from "@tanstack/react-router";
+import type { User } from "better-auth";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	BadgeCheck,
@@ -20,6 +21,7 @@ import { Image } from "@/components/ui/image.tsx";
 import { ADMIN_ACCESS } from "@/constants/constants";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { authClient } from "@/lib/auth/auth-client";
+import type { AuthSessionType } from "@/lib/auth/better-auth";
 import { cn } from "@/lib/utils";
 import type { Role } from "@/orpc/helpers/constants";
 import { Route } from "@/routes/__root";
@@ -33,7 +35,6 @@ import {
 import { Link } from "../ui/link";
 import { RoleBadge, SubscriptionBadge } from "./subscription-badge";
 
-// ─── Types ──────────────────────────────────────────────────────────────────
 
 interface NavItem {
 	to: string;
@@ -44,7 +45,6 @@ interface NavItem {
 	onClick?: () => void;
 }
 
-// ─── Shared Avatar ──────────────────────────────────────────────────────────
 
 function UserAvatar({
 	src,
@@ -103,7 +103,6 @@ function UserAvatar({
 	);
 }
 
-// ─── Shared Nav Items ───────────────────────────────────────────────────────
 
 function useMenuItems(user: {
 	role?: string | null;
@@ -163,7 +162,6 @@ function useMenuItems(user: {
 	return items;
 }
 
-// ─── Desktop Tooltip Menu ───────────────────────────────────────────────────
 
 function DesktopMenu({
 	user,
@@ -171,7 +169,7 @@ function DesktopMenu({
 	isLoading,
 	onLogout,
 }: {
-	user: any;
+	user: User;
 	items: NavItem[];
 	isLoading: boolean;
 	onLogout: () => void;
@@ -180,17 +178,25 @@ function DesktopMenu({
 	const ref = useRef<HTMLDivElement>(null);
 	const timeout = useRef<ReturnType<typeof setTimeout>>(null);
 
-	const handleEnter = useCallback(() => {
-		clearTimeout(timeout.current);
+	const handleEnter = () => {
+		if (timeout.current) {
+			clearTimeout(timeout.current);
+			timeout.current = undefined;
+		}
 		setOpen(true);
-	}, []);
-
-	const handleLeave = useCallback(() => {
+	}
+	const handleLeave = () => {
 		timeout.current = setTimeout(() => setOpen(false), 200);
+	}
+
+	useEffect(() => {
+		return () => {
+			if (timeout.current) {
+				clearTimeout(timeout.current);
+			}
+		};
 	}, []);
-
-	useEffect(() => () => clearTimeout(timeout.current), []);
-
+	if (!user) return null;
 	return (
 		<div
 			ref={ref}
@@ -324,7 +330,7 @@ function DesktopMenu({
 									return (
 										<Link
 											key={item.to}
-											to={item.to as any}
+											to={item.to}
 											onClick={(e) => {
 												if (item.onClick) {
 													e.preventDefault();
@@ -392,7 +398,6 @@ function DesktopMenu({
 	);
 }
 
-// ─── Mobile Drawer Menu ─────────────────────────────────────────────────────
 
 function MobileMenu({
 	user,
@@ -400,7 +405,7 @@ function MobileMenu({
 	isLoading,
 	onLogout,
 }: {
-	user: any;
+	user: AuthSessionType["user"];
 	items: NavItem[];
 	isLoading: boolean;
 	onLogout: () => void;

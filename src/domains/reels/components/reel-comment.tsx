@@ -9,12 +9,13 @@ import {
     DrawerTitle
 } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { client } from '@/orpc/client';
 import { layoutSize } from '../reels.domain';
 import { closeComments, reelsStore } from '../reels.store';
 import type { CommentItem } from '../reels.types';
-import { getReelComments } from '../server/reels.functions';
 
-export default function CommentModal({ videoId }: { videoId: number }) {
+export default function CommentModal({ videoId }: { videoId: string }) {
     const [comment, setComment] = React.useState('');
 
     const commentModalOpen = useStore(reelsStore, (s) => s.commentModalOpen);
@@ -23,7 +24,20 @@ export default function CommentModal({ videoId }: { videoId: number }) {
 
     const { data: comments, isLoading } = useQuery({
         queryKey: ['reels', 'comments', videoId],
-        queryFn: () => getReelComments(),
+        queryFn: async () => {
+            const res = await client.reviews.list({ mediaId: videoId, limit: 50, page: 1 });
+            return res.data.items.map((item) => ({
+                id: item.id,
+                user: {
+                    username: item.user.name || "Unknown",
+                    avatar: item.user.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${item.user.name || item.id}`,
+                },
+                text: item.review || "",
+                likes: item.helpful,
+                isLiked: false,
+                timestamp: new Date(item.createdAt).toLocaleDateString(),
+            }));
+        },
         enabled: commentModalOpen,
     });
 
@@ -56,9 +70,20 @@ export default function CommentModal({ videoId }: { videoId: number }) {
                 {/* --- Dynamic Comments List --- */}
                 <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 scrollbar-hide">
                     {isLoading ? (
-                        <div className="flex flex-col items-center justify-center py-20 gap-3">
-                            <Loader2 className="size-8 text-white/20 animate-spin" />
-                            <p className="text-white/40 text-sm">Loading reactions...</p>
+                        <div className="space-y-6">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <div key={i} className="flex gap-4">
+                                    <Skeleton className="size-10 rounded-full flex-shrink-0 bg-white/5" />
+                                    <div className="flex-1 space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <Skeleton className="h-3 w-20 bg-white/5 rounded" />
+                                            <Skeleton className="h-3 w-12 bg-white/5 rounded" />
+                                        </div>
+                                        <Skeleton className="h-4 w-full bg-white/5 rounded" />
+                                        <Skeleton className="h-4 w-3/4 bg-white/5 rounded" />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     ) : comments?.length ? (
                         comments.map((c: CommentItem) => (

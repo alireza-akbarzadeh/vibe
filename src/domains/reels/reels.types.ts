@@ -6,7 +6,7 @@ export interface ReelUser {
 }
 
 export interface VideoReel {
-	id: number;
+	id: string;
 	videoUrl: string;
 	thumbnail: string;
 	user: ReelUser;
@@ -27,7 +27,7 @@ export interface User {
 }
 
 export interface CommentItem {
-	id: number;
+	id: string;
 	user: User;
 	text: string;
 	likes: number;

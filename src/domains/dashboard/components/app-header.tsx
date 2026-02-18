@@ -1,5 +1,6 @@
 import { Film, LayoutGrid, Menu, Music2, Plus, Search, Users, Zap } from 'lucide-react'
 import * as React from 'react'
+import { NotificationCenter } from "@/components/notification/notification"
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -14,7 +15,6 @@ import { cn } from '@/lib/utils'
 import { useDashboardShortcuts } from '../hooks/useDahboardShortcut'
 import { actions } from '../store/dashboard.store'
 import { DashboardBreadcrumbs } from './breadcrumbs'
-import Notification from './notification'
 import { UserProfile } from './user-profile'
 
 interface AppHeaderProps {
@@ -24,7 +24,6 @@ interface AppHeaderProps {
 export default function AppHeader({ pathname }: AppHeaderProps) {
     const [isScrolled, setIsScrolled] = React.useState(false)
 
-    // Global Shortcuts now handle state via Store internally
     useDashboardShortcuts();
 
     React.useEffect(() => {
@@ -143,7 +142,7 @@ export default function AppHeader({ pathname }: AppHeaderProps) {
                     </DropdownMenuContent>
                 </DropdownMenu>
                 <div className="w-px h-6 bg-border/40 mx-2 hidden sm:block" />
-                <Notification />
+                <NotificationCenter />
                 <UserProfile variant='header' />
             </div>
         </header >

@@ -1,40 +1,38 @@
-import { useLocation, useNavigate, useRouteContext } from "@tanstack/react-router";
+import { useLocation, useNavigate, useRouteContext, useRouter } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
-	Bell,
 	ChevronLeft,
 	ChevronRight,
 	Command,
 	Search,
 } from "lucide-react";
 import { useRef, useState } from "react";
+import { NotificationCenter } from "@/components/notification/notification";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/components/ui/link";
-import { UserMenu } from "@/components/user-menui/user-menu";
+import { UserMenu } from "@/components/user-menu/user-menu";
 import { cn } from "@/lib/utils";
+import { breadcrumbMap } from "../library-constants";
 
-const breadcrumbMap: Record<string, string> = {
-	"/library": "Library",
-	"/library/music": "Music",
-	"/library/videos": "Videos",
-	"/library/blogs": "Blogs",
-	"/library/podcast": "Podcasts",
-	"/library/liked": "Liked",
-	"/library/saved": "Watchlist",
-	"/library/history": "History",
-	"/library/profile": "Profile",
-	"/library/setting": "Settings",
-	"/library/search": "Search",
-	"/library/subscription": "Subscription",
-};
+
 
 export const LibraryTopBar = () => {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
+	const router = useRouter();
 	const { auth } = useRouteContext({ from: "__root__" });
 	const [searchFocused, setSearchFocused] = useState(false);
 	const searchRef = useRef<HTMLInputElement>(null);
-
+	const onBack = () => {
+		if (window.history.length > 1) {
+			router.history.back();
+		} else {
+			navigate({ to: "/library" });
+		}
+	};
+	const onForward = () => {
+		router.history.forward();
+	};
 	const crumb = breadcrumbMap[pathname] ?? "Library";
 	const isRoot = pathname === "/library";
 	const user = auth?.user;
@@ -48,17 +46,16 @@ export const LibraryTopBar = () => {
 
 	return (
 		<header className="h-16 flex items-center justify-between gap-4 px-4 md:px-8 lg:px-12">
-			{/* Left: Nav + Breadcrumb */}
 			<div className="flex items-center gap-3 min-w-0">
 				<div className="flex items-center gap-1">
 					<button
-						onClick={() => window.history.back()}
+						onClick={onBack}
 						className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
 					>
 						<ChevronLeft className="w-4 h-4" />
 					</button>
 					<button
-						onClick={() => window.history.forward()}
+						onClick={onForward}
 						className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
 					>
 						<ChevronRight className="w-4 h-4" />
@@ -126,13 +123,7 @@ export const LibraryTopBar = () => {
 					<Search className="w-4 h-4" />
 				</button>
 
-				{/* Notifications */}
-				<button className="relative w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-					<Bell className="w-4 h-4" />
-					<span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-primary" />
-				</button>
-
-				{/* User avatar / menu */}
+				<NotificationCenter />
 				{user && <UserMenu />}
 			</div>
 		</header>

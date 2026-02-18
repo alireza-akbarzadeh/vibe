@@ -1,6 +1,6 @@
+import { useRouteContext } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { getWatchTogetherSocket } from "@/lib/watch-together-client";
-import { useRouteContext } from "@tanstack/react-router";
 
 export function WatchTogetherChat({ sessionId, layout = "overlay" }: { sessionId: string; layout?: "overlay" | "sidebar" }) {
     const [messages, setMessages] = useState<any[]>([]);

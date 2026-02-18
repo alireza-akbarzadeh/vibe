@@ -59,6 +59,8 @@ export const listMediaInputSchema = z.object({
 	releaseYearFrom: z.number().optional(),
 	releaseYearTo: z.number().optional(),
 
+	hasVideo: z.boolean().optional(),
+
 	sortBy: z.enum(["NEWEST", "OLDEST", "TITLE", "MANUAL"]).default("NEWEST"),
 });
 
