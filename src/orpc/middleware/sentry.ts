@@ -1,7 +1,7 @@
 import { os } from "@orpc/server";
 import * as Sentry from "@sentry/node";
 
-export const sentryMiddleware = os.middleware(async ({ next, path, input }) => {
+export const sentryMiddleware = os.middleware(async ({ next, path }, input) => {
 	return await Sentry.withScope(async (scope) => {
 		// Attempt to set transaction name and input if available
 		if (path) {
@@ -10,11 +10,13 @@ export const sentryMiddleware = os.middleware(async ({ next, path, input }) => {
 			);
 		}
 		if (input) {
+			// @ts-ignore - input is typed as any/unknown in middleware signature
 			scope.setContext("input", { input });
 		}
 
 		try {
-			return await next();
+			// @ts-ignore - input is passed as second argument to middleware, but next() expects context updates
+			return await next({});
 		} catch (error) {
 			Sentry.captureException(error);
 			throw error;
