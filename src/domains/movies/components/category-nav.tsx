@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
 	Clock,
 	Film,
@@ -8,6 +7,7 @@ import {
 	TrendingUp,
 	Tv,
 } from "lucide-react";
+import { motion } from "@/components/motion";
 
 import { setCategory, useMoviesStore } from "../store";
 
@@ -56,10 +56,11 @@ export function CategoryNav() {
 						animate={{ opacity: 1, scale: 1 }}
 						transition={{ delay: 0.4 + index * 0.05 }}
 						onClick={() => setCategory(category.id)}
-						className={`relative flex items-center gap-2 px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all ${activeCategory === category.id
-							? "text-white"
-							: "text-gray-400 hover:text-white"
-							}`}
+						className={`relative flex items-center gap-2 px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all ${
+							activeCategory === category.id
+								? "text-white"
+								: "text-gray-400 hover:text-white"
+						}`}
 					>
 						{/* Active background */}
 						{activeCategory === category.id && (

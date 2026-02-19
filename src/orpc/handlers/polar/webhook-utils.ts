@@ -3,14 +3,13 @@ import {
 	POLAR_PRODUCT_TO_PLAN,
 	polarClient,
 } from "@/integrations/polar/polar-client";
-import { prisma } from "@/lib/db";
-import { base } from "../../router/base";
+import { authedProcedure, publicProcedure } from "@/orpc/context";
 
 /**
  * Get webhook statistics and recent events
  * Admin only endpoint
  */
-export const getWebhookStats = base
+export const getWebhookStats = authedProcedure
 	.input(
 		z.object({
 			limit: z.number().min(1).max(50).default(10),
@@ -28,7 +27,10 @@ export const getWebhookStats = base
 			),
 		}),
 	)
-	.handler(async () => {
+	.handler(async ({ context }) => {
+		if (context.user.role !== "ADMIN") {
+			throw new Error("You are not authorized to perform this action");
+		}
 		// This is a placeholder - in production you'd store webhook events
 		// in your database and query them here
 		return {
@@ -41,7 +43,7 @@ export const getWebhookStats = base
  * Sync subscription status from Polar
  * Useful for manual reconciliation
  */
-export const syncSubscriptionStatus = base
+export const syncSubscriptionStatus = authedProcedure
 	.input(z.object({ userId: z.string() }))
 	.output(
 		z.object({
@@ -50,17 +52,15 @@ export const syncSubscriptionStatus = base
 			updatedStatus: z.string().optional(),
 		}),
 	)
-	.handler(async ({ input, errors }) => {
+	.handler(async ({ input, context }) => {
 		try {
-			const user = await prisma.user.findUnique({
+			const user = await context.db.user.findUnique({
 				where: { id: input.userId },
 				select: { id: true, customerId: true, subscriptionStatus: true },
 			});
 
 			if (!user || !user.customerId) {
-				throw errors.NOT_FOUND({
-					message: "User or customer not found",
-				});
+				throw new Error("User or customer not found");
 			}
 
 			// Get active subscriptions from Polar
@@ -78,18 +78,17 @@ export const syncSubscriptionStatus = base
 
 			if (activeSubscription) {
 				// Map product to plan
-				newPlan =
-					POLAR_PRODUCT_TO_PLAN[activeSubscription.productId] || "FREE";
+				newPlan = POLAR_PRODUCT_TO_PLAN[activeSubscription.productId] || "FREE";
 				newStatus = activeSubscription.status === "active" ? "ACTIVE" : "FREE";
 			} else {
 				newStatus = "FREE";
 			}
 
 			// Update user
-			await prisma.user.update({
+			await context.db.user.update({
 				where: { id: user.id },
 				data: {
-					subscriptionStatus: newStatus as any,
+					subscriptionStatus: newStatus,
 					currentPlan: newPlan,
 				},
 			});
@@ -99,15 +98,11 @@ export const syncSubscriptionStatus = base
 				message: "Subscription status synced successfully",
 				updatedStatus: newStatus,
 			};
-		} catch (error: any) {
-			console.error("Error syncing subscription:", error);
-
-			if (error.message?.includes("not found")) {
-				throw error;
-			}
-
-			throw errors.INTERNAL_ERROR({
-				message: "Failed to sync subscription status",
-			});
+		} catch (error) {
+			return {
+				success: false,
+				message:
+					error instanceof Error ? error.message : "An unknown error occurred",
+			};
 		}
 	});

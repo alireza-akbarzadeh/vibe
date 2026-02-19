@@ -1,0 +1,63 @@
+model Room {
+    id            String   @id @default(cuid())
+    name          String
+    description   String?
+    isPrivate     Boolean  @default(false)
+    maxCapacity   Int      @default(100)
+    ownerId       String
+    currentMediaId String?
+    isActive      Boolean  @default(true)
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+    token         String   @unique
+
+    owner         User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    currentMedia  Media? @relation(fields: [currentMediaId], references: [id], onDelete: SetNull)
+    members       RoomMember[]
+    playbackState PlaybackState?
+
+    @@index([ownerId])
+    @@index([isActive])
+}
+
+model RoomMember {
+    id        String   @id @default(cuid())
+    roomId    String
+    userId    String
+    profileId String?
+    isHost    Boolean  @default(false)
+    isModerator Boolean @default(false)
+    joinedAt  DateTime @default(now())
+    lastSeenAt DateTime @default(now())
+    isActive  Boolean  @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([roomId, userId])
+    @@index([roomId])
+    @@index([userId])
+}
+
+model PlaybackState {
+    id            String   @id @default(cuid())
+    roomId        String   @unique
+    mediaId       String
+    currentTime   Float
+    duration      Float
+    isPlaying     Boolean
+    playbackRate  Float
+    volume        Float
+    lastUpdatedBy String
+    lastUpdatedAt DateTime @default(now())
+    version       Int      @default(0)
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    room  Room  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+    media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+    @@index([roomId])
+}

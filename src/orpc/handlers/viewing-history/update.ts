@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
-import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { authedProcedure } from "@/orpc/context";
+import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import {
 	updateProgressInput,
 	viewingHistoryOutput,

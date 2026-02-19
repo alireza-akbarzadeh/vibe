@@ -1,6 +1,6 @@
+import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { publicProcedure } from "@/orpc/context";
-import { z } from "zod";
 
 const searchInputSchema = z.object({
 	query: z.string().min(1).max(200),

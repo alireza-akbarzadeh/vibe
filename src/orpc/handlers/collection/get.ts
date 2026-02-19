@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { CollectionWhereInput } from "@/generated/prisma/models";
 import { prisma } from "@/lib/db";
 import { publicProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";

@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
+import { motion } from "@/components/motion";
 import { scaleIn } from "@/components/motion/motion-page.tsx";
+
 interface Blog {
 	id: string;
 	title: string;
@@ -12,6 +13,7 @@ interface Blog {
 	readTime: number;
 	category: "music" | "movies";
 }
+
 import { formatDistanceToNow } from "@/lib/date.ts";
 import { cn } from "@/lib/utils";
 

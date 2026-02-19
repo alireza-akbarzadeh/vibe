@@ -1,98 +1,25 @@
-import { VideoPlayer } from "@/components/video-payler/video-player";
-import { VIDEOS } from "@/constants/media";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
+import { VideoPlayer } from "@/components/video-payler/video-player";
+import { useMovieDetails } from "@/hooks/use-movie-details";
 import {
+	MovieDetailsSection,
 	MovieHero,
 	ReviewsSection,
 	SimilarMovies,
 	TrailerPlayer,
 } from "./components";
-import { CastCarousel, ImagesGallery, StatsBar, Synopsis } from "./containers";
-import {
-	movieCastQueryOptions,
-	movieDetailsQueryOptions,
-	movieImagesQueryOptions,
-	movieReviewsQueryOptions,
-	movieSimilarQueryOptions,
-	movieVideosQueryOptions,
-} from "./movies-details.queries";
+import { CastAndCrew, ImagesGallery, StatsBar, Synopsis } from "./containers";
 
 interface MovieDetailsProps {
 	movieId: string;
 }
 
 export default function MovieDetails({ movieId }: MovieDetailsProps) {
+	const { cast, images, reviews, similarMovies, movieData, videoData } =
+		useMovieDetails(movieId);
+
 	const [watchMode, setWatchMovie] = useState<"movie" | "trailer">("trailer");
 	const modeRef = useRef<HTMLDivElement>(null);
-
-	// Fetch all data
-	const { data: media } = useSuspenseQuery(movieDetailsQueryOptions(movieId));
-	const { data: cast } = useSuspenseQuery(movieCastQueryOptions(movieId));
-	const { data: videos } = useSuspenseQuery(movieVideosQueryOptions(movieId));
-	const { data: images } = useSuspenseQuery(movieImagesQueryOptions(movieId));
-	const { data: reviews } = useSuspenseQuery(
-		movieReviewsQueryOptions(movieId),
-	);
-
-	const transformedReviews = reviews
-		? {
-			...reviews,
-			items: reviews.items.map((review) => ({
-				...review,
-				title: null,
-				content: review.review || "",
-			})),
-		}
-		: undefined;
-
-	const genreIds = media.genres?.map((g) => g.genre.id) || [];
-
-	const { data: similarMovies } = useSuspenseQuery(
-		movieSimilarQueryOptions(movieId, genreIds),
-	);
-
-	const movieData = {
-		id: media.id,
-		title: media.title,
-		year: media.releaseYear,
-		poster: media.thumbnail,
-		backdrop: images?.backdrops[0]?.filePath
-			? `https://image.tmdb.org/t/p/w1280${images.backdrops[0].filePath}`
-			: media.thumbnail,
-		rating: media.averageRating || media.rating || 0,
-		votes: media.reviewCount || reviews?.pagination.total || 0,
-		duration: media.duration,
-		releaseDate: new Date().toISOString(),
-		rating_label: "PG-13",
-		genres: media.genres?.map((g) => g.genre.name) || [],
-		synopsis: media.description,
-		director: cast?.directors[0]?.person.name || "Unknown",
-		writers: cast?.writers.map((w) => w.person.name) || [],
-		stars: cast?.actors.slice(0, 3).map((a) => a.person.name) || [],
-		productionCo: "N/A",
-		budget: "N/A",
-		revenue: "TBD",
-		trailerUrl: videos?.trailers[0]?.key
-			? `https://www.youtube.com/embed/${videos.trailers[0].key}`
-			: "",
-		metascore: Math.round((media.averageRating || media.rating || 0) * 10),
-		popularity: media.viewCount || 0,
-		popularityChange: 0,
-		description: media.description,
-		releaseYear: media.releaseYear,
-		reviewCount: media.reviewCount || reviews?.pagination.total || 0,
-		viewCount: media.viewCount || 0,
-	};
-
-	const videoData = {
-		videoId: media.id,
-		src: media.videoUrl || VIDEOS.demo,
-		videoPoster: media.thumbnail,
-		year: media.releaseYear.toString(),
-		totalTime: `${Math.floor(media.duration / 60)}h ${media.duration % 60}m`,
-		videoName: media.title,
-	};
 
 	const onModeChange = (mode: "trailer" | "movie") => {
 		modeRef.current?.scrollIntoView();
@@ -102,25 +29,28 @@ export default function MovieDetails({ movieId }: MovieDetailsProps) {
 	return (
 		<div className="bg-[#0a0a0a] min-h-screen">
 			<MovieHero onClick={onModeChange} movie={movieData} />
-			<div ref={modeRef}>
-				{watchMode === "trailer" && movieData.trailerUrl && (
-					<TrailerPlayer trailerUrl={movieData.trailerUrl} />
-				)}
-				{watchMode === "movie" && <VideoPlayer {...videoData} />}
+			<div className="py-12 space-y-16">
+				<div ref={modeRef} className="-my-12 py-12">
+					{watchMode === "trailer" && movieData.trailerUrl && (
+						<TrailerPlayer trailerUrl={movieData.trailerUrl} />
+					)}
+					{watchMode === "movie" && <VideoPlayer {...videoData} />}
+				</div>
+				<StatsBar
+					rating={movieData.rating}
+					votes={movieData.votes}
+					metascore={movieData.metascore}
+					popularity={movieData.popularity}
+					popularityChange={movieData.popularityChange}
+					revenue={movieData.revenue}
+				/>
+				<Synopsis movie={movieData} />
+				<MovieDetailsSection movie={movieData} />
+				<CastAndCrew cast={cast} />
+				<ReviewsSection reviews={reviews} mediaId={movieId} />
+				<ImagesGallery images={images} />
+				<SimilarMovies movies={similarMovies?.items} />
 			</div>
-			<StatsBar
-				rating={movieData.rating}
-				votes={movieData.votes}
-				metascore={movieData.metascore}
-				popularity={movieData.popularity}
-				popularityChange={movieData.popularityChange}
-				revenue={movieData.revenue}
-			/>
-			<Synopsis movie={movieData} />
-			<CastCarousel cast={cast} />
-			<ReviewsSection reviews={transformedReviews} mediaId={movieId} />
-			<ImagesGallery images={images} />
-			<SimilarMovies movies={similarMovies?.items} />
 		</div>
 	);
 }

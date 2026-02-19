@@ -43,12 +43,12 @@ import { cn, createContextFactory } from "@/lib/utils";
 
 type InputPhoneProps = Simplify<
 	Except<ComponentProps<"input">, "ref" | "onChange" | "value"> &
-	Except<
-		PhoneInputPrimitive.Props<typeof PhoneInputPrimitive.default>,
-		"onChange"
-	> & {
-		onChange?: (value: PhoneInputPrimitive.Value) => void;
-	}
+		Except<
+			PhoneInputPrimitive.Props<typeof PhoneInputPrimitive.default>,
+			"onChange"
+		> & {
+			onChange?: (value: PhoneInputPrimitive.Value) => void;
+		}
 >;
 
 function InputPhone({ onChange, className, ...props }: InputPhoneProps) {
@@ -81,7 +81,7 @@ function InputComponent({ className, ...props }: ComponentProps<typeof Input>) {
 		<Input
 			className={cn(
 				"rounded-e-xl rounded-s-none w-full h-full border-none outline-none bg-transparent text-white placeholder:text-slate-500",
-				className
+				className,
 			)}
 			{...props}
 		/>
@@ -164,7 +164,7 @@ function CountrySelect({
 					variant="ghost"
 					className={cn(
 						"flex gap-2 rounded-e-none rounded-s-xl px-3 h-full border-r border-white/10 hover:bg-white/5 text-white transition-colors",
-						disabled && "opacity-50"
+						disabled && "opacity-50",
 					)}
 					disabled={disabled}
 				>

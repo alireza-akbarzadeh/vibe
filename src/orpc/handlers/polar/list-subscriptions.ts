@@ -42,9 +42,14 @@ export const listSubscriptions = authedProcedure
 
 			const subscriptions = response.result.items.map((sub) => {
 				const price = sub.prices?.[0];
-				const priceAmount = price && 'priceAmount' in price ? price.priceAmount : 0;
-				const priceCurrency = price && 'priceCurrency' in price ? price.priceCurrency : 'USD';
-				const recurringInterval = price && 'recurringInterval' in price ? price.recurringInterval : null;
+				const priceAmount =
+					price && "priceAmount" in price ? price.priceAmount : 0;
+				const priceCurrency =
+					price && "priceCurrency" in price ? price.priceCurrency : "USD";
+				const recurringInterval =
+					price && "recurringInterval" in price
+						? price.recurringInterval
+						: null;
 
 				return {
 					id: sub.id,
@@ -53,8 +58,14 @@ export const listSubscriptions = authedProcedure
 					amount: priceAmount,
 					currency: priceCurrency,
 					interval: recurringInterval as string | null,
-					currentPeriodStart: sub.currentPeriodStart instanceof Date ? sub.currentPeriodStart.toISOString() : sub.currentPeriodStart,
-					currentPeriodEnd: sub.currentPeriodEnd instanceof Date ? sub.currentPeriodEnd.toISOString() : sub.currentPeriodEnd,
+					currentPeriodStart:
+						sub.currentPeriodStart instanceof Date
+							? sub.currentPeriodStart.toISOString()
+							: sub.currentPeriodStart,
+					currentPeriodEnd:
+						sub.currentPeriodEnd instanceof Date
+							? sub.currentPeriodEnd.toISOString()
+							: sub.currentPeriodEnd,
 					cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
 				};
 			});

@@ -1,8 +1,8 @@
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import { Bookmark, Check, Heart, Share2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "@/components/motion";
 import type { FeatureArticle } from "../blog-mock";
 import { actions, blogStore } from "../store/blog.store";
 

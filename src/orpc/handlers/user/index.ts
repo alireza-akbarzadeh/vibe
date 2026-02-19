@@ -1,4 +1,5 @@
-import { base } from "@/orpc/router/base";
+
+import { base } from "@/orpc/context";
 import { getUserStats } from "./get-stats";
 import { getUserAccess } from "./get-user-access";
 import { listUsersWithAccess } from "./get-users-with-access";

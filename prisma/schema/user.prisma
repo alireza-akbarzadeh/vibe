@@ -35,6 +35,11 @@ model User {
     auditLogs     AuditLog[]
     reviews       UserReview[]
     subscriptions Subscription[]
+    ownedRooms    Room[]
+    roomMemberships RoomMember[]
+
+    @@index([subscriptionStatus])
+    @@index([role])
 }
 
 model Subscription {
@@ -48,6 +53,10 @@ model Subscription {
     endedAt     DateTime?
     canceledAt  DateTime?
     user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@index([productId])
+    @@index([status])
 }
 
 model Session {
@@ -104,8 +113,10 @@ model Profile {
     isKids   Boolean @default(false)
     language String  @default("en")
 
-    user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-    history ViewingHistory[]
+    user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+    history   ViewingHistory[]
+    createdAt DateTime         @default(now())
+    updatedAt DateTime         @updatedAt
 
     @@index([userId])
 }

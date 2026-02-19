@@ -1,10 +1,6 @@
-import { client } from "@/orpc/client";
-import {
-	useMutation,
-	useQuery,
-	useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { client } from "@/orpc/client";
 
 // ─── Library Dashboard ──────────────────────────────────────────────────────
 
@@ -47,9 +43,7 @@ export function useToggleFavorite() {
 			queryClient.invalidateQueries({ queryKey: ["library", "favorites"] });
 			queryClient.invalidateQueries({ queryKey: ["library", "dashboard"] });
 			toast.success(
-				data.data.isFavorite
-					? "Added to favorites"
-					: "Removed from favorites",
+				data.data.isFavorite ? "Added to favorites" : "Removed from favorites",
 			);
 		},
 		onError: (error: Error) => {
@@ -91,9 +85,7 @@ export function useToggleWatchList() {
 			queryClient.invalidateQueries({ queryKey: ["library", "watchlist"] });
 			queryClient.invalidateQueries({ queryKey: ["library", "dashboard"] });
 			toast.success(
-				data.data.inWatchlist
-					? "Added to watchlist"
-					: "Removed from watchlist",
+				data.data.inWatchlist ? "Added to watchlist" : "Removed from watchlist",
 			);
 		},
 		onError: (error: Error) => {
@@ -168,9 +160,7 @@ export function useClearHistory() {
 				queryKey: ["library", "continueWatching"],
 			});
 			queryClient.invalidateQueries({ queryKey: ["library", "dashboard"] });
-			toast.success(
-				`Cleared ${data.data.deletedCount} items from history`,
-			);
+			toast.success(`Cleared ${data.data.deletedCount} items from history`);
 		},
 		onError: (error: Error) => {
 			toast.error("Failed to clear history", {
@@ -304,7 +294,9 @@ export function useMediaReviews(
 				mediaId: mediaId!,
 				page: options?.page ?? 1,
 				limit: options?.limit ?? 10,
-				sortBy: (options?.sortBy as "latest" | "highest" | "lowest" | "helpful") ?? "latest",
+				sortBy:
+					(options?.sortBy as "latest" | "highest" | "lowest" | "helpful") ??
+					"latest",
 			}),
 		enabled: !!mediaId,
 		staleTime: 60 * 1000,

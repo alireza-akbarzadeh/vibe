@@ -1,8 +1,8 @@
+import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { subscribedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { removeFromWatchListInput } from "@/orpc/models/watchlist";
-import { z } from "zod";
 
 export const removeFromWatchList = subscribedProcedure
 	.input(removeFromWatchListInput)

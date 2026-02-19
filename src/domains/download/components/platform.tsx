@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { Check, Download, ExternalLink, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 
 export function PlatformCard({ platform, index, isRecommended }) {

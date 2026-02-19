@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import {
 	ChevronRight,
 	Compass,
@@ -18,7 +17,7 @@ import {
 import type React from "react";
 import { useState } from "react";
 import { Logo } from "@/components/logo";
-import { MSG } from "@/constants/constants";
+import { AnimatePresence, motion } from "@/components/motion";
 import { actions, blogStore } from "@/domains/blog/store/blog.store";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { CommandSetting } from "./components/command-setting";
@@ -72,10 +71,11 @@ export function BlogLayout({ children }: { children: React.ReactNode }) {
 			{/* SIDEBAR / DRAWER */}
 			<aside
 				className={`
-                ${isSmallScreen
-						? `fixed inset-0 z-55 transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-500 bg-[#050505]`
-						: "w-72 border-r border-white/5 sticky top-0 h-screen"
-					} 
+                ${
+									isSmallScreen
+										? `fixed inset-0 z-55 transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-500 bg-[#050505]`
+										: "w-72 border-r border-white/5 sticky top-0 h-screen"
+								} 
                 flex flex-col bg-[#080808]/80 backdrop-blur-2xl
             `}
 			>

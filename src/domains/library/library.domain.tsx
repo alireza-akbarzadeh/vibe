@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { Loader2, Play, Sparkles, TrendingUp } from "lucide-react";
+import { Play, Sparkles, TrendingUp } from "lucide-react";
+import { motion } from "@/components/motion";
 import {
 	fadeInUp,
 	MotionPage,
@@ -12,13 +12,15 @@ import {
 	usePopularSeries,
 	useTopRated,
 } from "@/hooks/useLibrary";
+import { MediaCard } from "./components/media-card";
+import { MediaCarousel } from "./components/media-carousel";
+import { MediaCarouselSkeleton } from "./components/media-carousel-skeleton";
 
 export const LibraryDomains = () => {
 	const { data: latestData, isLoading: latestLoading } = useLatestReleases({
 		limit: 8,
 	});
-	const { data: popularData, isLoading: popularLoading } =
-		usePopularSeries(6);
+	const { data: popularData, isLoading: popularLoading } = usePopularSeries(6);
 	const { data: topRatedData, isLoading: topRatedLoading } = useTopRated({
 		limit: 8,
 	});
@@ -50,26 +52,15 @@ export const LibraryDomains = () => {
 						</div>
 						<h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
 							Discover Your Next
-							<span className="gradient-text-primary">
-								{" "}
-								Obsession
-							</span>
+							<span className="gradient-text-primary"> Obsession</span>
 						</h1>
 						<p className="text-lg text-muted-foreground mb-6">
-							Movies, series, and more — all in one seamless
-							experience.
+							Movies, series, and more — all in one seamless experience.
 						</p>
 						<div className="flex gap-4">
-							<Button
-								size="lg"
-								className="gap-2 glow-primary"
-								asChild
-							>
+							<Button size="lg" className="gap-2 glow-primary" asChild>
 								<Link to="/library/saved">
-									<Play
-										className="w-5 h-5"
-										fill="currentColor"
-									/>
+									<Play className="w-5 h-5" fill="currentColor" />
 									My Watchlist
 								</Link>
 							</Button>
@@ -79,9 +70,11 @@ export const LibraryDomains = () => {
 				</motion.div>
 			</motion.section>
 
-			{isLoading && (
-				<div className="flex items-center justify-center py-20">
-					<Loader2 className="w-8 h-8 animate-spin text-primary" />
+			{(latestLoading || popularLoading || topRatedLoading) && (
+				<div className="space-y-12">
+					{latestLoading && <MediaCarouselSkeleton />}
+					{popularLoading && <MediaCarouselSkeleton />}
+					{topRatedLoading && <MediaCarouselSkeleton />}
 				</div>
 			)}
 
@@ -94,17 +87,13 @@ export const LibraryDomains = () => {
 							<h2 className="section-header">Latest Releases</h2>
 						</div>
 					</div>
-					<motion.div
-						variants={staggerContainer}
-						initial="initial"
-						whileInView="animate"
-						viewport={{ once: true }}
-						className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-					>
+					<MediaCarousel>
 						{latestItems.map((item) => (
-							<ContentCard key={item.id} item={item} />
+							<div key={item.id} className="w-48">
+								<MediaCard item={item} />
+							</div>
 						))}
-					</motion.div>
+					</MediaCarousel>
 				</section>
 			)}
 
@@ -119,11 +108,7 @@ export const LibraryDomains = () => {
 					</div>
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 						{popularItems.map((item) => (
-							<ContentCard
-								key={item.id}
-								item={item}
-								aspect="video"
-							/>
+							<MediaCard key={item.id} item={item} aspect="video" />
 						))}
 					</div>
 				</section>
@@ -135,11 +120,13 @@ export const LibraryDomains = () => {
 					<div className="flex items-center justify-between mb-6">
 						<h2 className="section-header">Top Rated</h2>
 					</div>
-					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+					<MediaCarousel>
 						{topRatedItems.map((item) => (
-							<ContentCard key={item.id} item={item} />
+							<div key={item.id} className="w-48">
+								<MediaCard item={item} />
+							</div>
 						))}
-					</div>
+					</MediaCarousel>
 				</section>
 			)}
 
@@ -158,47 +145,3 @@ export const LibraryDomains = () => {
 		</MotionPage>
 	);
 };
-
-// ─── Reusable Content Card ──────────────────────────────────────────────────
-
-function ContentCard({
-	item,
-	aspect = "portrait",
-}: {
-	item: { id: string; title: string; thumbnail: string; type: string };
-	aspect?: "portrait" | "video";
-}) {
-	return (
-		<motion.div
-			variants={fadeInUp}
-			whileHover={{ y: -5 }}
-			className="group cursor-pointer"
-		>
-			<div
-				className={`relative overflow-hidden rounded-2xl bg-zinc-900 ${aspect === "video" ? "aspect-video" : "aspect-[2/3]"}`}
-			>
-				<img
-					src={item.thumbnail || "/api/placeholder/400/600"}
-					alt={item.title}
-					className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-					loading="lazy"
-				/>
-				<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-					<div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white shadow-2xl">
-						<Play className="w-6 h-6" fill="currentColor" />
-					</div>
-				</div>
-				<div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm">
-					<span className="text-[9px] font-black uppercase tracking-widest text-white/80">
-						{item.type}
-					</span>
-				</div>
-			</div>
-			<div className="mt-3 px-1">
-				<p className="font-bold text-sm tracking-tight truncate text-foreground group-hover:text-primary transition-colors">
-					{item.title}
-				</p>
-			</div>
-		</motion.div>
-	);
-}

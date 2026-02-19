@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Headphones, Loader2, Play, Sparkles } from "lucide-react";
+import { motion } from "@/components/motion";
 import {
 	fadeInUp,
 	MotionPage,
@@ -40,8 +40,7 @@ function PodcastsPage() {
 						Podcasts & Episodes
 					</h1>
 					<p className="text-lg text-muted-foreground max-w-xl">
-						Audio stories, discussions, and episodic content from
-						our catalog.
+						Audio stories, discussions, and episodic content from our catalog.
 					</p>
 				</div>
 				<div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-secondary/20 blur-3xl" />
@@ -76,20 +75,14 @@ function PodcastsPage() {
 							>
 								<div className="relative aspect-square overflow-hidden rounded-2xl bg-zinc-900">
 									<img
-										src={
-											episode.thumbnail ||
-											"/api/placeholder/400/400"
-										}
+										src={episode.thumbnail || "/api/placeholder/400/400"}
 										alt={episode.title}
 										className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
 										loading="lazy"
 									/>
 									<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
 										<div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white shadow-2xl">
-											<Play
-												className="w-6 h-6"
-												fill="currentColor"
-											/>
+											<Play className="w-6 h-6" fill="currentColor" />
 										</div>
 									</div>
 									<div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm">

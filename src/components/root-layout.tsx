@@ -7,7 +7,9 @@ export function RouteLayout() {
 
 	return (
 		<ScrollRestoration>
-			<Outlet />
+			<main>
+				<Outlet />
+			</main>
 		</ScrollRestoration>
 	);
 }

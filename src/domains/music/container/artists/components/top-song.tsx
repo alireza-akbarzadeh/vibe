@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { Heart, MoreHorizontal, Music, Pause, Play } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { Song } from "../artist.domains";
 
@@ -125,10 +125,11 @@ export function TopSongs({ songs }: { songs: Song[] }) {
 									className="p-2 rounded-full hover:bg-white/10 transition-colors"
 								>
 									<Heart
-										className={`w-5 h-5 transition-colors ${likedSongs.includes(song.id)
-											? "fill-purple-500 text-purple-500"
-											: "text-gray-400"
-											}`}
+										className={`w-5 h-5 transition-colors ${
+											likedSongs.includes(song.id)
+												? "fill-purple-500 text-purple-500"
+												: "text-gray-400"
+										}`}
 									/>
 								</motion.button>
 

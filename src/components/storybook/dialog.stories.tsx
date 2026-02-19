@@ -56,20 +56,30 @@ export const Form: Story = {
 		children: (
 			<div className="space-y-4 min-w-80">
 				<div className="flex flex-col gap-2">
-					<label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+					<label
+						htmlFor="storybook-email"
+						className="text-sm font-medium text-gray-700 dark:text-gray-200"
+					>
 						Email
 					</label>
+					{/* biome-ignore lint/correctness/useUniqueElementIds: Storybook stories are not interactive, so unique IDs are not required. */}
 					<input
+						id="storybook-email"
 						type="email"
 						placeholder="you@example.com"
 						className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
 					/>
 				</div>
 				<div className="flex flex-col gap-2">
-					<label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+					<label
+						htmlFor="storybook-password"
+						className="text-sm font-medium text-gray-700 dark:text-gray-200"
+					>
 						Password
 					</label>
+					{/* biome-ignore lint/correctness/useUniqueElementIds: Storybook stories are not interactive, so unique IDs are not required. */}
 					<input
+						id="storybook-password"
 						type="password"
 						placeholder="••••••••"
 						className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"

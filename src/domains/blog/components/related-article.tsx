@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ArrowUpRight, Clock } from "lucide-react";
+import { motion } from "@/components/motion";
 import { generateSlug } from "@/lib/utils";
 import { MOCK_ARTICLES, type Rating } from "../blog-mock";
 

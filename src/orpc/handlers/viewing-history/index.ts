@@ -1,9 +1,9 @@
-import { base } from "@/orpc/router/base";
+import { os } from "@/orpc/server";
 import { clearHistory, deleteHistoryItem } from "./delete";
 import { getContinueWatching, getViewingHistory } from "./get";
 import { updateProgress } from "./update";
 
-export const ViewingHistoryRouter = base.router({
+export const viewingHistoryProcedures = os.router({
 	update: updateProgress,
 	get: getViewingHistory,
 	continueWatching: getContinueWatching,

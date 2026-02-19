@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -12,6 +11,7 @@ import {
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@/components/ui/forms/form.tsx";
 import { Input } from "@/components/ui/input";

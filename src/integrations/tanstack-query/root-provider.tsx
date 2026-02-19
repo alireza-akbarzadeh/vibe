@@ -9,7 +9,7 @@ export function getContext() {
 					// Don't retry on auth errors or specific HTTP errors
 					if (error?.status === 401 || error?.status === 403) return false;
 					return count < 3;
-				}
+				},
 			},
 		},
 	});

@@ -1,17 +1,9 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { authedProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
-import { withRequire } from "@/orpc/middleware/middleware";
-import { base } from "@/orpc/router/base";
 
-export const deleteMedia = base
-	.use(
-		withRequire({
-			role: "ADMIN",
-			permission: { resource: "media", action: "delete" },
-		}),
-	)
+export const deleteMedia = authedProcedure
 	.input(z.object({ id: z.string() }))
 	.output(
 		ApiResponseSchema(
@@ -21,7 +13,7 @@ export const deleteMedia = base
 		),
 	)
 	.handler(async ({ input, context }) => {
-		const result = await prisma.$transaction(async (tx) => {
+		const result = await context.db.transaction(async (tx) => {
 			const existing = await tx.media.findUnique({
 				where: { id: input.id },
 			});

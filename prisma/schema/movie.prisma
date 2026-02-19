@@ -36,11 +36,14 @@ model Media {
     videos        Video[]
     images        Image[]
     cast          MediaCast[]
+    rooms         Room[]
+    playbackStates PlaybackState[]
 
     @@index([title])
     @@index([title, status])
     @@index([title, releaseYear])
     @@index([createdAt])
+    @@index([type])
     @@map("Media")
 }
 
@@ -272,6 +275,7 @@ model ViewingHistory {
     @@unique([profileId, mediaId])
     @@index([profileId, mediaId])
     @@index([profileId, lastWatchedAt])
+    @@index([profileId])
 }
 
 model Favorite {
@@ -284,6 +288,8 @@ model Favorite {
     media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
 
     @@unique([userId, mediaId])
+    @@index([userId])
+    @@index([mediaId])
 }
 
 model WatchList {

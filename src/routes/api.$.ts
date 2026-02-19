@@ -6,9 +6,11 @@ import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { createFileRoute } from "@tanstack/react-router";
 import type { ORPCContext } from "@/orpc/context";
-import { router } from "@/orpc/router";
+import { appRouter } from "@/orpc/router";
 
-const handler = new OpenAPIHandler(router, {
+import { db } from "@/server/db";
+
+const handler = new OpenAPIHandler(appRouter, {
 	plugins: [
 		new SmartCoercionPlugin({
 			schemaConverters: [new ZodToJsonSchemaConverter()],
@@ -27,6 +29,7 @@ const handler = new OpenAPIHandler(router, {
 
 async function handle({ request }: { request: Request }) {
 	const context: ORPCContext = {
+		db,
 		user: undefined,
 		session: undefined,
 	};

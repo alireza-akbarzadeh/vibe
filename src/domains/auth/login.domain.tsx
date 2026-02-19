@@ -1,5 +1,4 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
 	ArrowRight,
 	Eye,
@@ -15,6 +14,7 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@/components/ui/forms/form";
 import { InputPassword } from "@/components/ui/forms/input-password";

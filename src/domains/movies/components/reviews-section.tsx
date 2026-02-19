@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Review } from "./review";
 
@@ -32,7 +32,7 @@ interface ReviewsSectionProps {
 	mediaId: string;
 }
 
-export function ReviewsSection({ reviews, mediaId }: ReviewsSectionProps) {
+export function ReviewsSection({ reviews }: ReviewsSectionProps) {
 	const [filter, setFilter] = useState("all");
 	const [expandedReviews, setExpandedReviews] = useState(new Set());
 
@@ -57,7 +57,9 @@ export function ReviewsSection({ reviews, mediaId }: ReviewsSectionProps) {
 					<h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
 						Reviews
 					</h2>
-					<p className="text-gray-400">No reviews yet. Be the first to review!</p>
+					<p className="text-gray-400">
+						No reviews yet. Be the first to review!
+					</p>
 				</div>
 			</section>
 		);

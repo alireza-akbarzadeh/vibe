@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 
 interface LightBoxProps {

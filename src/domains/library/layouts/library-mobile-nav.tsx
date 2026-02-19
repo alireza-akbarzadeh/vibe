@@ -1,6 +1,6 @@
 import { useLocation } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Film, Home, Mic2, Music, User } from "lucide-react";
+import { motion } from "@/components/motion";
 
 import { Link } from "@/components/ui/link.tsx";
 import type { LibraryNav } from "@/domains/library/library-types.ts";

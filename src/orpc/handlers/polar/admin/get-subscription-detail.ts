@@ -42,9 +42,7 @@ export const getSubscriptionDetail = adminProcedure
 			const priceCurrency =
 				price && "priceCurrency" in price ? price.priceCurrency : "USD";
 			const recurringInterval =
-				price && "recurringInterval" in price
-					? price.recurringInterval
-					: null;
+				price && "recurringInterval" in price ? price.recurringInterval : null;
 
 			// Find local user
 			const localUser = await prisma.user.findFirst({
@@ -68,7 +66,9 @@ export const getSubscriptionDetail = adminProcedure
 				amount: priceAmount,
 				currency: priceCurrency,
 				interval: recurringInterval as string | null,
-				currentPeriodStart: toDateString(subscription.currentPeriodStart) || new Date().toISOString(),
+				currentPeriodStart:
+					toDateString(subscription.currentPeriodStart) ||
+					new Date().toISOString(),
 				currentPeriodEnd: toDateString(subscription.currentPeriodEnd),
 				cancelAtPeriodEnd: subscription.cancelAtPeriodEnd,
 				startedAt: toDateString(subscription.startedAt),

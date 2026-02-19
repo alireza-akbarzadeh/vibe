@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { motion, useScroll, useTransform } from "@/components/motion";
 import {
 	AlbumsSection,
 	ArtistHero,
@@ -15,7 +15,7 @@ export type Albums = {
 	type: string;
 	tracks: number;
 	cover: string;
-}
+};
 
 export type Artist = {
 	id: number;
@@ -39,7 +39,7 @@ export type Song = {
 	album: string;
 	albumArt: string;
 	isExplicit: boolean;
-	artist: string
+	artist: string;
 };
 
 export function ArtistProfile() {
@@ -47,7 +47,6 @@ export function ArtistProfile() {
 	const { scrollY } = useScroll();
 	const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 	const scale = useTransform(scrollY, [0, 300], [1, 1.1]);
-
 
 	const artist: Artist = {
 		id: 1,

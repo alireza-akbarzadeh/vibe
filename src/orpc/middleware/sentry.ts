@@ -10,12 +10,12 @@ export const sentryMiddleware = os.middleware(async ({ next, path }, input) => {
 			);
 		}
 		if (input) {
-			// @ts-ignore - input is typed as any/unknown in middleware signature
+			// @ts-expect-error - input is typed as any/unknown in middleware signature
 			scope.setContext("input", { input });
 		}
 
 		try {
-			// @ts-ignore - input is passed as second argument to middleware, but next() expects context updates
+			// @ts-expect-error - input is passed as second argument to middleware, but next() expects context updates
 			return await next({});
 		} catch (error) {
 			Sentry.captureException(error);

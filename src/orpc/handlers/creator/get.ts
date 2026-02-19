@@ -11,8 +11,8 @@ export const listCreators = publicProcedure
 	.input(
 		z
 			.object({
-				page: z.number().min(1).default(1),
 				limit: z.number().min(1).max(100).default(20),
+				cursor: z.string().cuid().optional(),
 				search: z.string().optional(),
 			})
 			.optional(),
@@ -22,9 +22,8 @@ export const listCreators = publicProcedure
 			ResponseSchema.PaginatedOutput(creatorOutput),
 		),
 	)
-	.handler(async ({ input = { page: 1, limit: 20 } }) => {
-		const { page, limit, search } = input;
-		const skip = (page - 1) * limit;
+	.handler(async ({ input = { limit: 20 } }) => {
+		const { limit, cursor, search } = input;
 
 		const where = search
 			? {
@@ -35,15 +34,18 @@ export const listCreators = publicProcedure
 				}
 			: undefined;
 
-		const [creators, total] = await Promise.all([
-			prisma.creator.findMany({
-				where,
-				orderBy: { name: "asc" },
-				skip,
-				take: limit,
-			}),
-			prisma.creator.count({ where }),
-		]);
+		const creators = await prisma.creator.findMany({
+			where,
+			orderBy: { name: "asc" },
+			take: limit + 1,
+			...(cursor && { cursor: { id: cursor } }),
+		});
+
+		let nextCursor: string | undefined;
+		if (creators.length > limit) {
+			const nextItem = creators.pop();
+			nextCursor = nextItem?.id;
+		}
 
 		return {
 			status: 200,
@@ -56,11 +58,7 @@ export const listCreators = publicProcedure
 					image: c.image,
 					birthDate: c.birthDate?.toISOString() ?? null,
 				})),
-				pagination: {
-					page,
-					limit,
-					total,
-				},
+				nextCursor,
 			},
 		};
 	});

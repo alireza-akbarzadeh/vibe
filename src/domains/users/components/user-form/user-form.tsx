@@ -1,7 +1,21 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Building2, Lock, Mail, MapPin, Shield, User, Users, Zap } from "lucide-react";
+import {
+	Building2,
+	Lock,
+	Mail,
+	MapPin,
+	Shield,
+	User,
+	Users,
+	Zap,
+} from "lucide-react";
 import { toast } from "sonner";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
 import { useForm } from "@/components/ui/forms/form";
 import { CompactField } from "@/domains/dashboard/components/user-table/compact-field";
 
@@ -9,10 +23,16 @@ import type { UserAccount } from "../../server/users.functions";
 import { userAccountSchema } from "../../user.schema";
 import UserFormHeader from "./user-form-header";
 
-export function UserForm({ initialData, mode = "create" }: { initialData?: Partial<UserAccount>; mode?: "create" | "edit" }) {
+export function UserForm({
+	initialData,
+	mode = "create",
+}: {
+	initialData?: Partial<UserAccount>;
+	mode?: "create" | "edit";
+}) {
 	const navigate = useNavigate();
 	const isEditMode = mode === "edit" || !!initialData?.id;
-	console.log('initialData:', initialData);
+	console.log("initialData:", initialData);
 
 	const form = useForm(userAccountSchema, {
 		defaultValues: initialData ?? {
@@ -61,8 +81,6 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 		},
 	});
 
-
-
 	type CountryOption = { code: string; name: string; flag: string };
 
 	const countries: CountryOption[] = [
@@ -72,7 +90,12 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 		{ code: "CA", name: "Canada", flag: "🇨🇦" },
 	];
 
-	const billingStatusOptions = ["active", "past_due", "cancelled", "trialing"] as const;
+	const billingStatusOptions = [
+		"active",
+		"past_due",
+		"cancelled",
+		"trialing",
+	] as const;
 	const timezones = [
 		"UTC",
 		"America/New_York",
@@ -84,19 +107,37 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 		"Europe/Paris",
 		"Asia/Tokyo",
 		"Asia/Shanghai",
-		"Australia/Sydney"
+		"Australia/Sydney",
 	] as const;
-	const locales = ["en-US", "en-GB", "es-ES", "fr-FR", "de-DE", "ja-JP"] as const;
+	const locales = [
+		"en-US",
+		"en-GB",
+		"es-ES",
+		"fr-FR",
+		"de-DE",
+		"ja-JP",
+	] as const;
 
 	return (
 		<div className="min-h-screen  bg-[#020408] text-slate-400  px-6 font-sans">
-			<div className={"bg-[#0a0c10] border border-white/5 rounded-2xl overflow-hidden shadow-2xl"}>
+			<div
+				className={
+					"bg-[#0a0c10] border border-white/5 rounded-2xl overflow-hidden shadow-2xl"
+				}
+			>
 				<UserFormHeader isEditMode={isEditMode} />
 
 				<form.Root className="p-8">
-					<Accordion type="multiple" defaultValue={["identity", "contact", "organization", "billing"]} className="space-y-6">
+					<Accordion
+						type="multiple"
+						defaultValue={["identity", "contact", "organization", "billing"]}
+						className="space-y-6"
+					>
 						{/* SECTION 1: CORE IDENTITY */}
-						<AccordionItem value="identity" className="border border-white/5 rounded-xl bg-slate-900/20 backdrop-blur-sm">
+						<AccordionItem
+							value="identity"
+							className="border border-white/5 rounded-xl bg-slate-900/20 backdrop-blur-sm"
+						>
 							<AccordionTrigger className="px-6 py-4 hover:no-underline">
 								<h2 className="text-lg font-bold text-white">Core Identity</h2>
 							</AccordionTrigger>
@@ -139,9 +180,14 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 						</AccordionItem>
 
 						{/* SECTION 2: CONTACT DETAILS */}
-						<AccordionItem value="contact" className="border border-white/5 rounded-xl bg-slate-900/20 backdrop-blur-sm">
+						<AccordionItem
+							value="contact"
+							className="border border-white/5 rounded-xl bg-slate-900/20 backdrop-blur-sm"
+						>
 							<AccordionTrigger className="px-6 py-4 hover:no-underline">
-								<h2 className="text-lg font-bold text-white">Contact Details</h2>
+								<h2 className="text-lg font-bold text-white">
+									Contact Details
+								</h2>
 							</AccordionTrigger>
 							<AccordionContent className="px-6 pb-6">
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
@@ -182,7 +228,9 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 											getOptionValue={(opt) => opt.code}
 											getOptionLabel={(opt) => opt.name}
 											renderOption={(opt) => (
-												<span>{opt.flag} {opt.name}</span>
+												<span>
+													{opt.flag} {opt.name}
+												</span>
 											)}
 										/>
 									</div>
@@ -191,9 +239,14 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 						</AccordionItem>
 
 						{/* SECTION 3: ORGANIZATION & SETTINGS */}
-						<AccordionItem value="organization" className="border border-white/5 rounded-xl bg-slate-900/20 backdrop-blur-sm">
+						<AccordionItem
+							value="organization"
+							className="border border-white/5 rounded-xl bg-slate-900/20 backdrop-blur-sm"
+						>
 							<AccordionTrigger className="px-6 py-4 hover:no-underline">
-								<h2 className="text-lg font-bold text-white">Organization & Settings</h2>
+								<h2 className="text-lg font-bold text-white">
+									Organization & Settings
+								</h2>
 							</AccordionTrigger>
 							<AccordionContent className="px-6 pb-6">
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
@@ -241,9 +294,14 @@ export function UserForm({ initialData, mode = "create" }: { initialData?: Parti
 						</AccordionItem>
 
 						{/* SECTION 4: BILLING & SECURITY */}
-						<AccordionItem value="billing" className="border border-white/5 rounded-xl bg-slate-900/20 backdrop-blur-sm">
+						<AccordionItem
+							value="billing"
+							className="border border-white/5 rounded-xl bg-slate-900/20 backdrop-blur-sm"
+						>
 							<AccordionTrigger className="px-6 py-4 hover:no-underline">
-								<h2 className="text-lg font-bold text-white">Billing & Security</h2>
+								<h2 className="text-lg font-bold text-white">
+									Billing & Security
+								</h2>
 							</AccordionTrigger>
 							<AccordionContent className="px-6 pb-6">
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">

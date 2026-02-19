@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "@/components/motion";
 import type { CastType } from "@/domains/movies/containers/cast-carousel.tsx";
 
 interface CastListProps {

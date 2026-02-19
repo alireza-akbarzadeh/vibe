@@ -33,7 +33,7 @@ interface AppDialogProps {
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;
 	component: "sheet" | "drawer";
-	className?: string
+	className?: string;
 }
 
 export function AppDialog(props: AppDialogProps) {
@@ -45,7 +45,7 @@ export function AppDialog(props: AppDialogProps) {
 		open,
 		onOpenChange,
 		component,
-		className
+		className,
 	} = props;
 	const { isMobile } = useMediaQuery();
 
@@ -53,7 +53,13 @@ export function AppDialog(props: AppDialogProps) {
 		return (
 			<Sheet open={open} onOpenChange={onOpenChange}>
 				{trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-				<SheetContent side="bottom" className={cn("rounded-t-[20px] border-t border-white/10 bg-[#121212]", className)}>
+				<SheetContent
+					side="bottom"
+					className={cn(
+						"rounded-t-[20px] border-t border-white/10 bg-[#121212]",
+						className,
+					)}
+				>
 					<SheetHeader>
 						{title && <SheetTitle>{title}</SheetTitle>}
 						{description && <SheetDescription>{description}</SheetDescription>}
@@ -68,14 +74,24 @@ export function AppDialog(props: AppDialogProps) {
 		return (
 			<Drawer open={open} onOpenChange={onOpenChange}>
 				{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
-				<DrawerContent className={cn("rounded-t-[20px] border-t border-white/10 bg-[#121212] focus:outline-none")}>
+				<DrawerContent
+					className={cn(
+						"rounded-t-[20px] border-t border-white/10 bg-[#121212] focus:outline-none",
+					)}
+				>
 					{/* iPhone Styled Handle Bar */}
 					<div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/20" />
 
 					<DrawerHeader className="mt-2">
-						{title && <DrawerTitle className="text-center text-lg font-semibold">{title}</DrawerTitle>}
+						{title && (
+							<DrawerTitle className="text-center text-lg font-semibold">
+								{title}
+							</DrawerTitle>
+						)}
 						{description && (
-							<DrawerDescription className="text-center">{description}</DrawerDescription>
+							<DrawerDescription className="text-center">
+								{description}
+							</DrawerDescription>
 						)}
 					</DrawerHeader>
 					<div className="mt-2 px-4 pb-8">{children}</div>
@@ -87,7 +103,11 @@ export function AppDialog(props: AppDialogProps) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			{trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-			<DialogContent className={cn("sm:max-w-106.25 bg-[#1a1a1a] border-white/10 shadow-2xl")}>
+			<DialogContent
+				className={cn(
+					"sm:max-w-106.25 bg-[#1a1a1a] border-white/10 shadow-2xl",
+				)}
+			>
 				<DialogHeader>
 					{title && <DialogTitle>{title}</DialogTitle>}
 					{description && <DialogDescription>{description}</DialogDescription>}

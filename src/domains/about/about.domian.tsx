@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
 	ArrowRight,
 	Film,
@@ -10,6 +9,7 @@ import {
 	Users,
 	Zap,
 } from "lucide-react";
+import { motion } from "@/components/motion";
 
 import { Button } from "@/components/ui/button";
 import { FeatureCard } from "./feature-about-card";

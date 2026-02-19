@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "@/components/motion";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import { cn } from "@/lib/utils.ts";
@@ -12,7 +12,12 @@ export const LibraryPinnedItem = ({
 	label: string;
 	color: string;
 	isOpen: boolean;
-	itemData: { id: string; title: string; artist: string;[key: string]: any };
+	itemData: {
+		id: string;
+		title: string;
+		artist: string;
+		[key: string]: unknown;
+	};
 }) => {
 	// 1. Monitor the store for the active track
 	const currentTrackId = useLibraryStore((s) => s.player.currentTrack?.id);
@@ -25,7 +30,7 @@ export const LibraryPinnedItem = ({
 		<motion.div
 			whileHover={{ x: isOpen ? 4 : 0 }}
 			whileTap={{ scale: 0.97 }}
-			onClick={() => libraryActions.playTrack(itemData as any)}
+			onClick={() => libraryActions.playTrack(itemData)}
 			className={cn(
 				"relative flex items-center gap-3 px-4 py-2 cursor-pointer group transition-all duration-300",
 				!isOpen && "justify-center",
@@ -38,9 +43,7 @@ export const LibraryPinnedItem = ({
 					className={cn(
 						"w-2 h-2 rounded-full transition-all duration-500 z-10 relative",
 						color,
-						isActive
-						&& "scale-125"
-
+						isActive && "scale-125",
 					)}
 				/>
 
@@ -78,7 +81,7 @@ export const LibraryPinnedItem = ({
 
 						{isActive && isPlaying && (
 							<div className="flex gap-[1.5px] items-end h-2.5 shrink-0">
-								{[0.6, 1, 0.4].map((h, i) => (
+								{[0.6, 1, 0.4].map((_h, i) => (
 									<motion.div
 										key={i}
 										animate={{ height: ["20%", "100%", "20%"] }}

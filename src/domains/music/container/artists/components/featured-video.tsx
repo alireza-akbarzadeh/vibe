@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { Eye, Play } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 
 export function FeaturedVideo({ video }) {
 	const [isHovered, setIsHovered] = useState(false);

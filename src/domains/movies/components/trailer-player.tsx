@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { PlayButton } from "@/components/play-button";
 
 interface TrailerPlayerProps {

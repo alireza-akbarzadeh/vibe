@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { Check, Film, Music, Sparkles, TrendingUp } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import type { ArtistType } from "../discovery.domain";
 
 interface ArtistCardProps {

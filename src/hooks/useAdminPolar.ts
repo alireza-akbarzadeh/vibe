@@ -127,7 +127,10 @@ export function useAdminSubscriptionStats() {
 }
 
 // Admin Customers
-export function useAdminAllCustomers(params: { limit?: number; page?: number }) {
+export function useAdminAllCustomers(params: {
+	limit?: number;
+	page?: number;
+}) {
 	return useQuery({
 		queryKey: ["admin", "customers", params],
 		queryFn: async () => {

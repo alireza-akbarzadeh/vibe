@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { BookOpen, Loader2, Sparkles } from "lucide-react";
+import { motion } from "@/components/motion";
 import {
 	fadeInUp,
 	MotionPage,
@@ -37,8 +37,8 @@ function BlogsPage() {
 					Articles & Highlights
 				</h1>
 				<p className="text-muted-foreground max-w-xl">
-					Curated picks, top-rated content, and editorial
-					highlights from our catalog.
+					Curated picks, top-rated content, and editorial highlights from our
+					catalog.
 				</p>
 			</motion.section>
 
@@ -61,10 +61,7 @@ function BlogsPage() {
 						<div className="grid md:grid-cols-2">
 							<div className="relative aspect-video md:aspect-auto overflow-hidden">
 								<img
-									src={
-										featured.thumbnail ||
-										"/api/placeholder/800/500"
-									}
+									src={featured.thumbnail || "/api/placeholder/800/500"}
 									alt={featured.title}
 									className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
 									loading="lazy"
@@ -118,10 +115,7 @@ function BlogsPage() {
 						>
 							<div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-900 mb-4">
 								<img
-									src={
-										item.thumbnail ||
-										"/api/placeholder/600/340"
-									}
+									src={item.thumbnail || "/api/placeholder/600/340"}
 									alt={item.title}
 									className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
 									loading="lazy"

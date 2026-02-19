@@ -1,5 +1,5 @@
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "@/components/motion";
 import { actions, blogStore } from "@/domains/blog/store/blog.store";
 
 // A small internal component for the pulsing number

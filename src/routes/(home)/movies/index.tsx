@@ -23,15 +23,13 @@ export const Route = createFileRoute("/(home)/movies/")({
 	component: RouteComponent,
 });
 
-export type MovieSearchQuery = { query?: string }
+export type MovieSearchQuery = { query?: string };
 
 function RouteComponent() {
 	const search = Route.useSearch();
 	const navigate = useNavigate();
 
-	const handleSearchChange = async (next: {
-		query?: string;
-	}) => {
+	const handleSearchChange = async (next: { query?: string }) => {
 		await navigate({
 			to: ".",
 			search: {
@@ -42,10 +40,5 @@ function RouteComponent() {
 		});
 	};
 
-	return (
-		<MovieDiscovery
-			query={search}
-			onSearchChange={handleSearchChange}
-		/>
-	);
+	return <MovieDiscovery query={search} onSearchChange={handleSearchChange} />;
 }

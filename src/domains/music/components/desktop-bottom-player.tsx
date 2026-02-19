@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: The click events are handled by the slider component. */
 import { useStore } from "@tanstack/react-store";
 import {
 	ListMusic,

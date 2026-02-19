@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { useRef, useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 
 interface VideoProgressbarProps {
 	currentTime: number;
@@ -74,7 +74,7 @@ export function VideoProgressbar({
 	const handleMouseUp = () => {
 		setIsDragging(false);
 		if (wasPlayingRef.current) onPlay();
-		window.removeEventListener("mousemove", handleMouseMove as any);
+		window.removeEventListener("mousemove", handleMouseMove);
 		window.removeEventListener("mouseup", handleMouseUp);
 	};
 

@@ -76,8 +76,7 @@ export const adminCancelSubscription = adminProcedure
 					: "Subscription will be cancelled at end of billing period",
 			};
 		} catch (error: unknown) {
-			const message =
-				error instanceof Error ? error.message : "Unknown error";
+			const message = error instanceof Error ? error.message : "Unknown error";
 			if (message.includes("not found") || message.includes("NOT_FOUND")) {
 				throw errors.NOT_FOUND({ message: "Subscription not found" });
 			}

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
 	BadgeCheck,
 	MapPin,
@@ -9,6 +8,7 @@ import {
 	UserPlus,
 } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { Artist } from "../artist.domains";
 

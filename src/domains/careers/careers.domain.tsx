@@ -1,5 +1,5 @@
-/** biome-ignore-all lint/correctness/useUniqueElementIds: <explanation> */
-import { AnimatePresence, motion } from "framer-motion";
+/** biome-ignore-all lint/correctness/useUniqueElementIds: The ID is used for scrolling to the careers section. */
+
 import {
 	Briefcase,
 	Calendar,
@@ -24,6 +24,7 @@ import {
 	Zap,
 } from "lucide-react";
 import { useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 

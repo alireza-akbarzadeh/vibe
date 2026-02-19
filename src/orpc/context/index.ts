@@ -1,3 +1,7 @@
+import { os } from "@orpc/server";
+import SuperJSON from "superjson";
+
+import type { DatabaseClient } from "@/server/db";
 import type { AuthContext } from "../middleware/middleware";
 import {
 	requireAdmin,
@@ -5,74 +9,73 @@ import {
 	withAuth,
 	withRequire,
 } from "../middleware/middleware";
-import { base } from "../router/base";
 
-/* -------------------------------------------------------------------------- */
-/*                              BASE CONTEXT                                  */
-/* -------------------------------------------------------------------------- */
+import { withDb } from "../middleware/with-db";
 
-export type ORPCContext = Partial<AuthContext>;
+export type ORPCContext = { db: DatabaseClient; auth: AuthContext };
 
-// Use the base with error definitions
-export const publicProcedure = base.$context<ORPCContext>();
+export const base = os.$context<ORPCContext>().errors({
+	NOT_FOUND: {
+		status: 404,
+		message: "Not Found",
+	},
+	UNAUTHORIZED: {
+		status: 401,
+		message: "Unauthorized",
+	},
+	FORBIDDEN: {
+		status: 403,
+		message: "Forbidden",
+	},
+	BAD_REQUEST: {
+		status: 400,
+		message: "Bad Request",
+	},
+	CONFLICT: {
+		status: 409,
+		message: "Conflict",
+	},
+	TOO_MANY_REQUESTS: {
+		status: 429,
+		message: "Too Many Requests",
+	},
+});
 
-/* -------------------------------------------------------------------------- */
-/*                            AUTHED PROCEDURE                                */
-/* -------------------------------------------------------------------------- */
+export const publicProcedure = base.use(withDb);
 
 export const authedProcedure = publicProcedure.use(withAuth);
 
-/* -------------------------------------------------------------------------- */
-/*                             ADMIN PROCEDURE                                */
-/* -------------------------------------------------------------------------- */
+export const adminProcedure = authedProcedure.use(requireAdmin());
 
-export const adminProcedure = publicProcedure.use(withAuth).use(requireAdmin());
+export const subscribedProcedure = authedProcedure.use(
+	requireSubscription(["PREMIUM", "FAMILY"]),
+);
 
-/* -------------------------------------------------------------------------- */
-/*                        SUBSCRIBED PROCEDURE                                 */
-/* -------------------------------------------------------------------------- */
+export const premiumProcedure = authedProcedure.use(
+	requireSubscription(["PREMIUM", "FAMILY"]),
+);
 
-export const subscribedProcedure = publicProcedure
-	.use(withAuth)
-	.use(requireSubscription(["PREMIUM", "FAMILY"]));
-
-/* -------------------------------------------------------------------------- */
-/*                        PREMIUM ONLY PROCEDURE                              */
-/* -------------------------------------------------------------------------- */
-
-export const premiumProcedure = publicProcedure
-	.use(withAuth)
-	.use(requireSubscription(["PREMIUM", "FAMILY"]));
-
-/* -------------------------------------------------------------------------- */
-/*                      COLLECTION ADMIN PROCEDURES                           */
-/* -------------------------------------------------------------------------- */
-
-export const collectionCreateProcedure = publicProcedure.use(
+export const collectionCreateProcedure = authedProcedure.use(
 	withRequire({
 		role: "ADMIN",
 		permission: { resource: "collection", action: "create" },
 	}),
 );
 
-export const collectionUpdateProcedure = publicProcedure.use(
+export const collectionUpdateProcedure = authedProcedure.use(
 	withRequire({
 		role: "ADMIN",
 		permission: { resource: "collection", action: "update" },
 	}),
 );
 
-export const collectionDeleteProcedure = publicProcedure.use(
+export const collectionDeleteProcedure = authedProcedure.use(
 	withRequire({
 		role: "ADMIN",
 		permission: { resource: "collection", action: "delete" },
 	}),
 );
 
-/* -------------------------------------------------------------------------- */
-/*                         ROLE MANAGEMENT PROCEDURE                          */
-/* -------------------------------------------------------------------------- */
-
-export const roleProcedure = publicProcedure.use(
+export const roleProcedure = authedProcedure.use(
 	withRequire({ role: "ADMIN" }),
 );

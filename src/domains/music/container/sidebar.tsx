@@ -1,5 +1,4 @@
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import {
 	Home,
 	Library,
@@ -7,15 +6,16 @@ import {
 	Minimize2,
 	Plus,
 	Search,
-	X
+	X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/logo";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Input } from "@/components/ui/input";
 import {
 	type ActiveFilter,
 	musicAction,
-	musicStore
+	musicStore,
 } from "@/domains/music/music.store";
 import { cn } from "@/lib/utils";
 import { AddToPlaylistModal } from "../components/add-playlist";
@@ -61,10 +61,14 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 		<div className="flex flex-col h-full gap-2 p-2 select-none w-full bg-black">
 			{/* Top Navigation Group */}
 			<nav className="bg-[#121212] rounded-xl p-2 space-y-1">
-				<div className={cn(
-					"mb-2 transition-all duration-300",
-					isSidebarCollapsed ? "opacity-0 h-0 overflow-hidden" : "opacity-100 p-2"
-				)}>
+				<div
+					className={cn(
+						"mb-2 transition-all duration-300",
+						isSidebarCollapsed
+							? "opacity-0 h-0 overflow-hidden"
+							: "opacity-100 p-2",
+					)}
+				>
 					<Logo />
 				</div>
 
@@ -86,10 +90,12 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 			<div className="bg-[#121212] rounded-xl flex-1 flex flex-col overflow-hidden">
 				<header className="pt-3 px-4 z-10">
 					{/* Library Header Row */}
-					<div className={cn(
-						"flex items-center text-gray-400 mb-2 transition-all",
-						isSidebarCollapsed ? "justify-center" : "justify-between"
-					)}>
+					<div
+						className={cn(
+							"flex items-center text-gray-400 mb-2 transition-all",
+							isSidebarCollapsed ? "justify-center" : "justify-between",
+						)}
+					>
 						<button
 							type="button"
 							onClick={() => !forceFull && musicAction.toggleSidebar()}
@@ -123,7 +129,6 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 											<Plus className="w-6 h-7" />
 										</button>
 									}
-
 								/>
 								{/* Hide collapse toggle in mobile drawer */}
 								{!forceFull && (
@@ -147,21 +152,23 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 							className="space-y-3 overflow-hidden"
 						>
 							<div className="flex gap-2 pb-1 overflow-x-auto no-scrollbar">
-								{(["All", "Playlists", "Artists"] as ActiveFilter[]).map((f) => (
-									<button
-										type="button"
-										key={f}
-										onClick={() => musicAction.setFilter(f)}
-										className={cn(
-											"text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap transition-all",
-											activeFilter === f
-												? "bg-white text-black"
-												: "bg-[#2a2a2a] text-white hover:bg-[#333]"
-										)}
-									>
-										{f}
-									</button>
-								))}
+								{(["All", "Playlists", "Artists"] as ActiveFilter[]).map(
+									(f) => (
+										<button
+											type="button"
+											key={f}
+											onClick={() => musicAction.setFilter(f)}
+											className={cn(
+												"text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap transition-all",
+												activeFilter === f
+													? "bg-white text-black"
+													: "bg-[#2a2a2a] text-white hover:bg-[#333]",
+											)}
+										>
+											{f}
+										</button>
+									),
+								)}
 							</div>
 
 							<div className="pb-2 flex items-center justify-between text-gray-400 min-h-10">
@@ -178,7 +185,9 @@ export function Sidebar({ forceFull = false }: SidebarProps) {
 												placeholder="Search in Your Library"
 												autoFocus
 												value={searchQuery}
-												onChange={(e) => musicAction.setSearchQuery(e.target.value)}
+												onChange={(e) =>
+													musicAction.setSearchQuery(e.target.value)
+												}
 											/>
 											<X
 												className="w-3.5 h-3.5 cursor-pointer hover:text-white"

@@ -1,16 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Play, Star, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { AddButton } from "@/components/buttons/add-button";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import type { MediaList } from "@/orpc/models/media.schema";
 
-
 type HeroBannerProps = {
-	latestData: MediaList[]
-}
+	latestData: MediaList[];
+};
 export function HeroBanner({ latestData }: HeroBannerProps) {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [isMuted, setIsMuted] = useState(true);
@@ -25,11 +24,13 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 
 	// Auto-scroll sidebar when index changes
 	useEffect(() => {
-		const activeItem = sidebarRef.current?.children[currentIndex] as HTMLElement;
+		const activeItem = sidebarRef.current?.children[
+			currentIndex
+		] as HTMLElement;
 		if (activeItem) {
 			sidebarRef.current?.scrollTo({
 				top: activeItem.offsetTop - 100,
-				behavior: "smooth"
+				behavior: "smooth",
 			});
 		}
 	}, [currentIndex]);
@@ -91,7 +92,6 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 			{/* Content Wrapper */}
 			<div className="relative z-30 h-full flex flex-col justify-end">
 				<div className="max-w-400 mx-auto px-6 md:px-12 w-full pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
-
 					{/* Main Info Section */}
 					<div className="lg:col-span-8 flex flex-col items-start gap-6">
 						<AnimatePresence mode="wait">
@@ -110,13 +110,15 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 									</span>
 									<div className="flex items-center gap-1 text-yellow-500">
 										<Star className="w-4 h-4 fill-current" />
-										<span className="font-bold text-sm tracking-tighter">{current.rating || "8.4"}</span>
+										<span className="font-bold text-sm tracking-tighter">
+											{current.rating || "8.4"}
+										</span>
 									</div>
 								</div>
 
 								{/* Cinematic Title */}
 								<h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter drop-shadow-2xl uppercase">
-									{current.title.split(' ').map((word, i) => (
+									{current.title.split(" ").map((word, i) => (
 										// biome-ignore lint/suspicious/noArrayIndexKey: title parts don't have IDs
 										<span key={`${word}-${i}`} className="inline-block mr-4">
 											{word}
@@ -136,7 +138,10 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 									</span>
 									<div className="hidden md:flex gap-2">
 										{current.genres.slice(0, 3).map((g) => (
-											<span key={g.genre.id} className="text-white/40 hover:text-white transition-colors cursor-default capitalize italic">
+											<span
+												key={g.genre.id}
+												className="text-white/40 hover:text-white transition-colors cursor-default capitalize italic"
+											>
 												#{g.genre.name}
 											</span>
 										))}
@@ -174,7 +179,11 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 											onClick={() => setIsMuted(!isMuted)}
 											className="h-16 w-16 rounded-2xl bg-white/5 backdrop-blur-3xl border border-white/10 text-white hover:bg-white/10 active:scale-90"
 										>
-											{isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
+											{isMuted ? (
+												<VolumeX className="w-6 h-6" />
+											) : (
+												<Volume2 className="w-6 h-6" />
+											)}
 										</Button>
 									</div>
 								</div>
@@ -189,15 +198,19 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 								<span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
 								Featured Hits
 							</span>
-							<span>{currentIndex + 1} / {latestData.length}</span>
+							<span>
+								{currentIndex + 1} / {latestData.length}
+							</span>
 						</div>
 
 						<div
 							ref={sidebarRef}
 							className="flex flex-col gap-3 overflow-y-auto pr-4 scrollbar-hide h-full pb-20 transition-all"
 							style={{
-								maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
-								WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
+								maskImage:
+									"linear-gradient(to bottom, black 80%, transparent 100%)",
+								WebkitMaskImage:
+									"linear-gradient(to bottom, black 80%, transparent 100%)",
 							}}
 						>
 							{latestData.map((movie, idx) => {
@@ -209,19 +222,20 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 										animate={{
 											opacity: isActive ? 1 : 0.4,
 											x: 0,
-											scale: isActive ? 1.02 : 1
+											scale: isActive ? 1.02 : 1,
 										}}
 										transition={{
 											type: "spring",
 											stiffness: 100,
 											damping: 20,
-											delay: idx * 0.05
+											delay: idx * 0.05,
 										}}
 										onClick={() => setCurrentIndex(idx)}
-										className={`group relative min-h-22.5 rounded-2xl overflow-hidden flex items-center transition-all duration-500 shrink-0 border border-white/5 ${isActive
-											? 'bg-white/10 border-white/20 shadow-[0_0_30px_rgba(139,92,246,0.1)]'
-											: 'hover:bg-white/5 hover:border-white/10'
-											}`}
+										className={`group relative min-h-22.5 rounded-2xl overflow-hidden flex items-center transition-all duration-500 shrink-0 border border-white/5 ${
+											isActive
+												? "bg-white/10 border-white/20 shadow-[0_0_30px_rgba(139,92,246,0.1)]"
+												: "hover:bg-white/5 hover:border-white/10"
+										}`}
 									>
 										{/* Highlight background for active */}
 										{isActive && (
@@ -236,7 +250,7 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 												<Image
 													alt={movie.title}
 													src={movie.thumbnail}
-													className={`w-full h-full object-cover transition-transform duration-700 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`}
+													className={`w-full h-full object-cover transition-transform duration-700 ${isActive ? "scale-110" : "group-hover:scale-105"}`}
 												/>
 												{isActive && (
 													<div className="absolute inset-0 bg-purple-500/20 backdrop-blur-[1px] flex items-center justify-center">
@@ -247,7 +261,9 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 										</div>
 
 										<div className="flex-1 px-4 text-left z-10 py-3">
-											<div className={`font-black text-xs uppercase truncate leading-none mb-2 transition-colors ${isActive ? 'text-white' : 'text-white/60'}`}>
+											<div
+												className={`font-black text-xs uppercase truncate leading-none mb-2 transition-colors ${isActive ? "text-white" : "text-white/60"}`}
+											>
 												{movie.title}
 											</div>
 											<div className="flex items-center gap-2">
@@ -282,7 +298,6 @@ export function HeroBanner({ latestData }: HeroBannerProps) {
 						<div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-40 pointer-events-none">
 							<ChevronDown className="w-4 h-4 text-white animate-bounce" />
 						</div>
-
 					</div>
 				</div>
 

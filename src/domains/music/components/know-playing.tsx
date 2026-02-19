@@ -1,6 +1,6 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import type { Song } from "../music.store";
 
 export function NowPlaying({

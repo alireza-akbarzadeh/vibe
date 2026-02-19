@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ArrowLeft, Loader2, Mail, RefreshCw, Shield, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 
 import { MSG } from "@/constants/constants";

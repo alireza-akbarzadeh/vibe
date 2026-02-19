@@ -1,5 +1,5 @@
 import { useLocation } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "@/components/motion";
 import { Link } from "@/components/ui/link";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import { cn } from "@/lib/utils.ts";

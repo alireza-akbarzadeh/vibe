@@ -1,6 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import {
 	Bookmark,
 	CheckCircle2,
@@ -12,6 +11,7 @@ import {
 	TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "@/components/motion";
 import { generateSlug } from "@/lib/utils";
 import type { FeatureArticle, Rating } from "../blog-mock";
 import { actions, blogStore } from "../store/blog.store";

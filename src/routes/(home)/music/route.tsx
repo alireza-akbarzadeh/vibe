@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import { Maximize2, Menu } from "lucide-react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AddToPlaylistModal } from "@/domains/music/components/add-playlist";
 import { BottomPlayer } from "@/domains/music/components/bottom-player";
@@ -34,7 +34,10 @@ function MusicLayout() {
 								<Menu className="w-6 h-6" />
 							</button>
 						</SheetTrigger>
-						<SheetContent side="left" className="p-0 w-80 bg-black border-r border-white/10">
+						<SheetContent
+							side="left"
+							className="p-0 w-80 bg-black border-r border-white/10"
+						>
 							<Sidebar forceFull />
 						</SheetContent>
 					</Sheet>

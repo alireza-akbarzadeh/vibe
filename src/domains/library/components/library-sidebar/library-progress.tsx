@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "@/components/motion";
 
 export const LibraryProgress = () => (
 	<div className="px-6 py-2">

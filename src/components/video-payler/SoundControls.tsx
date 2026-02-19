@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { Volume1, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "@/components/motion";
 
 type VideoControlsProps = {
 	videoRef: React.RefObject<HTMLVideoElement | null>;

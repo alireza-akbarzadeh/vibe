@@ -1,11 +1,26 @@
-import { Film, Headphones, LucideIcon, Tv, Video, Volume2 } from "lucide-react";
-import { ValidLink } from "@/components/ui/link";
+import {
+	Film,
+	Headphones,
+	type LucideIcon,
+	Tv,
+	Video,
+	Volume2,
+} from "lucide-react";
+import type { ValidLink } from "@/components/ui/link";
 import { orpc } from "@/orpc/client";
+
+import { recommendationOutputSchema } from "@/orpc/models/recommendation";
+
+const TrendingResponseSchema = ApiResponseSchema(recommendationOutputSchema);
 
 /** Trending content - movies/shows that are hot right now */
 export function trendingQueryOptions(limit = 10, enabled = true) {
-	return orpc.recommendations.trending.queryOptions({
-		input: { limit, days: 7, page: 1 },
+	return queryOptions<z.infer<typeof TrendingResponseSchema>>({
+		queryKey: ["trending", limit],
+		queryFn: () =>
+			orpc.recommendations.trending.query({
+				input: { limit, days: 7, page: 1 },
+			}),
 		enabled,
 	});
 }
@@ -71,10 +86,18 @@ export function trackStatsQueryOptions() {
 	});
 }
 
+import { queryOptions } from "@tanstack/react-query";
+import type { z } from "zod";
+import { PlatformStatsSchema } from "@/orpc/handlers/health/health.handlers";
+import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
+
+const PlatformStatsResponseSchema = ApiResponseSchema(PlatformStatsSchema);
+
 /** Platform stats (users, movies, tracks) - public endpoint */
 export function platformStatsQueryOptions(enabled = true) {
-	return orpc.health.platformStats.queryOptions({
-		input: undefined,
+	return queryOptions<z.infer<typeof PlatformStatsResponseSchema>>({
+		queryKey: ["platform-stats"],
+		queryFn: () => orpc.health.platformStats.query(),
 		enabled,
 	});
 }

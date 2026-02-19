@@ -1,6 +1,5 @@
 import { useId } from "@mantine/hooks";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
 	ArrowRight,
 	CreditCard,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useForm } from "@/components/ui/forms/form";
@@ -75,7 +75,7 @@ export function RegisterDomain(props: RegisterDomainProps) {
 					password: value.password,
 					name: value.name,
 					agreeToTerms: true,
-				} as any,
+				},
 				{
 					onError: async ({ error }) => {
 						if (error.code === AUTH_STATUS.EMAIL_ALREADY_EXISTS) {

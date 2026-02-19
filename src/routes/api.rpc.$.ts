@@ -6,9 +6,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { auth } from "@/lib/auth/better-auth";
 import { rpcLogger } from "@/lib/rpc-logger";
 import type { ORPCContext } from "@/orpc/context";
-import { router } from "@/orpc/router";
+import { appRouter } from "@/orpc/router";
+import { db } from "@/server/db";
 
-const handler = new RPCHandler(router, {
+const handler = new RPCHandler(appRouter, {
 	plugins: [
 		new LoggingHandlerPlugin({
 			logger: rpcLogger,
@@ -42,6 +43,7 @@ async function handle({ request }: { request: Request }) {
 		const context: ORPCContext = {
 			user: session?.user ?? undefined,
 			session: session?.session ?? undefined,
+			db,
 		};
 
 		const { response } = await handler.handle(request, {

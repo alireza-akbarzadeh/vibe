@@ -1,7 +1,7 @@
 import { Store } from "@tanstack/store";
 import { toast } from "sonner";
 import { client } from "@/orpc/client";
-import { ListMediaInput } from "@/orpc/models/media.input.schema";
+import type { ListMediaInput } from "@/orpc/models/media.input.schema";
 import type { MediaList } from "@/orpc/models/media.schema";
 
 export interface MediaItem extends MediaList {
@@ -130,7 +130,7 @@ export const bulkDeleteMediaAction = async (ids: string[]) => {
 };
 
 // Action: Bulk create media
-export const bulkCreateMediaAction = async (items: any[]) => {
+export const bulkCreateMediaAction = async (items: MediaItem[]) => {
 	mediaUIStore.setState((s) => ({ ...s, isBulkCreating: true, error: null }));
 	try {
 		await client.media.bulkCreate(items);

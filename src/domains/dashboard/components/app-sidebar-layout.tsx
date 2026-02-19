@@ -10,7 +10,7 @@ import { SearchSide } from "./search-setting";
 import { AdminSidebar } from "./sidebar";
 
 export function AppSidebarLayout() {
-	const searchOpen = useStore(dashboardStore, (state) => state.searchOpen);
+	const _searchOpen = useStore(dashboardStore, (state) => state.searchOpen);
 	const mobileOpen = useStore(
 		dashboardStore,
 		(state) => state.mobileSidebarOpen,

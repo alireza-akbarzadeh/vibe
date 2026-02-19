@@ -1,10 +1,12 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
-import {
-	LogIn,
-	Sparkles,
-} from "lucide-react";
+import { LogIn, Sparkles } from "lucide-react";
 import { useState } from "react";
+import {
+	motion,
+	useMotionValueEvent,
+	useScroll,
+	useTransform,
+} from "@/components/motion";
 import { UserMenu } from "@/components/user-menu/user-menu";
 import { cn } from "@/lib/utils";
 import { Route } from "@/routes/__root";

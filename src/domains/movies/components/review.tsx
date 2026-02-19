@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Flag, MessageCircle, Star, ThumbsUp } from "lucide-react";
+import { motion } from "@/components/motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useRef } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { Albums } from "../artist.domains";
 

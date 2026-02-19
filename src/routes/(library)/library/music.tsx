@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Loader2, Music, Play, Sparkles } from "lucide-react";
+import { motion } from "@/components/motion";
 import {
 	fadeInUp,
 	MotionPage,
@@ -35,8 +35,8 @@ function MusicPage() {
 						Music Library
 					</h1>
 					<p className="text-lg text-muted-foreground mb-6 max-w-xl">
-						Your personal collection of tracks. Discover new sounds
-						and revisit your favorites.
+						Your personal collection of tracks. Discover new sounds and revisit
+						your favorites.
 					</p>
 					<div className="flex gap-4">
 						<Button size="lg" className="gap-2 glow-accent">
@@ -69,7 +69,7 @@ function MusicPage() {
 						viewport={{ once: true }}
 						className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
 					>
-						{tracks.map((track, index) => (
+						{tracks.map((track, _index) => (
 							<motion.div
 								key={track.id}
 								variants={fadeInUp}
@@ -78,20 +78,14 @@ function MusicPage() {
 							>
 								<div className="relative aspect-square overflow-hidden rounded-2xl bg-zinc-900">
 									<img
-										src={
-											track.thumbnail ||
-											"/api/placeholder/400/400"
-										}
+										src={track.thumbnail || "/api/placeholder/400/400"}
 										alt={track.title}
 										className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
 										loading="lazy"
 									/>
 									<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
 										<div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white shadow-2xl">
-											<Play
-												className="w-6 h-6"
-												fill="currentColor"
-											/>
+											<Play className="w-6 h-6" fill="currentColor" />
 										</div>
 									</div>
 									<div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm">

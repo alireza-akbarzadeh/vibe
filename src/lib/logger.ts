@@ -12,7 +12,8 @@ const baseLogger = pino({
 		},
 	},
 	timestamp: pino.stdTimeFunctions.isoTime,
-	base: process.env.NODE_ENV === "production" ? undefined : { pid: process.pid },
+	base:
+		process.env.NODE_ENV === "production" ? undefined : { pid: process.pid },
 });
 
 export const logger = {
@@ -24,5 +25,3 @@ export const logger = {
 	loading: (...message: unknown[]) =>
 		baseLogger.info({ type: "loading" }, message.join(" ")),
 };
-
-

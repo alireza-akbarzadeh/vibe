@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { Crown, Sparkles, Zap } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { motion } from "@/components/motion";
 import { Badge } from "@/components/ui/badge";
 import type { CheckoutInputScheme } from "@/types/subscription";
 import { FaqSection } from "./components/faq-section";
@@ -22,11 +22,11 @@ export const iconMap = {
 	Crown,
 };
 type PlanWithIcon = Omit<PlanType, "icon"> & {
-	icon: typeof iconMap[keyof typeof iconMap];
+	icon: (typeof iconMap)[keyof typeof iconMap];
 };
 
 export function Plans(props: PlansProps) {
-	const { onCheckout, plans, userSubscription } = props
+	const { onCheckout, plans, userSubscription } = props;
 	const [isAnnual, setIsAnnual] = useState(false);
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 	const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -58,7 +58,7 @@ export function Plans(props: PlansProps) {
 				...plan,
 				icon: iconMap[plan.icon as keyof typeof iconMap],
 			})) ?? [],
-		[plans]
+		[plans],
 	);
 
 	// Filter plans based on billing interval (monthly/annual)
@@ -66,17 +66,16 @@ export function Plans(props: PlansProps) {
 		return data.filter((plan) => {
 			// Always show Free plan
 			if (plan.slug === "Free") return true;
-			
+
 			// Show monthly plans when isAnnual is false
 			if (!isAnnual && plan.price.interval === "month") return true;
-			
+
 			// Show annual plans when isAnnual is true
 			if (isAnnual && plan.price.interval === "year") return true;
-			
+
 			return false;
 		});
 	}, [data, isAnnual]);
-
 
 	return (
 		<div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
@@ -151,20 +150,22 @@ export function Plans(props: PlansProps) {
 						<button
 							type="button"
 							onClick={() => setIsAnnual(false)}
-							className={`px-6 py-2 rounded-full font-medium transition-all ${!isAnnual
-								? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
-								: "text-gray-400 hover:text-white"
-								}`}
+							className={`px-6 py-2 rounded-full font-medium transition-all ${
+								!isAnnual
+									? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+									: "text-gray-400 hover:text-white"
+							}`}
 						>
 							Monthly
 						</button>
 						<button
 							type="button"
 							onClick={() => setIsAnnual(true)}
-							className={`px-6 py-2 rounded-full font-medium transition-all ${isAnnual
-								? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
-								: "text-gray-400 hover:text-white"
-								}`}
+							className={`px-6 py-2 rounded-full font-medium transition-all ${
+								isAnnual
+									? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+									: "text-gray-400 hover:text-white"
+							}`}
 						>
 							Annual
 							<Badge className="ml-2 bg-green-500/20 text-green-400 border-green-500/30">

@@ -1,28 +1,20 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db";
+import { authedProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
-import { withRequire } from "@/orpc/middleware/middleware";
 import { createMediaInputSchema } from "@/orpc/models/media.input.schema";
 import { MediaItemSchema } from "@/orpc/models/media.schema";
-import { base } from "@/orpc/router/base";
 
 /* -------------------------------------------------------------------------- */
 /*                                CREATE MEDIA                                 */
 /* -------------------------------------------------------------------------- */
 
-export const createMedia = base
-	.use(
-		withRequire({
-			role: "ADMIN",
-			permission: { resource: "media", action: "create" },
-		}),
-	)
+export const createMedia = authedProcedure
 	.input(createMediaInputSchema)
 	.output(ApiResponseSchema(MediaItemSchema))
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, ctx }) => {
 		const { genreIds, creatorIds, ...mediaData } = input;
 
-		const result = await prisma.$transaction(async (tx) => {
+		const result = await ctx.db.$transaction(async (tx) => {
 			const media = await tx.media.create({
 				data: {
 					...mediaData,
@@ -63,7 +55,7 @@ export const createMedia = base
 
 			await tx.auditLog.create({
 				data: {
-					userId: context.user.id,
+					userId: ctx.user.id,
 					action: "CREATE",
 					resource: "MEDIA",
 					resourceId: media.id,
@@ -85,42 +77,30 @@ export const createMedia = base
 /*                                UPDATE MEDIA                                 */
 /* -------------------------------------------------------------------------- */
 
-export const updateMedia = base
-	.use(
-		withRequire({
-			role: "ADMIN",
-			permission: { resource: "media", action: "update" },
-		}),
-	)
+export const updateMedia = authedProcedure
 	.input(createMediaInputSchema.extend({ id: z.string() }))
 	.output(ApiResponseSchema(MediaItemSchema))
 	.handler(async ({ input, context }) => {
 		const { id, genreIds, creatorIds, ...mediaData } = input;
 
-		const result = await prisma.$transaction(async (tx) => {
-			const existing = await tx.media.findUnique({ where: { id } });
-
+		const result = await context.db.transaction(async (tx) => {
 			const media = await tx.media.update({
 				where: { id },
 				data: {
 					...mediaData,
-					genres: genreIds
-						? {
-								deleteMany: {},
-								create: genreIds.map((id) => ({
-									genre: { connect: { id } },
-								})),
-							}
-						: undefined,
-					creators: creatorIds
-						? {
-								deleteMany: {},
-								create: creatorIds.map((id) => ({
-									creator: { connect: { id } },
-									role: "ARTIST",
-								})),
-							}
-						: undefined,
+					genres: {
+						deleteMany: {},
+						create: genreIds?.map((id) => ({
+							genre: { connect: { id } },
+						})),
+					},
+					creators: {
+						deleteMany: {},
+						create: creatorIds?.map((id) => ({
+							creator: { connect: { id } },
+							role: "ARTIST",
+						})),
+					},
 				},
 				include: {
 					genres: { include: { genre: true } },
@@ -147,10 +127,7 @@ export const updateMedia = base
 					action: "UPDATE",
 					resource: "MEDIA",
 					resourceId: media.id,
-					metadata: {
-						before: existing,
-						after: mediaData,
-					},
+					metadata: input,
 				},
 			});
 

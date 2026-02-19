@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Clock, Heart, Pause, Play } from "lucide-react";
+import { motion } from "@/components/motion";
 import type { Track } from "@/domains/library/store/library-store-types.ts";
 import { cn, formatDuration } from "@/lib/utils";
 
@@ -18,7 +18,6 @@ export const TrackRow = ({
 	isActive,
 	onPlay,
 }: TrackRowProps) => {
-
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: -20 }}

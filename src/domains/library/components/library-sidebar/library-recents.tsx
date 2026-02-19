@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Pause, Play } from "lucide-react";
+import { motion } from "@/components/motion";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import type { Track } from "@/domains/library/store/library-store-types.ts";

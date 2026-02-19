@@ -1,11 +1,11 @@
-import { base } from "@/orpc/router/base";
+import { os } from "@/orpc/server";
 import { bulkCreateMedia, createMedia } from "./create";
 import { deleteMedia } from "./delete";
 import { getMedia, getTrendingSearches, listMedia } from "./get";
 import { searchMedia } from "./search";
 import { updateMedia } from "./update";
 
-export const MediaRouter = base.router({
+export const mediaProcedures = os.router({
 	list: listMedia,
 	find: getMedia,
 	search: searchMedia,

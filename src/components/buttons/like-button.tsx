@@ -1,7 +1,8 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
-import { AnimatePresence, motion } from "framer-motion";
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: The index is used as a key for a list of characters, which is stable. */
+
 import { Heart } from "lucide-react";
 import type { ComponentProps } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { useFavorites } from "@/domains/movies/hooks/useFavorites";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -53,7 +54,8 @@ export function LikeButton({
 				isFavorite
 					? "text-pink-500 bg-pink-500/10 border-pink-500/20 shadow-[0_0_20px_rgba(236,72,153,0.15)]"
 					: "text-white/40 hover:text-white bg-white/5 hover:bg-white/10 border-white/5",
-				(isLoading || toggleFavorite.isPending) && "opacity-50 cursor-not-allowed",
+				(isLoading || toggleFavorite.isPending) &&
+					"opacity-50 cursor-not-allowed",
 				className,
 			)}
 			{...props}
@@ -101,7 +103,8 @@ export function LikeButton({
 				<Heart
 					className={cn(
 						mapSized[iconSize],
-						isFavorite && "fill-current drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]",
+						isFavorite &&
+							"fill-current drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]",
 						"transition-all duration-300",
 					)}
 				/>
@@ -128,7 +131,7 @@ export function LikeButton({
 								}}
 								className={cn(
 									"absolute w-1 h-1 rounded-full left-1/2 top-1/2",
-									i % 2 === 0 ? "bg-pink-400" : "bg-white"
+									i % 2 === 0 ? "bg-pink-400" : "bg-white",
 								)}
 							/>
 						))}

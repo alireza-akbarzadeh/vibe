@@ -10,9 +10,9 @@ interface AddToPlaylistModalProps {
 }
 
 export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
-	const { trigger } = props
+	const { trigger } = props;
 	const { library, isAddModalOpen, songToAddToPlaylist } = useStore(musicStore);
-	const playlists = library.filter((i) => i.type === "playlist")
+	const playlists = library.filter((i) => i.type === "playlist");
 	const [isCreateOpen, setIsCreateOpen] = useState(false);
 
 	return (
@@ -22,17 +22,19 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 				if (!open) musicAction.toggleAddToPlayListModal();
 			}}
 			component="drawer"
-			trigger={trigger ||
-				<button
-					type="button"
-					onClick={(e) => {
-						e.stopPropagation();
-						musicAction.toggleAddToPlayListModal();
-					}}
-					className="py-1.5 px-2 rounded-full border border-white/20 hover:bg-white/10  text-gray-400 hover:text-white transition-colors"
-				>
-					<Plus className="w-6 h-7" />
-				</button>
+			trigger={
+				trigger || (
+					<button
+						type="button"
+						onClick={(e) => {
+							e.stopPropagation();
+							musicAction.toggleAddToPlayListModal();
+						}}
+						className="py-1.5 px-2 rounded-full border border-white/20 hover:bg-white/10  text-gray-400 hover:text-white transition-colors"
+					>
+						<Plus className="w-6 h-7" />
+					</button>
+				)
 			}
 			title="Add to Playlist"
 			description="Choose a playlist to add this song to"
@@ -49,9 +51,7 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 					<div className="w-12 h-12 rounded bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
 						<Plus className="w-6 h-6 text-white" />
 					</div>
-					<span className="text-white font-semibold">
-						Create New Playlist
-					</span>
+					<span className="text-white font-semibold">Create New Playlist</span>
 				</button>
 
 				<CreatePlaylistDialog
@@ -64,7 +64,10 @@ export function AddToPlaylistModal(props: AddToPlaylistModalProps) {
 						type="button"
 						key={playlist.id}
 						onClick={() => {
-							musicAction.addSongToPlaylistAction(playlist.id, songToAddToPlaylist);
+							musicAction.addSongToPlaylistAction(
+								playlist.id,
+								songToAddToPlaylist,
+							);
 							musicAction.toggleAddToPlayListModal();
 						}}
 						className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-left"

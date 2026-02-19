@@ -1,11 +1,7 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
-/** biome-ignore-all lint/correctness/noChildrenProp: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: The `any` type is used for generic form components. */
+/** biome-ignore-all lint/correctness/noChildrenProp: The `children` prop is used to render form fields. */
 
-import type {
-	DeepKeys,
-	FieldApi,
-	FormOptions,
-} from "@tanstack/react-form";
+import type { DeepKeys, FieldApi, FormOptions } from "@tanstack/react-form";
 import { useField, useForm as useTanStackForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-adapter";
 import type { ComponentProps, ReactNode } from "react";
@@ -19,9 +15,9 @@ import { cn, createContextFactory } from "@/lib/utils";
 
 // --- UI Interfaces ---
 
-interface FieldLabelProps extends ComponentProps<typeof Label> { }
-interface FieldDetailProps extends ComponentProps<"p">, AsChildProps { }
-interface FieldMessageProps extends ComponentProps<"p">, AsChildProps { }
+interface FieldLabelProps extends ComponentProps<typeof Label> {}
+interface FieldDetailProps extends ComponentProps<"p">, AsChildProps {}
+interface FieldMessageProps extends ComponentProps<"p">, AsChildProps {}
 interface FieldContainerProps extends ComponentProps<"div"> {
 	label?: string;
 	detail?: string;
@@ -35,7 +31,8 @@ type FieldContextValue = {
 	name: string;
 };
 
-const [FieldContextProvider, useFieldContext] = createContextFactory<FieldContextValue>();
+const [FieldContextProvider, useFieldContext] =
+	createContextFactory<FieldContextValue>();
 
 // --- Main Hook ---
 
@@ -45,12 +42,7 @@ export function useForm<
 >(
 	schema: TFormSchema,
 	options?: Omit<
-		FormOptions<TFormData, any, any, any, any, any, any, any, any, any, any, any>,
-		"validatorAdapter"
-	>,
-) {
-	const typedOptions =
-		options as FormOptions<
+		FormOptions<
 			TFormData,
 			any,
 			any,
@@ -63,7 +55,24 @@ export function useForm<
 			any,
 			any,
 			any
-		>;
+		>,
+		"validatorAdapter"
+	>,
+) {
+	const typedOptions = options as FormOptions<
+		TFormData,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any,
+		any
+	>;
 	const form = useTanStackForm<TFormData>({
 		validatorAdapter: zodValidator(schema),
 		validators: {
@@ -107,30 +116,38 @@ export function useForm<
 
 		return (
 			<FieldContextProvider value={{ form, name: name as string }}>
-				<FieldContainer label={label} detail={detail} className={cn("group", className)}>
+				<FieldContainer
+					label={label}
+					detail={detail}
+					className={cn("group", className)}
+				>
 					<div className="relative flex items-center">
 						{Icon && (
 							<div className="absolute left-4 z-10 opacity-20 group-focus-within:opacity-70 transition-opacity pointer-events-none">
 								<Icon className="w-4 h-4 text-white" />
 							</div>
 						)}
-						<div className="flex-1">
-							{children(field as any)}
-						</div>
+						<div className="flex-1">{children(field as any)}</div>
 					</div>
 				</FieldContainer>
 			</FieldContextProvider>
 		);
 	};
 
-	const FormSubmit = ({ className, ...props }: ComponentProps<typeof Button>) => (
+	const FormSubmit = ({
+		className,
+		...props
+	}: ComponentProps<typeof Button>) => (
 		<form.Subscribe
 			selector={(state) => [state.canSubmit, state.isSubmitting] as const}
 			children={([canSubmit, isSubmitting]) => (
 				<Button
 					type="submit"
 					disabled={!canSubmit || isSubmitting}
-					className={cn("w-full h-12 rounded-xl font-black uppercase tracking-widest text-[10px]", className)}
+					className={cn(
+						"w-full h-12 rounded-xl font-black uppercase tracking-widest text-[10px]",
+						className,
+					)}
 					{...props}
 				/>
 			)}
@@ -166,7 +183,7 @@ function FieldLabel({ className, children, ...props }: FieldLabelProps) {
 			className={cn(
 				"font-bold text-[11px] uppercase tracking-wider",
 				field.state.meta.isTouched && field.hasErrors && "text-destructive",
-				className
+				className,
 			)}
 			{...props}
 		>
@@ -175,27 +192,41 @@ function FieldLabel({ className, children, ...props }: FieldLabelProps) {
 	);
 }
 
-function FieldDetail({ asChild, className, children, ...props }: FieldDetailProps) {
+function FieldDetail({
+	asChild,
+	className,
+	children,
+	...props
+}: FieldDetailProps) {
 	const Comp = asChild ? Slot : "p";
 	return (
-		<Comp className={cn("text-[10px] text-muted-foreground font-medium", className)} {...props}>
+		<Comp
+			className={cn("text-[10px] text-muted-foreground font-medium", className)}
+			{...props}
+		>
 			{children}
 		</Comp>
 	);
 }
 
-function FieldMessage({ asChild, className, children, ...props }: FieldMessageProps) {
+function FieldMessage({
+	asChild,
+	className,
+	children,
+	...props
+}: FieldMessageProps) {
 	const field = useFieldInstance();
 	const Comp = asChild ? Slot : "p";
 
-	const rawError = field.state.meta.isTouched && field.hasErrors
-		? field.state.meta.errors[0]
-		: null;
+	const rawError =
+		field.state.meta.isTouched && field.hasErrors
+			? field.state.meta.errors[0]
+			: null;
 
 	const errorMessage = React.useMemo(() => {
 		if (!rawError) return null;
-		if (typeof rawError === 'string') return rawError;
-		if (typeof rawError === 'object' && 'message' in (rawError as any)) {
+		if (typeof rawError === "string") return rawError;
+		if (typeof rawError === "object" && "message" in (rawError as any)) {
 			return (rawError as any).message;
 		}
 		return String(rawError);
@@ -208,7 +239,7 @@ function FieldMessage({ asChild, className, children, ...props }: FieldMessagePr
 			className={cn(
 				"text-[10px] font-bold",
 				errorMessage ? "text-destructive" : "text-muted-foreground",
-				className
+				className,
 			)}
 			{...props}
 		>
@@ -217,7 +248,13 @@ function FieldMessage({ asChild, className, children, ...props }: FieldMessagePr
 	);
 }
 
-function FieldContainer({ label, detail, message, children, className }: FieldContainerProps) {
+function FieldContainer({
+	label,
+	detail,
+	message,
+	children,
+	className,
+}: FieldContainerProps) {
 	return (
 		<div className={cn("space-y-1.5", className)}>
 			{(label || detail) && (

@@ -1,6 +1,6 @@
+import { prisma } from "@/lib/db";
 import { adminProcedure } from "@/orpc/context";
 import { UserAccessOutput, userIdInput } from "@/orpc/models/user-access";
-import { prisma } from "@/lib/db";
 
 export const getUserAccess = adminProcedure
 	.input(userIdInput)
@@ -103,5 +103,7 @@ export const getUserAccess = adminProcedure
 			roles,
 			permissions: Array.from(permissionMap.values()),
 			createdAt: user.createdAt.toISOString(),
+			updatedAt: user.updatedAt.toISOString(),
+			banned: user.banned,
 		};
 	});

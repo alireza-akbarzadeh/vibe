@@ -1,4 +1,5 @@
 import { client } from "@/orpc/client";
+import type { MediaList } from "@/orpc/models/media.schema";
 
 /** Section slug to API endpoint mapping */
 export type SectionSlug =
@@ -143,7 +144,7 @@ export function getSectionInfiniteQueryOptions(
 			const response = await client.media.list({
 				limit,
 				page: pageParam as number,
-				category: category as any,
+				category: category,
 				search: search || undefined,
 				type: "MOVIE",
 				genreIds: filters?.genreIds,
@@ -153,7 +154,10 @@ export function getSectionInfiniteQueryOptions(
 			});
 			return response;
 		},
-		getNextPageParam: (lastPage: any, allPages: unknown[]) => {
+		getNextPageParam: (
+			lastPage: { data?: MediaList | null },
+			allPages: unknown[],
+		) => {
 			const items = lastPage?.data?.items || [];
 			if (items.length === limit) {
 				return allPages.length + 1;

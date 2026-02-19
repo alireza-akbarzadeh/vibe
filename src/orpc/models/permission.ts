@@ -43,7 +43,6 @@ export const createPermissionBulkInput = z.object({
 	permissions: z.array(createPermissionInput).min(1),
 });
 
-
 /* -------------------------------------------------------------------------- */
 /*                              OUTPUT SCHEMAS                                */
 /* -------------------------------------------------------------------------- */

@@ -11,13 +11,10 @@ import { SearchResultsList } from "./components/movie-search/search-results-list
 import { SearchResultsSkeleton } from "./components/movie-search/search-results-skeleton";
 import { useMovieDiscovery } from "./hooks/use-movie-discovery";
 
-
-
 export const SEARCH_RESULTS_MIN_HEIGHT = 420;
 
-
 export interface MovieDiscoveryProps {
-	query?: MovieSearchQuery
+	query?: MovieSearchQuery;
 	onSearchChange?: (query: MovieSearchQuery) => void;
 }
 
@@ -116,4 +113,3 @@ export default function MovieDiscovery(props: MovieDiscoveryProps = {}) {
 		</div>
 	);
 }
-

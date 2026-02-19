@@ -2,7 +2,7 @@ import { useDidUpdate } from "@mantine/hooks";
 import { ScriptOnce } from "@tanstack/react-router";
 import { outdent } from "outdent";
 import type { PropsWithChildren } from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { z } from "zod";
 import { createContextFactory, type ExcludeUnionStrict } from "@/lib/utils";
 
@@ -28,14 +28,14 @@ function ThemeProvider({ children }: PropsWithChildren) {
 		getResolvedTheme(theme),
 	);
 
-	const setTheme = (theme: Theme) => {
+	const setTheme = useCallback((theme: Theme) => {
 		_setTheme(theme);
 		_setResolvedTheme(getResolvedTheme(theme));
-	};
+	}, []);
 
-	const toggleTheme = () => {
+	const toggleTheme = useCallback(() => {
 		setTheme(resolvedTheme === "dark" ? "light" : "dark");
-	};
+	}, [resolvedTheme, setTheme]);
 
 	useDidUpdate(() => {
 		localStorage.setItem("theme", theme);

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
 	ArrowRight,
 	Facebook,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "@/components/logo.tsx";
+import { motion } from "@/components/motion";
 import { Link, type ValidLink } from "@/components/ui/link.tsx";
 
 // ─── Data ─────────────────────────────────────────────────────

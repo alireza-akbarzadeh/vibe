@@ -1,9 +1,9 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: search suggestions are ephemeral UI elements */
 import { useDebouncedValue } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
 import { Search, TrendingUp, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,7 +35,10 @@ export function MoviesSearchInput({
 
 	const trimmedInput = inputValue.trim();
 	// Debounce only for API calls, not for URL updates
-	const [debouncedSearchTerm] = useDebouncedValue(trimmedInput, SEARCH_DEBOUNCE_MS);
+	const [debouncedSearchTerm] = useDebouncedValue(
+		trimmedInput,
+		SEARCH_DEBOUNCE_MS,
+	);
 
 	useEffect(() => {
 		const fromUrl = searchQuery ?? "";
@@ -58,7 +61,11 @@ export function MoviesSearchInput({
 	});
 
 	const { data: searchData, isFetching: searchFetching } = useQuery({
-		...searchSuggestionsQueryOptions(debouncedSearchTerm ? { search: debouncedSearchTerm, limit: 8 } : { search: "", limit: 0 }),
+		...searchSuggestionsQueryOptions(
+			debouncedSearchTerm
+				? { search: debouncedSearchTerm, limit: 8 }
+				: { search: "", limit: 0 },
+		),
 		enabled: isFocused && showSearchSection,
 	});
 

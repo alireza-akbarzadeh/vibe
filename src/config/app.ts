@@ -7,8 +7,8 @@ import {
 import type { Theme } from "@/components/theme-provider";
 
 export interface LanguageOption {
-	locale: any;
-	countryCode: any;
+	locale: string;
+	countryCode: string;
 	label: string;
 }
 

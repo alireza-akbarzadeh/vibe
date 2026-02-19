@@ -1,10 +1,14 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: The index is used as a key for a list of characters, which is stable. */
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import { Heart, MoreHorizontal, Play } from "lucide-react";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 // Import your stores and types
-import { musicAction, musicStore, type Song } from "@/domains/music/music.store";
+import {
+	musicAction,
+	musicStore,
+	type Song,
+} from "@/domains/music/music.store";
 import { client } from "@/orpc/client";
 import { MusicSearch } from "../components/music-search";
 
@@ -34,7 +38,6 @@ const searchFilters = [
 	"Podcasts & Shows",
 ];
 
-
 export function SearchView() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [activeFilter, setActiveFilter] = useState("All");
@@ -61,7 +64,9 @@ export function SearchView() {
 					title: item.title,
 					artist: item.creators?.[0]?.creator.name || "Unknown Artist",
 					album: item.collection?.title || "Unknown Album",
-					albumArt: item.thumbnail || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300",
+					albumArt:
+						item.thumbnail ||
+						"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300",
 					duration: item.duration || 200,
 					mediaId: item.id,
 				}));
@@ -72,7 +77,9 @@ export function SearchView() {
 					{
 						id: "a1",
 						name: transformedSongs[0]?.artist || "Artist",
-						image: transformedSongs[0]?.albumArt || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300",
+						image:
+							transformedSongs[0]?.albumArt ||
+							"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300",
 						type: "Artist",
 					},
 				]);
@@ -111,10 +118,11 @@ export function SearchView() {
 						type="button"
 						key={filter}
 						onClick={() => setActiveFilter(filter)}
-						className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${activeFilter === filter
-							? "bg-white text-black"
-							: "bg-white/10 text-white hover:bg-white/20"
-							}`}
+						className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+							activeFilter === filter
+								? "bg-white text-black"
+								: "bg-white/10 text-white hover:bg-white/20"
+						}`}
 					>
 						{filter}
 					</button>
@@ -138,7 +146,9 @@ export function SearchView() {
 									<div className="bg-[#181818] p-6 rounded-xl h-64 animate-pulse" />
 								) : artists.length > 0 ? (
 									<motion.div
-										whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
+										whileHover={{
+											backgroundColor: "rgba(255, 255, 255, 0.05)",
+										}}
 										className="bg-[#181818] p-6 rounded-xl group relative cursor-pointer transition-colors"
 									>
 										<img
@@ -172,7 +182,10 @@ export function SearchView() {
 								{isLoading ? (
 									<div className="space-y-2">
 										{[...Array(5)].map((_, i) => (
-											<div key={i} className="h-14 bg-white/10 rounded-md animate-pulse" />
+											<div
+												key={i}
+												className="h-14 bg-white/10 rounded-md animate-pulse"
+											/>
 										))}
 									</div>
 								) : (
@@ -245,7 +258,10 @@ export function SearchView() {
 						{isLoading ? (
 							<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
 								{[...Array(6)].map((_, i) => (
-									<div key={i} className="bg-[#181818] p-4 rounded-xl h-60 animate-pulse" />
+									<div
+										key={i}
+										className="bg-[#181818] p-4 rounded-xl h-60 animate-pulse"
+									/>
 								))}
 							</div>
 						) : (
@@ -298,7 +314,10 @@ export function SearchView() {
 						{isLoading ? (
 							<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
 								{[...Array(6)].map((_, i) => (
-									<div key={i} className="bg-[#181818] p-4 rounded-xl h-60 animate-pulse" />
+									<div
+										key={i}
+										className="bg-[#181818] p-4 rounded-xl h-60 animate-pulse"
+									/>
 								))}
 							</div>
 						) : albums.length > 0 ? (
@@ -338,6 +357,6 @@ export function SearchView() {
 					</section>
 				)}
 			</AnimatePresence>
-		</div >
+		</div>
 	);
 }

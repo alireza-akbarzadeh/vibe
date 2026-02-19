@@ -62,12 +62,12 @@ import { Route as libraryLibraryMusicRouteImport } from './routes/(library)/libr
 import { Route as libraryLibraryLikedRouteImport } from './routes/(library)/library/liked'
 import { Route as libraryLibraryHistoryRouteImport } from './routes/(library)/library/history'
 import { Route as libraryLibraryBlogsRouteImport } from './routes/(library)/library/blogs'
-import { Route as homePlayPlayIdRouteImport } from './routes/(home)/play/$playId'
 import { Route as homeMusicSearchRouteImport } from './routes/(home)/music/search'
 import { Route as homeMusicLibraryRouteImport } from './routes/(home)/music/library'
 import { Route as homeMusicMusicidRouteImport } from './routes/(home)/music/$musicid'
 import { Route as homeMoviesMovieIdRouteImport } from './routes/(home)/movies/$movieId'
 import { Route as homeExploreSectionRouteImport } from './routes/(home)/explore/$section'
+import { Route as cinemaRoomRoomIdRouteImport } from './routes/(cinema)/room/$roomId'
 import { Route as blogBlogProfileRouteImport } from './routes/(blog)/blog/profile'
 import { Route as blogBlogBlogslugRouteImport } from './routes/(blog)/blog/$blogslug'
 import { Route as adminDashboardUsersIndexRouteImport } from './routes/(admin)/dashboard/users/index'
@@ -393,11 +393,6 @@ const libraryLibraryBlogsRoute = libraryLibraryBlogsRouteImport.update({
   path: '/library/blogs',
   getParentRoute: () => libraryRouteRoute,
 } as any)
-const homePlayPlayIdRoute = homePlayPlayIdRouteImport.update({
-  id: '/(home)/play/$playId',
-  path: '/play/$playId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const homeMusicSearchRoute = homeMusicSearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -421,6 +416,11 @@ const homeMoviesMovieIdRoute = homeMoviesMovieIdRouteImport.update({
 const homeExploreSectionRoute = homeExploreSectionRouteImport.update({
   id: '/(home)/explore/$section',
   path: '/explore/$section',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const cinemaRoomRoomIdRoute = cinemaRoomRoomIdRouteImport.update({
+  id: '/(cinema)/room/$roomId',
+  path: '/room/$roomId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const blogBlogProfileRoute = blogBlogProfileRouteImport.update({
@@ -811,12 +811,12 @@ export interface FileRoutesByFullPath {
   '/': typeof homeIndexRoute
   '/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/blog/profile': typeof blogBlogProfileRoute
+  '/room/$roomId': typeof cinemaRoomRoomIdRoute
   '/explore/$section': typeof homeExploreSectionRoute
   '/movies/$movieId': typeof homeMoviesMovieIdRoute
   '/music/$musicid': typeof homeMusicMusicidRoute
   '/music/library': typeof homeMusicLibraryRoute
   '/music/search': typeof homeMusicSearchRoute
-  '/play/$playId': typeof homePlayPlayIdRoute
   '/library/blogs': typeof libraryLibraryBlogsRoute
   '/library/history': typeof libraryLibraryHistoryRoute
   '/library/liked': typeof libraryLibraryLikedRoute
@@ -928,12 +928,12 @@ export interface FileRoutesByTo {
   '/': typeof homeIndexRoute
   '/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/blog/profile': typeof blogBlogProfileRoute
+  '/room/$roomId': typeof cinemaRoomRoomIdRoute
   '/explore/$section': typeof homeExploreSectionRoute
   '/movies/$movieId': typeof homeMoviesMovieIdRoute
   '/music/$musicid': typeof homeMusicMusicidRoute
   '/music/library': typeof homeMusicLibraryRoute
   '/music/search': typeof homeMusicSearchRoute
-  '/play/$playId': typeof homePlayPlayIdRoute
   '/library/blogs': typeof libraryLibraryBlogsRoute
   '/library/history': typeof libraryLibraryHistoryRoute
   '/library/liked': typeof libraryLibraryLikedRoute
@@ -1050,12 +1050,12 @@ export interface FileRoutesById {
   '/(home)/': typeof homeIndexRoute
   '/(blog)/blog/$blogslug': typeof blogBlogBlogslugRoute
   '/(blog)/blog/profile': typeof blogBlogProfileRoute
+  '/(cinema)/room/$roomId': typeof cinemaRoomRoomIdRoute
   '/(home)/explore/$section': typeof homeExploreSectionRoute
   '/(home)/movies/$movieId': typeof homeMoviesMovieIdRoute
   '/(home)/music/$musicid': typeof homeMusicMusicidRoute
   '/(home)/music/library': typeof homeMusicLibraryRoute
   '/(home)/music/search': typeof homeMusicSearchRoute
-  '/(home)/play/$playId': typeof homePlayPlayIdRoute
   '/(library)/library/blogs': typeof libraryLibraryBlogsRoute
   '/(library)/library/history': typeof libraryLibraryHistoryRoute
   '/(library)/library/liked': typeof libraryLibraryLikedRoute
@@ -1171,12 +1171,12 @@ export interface FileRouteTypes {
     | '/'
     | '/blog/$blogslug'
     | '/blog/profile'
+    | '/room/$roomId'
     | '/explore/$section'
     | '/movies/$movieId'
     | '/music/$musicid'
     | '/music/library'
     | '/music/search'
-    | '/play/$playId'
     | '/library/blogs'
     | '/library/history'
     | '/library/liked'
@@ -1288,12 +1288,12 @@ export interface FileRouteTypes {
     | '/'
     | '/blog/$blogslug'
     | '/blog/profile'
+    | '/room/$roomId'
     | '/explore/$section'
     | '/movies/$movieId'
     | '/music/$musicid'
     | '/music/library'
     | '/music/search'
-    | '/play/$playId'
     | '/library/blogs'
     | '/library/history'
     | '/library/liked'
@@ -1409,12 +1409,12 @@ export interface FileRouteTypes {
     | '/(home)/'
     | '/(blog)/blog/$blogslug'
     | '/(blog)/blog/profile'
+    | '/(cinema)/room/$roomId'
     | '/(home)/explore/$section'
     | '/(home)/movies/$movieId'
     | '/(home)/music/$musicid'
     | '/(home)/music/library'
     | '/(home)/music/search'
-    | '/(home)/play/$playId'
     | '/(library)/library/blogs'
     | '/(library)/library/history'
     | '/(library)/library/liked'
@@ -1524,9 +1524,9 @@ export interface RootRouteChildren {
   homeIndexRoute: typeof homeIndexRoute
   blogBlogBlogslugRoute: typeof blogBlogBlogslugRoute
   blogBlogProfileRoute: typeof blogBlogProfileRoute
+  cinemaRoomRoomIdRoute: typeof cinemaRoomRoomIdRoute
   homeExploreSectionRoute: typeof homeExploreSectionRoute
   homeMoviesMovieIdRoute: typeof homeMoviesMovieIdRoute
-  homePlayPlayIdRoute: typeof homePlayPlayIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
   ApiSubscriptionCancelRoute: typeof ApiSubscriptionCancelRoute
@@ -1910,13 +1910,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof libraryLibraryBlogsRouteImport
       parentRoute: typeof libraryRouteRoute
     }
-    '/(home)/play/$playId': {
-      id: '/(home)/play/$playId'
-      path: '/play/$playId'
-      fullPath: '/play/$playId'
-      preLoaderRoute: typeof homePlayPlayIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(home)/music/search': {
       id: '/(home)/music/search'
       path: '/search'
@@ -1950,6 +1943,13 @@ declare module '@tanstack/react-router' {
       path: '/explore/$section'
       fullPath: '/explore/$section'
       preLoaderRoute: typeof homeExploreSectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(cinema)/room/$roomId': {
+      id: '/(cinema)/room/$roomId'
+      path: '/room/$roomId'
+      fullPath: '/room/$roomId'
+      preLoaderRoute: typeof cinemaRoomRoomIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(blog)/blog/profile': {
@@ -2621,9 +2621,9 @@ const rootRouteChildren: RootRouteChildren = {
   homeIndexRoute: homeIndexRoute,
   blogBlogBlogslugRoute: blogBlogBlogslugRoute,
   blogBlogProfileRoute: blogBlogProfileRoute,
+  cinemaRoomRoomIdRoute: cinemaRoomRoomIdRoute,
   homeExploreSectionRoute: homeExploreSectionRoute,
   homeMoviesMovieIdRoute: homeMoviesMovieIdRoute,
-  homePlayPlayIdRoute: homePlayPlayIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
   ApiSubscriptionCancelRoute: ApiSubscriptionCancelRoute,
@@ -2636,3 +2636,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

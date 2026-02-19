@@ -1,18 +1,18 @@
-import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
+import { motion } from "@/components/motion";
 import { useLazyQuerySection } from "@/hooks/useLazySection";
 import type { MediaList } from "@/orpc/models/media.schema";
 import type { MovieVariantCard } from "./movie-carousel";
 import { MovieCarousel } from "./movie-carousel";
 
 interface LazyMovieCarouselProps {
-    title: string;
-    subtitle?: string;
-    variant: MovieVariantCard;
-    showProgress?: boolean;
-    queryKey: unknown[];
-    queryFn: () => Promise<{ data: { items: MediaList[] } }>;
-    sectionSlug?: string;
+	title: string;
+	subtitle?: string;
+	variant: MovieVariantCard;
+	showProgress?: boolean;
+	queryKey: unknown[];
+	queryFn: () => Promise<{ data: { items: MediaList[] } }>;
+	sectionSlug?: string;
 }
 
 /**
@@ -21,77 +21,84 @@ interface LazyMovieCarouselProps {
  * Optimized for performance on high-traffic pages
  */
 export function LazyMovieCarousel({
-    title,
-    subtitle,
-    variant,
-    showProgress,
-    queryKey,
-    queryFn,
-    sectionSlug,
+	title,
+	subtitle,
+	variant,
+	showProgress,
+	queryKey,
+	queryFn,
+	sectionSlug,
 }: LazyMovieCarouselProps) {
-    const { ref, data, isVisible, isLoading: isQueryLoading, isError } = useLazyQuerySection<{
-        data: { items: MediaList[] };
-    }>(
-        {
-            queryKey,
-            queryFn,
-            staleTime: 5 * 60 * 1000,
-            gcTime: 10 * 60 * 1000,
-        },
-        "600px",
-    );
+	const {
+		ref,
+		data,
+		isVisible,
+		isLoading: isQueryLoading,
+		isError,
+	} = useLazyQuerySection<{
+		data: { items: MediaList[] };
+	}>(
+		{
+			queryKey,
+			queryFn,
+			staleTime: 5 * 60 * 1000,
+			gcTime: 10 * 60 * 1000,
+		},
+		"600px",
+	);
 
-    const movies = data?.data?.items ?? [];
-    const isLoading = isQueryLoading && isVisible;
+	const movies = data?.data?.items ?? [];
+	const isLoading = isQueryLoading && isVisible;
 
-    if (!isVisible) {
-        return (
-            <section
-                ref={ref}
-                className="relative max-w-450 mx-auto px-6 h-100"
-                aria-busy="true"
-            />
-        );
-    }
+	if (!isVisible) {
+		return (
+			<section
+				ref={ref}
+				className="relative max-w-450 mx-auto px-6 h-100"
+				aria-busy="true"
+			/>
+		);
+	}
 
-    if (isError) {
-        return null;
-    }
+	if (isError) {
+		return null;
+	}
 
-    // Show loading state
-    if (isLoading) {
-        return (
-            <section
-                ref={ref}
-                className="relative max-w-450 mx-auto px-6 h-100 flex items-center justify-center"
-            >
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col items-center gap-3"
-                >
-                    <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
-                    <p className="text-sm text-gray-400">Loading {title}...</p>
-                </motion.div>
-            </section>
-        );
-    }
+	// Show loading state
+	if (isLoading) {
+		return (
+			<section
+				ref={ref}
+				className="relative max-w-450 mx-auto px-6 h-100 flex items-center justify-center"
+			>
+				<motion.div
+					initial={{ opacity: 0, scale: 0.8 }}
+					animate={{ opacity: 1, scale: 1 }}
+					transition={{ duration: 0.3 }}
+					className="flex flex-col items-center gap-3"
+				>
+					<Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
+					<p className="text-sm text-gray-400">Loading {title}...</p>
+				</motion.div>
+			</section>
+		);
+	}
 
-    // Don't show empty sections
-    if (movies.length === 0) {
-        return null;
-    }
+	// Don't show empty sections
+	if (movies.length === 0) {
+		return null;
+	}
 
-    return (
-        <section ref={ref}>
-            <MovieCarousel
-                title={title}
-                subtitle={subtitle}
-                movies={movies}
-                variant={variant}
-                showProgress={showProgress}
-                sectionSlug={sectionSlug}
-            />
-        </section>);
+	return (
+		<section ref={ref}>
+			<MovieCarousel
+				title={title}
+				subtitle={subtitle}
+				movies={movies}
+				variant={variant}
+				showProgress={showProgress}
+				sectionSlug={sectionSlug}
+			/>
+		</section>
+	);
 }

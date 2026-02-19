@@ -57,9 +57,7 @@ export const createPermission = adminProcedure
 		};
 	});
 
-
-
-	export const createPermissionBulk = adminProcedure
+export const createPermissionBulk = adminProcedure
 	.input(createPermissionBulkInput)
 	.output(ResponseSchema.ApiResponseSchema(permissionBulkOutput))
 	.handler(async ({ input, context }) => {
@@ -119,7 +117,7 @@ export const createPermission = adminProcedure
 						resource: true,
 						action: true,
 					},
-			  })
+				})
 			: [];
 
 		// 5️⃣ Audit log

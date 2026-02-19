@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Info, Play, Star } from "lucide-react";
 import { AddButton } from "@/components/buttons/add-button";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { SimilarMoviesType } from "@/domains/movies/components/similar-movies.tsx";
 import { MovieInfoDialog } from "./movie-info-dialog";

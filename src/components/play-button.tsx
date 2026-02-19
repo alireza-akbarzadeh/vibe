@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Pause, Play } from "lucide-react";
+import { motion } from "@/components/motion";
 
 interface PlayButtonProps {
 	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;

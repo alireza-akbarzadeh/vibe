@@ -2,15 +2,6 @@
 
 import { useIntersection } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "@/components/ui/link";
-import {
-	AnimatePresence,
-	motion,
-	useMotionValue,
-	useScroll,
-	useSpring,
-	useTransform,
-} from "framer-motion";
 import {
 	ChevronRight,
 	Film,
@@ -20,9 +11,16 @@ import {
 	TrendingUp,
 	Zap,
 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+	AnimatePresence,
+	motion,
+	useScroll,
+	useTransform,
+} from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
+import { Link } from "@/components/ui/link";
 import { cn } from "@/lib/utils";
 import type { MediaList } from "@/orpc/models/media.schema";
 import {
@@ -116,6 +114,8 @@ function SpotlightCard({
 				<Image
 					src={movie.thumbnail}
 					alt={movie.title}
+					fetchPriority="high"
+					loading="eager"
 					className="absolute inset-0 w-full h-full object-cover"
 				/>
 				<div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent" />
@@ -192,14 +192,24 @@ export default function HeroSection() {
 	const [currentWord, setCurrentWord] = useState(0);
 	const words = ["MUSIC", "MOVIES", "SHOWS", "LIVE"];
 	const sectionRef = useRef<HTMLElement>(null);
+	const [queriesEnabled, setQueriesEnabled] = useState(false);
 
-	const { data: trendingData } = useQuery(trendingQueryOptions(8));
-	const { data: statsData } = useQuery(platformStatsQueryOptions());
+	useEffect(() => {
+		// Enable queries after the component has mounted to avoid blocking LCP
+		setQueriesEnabled(true);
+	}, []);
+
+	const { data: trendingData } = useQuery(
+		trendingQueryOptions(8, queriesEnabled),
+	);
+	const { data: statsData } = useQuery(
+		platformStatsQueryOptions(queriesEnabled),
+	);
 	const trendingItems = trendingData?.data?.items ?? [];
 
-	const totalUsers = statsData?.totalUsers ?? 0;
-	const totalTracks = statsData?.totalTracks ?? 0;
-	const totalMovies = statsData?.totalMovies ?? 0;
+	const totalUsers = statsData?.data?.totalUsers ?? 0;
+	const totalTracks = statsData?.data?.totalTracks ?? 0;
+	const totalMovies = statsData?.data?.totalMovies ?? 0;
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -208,33 +218,12 @@ export default function HeroSection() {
 		return () => clearInterval(interval);
 	}, []);
 
-	const mouseX = useMotionValue(0);
-	const mouseY = useMotionValue(0);
-	const springConfig = { damping: 30, stiffness: 120 };
-	const dx = useSpring(mouseX, springConfig);
-	const dy = useSpring(mouseY, springConfig);
-
-	const handleMouseMove = useCallback(
-		(e: MouseEvent) => {
-			mouseX.set((e.clientX / window.innerWidth - 0.5) * 60);
-			mouseY.set((e.clientY / window.innerHeight - 0.5) * 60);
-		},
-		[mouseX, mouseY],
-	);
-
-	useEffect(() => {
-		window.addEventListener("mousemove", handleMouseMove);
-		return () => window.removeEventListener("mousemove", handleMouseMove);
-	}, [handleMouseMove]);
-
 	const { scrollYProgress } = useScroll({
 		target: sectionRef,
 		offset: ["start start", "end start"],
 	});
 	const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 	const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-	const rotateX = useTransform(dy, [-30, 30], [2, -2]);
-	const rotateY = useTransform(dx, [-30, 30], [-2, 2]);
 
 	return (
 		<motion.section
@@ -276,7 +265,7 @@ export default function HeroSection() {
 					className="absolute bottom-[15%] left-[28%] w-70 h-70 rounded-full blur-[100px] bg-pink-500/20"
 				/>
 				<motion.div
-					style={{ x: dx, y: dy, translateX: "-50%", translateY: "-50%" }}
+					style={{ translateX: "-50%", translateY: "-50%" }}
 					className="absolute top-1/2 left-1/2 w-175 h-175 bg-cyan-500/6 rounded-full blur-[150px]"
 				/>
 				<div className="absolute inset-0 bg-[linear-gradient(to_right,#80808006_1px,transparent_1px),linear-gradient(to_bottom,#80808006_1px,transparent_1px)] bg-size-[64px_64px] mask-[radial-gradient(ellipse_70%_50%_at_50%_0%,#000_60%,transparent_100%)]" />
@@ -325,7 +314,7 @@ export default function HeroSection() {
 
 			{/* Main Content */}
 			<motion.div
-				style={{ rotateX, rotateY, perspective: 1200 }}
+				style={{ perspective: 1200 }}
 				className="relative z-10 min-h-screen flex flex-col justify-center items-center px-6 py-20"
 			>
 				<motion.div

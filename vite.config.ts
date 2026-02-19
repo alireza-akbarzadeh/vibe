@@ -1,4 +1,6 @@
-import { defineConfig } from 'vite'
+
+import { defineConfig, PluginOption } from 'vite'
+import { visualizer } from 'rollup-plugin-visualizer';
 import { devtools } from '@tanstack/devtools-vite'
 import { sentryTanstackStart } from "@sentry/tanstackstart-react";
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
@@ -6,9 +8,24 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
+import { wss } from './src/server/ws'
+
+const webSocketServer = {
+  name: 'webSocketServer',
+  configureServer(server: any) {
+    server.httpServer.on('upgrade', (req: any, socket: any, head: any) => {
+      if (req.url === '/ws') {
+        wss.handleUpgrade(req, socket, head, (ws: any) => {
+          wss.emit('connection', ws, req);
+        });
+      }
+    });
+  },
+};
 
 const config = defineConfig({
   plugins: [
+    webSocketServer,
     tanstackRouter({
       autoCodeSplitting: true,
       codeSplittingOptions: {
@@ -46,9 +63,20 @@ const config = defineConfig({
         plugins: ['babel-plugin-react-compiler'],
       },
     }),
-  ],
+    process.env.VITE_VISUALIZE && visualizer({
+      open: true,
+      filename: 'dist/stats.html',
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ].filter(Boolean) as PluginOption[],
+  resolve: {
+    alias: {
+      "@": "/src",
+    },
+  },
   optimizeDeps: {
-    exclude: ['@prisma/client', '.prisma/client', '@noble/ciphers', 'better-auth'],
+    exclude: ['@noble/ciphers', 'better-auth', '@prisma/client'],
   },
   build: {
     rollupOptions: {
@@ -56,12 +84,12 @@ const config = defineConfig({
         'node:stream',
         'node:stream/web',
         'node:async_hooks',
-        '@prisma/client',
+        '@sentry/tanstack-start',
       ],
     },
   },
   ssr: {
-    external: ['@prisma/client', '.prisma/client', 'better-auth', '@noble/ciphers'],
+    external: ['better-auth', '@noble/ciphers', '@prisma/client'],
   },
   server: {
     host: true,

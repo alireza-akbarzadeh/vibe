@@ -1,6 +1,6 @@
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import { Search, XCircle } from "lucide-react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { MOCK_ARTICLES } from "../blog-mock";
 import { ArticleCard } from "../components/article-card";
 import { actions, blogStore } from "../store/blog.store";

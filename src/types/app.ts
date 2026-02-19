@@ -5,14 +5,29 @@ import type { MediaList } from "@/orpc/models/media.schema";
  * Extends MediaList with additional UI-specific fields
  */
 
-export interface FeaturedMovie extends Pick<MediaList, "id" | "title" | "description" | "rating" | "releaseYear" | "duration"> {
+export interface FeaturedMovie
+	extends Pick<
+		MediaList,
+		"id" | "title" | "description" | "rating" | "releaseYear" | "duration"
+	> {
 	image: string; // thumbnail
 	genres: string[];
 	runtime: string; // formatted duration
 	movieId: number; // for legacy compatibility
 }
 
-export interface MovieTypes extends Pick<MediaList, "id" | "title" | "description" | "rating" | "releaseYear" | "duration" | "reviewCount" | "viewCount"> {
+export interface MovieTypes
+	extends Pick<
+		MediaList,
+		| "id"
+		| "title"
+		| "description"
+		| "rating"
+		| "releaseYear"
+		| "duration"
+		| "reviewCount"
+		| "viewCount"
+	> {
 	year: number; // alias for releaseYear
 	poster: string; // alias for thumbnail
 	backdrop: string; // additional image
@@ -33,7 +48,11 @@ export interface MovieTypes extends Pick<MediaList, "id" | "title" | "descriptio
 	popularityChange: number;
 }
 
-export interface ContinueWatching extends Pick<MediaList, "id" | "title" | "rating" | "releaseYear" | "description"> {
+export interface ContinueWatching
+	extends Pick<
+		MediaList,
+		"id" | "title" | "rating" | "releaseYear" | "description"
+	> {
 	poster_path: string; // alias for thumbnail
 	year: number; // alias for releaseYear
 	genres: string[];

@@ -1,8 +1,7 @@
-/** biome-ignore-all lint/correctness/useUniqueElementIds: <explanation> */
+/** biome-ignore-all lint/correctness/useUniqueElementIds: The ID is used for scrolling to the comments section. */
 
 import { useParams, useRouter } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import {
 	ArrowLeft,
 	Bookmark,
@@ -14,6 +13,12 @@ import {
 	Twitter,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import {
+	AnimatePresence,
+	motion,
+	useScroll,
+	useSpring,
+} from "@/components/motion";
 import { actions, blogStore } from "@/domains/blog/store/blog.store";
 import { generateSlug } from "@/lib/utils";
 import { MOCK_ARTICLES } from "../blog-mock";

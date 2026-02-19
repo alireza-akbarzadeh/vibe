@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MovieImages } from "@/domains/movies/components";
 import { LightBox } from "../components/light-box";
-import type { MovieImage, GroupedImages } from "../movie-types";
+import type { GroupedImages, MovieImage } from "../movie-types";
 
 type ActiveTabSte = "poster" | "still" | "behind" | "all" | "backdrop";
 
@@ -18,26 +18,34 @@ export function ImagesGallery({ images }: ImagesGalleryProps) {
 
 	// Transform API images to component format
 	const allImages: MovieImage[] = [
-		...(images?.backdrops?.map((img): MovieImage => ({
-			url: `https://image.tmdb.org/t/p/w1280${img.filePath}`,
-			type: "backdrop" as const,
-			description: `Backdrop image - ${img.width}x${img.height}`,
-		})) || []),
-		...(images?.posters?.map((img): MovieImage => ({
-			url: `https://image.tmdb.org/t/p/w780${img.filePath}`,
-			type: "poster" as const,
-			description: `Poster image - ${img.width}x${img.height}`,
-		})) || []),
-		...(images?.stills?.map((img): MovieImage => ({
-			url: `https://image.tmdb.org/t/p/w1280${img.filePath}`,
-			type: "still" as const,
-			description: `Still image - ${img.width}x${img.height}`,
-		})) || []),
-		...(images?.logos?.map((img): MovieImage => ({
-			url: `https://image.tmdb.org/t/p/w500${img.filePath}`,
-			type: "behind" as const,
-			description: `Logo - ${img.width}x${img.height}`,
-		})) || []),
+		...(images?.backdrops?.map(
+			(img): MovieImage => ({
+				url: `https://image.tmdb.org/t/p/w1280${img.filePath}`,
+				type: "backdrop" as const,
+				description: `Backdrop image - ${img.width}x${img.height}`,
+			}),
+		) || []),
+		...(images?.posters?.map(
+			(img): MovieImage => ({
+				url: `https://image.tmdb.org/t/p/w780${img.filePath}`,
+				type: "poster" as const,
+				description: `Poster image - ${img.width}x${img.height}`,
+			}),
+		) || []),
+		...(images?.stills?.map(
+			(img): MovieImage => ({
+				url: `https://image.tmdb.org/t/p/w1280${img.filePath}`,
+				type: "still" as const,
+				description: `Still image - ${img.width}x${img.height}`,
+			}),
+		) || []),
+		...(images?.logos?.map(
+			(img): MovieImage => ({
+				url: `https://image.tmdb.org/t/p/w500${img.filePath}`,
+				type: "behind" as const,
+				description: `Logo - ${img.width}x${img.height}`,
+			}),
+		) || []),
 	];
 
 	// Show placeholder if no images
@@ -92,15 +100,11 @@ export function ImagesGallery({ images }: ImagesGalleryProps) {
 					{/* Image Grid */}
 					<Tabs
 						value={activeTab}
-						onValueChange={(value) =>
-							setActiveTab(value as ActiveTabSte)
-						}
+						onValueChange={(value) => setActiveTab(value as ActiveTabSte)}
 						defaultValue={activeTab}
 					>
 						<TabsList>
-							<TabsTrigger value="all">
-								All ({allImages.length})
-							</TabsTrigger>
+							<TabsTrigger value="all">All ({allImages.length})</TabsTrigger>
 							<TabsTrigger value="backdrop">
 								Backdrops ({images?.backdrops.length || 0})
 							</TabsTrigger>

@@ -1,7 +1,6 @@
-import { useRouteContext } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
-import { RotateCcw, RotateCw, SkipBack, SkipForward, Users } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { RotateCcw, RotateCw, SkipBack, SkipForward } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import BackButton from "../back-button";
 import { PlayButton } from "../play-button";
@@ -11,10 +10,8 @@ import { SoundControls } from "./SoundControls";
 import { SettingVideoOptions } from "./setting-video-options";
 import { formatTime } from "./utils";
 import { VideoProgressbar } from "./video-progressbar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { getWatchTogetherSocket } from "@/lib/watch-together-client";
+import { WatchTogetherAvatars } from "./watch-together-avatars";
+import { WatchTogetherButton } from "./watch-together-button";
 
 interface PlayerState {
 	isPlaying: boolean;
@@ -210,135 +207,6 @@ export function PlayerControls({
 					</div>
 				</div>
 			</div>
-		</div>
-	);
-}
-
-function WatchTogetherButton({ playId }: { playId: string }) {
-	const [sessionId, setSessionId] = useState<string | null>(null);
-	const [copied, setCopied] = useState(false);
-	const [popoverOpen, setPopoverOpen] = useState(false);
-	const [url, setUrl] = useState("");
-
-	useEffect(() => {
-		if (typeof window === "undefined") return;
-		const params = new URLSearchParams(window.location.search);
-		const together = params.get("together");
-		if (together) {
-			setSessionId(together);
-		}
-	}, []);
-
-	useEffect(() => {
-		if (typeof window === "undefined") return;
-		if (sessionId) {
-			setUrl(`${window.location.origin}/play/${playId}?together=${sessionId}`);
-		}
-	}, [sessionId, playId]);
-
-	const handleCreate = () => {
-		const id = Math.random().toString(36).slice(2, 10);
-		setSessionId(id);
-		if (typeof window !== "undefined") {
-			window.history.replaceState({}, "", `?together=${id}`);
-		}
-		setPopoverOpen(true);
-	};
-
-	const handleCopy = () => {
-		if (typeof navigator !== "undefined") {
-			navigator.clipboard.writeText(url);
-			setCopied(true);
-			toast.success("Session link copied!");
-			setTimeout(() => setCopied(false), 1200);
-		}
-	};
-
-	return (
-		<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-			<PopoverTrigger asChild>
-				<Button size="icon" variant="ghost" aria-label="Watch Together" onClick={() => {
-					if (!sessionId) handleCreate();
-					else setPopoverOpen(true);
-				}}>
-					<Users className="w-5 h-5" />
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent className="w-80">
-				<div className="flex flex-col gap-2">
-					<div className="font-bold text-sm mb-1">Watch Together</div>
-					<Input value={url} readOnly className="w-full" />
-					<Button onClick={handleCopy} variant="outline" size="sm">
-						{copied ? "Copied!" : "Copy Link"}
-					</Button>
-				</div>
-			</PopoverContent>
-		</Popover>
-	);
-}
-
-function WatchTogetherAvatars() {
-	const [sessionId, setSessionId] = useState<string | null>(null);
-	const [users, setUsers] = useState<any[]>([]);
-	const socketRef = useRef<any>(null);
-	// Get current user from root route context
-	// Use root context from TanStack Router
-	const { auth } = useRouteContext({ from: "__root__" });
-	const user = auth?.user;
-
-	useEffect(() => {
-		if (typeof window === "undefined") return;
-		const params = new URLSearchParams(window.location.search);
-		const together = params.get("together");
-		if (together) setSessionId(together);
-	}, []);
-
-	useEffect(() => {
-		if (!sessionId) return;
-		const socket = getWatchTogetherSocket();
-		socketRef.current = socket;
-		// Pass real user info if available
-		socket.emit("join-room", {
-			roomId: sessionId,
-			user: user
-				? {
-					id: user.id,
-					name: user.name || user.email?.split("@")[0] || "User",
-					image: user.image || null,
-				}
-				: { name: "User" },
-		});
-		socket.on("user-joined", (user) => setUsers((u) => [...u, user]));
-		socket.on("user-left", ({ id }) => setUsers((u) => u.filter((x) => x.id !== id)));
-		return () => {
-			socket.disconnect();
-		};
-	}, [sessionId, user]);
-
-	if (!sessionId || users.length === 0) return null;
-	const maxAvatars = 5;
-	const shown = users.slice(0, maxAvatars);
-	const extra = users.length - maxAvatars;
-	return (
-		<div className="flex items-center gap-1 ml-2">
-			{shown.map((u, i) => (
-				<img
-					key={u.id || i}
-					src={
-						u.user?.image ||
-						`https://avatar.vercel.sh/${encodeURIComponent(
-							u.user?.name || "u"
-						)}`
-					}
-					alt={u.user?.name || "User"}
-					className="w-6 h-6 rounded-full border-2 border-white -ml-2 first:ml-0"
-				/>
-			))}
-			{extra > 0 && (
-				<span className="w-6 h-6 rounded-full bg-zinc-700 text-white text-xs flex items-center justify-center border-2 border-white -ml-2">
-					+{extra}
-				</span>
-			)}
 		</div>
 	);
 }

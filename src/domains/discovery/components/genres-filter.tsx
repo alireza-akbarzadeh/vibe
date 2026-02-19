@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Film, Grid3x3, Music, Sparkles, TrendingUp } from "lucide-react";
+import { motion } from "@/components/motion";
 
 interface GenreFiltersProps {
 	activeFilter: string;

@@ -1,6 +1,6 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 
 interface VideoOverlayProps {
 	onTogglePlay: () => void;
@@ -35,8 +35,7 @@ export function VideoOverlay({
 	};
 
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
-		// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+		// biome-ignore lint/a11y/useKeyWithClickEvents: The div is used to capture double-click events for skipping.
 		<div
 			className="absolute inset-0 z-10"
 			onDoubleClick={handleDoubleClick}

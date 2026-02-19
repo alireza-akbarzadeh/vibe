@@ -1,10 +1,10 @@
-import { base } from "@/orpc/router/base";
+import { os } from "@/orpc/server";
 import { addToWatchList } from "./create";
 import { removeFromWatchList } from "./delete";
 import { checkWatchList, listWatchList } from "./get";
 import { toggleWatchList } from "./toggle";
 
-export const WatchListRouter = base.router({
+export const watchListProcedures = os.router({
 	add: addToWatchList,
 	list: listWatchList,
 	check: checkWatchList,

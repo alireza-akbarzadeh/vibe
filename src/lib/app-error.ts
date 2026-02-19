@@ -95,7 +95,7 @@ export const Errors = {
 	},
 
 	forbidden: (message?: string, originalError?: unknown): AppError => {
-		const msg = message || "Access denied.";
+		const _msg = message || "Access denied.";
 		return new AppError({
 			code: "FORBIDDEN",
 			message: message || "Access denied.",
@@ -130,7 +130,7 @@ export const Errors = {
 	},
 
 	checkoutFailed: (message?: string, originalError?: unknown): AppError => {
-		const msg = message || "Checkout creation failed.";
+		const _msg = message || "Checkout creation failed.";
 		return new AppError({
 			code: "CHECKOUT_FAILED",
 			message: message || "Checkout creation failed.",

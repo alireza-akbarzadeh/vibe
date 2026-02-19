@@ -1,4 +1,5 @@
 import type React from "react";
+import { useId } from "react";
 
 export interface RadioOption {
 	value: string;
@@ -22,18 +23,23 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
 	onChange,
 	className = "",
 }) => {
+	const id = useId();
 	return (
 		<div className={`flex flex-col gap-3 ${className}`}>
-			<label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+			<label
+				htmlFor={id}
+				className="text-sm font-medium text-gray-700 dark:text-gray-200"
+			>
 				{label}
 			</label>
 			<div className="flex gap-4">
-				{options.map((option) => (
+				{options.map((option, index) => (
 					<label
 						key={option.value}
 						className="flex items-center gap-2 cursor-pointer group"
 					>
 						<input
+							id={index === 0 ? id : undefined}
 							type="radio"
 							name={name}
 							value={option.value}

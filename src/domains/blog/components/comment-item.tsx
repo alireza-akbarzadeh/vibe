@@ -1,5 +1,4 @@
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import {
 	Heart,
 	MoreHorizontal,
@@ -10,6 +9,7 @@ import {
 	User,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import type { Comment } from "../blog-mock";
 import { commentActions, commentStore } from "../store/comment-store";
 

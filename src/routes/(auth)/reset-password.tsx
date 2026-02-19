@@ -1,6 +1,5 @@
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
 	ArrowLeft,
 	CheckCircle2,
@@ -14,6 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { InputPassword } from "@/components/ui/forms/input-password";
 import { MSG } from "@/constants/constants";

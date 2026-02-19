@@ -1,6 +1,5 @@
 // routes/(auth)/recovery-code.tsx
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
 	AlertCircle,
 	CheckCircle2,
@@ -11,6 +10,7 @@ import {
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@/components/ui/forms/form.tsx";
 import { Input } from "@/components/ui/input";
@@ -60,7 +60,7 @@ function RecoveryCodePage() {
 				setTimeout(() => {
 					navigate({ to: "/" });
 				}, 2000);
-			} catch (error) {
+			} catch (_error) {
 				toast.error("Something went wrong");
 			}
 		},
@@ -69,7 +69,7 @@ function RecoveryCodePage() {
 	const recoveryId = useId();
 
 	// Generate new backup codes (usually from settings page)
-	const generateBackupCodes = async () => {
+	const _generateBackupCodes = async () => {
 		try {
 			const { data, error } = await authClient.twoFactor.generateBackupCodes({
 				password: "", // In a real app, ask for password confirmation
@@ -83,7 +83,7 @@ function RecoveryCodePage() {
 			setNewBackupCodes(data.backupCodes);
 			setShowNewCodes(true);
 			toast.success("New backup codes generated!");
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Failed to generate backup codes");
 		}
 	};

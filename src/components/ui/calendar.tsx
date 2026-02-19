@@ -306,37 +306,38 @@ function MonthGrid({
 			{Array.from(
 				{ length: displayYears.to - displayYears.from + 1 },
 				(_, i) => {
+					const year = displayYears.from + i;
 					const isBefore =
+						dayPickerProps.startMonth &&
 						differenceInCalendarDays(
 							new Date(displayYears.from + i, 12, 31),
-							dayPickerProps.startMonth!,
+							dayPickerProps.startMonth,
 						) < 0;
 
 					const isAfter =
+						dayPickerProps.endMonth &&
 						differenceInCalendarDays(
-							new Date(displayYears.from + i, 0, 0),
-							dayPickerProps.endMonth!,
+							new Date(year, 0, 0),
+							dayPickerProps.endMonth,
 						) > 0;
 
 					const isDisabled = isBefore || isAfter;
 					return (
 						<Button
-							key={i}
+							key={year}
 							className={cn(
 								"h-7 w-full text-sm font-normal text-foreground",
-								displayYears.from + i === new Date().getFullYear() &&
+								year === new Date().getFullYear() &&
 									"bg-accent font-medium text-accent-foreground",
 							)}
 							variant="ghost"
 							onClick={() => {
 								setNavView("days");
-								goToMonth(
-									new Date(displayYears.from + i, new Date().getMonth()),
-								);
+								goToMonth(new Date(year, new Date().getMonth()));
 							}}
 							disabled={navView === "years" ? isDisabled : undefined}
 						>
-							{displayYears.from + i}
+							{year}
 						</Button>
 					);
 				},

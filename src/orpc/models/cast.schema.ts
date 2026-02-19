@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { CastType } from "@/generated/prisma/client";
 
 /**
  * Zod schema for Cast/Crew output

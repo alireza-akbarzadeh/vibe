@@ -1,9 +1,26 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, Calendar, Check, Filter, LayoutGrid, Search, SlidersHorizontal, SortAsc, SortDesc, Sparkles, X } from "lucide-react";
+import {
+	ArrowLeft,
+	Calendar,
+	Check,
+	Filter,
+	LayoutGrid,
+	Search,
+	SlidersHorizontal,
+	SortAsc,
+	SortDesc,
+	Sparkles,
+	X,
+} from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import {
+	AnimatePresence,
+	motion,
+	useScroll,
+	useTransform,
+} from "@/components/motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,7 +70,9 @@ const FilterContent = ({
 		<div className="space-y-4">
 			<div className="flex items-center gap-2 text-white/40 mb-2">
 				<Filter className="w-4 h-4" />
-				<span className="text-xs font-black uppercase tracking-widest">Genre DNA</span>
+				<span className="text-xs font-black uppercase tracking-widest">
+					Genre DNA
+				</span>
 			</div>
 			<div className="flex flex-wrap gap-2 max-h-48 md:max-h-64 overflow-y-auto pr-2 custom-scrollbar">
 				{genres.map((genre) => {
@@ -64,8 +83,10 @@ const FilterContent = ({
 							variant="outline"
 							size="sm"
 							onClick={() => {
-								setSelectedGenreIds(prev =>
-									isSelected ? prev.filter(id => id !== genre.id) : [...prev, genre.id]
+								setSelectedGenreIds((prev) =>
+									isSelected
+										? prev.filter((id) => id !== genre.id)
+										: [...prev, genre.id],
 								);
 							}}
 							className={`rounded-full px-4 h-9 border-white/10 transition-all duration-300 ${isSelected ? "bg-purple-500 border-purple-500 text-white" : "bg-transparent text-white/40 hover:text-white"}`}
@@ -82,7 +103,9 @@ const FilterContent = ({
 		<div className="space-y-4">
 			<div className="flex items-center gap-2 text-white/40 mb-2">
 				<Calendar className="w-4 h-4" />
-				<span className="text-xs font-black uppercase tracking-widest">Time Horizon</span>
+				<span className="text-xs font-black uppercase tracking-widest">
+					Time Horizon
+				</span>
 			</div>
 			<div className="px-2 pt-2">
 				<Slider
@@ -104,8 +127,16 @@ const FilterContent = ({
 		{/* Sort Architecture Section */}
 		<div className="space-y-4">
 			<div className="flex items-center gap-2 text-white/40 mb-2">
-				{sortBy === "NEWEST" ? <SortDesc className="w-4 h-4" /> : sortBy === "OLDEST" ? <SortAsc className="w-4 h-4" /> : <LayoutGrid className="w-4 h-4" />}
-				<span className="text-xs font-black uppercase tracking-widest">Sort Architecture</span>
+				{sortBy === "NEWEST" ? (
+					<SortDesc className="w-4 h-4" />
+				) : sortBy === "OLDEST" ? (
+					<SortAsc className="w-4 h-4" />
+				) : (
+					<LayoutGrid className="w-4 h-4" />
+				)}
+				<span className="text-xs font-black uppercase tracking-widest">
+					Sort Architecture
+				</span>
 			</div>
 			<div className="grid grid-cols-1 gap-2">
 				{[
@@ -119,13 +150,18 @@ const FilterContent = ({
 						<Button
 							key={option.id}
 							variant="ghost"
-							onClick={() => setSortBy(option.id as "NEWEST" | "OLDEST" | "TITLE")}
+							onClick={() =>
+								setSortBy(option.id as "NEWEST" | "OLDEST" | "TITLE")
+							}
 							className={`justify-start h-12 rounded-xl transition-all duration-300 ${isSelected ? "bg-white/10 text-white" : "text-white/40 hover:text-white"}`}
 						>
 							<Icon className="w-4 h-4 mr-3" />
 							<span className="font-bold">{option.label}</span>
 							{isSelected && (
-								<motion.div layoutId="sort-active" className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,1)]" />
+								<motion.div
+									layoutId="sort-active"
+									className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,1)]"
+								/>
 							)}
 						</Button>
 					);
@@ -169,12 +205,15 @@ function RouteComponent() {
 		return () => clearTimeout(timer);
 	}, [searchQuery]);
 
-	const activeFilters = useMemo(() => ({
-		genreIds: selectedGenreIds.length > 0 ? selectedGenreIds : undefined,
-		releaseYearFrom: yearRange[0] > 1900 ? yearRange[0] : undefined,
-		releaseYearTo: yearRange[1] < 2026 ? yearRange[1] : undefined,
-		sortBy: sortBy as "NEWEST" | "OLDEST" | "TITLE" | "MANUAL",
-	}), [selectedGenreIds, yearRange, sortBy]);
+	const activeFilters = useMemo(
+		() => ({
+			genreIds: selectedGenreIds.length > 0 ? selectedGenreIds : undefined,
+			releaseYearFrom: yearRange[0] > 1900 ? yearRange[0] : undefined,
+			releaseYearTo: yearRange[1] < 2026 ? yearRange[1] : undefined,
+			sortBy: sortBy as "NEWEST" | "OLDEST" | "TITLE" | "MANUAL",
+		}),
+		[selectedGenreIds, yearRange, sortBy],
+	);
 
 	const {
 		data,
@@ -183,7 +222,14 @@ function RouteComponent() {
 		isFetchingNextPage,
 		isLoading,
 		isError,
-	} = useInfiniteQuery(getSectionInfiniteQueryOptions(sectionSlug, 20, debouncedSearch, activeFilters));
+	} = useInfiniteQuery(
+		getSectionInfiniteQueryOptions(
+			sectionSlug,
+			20,
+			debouncedSearch,
+			activeFilters,
+		),
+	);
 
 	useEffect(() => {
 		if (!loadMoreRef.current) return;
@@ -236,7 +282,7 @@ function RouteComponent() {
 				<motion.div
 					animate={{
 						scale: [1, 1.1, 1],
-						opacity: [0.3, 0.5, 0.3]
+						opacity: [0.3, 0.5, 0.3],
 					}}
 					transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
 					className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[120px]"
@@ -244,7 +290,7 @@ function RouteComponent() {
 				<motion.div
 					animate={{
 						scale: [1.1, 1, 1.1],
-						opacity: [0.2, 0.4, 0.2]
+						opacity: [0.2, 0.4, 0.2],
 					}}
 					transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
 					className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-pink-600/10 rounded-full blur-[150px]"
@@ -271,14 +317,22 @@ function RouteComponent() {
 					<div className="md:hidden">
 						<Drawer>
 							<DrawerTrigger asChild>
-								<Button size="icon" variant="ghost" className="w-10 h-10 rounded-full bg-white/5 border border-white/10">
+								<Button
+									size="icon"
+									variant="ghost"
+									className="w-10 h-10 rounded-full bg-white/5 border border-white/10"
+								>
 									<Filter className="w-5 h-5 text-purple-400" />
 								</Button>
 							</DrawerTrigger>
 							<DrawerContent className="bg-[#0a0a0a] border-white/10 p-6 h-[80vh]">
 								<DrawerHeader className="px-0">
-									<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">Refine Discovery</DrawerTitle>
-									<DrawerDescription className="text-white/40">Adjust parameters for the current frequency.</DrawerDescription>
+									<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">
+										Refine Discovery
+									</DrawerTitle>
+									<DrawerDescription className="text-white/40">
+										Adjust parameters for the current frequency.
+									</DrawerDescription>
 								</DrawerHeader>
 								<div className="mt-4 overflow-y-auto pb-10">
 									<FilterContent
@@ -296,7 +350,11 @@ function RouteComponent() {
 					</div>
 
 					<div className="hidden md:flex items-center gap-1 p-1 bg-white/5 backdrop-blur-md rounded-xl border border-white/10">
-						<Button size="icon" variant="ghost" className="w-9 h-9 rounded-lg hover:bg-white/5 opacity-40">
+						<Button
+							size="icon"
+							variant="ghost"
+							className="w-9 h-9 rounded-lg hover:bg-white/5 opacity-40"
+						>
 							<LayoutGrid className="w-4 h-4" />
 						</Button>
 						<Button
@@ -340,10 +398,16 @@ function RouteComponent() {
 						transition={{ delay: 0.2 }}
 						className="mt-12 group relative max-w-4xl"
 					>
-						<div className={`absolute inset-0 bg-linear-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur-xl transition-opacity duration-500 ${isSearchFocused ? "opacity-100" : "opacity-0"}`} />
+						<div
+							className={`absolute inset-0 bg-linear-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur-xl transition-opacity duration-500 ${isSearchFocused ? "opacity-100" : "opacity-0"}`}
+						/>
 						<div className="flex flex-col gap-4">
-							<div className={`relative flex items-center bg-white/5 backdrop-blur-3xl border transition-all duration-500 rounded-2xl ${isSearchFocused ? "border-purple-500/50 ring-4 ring-purple-500/10" : "border-white/10"}`}>
-								<Search className={`absolute left-5 w-6 h-6 transition-colors duration-300 ${isSearchFocused ? "text-purple-400" : "text-white/20"}`} />
+							<div
+								className={`relative flex items-center bg-white/5 backdrop-blur-3xl border transition-all duration-500 rounded-2xl ${isSearchFocused ? "border-purple-500/50 ring-4 ring-purple-500/10" : "border-white/10"}`}
+							>
+								<Search
+									className={`absolute left-5 w-6 h-6 transition-colors duration-300 ${isSearchFocused ? "text-purple-400" : "text-white/20"}`}
+								/>
 								<Input
 									type="text"
 									placeholder={`Explore ${config.title.toLowerCase()}...`}
@@ -390,9 +454,7 @@ function RouteComponent() {
 									<div className="md:hidden">
 										<Drawer>
 											<DrawerTrigger asChild>
-												<Button
-													className="h-11 px-4 rounded-xl font-bold bg-white/10 text-white/60 hover:bg-white/20"
-												>
+												<Button className="h-11 px-4 rounded-xl font-bold bg-white/10 text-white/60 hover:bg-white/20">
 													<SlidersHorizontal className="w-4 h-4" />
 													{selectedGenreIds.length > 0 && (
 														<Badge className="ml-2 bg-purple-500 hover:bg-purple-500 text-white border-none h-5 w-5 p-0 flex items-center justify-center rounded-full text-[10px]">
@@ -403,8 +465,12 @@ function RouteComponent() {
 											</DrawerTrigger>
 											<DrawerContent className="bg-[#0a0a0a] border-white/10 p-6 h-[80vh]">
 												<DrawerHeader className="px-0">
-													<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">Refine Discovery</DrawerTitle>
-													<DrawerDescription className="text-white/40">Adjust parameters for the current frequency.</DrawerDescription>
+													<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">
+														Refine Discovery
+													</DrawerTitle>
+													<DrawerDescription className="text-white/40">
+														Adjust parameters for the current frequency.
+													</DrawerDescription>
 												</DrawerHeader>
 												<div className="mt-4 overflow-y-auto pb-10">
 													<FilterContent
@@ -473,7 +539,9 @@ function RouteComponent() {
 						animate={{ opacity: 1 }}
 						className="text-center py-32 bg-white/5 rounded-3xl border border-dashed border-white/10"
 					>
-						<p className="text-xl font-bold text-red-400 mb-6">UNABLE TO RETRIEVE FREQUENCY</p>
+						<p className="text-xl font-bold text-red-400 mb-6">
+							UNABLE TO RETRIEVE FREQUENCY
+						</p>
 						<Button
 							onClick={() => window.location.reload()}
 							className="bg-white/10 hover:bg-white/20 text-white rounded-xl px-10"
@@ -503,9 +571,9 @@ function RouteComponent() {
 									variants={{
 										show: {
 											transition: {
-												staggerChildren: 0.05
-											}
-										}
+												staggerChildren: 0.05,
+											},
+										},
 									}}
 									className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-y-10 gap-x-6 md:gap-x-8"
 								>
@@ -514,7 +582,7 @@ function RouteComponent() {
 											key={`${movie.id}-${index}`}
 											variants={{
 												hidden: { opacity: 0, y: 20 },
-												show: { opacity: 1, y: 0 }
+												show: { opacity: 1, y: 0 },
 											}}
 										>
 											<MovieCard
@@ -531,16 +599,27 @@ function RouteComponent() {
 
 						{/* Paginated Loader Infrastructure */}
 						{(hasNextPage || isFetchingNextPage) && (
-							<div ref={loadMoreRef} className="py-20 flex flex-col items-center justify-center gap-4">
+							<div
+								ref={loadMoreRef}
+								className="py-20 flex flex-col items-center justify-center gap-4"
+							>
 								<div className="w-12 h-12 relative">
 									<motion.div
 										animate={{ rotate: 360 }}
-										transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+										transition={{
+											duration: 1,
+											repeat: Infinity,
+											ease: "linear",
+										}}
 										className="absolute inset-0 border-4 border-purple-500/20 rounded-full"
 									/>
 									<motion.div
 										animate={{ rotate: 360 }}
-										transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+										transition={{
+											duration: 1.5,
+											repeat: Infinity,
+											ease: "linear",
+										}}
 										className="absolute inset-0 border-t-4 border-purple-500 rounded-full"
 									/>
 								</div>
@@ -570,8 +649,12 @@ function RouteComponent() {
 					</DrawerTrigger>
 					<DrawerContent className="bg-[#0a0a0a] border-white/10 p-6 h-[80vh]">
 						<DrawerHeader className="px-0">
-							<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">Refine Discovery</DrawerTitle>
-							<DrawerDescription className="text-white/40">Adjust parameters for the current frequency.</DrawerDescription>
+							<DrawerTitle className="text-2xl font-black italic uppercase tracking-tighter text-white">
+								Refine Discovery
+							</DrawerTitle>
+							<DrawerDescription className="text-white/40">
+								Adjust parameters for the current frequency.
+							</DrawerDescription>
 						</DrawerHeader>
 						<div className="mt-4 overflow-y-auto pb-10">
 							<FilterContent

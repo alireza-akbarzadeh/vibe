@@ -1,6 +1,6 @@
-import { client, orpc } from "@/orpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { client, orpc } from "@/orpc/client";
 
 interface SubscriptionStatus {
 	status: "FREE" | "PREMIUM" | "FAMILY" | "CANCELLED" | "NONE";
@@ -38,12 +38,12 @@ export function useSubscription() {
 			}
 
 			const sub = result.subscriptions[0];
-			
+
 			// Map status to our system
 			let status: "FREE" | "PREMIUM" | "FAMILY" | "CANCELLED" | "NONE" = "NONE";
 			if (sub.status === "active") {
-				status = sub.productName.toLowerCase().includes("family") 
-					? "FAMILY" 
+				status = sub.productName.toLowerCase().includes("family")
+					? "FAMILY"
 					: "PREMIUM";
 			} else if (sub.status === "canceled" || sub.cancelAtPeriodEnd) {
 				status = "CANCELLED";

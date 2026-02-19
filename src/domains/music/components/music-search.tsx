@@ -1,6 +1,6 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Music, Search, TrendingUp, X } from "lucide-react";
 import { useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Input } from "@/components/ui/input";
 
 interface SearchHeaderProps {

@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from "framer-motion";
 import {
 	Activity,
 	Apple,
@@ -13,16 +12,23 @@ import {
 	ShieldCheck,
 	Smartphone,
 	Sparkles,
-	Tv
+	Tv,
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { DeviceShowcase } from "./components/device-showcase";
 import { DownloadHero } from "./components/download-hero";
 
 // --- Types ---
 
-export type PlatformId = "windows" | "macos" | "tvos" | "ios" | "android" | "web";
+export type PlatformId =
+	| "windows"
+	| "macos"
+	| "tvos"
+	| "ios"
+	| "android"
+	| "web";
 
 export interface Platform {
 	id: PlatformId;
@@ -57,10 +63,14 @@ const PLATFORMS: Platform[] = [
 		version: "v2.4.0",
 		fileSize: "112 MB",
 		downloadUrl: "#",
-		requirements: { os: "macOS 11.0+", cpu: "M1/M2/M3 or Intel", storage: "500MB" },
+		requirements: {
+			os: "macOS 11.0+",
+			cpu: "M1/M2/M3 or Intel",
+			storage: "500MB",
+		},
 		accent: "#a855f7",
 		type: "desktop",
-		description: "Native M3 optimization with full spatial audio support."
+		description: "Native M3 optimization with full spatial audio support.",
 	},
 	{
 		id: "windows",
@@ -72,7 +82,7 @@ const PLATFORMS: Platform[] = [
 		requirements: { os: "Windows 10/11", cpu: "x64 2.0GHz+", storage: "450MB" },
 		accent: "#0ea5e9",
 		type: "desktop",
-		description: "DirectX 12 powered streaming for low-latency playback."
+		description: "DirectX 12 powered streaming for low-latency playback.",
 	},
 	{
 		id: "tvos",
@@ -81,10 +91,15 @@ const PLATFORMS: Platform[] = [
 		version: "v1.8.0",
 		fileSize: "App Store",
 		downloadUrl: "#",
-		requirements: { os: "tvOS / Android TV", cpu: "Quad-Core ARM", storage: "120MB" },
+		requirements: {
+			os: "tvOS / Android TV",
+			cpu: "Quad-Core ARM",
+			storage: "120MB",
+		},
 		accent: "#f59e0b",
 		type: "tv",
-		description: "Cinematic 4K experience designed for the big screen and remote navigation."
+		description:
+			"Cinematic 4K experience designed for the big screen and remote navigation.",
 	},
 	{
 		id: "ios",
@@ -96,7 +111,7 @@ const PLATFORMS: Platform[] = [
 		requirements: { os: "iOS 15.0+", cpu: "A12 Bionic+", storage: "200MB" },
 		accent: "#ec4899",
 		type: "mobile",
-		description: "Your entire library, optimized for ProMotion displays."
+		description: "Your entire library, optimized for ProMotion displays.",
 	},
 	{
 		id: "android",
@@ -105,11 +120,15 @@ const PLATFORMS: Platform[] = [
 		version: "v2.4.1",
 		fileSize: "72 MB",
 		downloadUrl: "#",
-		requirements: { os: "Android 10+", cpu: "Snapdragon 8++", storage: "220MB" },
+		requirements: {
+			os: "Android 10+",
+			cpu: "Snapdragon 8++",
+			storage: "220MB",
+		},
 		accent: "#22c55e",
 		type: "mobile",
-		description: "High-fidelity audio streaming on any Android device."
-	}
+		description: "High-fidelity audio streaming on any Android device.",
+	},
 ];
 
 const RECENT_RELEASES: ReleaseNote[] = [
@@ -132,22 +151,37 @@ const RECENT_RELEASES: ReleaseNote[] = [
 	},
 ];
 
-
 // --- Main Page ---
 
 export function DownloadPage() {
 	const [activePlatform, setActivePlatform] = useState<PlatformId>("macos");
 
-	const current = PLATFORMS.find(p => p.id === activePlatform) || PLATFORMS[0];
+	const current =
+		PLATFORMS.find((p) => p.id === activePlatform) || PLATFORMS[0];
 
 	return (
-		<div className="min-h-screen bg-[#050505] text-white selection:bg-purple-500/30">
+		<div className="min-h-screen bg-black text-white selection:bg-purple-500/30">
+			{/* --- Background -- */}
+			<motion.div
+				key={current.id}
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ duration: 1.5 }}
+				style={{ "--accent": current.accent } as React.CSSProperties}
+				className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--accent),transparent_60%)] opacity-20 z-0 pointer-events-none"
+			/>
+
 			<DownloadHero />
 
-			<section className="max-w-7xl mx-auto px-6 pb-32">
-
+			<section className="max-w-7xl mx-auto px-6 pb-32 relative z-10">
 				{/* 1. INTERACTIVE SHOWCASE */}
-				<div className="flex flex-col items-center mb-40">
+				<motion.div
+					initial={{ y: 50, opacity: 0 }}
+					whileInView={{ y: 0, opacity: 1 }}
+					transition={{ duration: 0.8, ease: "easeOut" }}
+					viewport={{ once: true, amount: 0.2 }}
+					className="flex flex-col items-center mb-40"
+				>
 					<div className="relative min-h-[550px] w-full flex items-center justify-center mb-16">
 						<AnimatePresence mode="wait">
 							<motion.div
@@ -155,7 +189,7 @@ export function DownloadPage() {
 								initial={{ y: 30, opacity: 0, scale: 0.9 }}
 								animate={{ y: 0, opacity: 1, scale: 1 }}
 								exit={{ y: -30, opacity: 0, scale: 0.9 }}
-								transition={{ type: "spring", damping: 25 }}
+								transition={{ type: "spring", damping: 25, stiffness: 120 }}
 							>
 								<DeviceShowcase platform={current} />
 							</motion.div>
@@ -167,10 +201,14 @@ export function DownloadPage() {
 							<button
 								key={p.id}
 								onClick={() => setActivePlatform(p.id)}
-								className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${activePlatform === p.id ? "text-white" : "text-gray-500 hover:text-gray-300"}`}
+								className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${activePlatform === p.id ? "text-white" : "text-gray-400 hover:text-white"}`}
 							>
 								{activePlatform === p.id && (
-									<motion.div layoutId="pill" className="absolute inset-0 bg-white/10 rounded-full border border-white/10" />
+									<motion.div
+										layoutId="pill"
+										style={{ "--accent": p.accent } as React.CSSProperties}
+										className="absolute inset-0 bg-white/10 rounded-full border border-white/10 shadow-[0_0_20px_0_var(--accent)]"
+									/>
 								)}
 								<p.icon className="w-4 h-4 relative z-10" />
 								<span className="relative z-10">{p.name}</span>
@@ -179,25 +217,42 @@ export function DownloadPage() {
 					</div>
 
 					<div className="text-center max-w-2xl">
-						<h2 className="text-5xl font-bold mb-6 tracking-tight">
-							{current.type === 'tv' ? 'Stream on the Big Screen' : `Ready for ${current.name}`}
+						<h2 className="text-5xl font-bold mb-6 tracking-tight bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
+							{current.type === "tv"
+								? "Stream on the Big Screen"
+								: `Ready for ${current.name}`}
 						</h2>
-						<p className="text-gray-400 mb-10 text-lg leading-relaxed">{current.description}</p>
+						<p className="text-gray-400 mb-10 text-lg leading-relaxed">
+							{current.description}
+						</p>
 
 						<div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-							<button className="bg-white text-black px-12 py-5 rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-3">
-								{current.type === 'tv' ? <Cast className="w-5 h-5" /> : <Download className="w-5 h-5" />}
-								{current.type === 'tv' ? 'Available on App Store' : 'Download Now'}
-							</button>
+							<motion.button
+								whileHover={{ scale: 1.05 }}
+								whileTap={{ scale: 0.95 }}
+								style={{ "--accent": current.accent } as React.CSSProperties}
+								className="bg-[var(--accent)] text-white px-10 py-4 rounded-full font-bold transition-transform flex items-center gap-3 shadow-[0_10px_30px_-10px_var(--accent)]"
+							>
+								{current.type === "tv" ? (
+									<Cast className="w-5 h-5" />
+								) : (
+									<Download className="w-5 h-5" />
+								)}
+								{current.type === "tv"
+									? "Available on App Store"
+									: "Download Now"}
+							</motion.button>
 							<div className="flex flex-col items-start text-left">
-								<div className="flex items-center gap-2 text-sm text-green-500 font-semibold uppercase tracking-tighter">
-									<CheckCircle2 className="w-4 h-4" /> Trusted Build
+								<div className="flex items-center gap-2 text-sm text-green-400 font-semibold uppercase tracking-wider">
+									<ShieldCheck className="w-4 h-4 text-green-400" /> Verified Build
 								</div>
-								<span className="text-[11px] text-gray-500">{current.version} • {current.fileSize}</span>
+								<span className="text-[11px] text-gray-500">
+									{current.version} • {current.fileSize}
+								</span>
 							</div>
 						</div>
 					</div>
-				</div>
+				</motion.div>
 
 				{/* 2. SYSTEM REQUIREMENTS */}
 				<div className="grid lg:grid-cols-2 gap-20 mb-40">
@@ -206,22 +261,48 @@ export function DownloadPage() {
 							<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold uppercase tracking-widest mb-4">
 								<Activity className="w-3 h-3" /> System Requirements
 							</div>
-							<h2 className="text-4xl font-bold mb-6 tracking-tight">Optimized for your hardware.</h2>
-							<p className="text-gray-400 leading-relaxed">We leverage native APIs to ensure the smoothest performance and minimal battery drain on every device.</p>
+							<h2 className="text-4xl font-bold mb-6 tracking-tight">
+								Optimized for your hardware.
+							</h2>
+							<p className="text-gray-400 leading-relaxed">
+								We leverage native APIs to ensure the smoothest performance and
+								minimal battery drain on every device.
+							</p>
 						</div>
 
 						<div className="grid gap-4">
 							{[
-								{ icon: Monitor, label: "OS Version", value: current.requirements.os },
-								{ icon: Cpu, label: "Processor", value: current.requirements.cpu },
-								{ icon: HardDrive, label: "Disk Space", value: current.requirements.storage },
+								{
+									icon: Monitor,
+									label: "OS Version",
+									value: current.requirements.os,
+								},
+								{
+									icon: Cpu,
+									label: "Processor",
+									value: current.requirements.cpu,
+								},
+								{
+									icon: HardDrive,
+									label: "Disk Space",
+									value: current.requirements.storage,
+								},
 							].map((spec) => (
-								<div key={spec.value} className="flex items-center justify-between p-5 rounded-2xl bg-white/5 border border-white/10">
+								<div
+									key={spec.value}
+									className="flex items-center justify-between p-5 rounded-2xl bg-white/5 border border-white/10"
+								>
 									<div className="flex items-center gap-4 text-left">
-										<div className="p-2 rounded-lg bg-white/5"><spec.icon className="w-5 h-5 text-gray-400" /></div>
-										<span className="text-sm text-gray-400 font-medium">{spec.label}</span>
+										<div className="p-2 rounded-lg bg-white/5">
+											<spec.icon className="w-5 h-5 text-gray-400" />
+										</div>
+										<span className="text-sm text-gray-400 font-medium">
+											{spec.label}
+										</span>
 									</div>
-									<span className="text-sm font-bold text-white">{spec.value}</span>
+									<span className="text-sm font-bold text-white">
+										{spec.value}
+									</span>
 								</div>
 							))}
 						</div>
@@ -233,7 +314,10 @@ export function DownloadPage() {
 							<div>
 								<ShieldCheck className="w-12 h-12 text-purple-500 mb-8" />
 								<h3 className="text-2xl font-bold mb-4">Verified Security</h3>
-								<p className="text-gray-400 leading-relaxed mb-8">All downloads are signed with an EV certificate and scanned against major antivirus engines.</p>
+								<p className="text-gray-400 leading-relaxed mb-8">
+									All downloads are signed with an EV certificate and scanned
+									against major antivirus engines.
+								</p>
 							</div>
 							<div className="space-y-4">
 								<div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
@@ -264,11 +348,18 @@ export function DownloadPage() {
 
 					<div className="grid gap-6">
 						{RECENT_RELEASES.map((release) => (
-							<div key={release.version} className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors">
+							<div
+								key={release.version}
+								className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors"
+							>
 								<div className="flex flex-wrap items-center justify-between gap-4 mb-8">
 									<div className="flex items-center gap-4">
-										<span className="text-2xl font-bold font-mono">v{release.version}</span>
-										<span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-[10px] font-bold uppercase tracking-tighter">Latest Release</span>
+										<span className="text-2xl font-bold font-mono">
+											v{release.version}
+										</span>
+										<span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-[10px] font-bold uppercase tracking-tighter">
+											Latest Release
+										</span>
 									</div>
 									<div className="flex items-center gap-2 text-xs text-gray-500 bg-white/5 px-3 py-1.5 rounded-full">
 										<Clock className="w-3.5 h-3.5" /> {release.date}
@@ -277,9 +368,14 @@ export function DownloadPage() {
 								<div className="space-y-4 max-w-3xl text-left">
 									{release.changes.map((change) => (
 										<div key={change.text} className="flex gap-4">
-											<div className={`mt-2 w-1.5 h-1.5 rounded-full shrink-0 ${change.type === 'feat' ? 'bg-purple-500' : change.type === 'fix' ? 'bg-blue-500' : 'bg-green-500'}`} />
+											<div
+												className={`mt-2 w-1.5 h-1.5 rounded-full shrink-0 ${change.type === "feat" ? "bg-purple-500" : change.type === "fix" ? "bg-blue-500" : "bg-green-500"}`}
+											/>
 											<p className="text-gray-400 leading-relaxed text-sm">
-												<span className="text-gray-200 font-medium capitalize">{change.type}: </span>{change.text}
+												<span className="text-gray-200 font-medium capitalize">
+													{change.type}:{" "}
+												</span>
+												{change.text}
 											</p>
 										</div>
 									))}
@@ -288,7 +384,6 @@ export function DownloadPage() {
 						))}
 					</div>
 				</div>
-
 			</section>
 		</div>
 	);

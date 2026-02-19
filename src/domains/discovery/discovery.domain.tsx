@@ -1,8 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Music, Search, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

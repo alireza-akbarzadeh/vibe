@@ -47,13 +47,15 @@ export const cancelSubscription = authedProcedure
 				},
 			});
 
-			const canceledAt = canceled.currentPeriodEnd instanceof Date 
-				? canceled.currentPeriodEnd.toISOString() 
-				: canceled.currentPeriodEnd || undefined;
+			const canceledAt =
+				canceled.currentPeriodEnd instanceof Date
+					? canceled.currentPeriodEnd.toISOString()
+					: canceled.currentPeriodEnd || undefined;
 
 			return {
 				success: true,
-				message: "Subscription will be canceled at the end of the current period",
+				message:
+					"Subscription will be canceled at the end of the current period",
 				canceledAt,
 			};
 		} catch (error: any) {

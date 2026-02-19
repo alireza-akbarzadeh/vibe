@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Brain, Film, Music } from "lucide-react";
+import { motion } from "@/components/motion";
 
 import type { ArtistType } from "../discovery.domain";
 

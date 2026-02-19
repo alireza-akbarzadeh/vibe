@@ -6,6 +6,7 @@ export { HeroBanner } from "./hero-banner";
 export { LightBox } from "./light-box";
 export { MovieCard } from "./movie-card";
 export { MovieCarousel } from "./movie-carousel";
+export { MovieDetailsSection } from "./movie-details-section";
 export { MovieHero } from "./movie-hero";
 export { MovieImages } from "./movie-images";
 export { MovieItem } from "./movie-list";

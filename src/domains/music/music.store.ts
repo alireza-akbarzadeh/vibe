@@ -128,7 +128,7 @@ export const musicAction = {
 						if (item.type === "favorites") {
 							const countMatch = item.subtitle.match(/\\d+/);
 							const currentCount = countMatch
-								? Number.parseInt(countMatch[0])
+								? Number.parseInt(countMatch[0], 10)
 								: 0;
 							return {
 								...item,
@@ -159,7 +159,7 @@ export const musicAction = {
 						if (item.type === "favorites") {
 							const countMatch = item.subtitle.match(/\\d+/);
 							const currentCount = countMatch
-								? Number.parseInt(countMatch[0])
+								? Number.parseInt(countMatch[0], 10)
 								: 0;
 							return {
 								...item,
@@ -248,7 +248,7 @@ export const musicAction = {
 					if (item.type === "watchlist") {
 						const countMatch = item.subtitle.match(/\\d+/);
 						const currentCount = countMatch
-							? Number.parseInt(countMatch[0])
+							? Number.parseInt(countMatch[0], 10)
 							: 0;
 						return {
 							...item,
@@ -274,7 +274,7 @@ export const musicAction = {
 					if (item.type === "watchlist") {
 						const countMatch = item.subtitle.match(/\\d+/);
 						const currentCount = countMatch
-							? Number.parseInt(countMatch[0])
+							? Number.parseInt(countMatch[0], 10)
 							: 0;
 						return {
 							...item,
@@ -351,7 +351,9 @@ export const musicAction = {
 			const updatedLibrary = s.library.map((item) => {
 				if (item.id === playlistId && item.type === "playlist") {
 					const countMatch = item.subtitle.match(/\\d+/);
-					const currentCount = countMatch ? Number.parseInt(countMatch[0]) : 0;
+					const currentCount = countMatch
+						? Number.parseInt(countMatch[0], 10)
+						: 0;
 					return {
 						...item,
 						subtitle: `Playlist • ${currentCount + 1} songs`,

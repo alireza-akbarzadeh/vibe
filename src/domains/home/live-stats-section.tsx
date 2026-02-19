@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
 import {
 	Award,
 	Film,
@@ -11,6 +10,7 @@ import {
 	Users,
 	Zap,
 } from "lucide-react";
+import { motion } from "@/components/motion";
 import { Typography } from "@/components/ui/typography";
 import { useLazySection } from "@/hooks/useLazySection";
 import { platformStatsQueryOptions } from "./home.queries";

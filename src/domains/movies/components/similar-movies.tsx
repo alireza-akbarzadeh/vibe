@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { MovieItem } from "@/domains/movies/components/movie-list.tsx";
 import type { MediaList } from "@/orpc/models/media.schema";
@@ -27,7 +27,9 @@ export function SimilarMovies({ movies }: SimilarMoviesProps) {
 			duration: media.duration
 				? `${Math.floor(media.duration / 60)}h ${media.duration % 60}m`
 				: "N/A",
-			poster: media.thumbnail || "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=450&fit=crop",
+			poster:
+				media.thumbnail ||
+				"https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=450&fit=crop",
 		})) || [];
 
 	// Don't render section if no similar movies

@@ -1,18 +1,11 @@
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import {
-	ChevronRight,
-	Info,
-	Play,
-	Share2,
-	Star,
-	Volume2
-} from "lucide-react";
+import { ChevronRight, Info, Play, Share2, Star, Volume2 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { LikeButton } from "@/components/buttons/like-button";
 import { WatchListButton } from "@/components/buttons/watchlist-button";
+import { motion } from "@/components/motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -38,7 +31,9 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 	const { data: images } = useSuspenseQuery(movieImagesQueryOptions(mediaId));
 
 	const genreIds = media.genres?.map((g) => g.genre.id) || [];
-	const { data: similarMovies } = useQuery(movieSimilarQueryOptions(mediaId, genreIds));
+	const { data: similarMovies } = useQuery(
+		movieSimilarQueryOptions(mediaId, genreIds),
+	);
 
 	const backdrop = images?.backdrops[0]?.filePath
 		? `https://image.tmdb.org/t/p/w1280${images.backdrops[0].filePath}`
@@ -87,7 +82,9 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 							</Badge>
 							<div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10">
 								<Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" />
-								<span className="text-sm font-black text-white">{media.averageRating?.toFixed(1) || "8.4"}</span>
+								<span className="text-sm font-black text-white">
+									{media.averageRating?.toFixed(1) || "8.4"}
+								</span>
 							</div>
 							<span className="text-white/40 font-bold uppercase tracking-widest text-[10px]">
 								{media.duration}
@@ -102,7 +99,12 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 							<Button
 								size="lg"
 								className="bg-white hover:bg-gray-200 text-black font-black uppercase tracking-tighter rounded-xl px-10 h-14 group transition-all active:scale-95"
-								onClick={() => navigate({ to: "/movies/$movieId", params: { movieId: mediaId } })}
+								onClick={() =>
+									navigate({
+										to: "/movies/$movieId",
+										params: { movieId: mediaId },
+									})
+								}
 							>
 								<Play className="w-5 h-5 fill-black mr-2 transition-transform group-hover:scale-110" />
 								Watch Now
@@ -141,7 +143,9 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 						>
 							<div className="flex items-center gap-2">
 								<div className="h-px w-8 bg-purple-500" />
-								<span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">Synopsis</span>
+								<span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">
+									Synopsis
+								</span>
 							</div>
 							<p className="text-xl text-white/70 leading-relaxed font-medium tracking-tight line-clamp-4 hover:line-clamp-none transition-all duration-500">
 								{media.description}
@@ -164,7 +168,9 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-2">
 									<div className="h-px w-8 bg-purple-500" />
-									<span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">Main Cast</span>
+									<span className="text-[10px] font-black uppercase tracking-[0.3em] text-purple-400">
+										Main Cast
+									</span>
 								</div>
 							</div>
 							<div className="flex -space-x-4 overflow-hidden">
@@ -177,7 +183,11 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 										className="relative"
 									>
 										<img
-											src={actor.person.profilePath ? `https://image.tmdb.org/t/p/w185${actor.person.profilePath}` : `https://api.dicebear.com/7.x/avataaars/svg?seed=${actor.person.name}`}
+											src={
+												actor.person.profilePath
+													? `https://image.tmdb.org/t/p/w185${actor.person.profilePath}`
+													: `https://api.dicebear.com/7.x/avataaars/svg?seed=${actor.person.name}`
+											}
 											alt={actor.person.name}
 											className="w-16 h-16 rounded-full border-4 border-black object-cover"
 										/>
@@ -195,7 +205,9 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 						{/* Stats Vertical Bar */}
 						<div className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-8">
 							<div className="flex flex-col gap-1">
-								<span className="text-[10px] font-black uppercase tracking-widest text-white/30">Director</span>
+								<span className="text-[10px] font-black uppercase tracking-widest text-white/30">
+									Director
+								</span>
 								<span className="text-lg font-black italic uppercase text-white tracking-tighter">
 									{cast?.directors[0]?.person.name || "Ridley Scott"}
 								</span>
@@ -203,19 +215,29 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 
 							<div className="grid grid-cols-2 gap-6">
 								<div className="flex flex-col gap-1">
-									<span className="text-[10px] font-black uppercase tracking-widest text-white/30">Language</span>
-									<span className="text-sm font-bold text-white uppercase">English</span>
+									<span className="text-[10px] font-black uppercase tracking-widest text-white/30">
+										Language
+									</span>
+									<span className="text-sm font-bold text-white uppercase">
+										English
+									</span>
 								</div>
 								<div className="flex flex-col gap-1">
-									<span className="text-[10px] font-black uppercase tracking-widest text-white/30">Rating</span>
-									<span className="text-sm font-bold text-white uppercase">R-Rated</span>
+									<span className="text-[10px] font-black uppercase tracking-widest text-white/30">
+										Rating
+									</span>
+									<span className="text-sm font-bold text-white uppercase">
+										R-Rated
+									</span>
 								</div>
 							</div>
 
 							<div className="h-px bg-white/10" />
 
 							<div className="space-y-4">
-								<span className="text-[10px] font-black uppercase tracking-widest text-white/30">Atmosphere</span>
+								<span className="text-[10px] font-black uppercase tracking-widest text-white/30">
+									Atmosphere
+								</span>
 								<div className="flex gap-4">
 									<div className="flex-1 flex items-center justify-center h-16 rounded-2xl bg-white/5 border border-white/10">
 										<Volume2 className="w-6 h-6 text-purple-500" />
@@ -231,12 +253,21 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 						<div className="space-y-4">
 							<div className="flex items-center gap-2">
 								<div className="h-px w-4 bg-purple-500" />
-								<span className="text-[10px] font-black uppercase tracking-widest text-white/40">Similar Records</span>
+								<span className="text-[10px] font-black uppercase tracking-widest text-white/40">
+									Similar Records
+								</span>
 							</div>
 							<div className="grid grid-cols-3 gap-2">
 								{similarMovies?.items.slice(0, 3).map((movie) => (
-									<div key={movie.id} className="aspect-2/3 bg-white/5 rounded-xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-colors cursor-pointer group">
-										<img src={movie.thumbnail} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+									<div
+										key={movie.id}
+										className="aspect-2/3 bg-white/5 rounded-xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-colors cursor-pointer group"
+									>
+										<img
+											src={movie.thumbnail}
+											alt=""
+											className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+										/>
 									</div>
 								))}
 							</div>
@@ -245,7 +276,12 @@ function MovieInfoContent({ mediaId }: { mediaId: string }) {
 						<Button
 							variant="ghost"
 							className="w-full h-14 rounded-2xl border border-white/10 bg-white/5 text-white font-black uppercase tracking-tighter hover:bg-white hover:text-black transition-all group"
-							onClick={() => navigate({ to: "/movies/$movieId", params: { movieId: mediaId } })}
+							onClick={() =>
+								navigate({
+									to: "/movies/$movieId",
+									params: { movieId: mediaId },
+								})
+							}
 						>
 							View Full Record
 							<ChevronRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />

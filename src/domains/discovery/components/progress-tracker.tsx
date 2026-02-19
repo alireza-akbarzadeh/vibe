@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { Check, Target } from "lucide-react";
 import { useId } from "react";
+import { motion } from "@/components/motion";
 
 interface ProgressTrackerProps {
 	current: number;

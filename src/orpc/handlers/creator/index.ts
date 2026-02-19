@@ -1,14 +1,13 @@
-import { base } from "@/orpc/router/base";
-import { bulkCreateCreator, createCreator } from "./create";
+import { os } from "@/orpc/server";
+import { createCreator } from "./create";
 import { deleteCreator } from "./delete";
 import { getCreator, listCreators } from "./get";
 import { updateCreator } from "./update";
 
-export const CreatorRouter = base.router({
+export const creatorProcedures = os.router({
 	create: createCreator,
-	bulkCreate: bulkCreateCreator,
+	delete: deleteCreator,
 	get: getCreator,
 	list: listCreators,
 	update: updateCreator,
-	delete: deleteCreator,
 });

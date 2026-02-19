@@ -39,25 +39,31 @@ export function searchSuggestionsQueryOptions(input: {
 }) {
 	// Normalize search query to match API expectations
 	// Handle both string and undefined/null cases safely
-	const searchValue = typeof input.search === 'string' ? input.search : '';
+	const searchValue = typeof input.search === "string" ? input.search : "";
 	const normalized = searchValue.trim().replace(/\s+/g, " ");
-	
+
 	if (!normalized || normalized.length < 2) {
 		return {
 			queryKey: ["media", "search", "empty", input.category],
-			queryFn: async () => ({ data: { items: [], total: 0 }, status: 200, message: "No search query" }),
+			queryFn: async () => ({
+				data: { items: [], total: 0 },
+				status: 200,
+				message: "No search query",
+			}),
 			enabled: false,
 		};
 	}
-	
+
 	// Map category to media type for API filtering
-	const getMediaType = (category?: string): "MOVIE" | "EPISODE" | "TRACK" | undefined => {
+	const getMediaType = (
+		category?: string,
+	): "MOVIE" | "EPISODE" | "TRACK" | undefined => {
 		if (!category || category === "all") return undefined;
 		if (category === "movies") return "MOVIE";
 		if (category === "series") return "EPISODE";
 		return undefined; // For trending, recent, favorites, etc.
 	};
-	
+
 	return orpc.media.search.queryOptions({
 		input: {
 			query: normalized,

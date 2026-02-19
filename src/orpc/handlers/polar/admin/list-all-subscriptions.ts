@@ -51,7 +51,9 @@ export const listAllSubscriptions = adminProcedure
 				const priceCurrency =
 					price && "priceCurrency" in price ? price.priceCurrency : "USD";
 				const recurringInterval =
-					price && "recurringInterval" in price ? price.recurringInterval : null;
+					price && "recurringInterval" in price
+						? price.recurringInterval
+						: null;
 
 				return {
 					id: sub.id,

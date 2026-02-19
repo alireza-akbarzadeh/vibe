@@ -1,13 +1,10 @@
 import { useRouter } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "@/components/logo";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
-import {
-	Drawer,
-	DrawerContent,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { MobileSearch } from "./mobile-search";
 import { MoviesSearchInput } from "./movies-search-input";
 

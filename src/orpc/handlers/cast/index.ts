@@ -1,4 +1,4 @@
-import { base } from "@/orpc/router/base";
+import { os } from "@/orpc/server";
 import { bulkCreateCast, createCastMember } from "./cast-create";
 import { deleteAllCast, deleteCastMember } from "./cast-delete";
 import { getMediaCast, listCast } from "./cast-get";
@@ -24,7 +24,7 @@ import { updateCastMember } from "./cast-update";
  * - deleteCastMember: Delete single cast member (admin)
  * - deleteAllCast: Delete all cast for a media (admin)
  */
-export const CastRouter = base.router({
+export const castProcedures = os.router({
 	// Create
 	createCastMember,
 	bulkCreateCast,

@@ -9,40 +9,43 @@ interface MyRouterContext {
 	auth: Awaited<ReturnType<typeof getSession>>;
 }
 
-export const authMiddleware = createMiddleware().server(async ({ next, context }) => {
-	const auth = (context as unknown as MyRouterContext).auth;
+export const authMiddleware = createMiddleware().server(
+	async ({ next, context }) => {
+		const auth = (context as unknown as MyRouterContext).auth;
 
-	if (!auth) {
-		throw redirect({ to: "/login" });
-	}
+		if (!auth) {
+			throw redirect({ to: "/login" });
+		}
 
-	return await next();
-});
+		return await next();
+	},
+);
 
-export const adminMiddleware = createMiddleware().server(async ({ next, request, context }) => {
-	const auth = (context as unknown as MyRouterContext).auth;
+export const adminMiddleware = createMiddleware().server(
+	async ({ next, request, context }) => {
+		const auth = (context as unknown as MyRouterContext).auth;
 
-	// Check if session exists
-	if (!auth || !auth.user) {
-		throw redirect({ to: "/login" });
-	}
+		// Check if session exists
+		if (!auth || !auth.user) {
+			throw redirect({ to: "/login" });
+		}
 
+		// Check if user has ADMIN role (uppercase as stored in DB)
+		const userRole = auth.user.role as string;
+		if (!userRole || userRole !== "ADMIN") {
+			throw redirect({
+				to: "/unauthorized",
+				search: {
+					error: "unauthorized",
+					from: request.url,
+					requiredRole: "ADMIN",
+				},
+			});
+		}
 
-	// Check if user has ADMIN role (uppercase as stored in DB)
-	const userRole = auth.user.role as string;
-	if (!userRole || userRole !== "ADMIN") {
-		throw redirect({
-			to: "/unauthorized",
-			search: {
-				error: "unauthorized",
-				from: request.url,
-				requiredRole: "ADMIN",
-			},
-		});
-	}
-
-	return await next();
-});
+		return await next();
+	},
+);
 
 type SubscriptionLevel = "PRO" | "PREMIUM";
 
@@ -73,22 +76,24 @@ export const requireSubscription = (requiredLevel: SubscriptionLevel = "PRO") =>
 		return await next();
 	});
 
-export const verifiedEmailMiddleware = createMiddleware().server(async ({ next, request, context }) => {
-	const auth = (context as unknown as MyRouterContext).auth;
+export const verifiedEmailMiddleware = createMiddleware().server(
+	async ({ next, request, context }) => {
+		const auth = (context as unknown as MyRouterContext).auth;
 
-	if (!auth) {
-		throw redirect({ to: "/login" });
-	}
+		if (!auth) {
+			throw redirect({ to: "/login" });
+		}
 
-	if (!auth.user.emailVerified) {
-		throw redirect({
-			to: "/verify-email",
-			search: { email: auth.user.email, redirectUrl: request.url },
-		});
-	}
+		if (!auth.user.emailVerified) {
+			throw redirect({
+				to: "/verify-email",
+				search: { email: auth.user.email, redirectUrl: request.url },
+			});
+		}
 
-	return await next();
-});
+		return await next();
+	},
+);
 
 export const requirePermission = (resource: string, action: string) =>
 	createMiddleware().server(async ({ next, context }) => {

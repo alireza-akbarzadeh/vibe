@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { MediaList } from "@/orpc/models/media.schema";
 import { MovieCard } from "./movie-card";
@@ -50,7 +50,8 @@ export function MovieCarousel({
 	const scroll = (direction: "left" | "right") => {
 		if (scrollRef.current) {
 			const { clientWidth } = scrollRef.current;
-			const scrollAmount = direction === "left" ? -clientWidth * 0.8 : clientWidth * 0.8;
+			const scrollAmount =
+				direction === "left" ? -clientWidth * 0.8 : clientWidth * 0.8;
 			scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
 		}
 	};
@@ -137,7 +138,8 @@ export function MovieCarousel({
 					style={{
 						scrollbarWidth: "none",
 						msOverflowStyle: "none",
-						maskImage: "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
+						maskImage:
+							"linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
 					}}
 				>
 					{movies.map((movie, index) => (

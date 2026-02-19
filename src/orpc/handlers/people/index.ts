@@ -1,4 +1,4 @@
-import { base } from "@/orpc/router/base";
+import { os } from "@/orpc/server";
 import { bulkCreatePeople, createPeople } from "./create";
 import { bulkDeletePeople, deletePeople } from "./delete";
 import { getPeople, getPeopleByPersonId, listPeople } from "./get";
@@ -7,7 +7,7 @@ import { updatePeople } from "./update";
 /**
  * People Router - CRUD operations for cast/crew data
  */
-export const PeopleRouter = base.router({
+export const peopleProcedures = os.router({
 	list: listPeople,
 	find: getPeople,
 	findByPersonId: getPeopleByPersonId,

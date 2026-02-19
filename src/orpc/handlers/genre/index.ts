@@ -1,14 +1,13 @@
-import { base } from "@/orpc/router/base";
-import { bulkCreateGenre, createGenre } from "./create";
+import { os } from "@/orpc/server";
+import { createGenre } from "./create";
 import { deleteGenre } from "./delete";
 import { getGenre, listGenres } from "./get";
 import { updateGenre } from "./update";
 
-export const GenreRouter = base.router({
+export const genreProcedures = os.router({
 	create: createGenre,
-	bulkCreate: bulkCreateGenre,
+	delete: deleteGenre,
 	get: getGenre,
 	list: listGenres,
 	update: updateGenre,
-	delete: deleteGenre,
 });

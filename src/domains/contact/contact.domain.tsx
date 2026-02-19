@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
 	CheckCircle,
 	ChevronRight,
@@ -21,6 +20,7 @@ import {
 	Zap,
 } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/forms/textarea";
 import { Input } from "@/components/ui/input";

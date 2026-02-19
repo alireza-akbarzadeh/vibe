@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
 	Briefcase,
 	Building,
@@ -9,6 +8,7 @@ import {
 	Users,
 } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button.tsx";
 import type { MovieTypes } from "@/types/app.ts";
 

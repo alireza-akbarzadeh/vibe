@@ -1,13 +1,12 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
 import { MiniPlayer } from "@/components/mini-music-player.tsx";
+import { AnimatePresence, motion } from "@/components/motion";
 import { LibraryAppSidebar } from "@/domains/library/layouts/library-app-sidebar.tsx";
 import { LibraryMobileNav } from "@/domains/library/layouts/library-mobile-nav.tsx";
 import { LibraryTopBar } from "@/domains/library/layouts/library-top-bar.tsx";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
 import { cn } from "@/lib/utils.ts";
 import { authMiddleware } from "@/middleware/auth";
-
 
 export const Route = createFileRoute("/(library)")({
 	component: LibraryLayout,

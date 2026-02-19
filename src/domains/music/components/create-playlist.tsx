@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { musicAction } from "../music.store";
 
-
-
 interface CreatePlaylistDialogProps {
 	isOpen: boolean;
 	onClose: () => void;
@@ -31,7 +29,7 @@ export function CreatePlaylistDialog({
 			setPlaylistName("");
 			setDescription("");
 			onClose();
-			musicAction.toggleAddToPlayListModal()
+			musicAction.toggleAddToPlayListModal();
 		}
 	};
 

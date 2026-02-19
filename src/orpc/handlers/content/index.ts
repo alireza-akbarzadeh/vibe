@@ -1,4 +1,4 @@
-import { base } from "@/orpc/router/base";
+import { os } from "@/orpc/server";
 import {
 	getAnimations,
 	getComedyMovies,
@@ -11,11 +11,11 @@ import {
 } from "./get";
 import { searchContent } from "./search";
 
-export const ContentRouter = base.router({
+export const contentProcedures = os.router({
 	latestReleases: getLatestReleases,
 	popularSeries: getPopularSeries,
 	animations: getAnimations,
-	tvSeries: getTVSeries,
+	vSeries: getTVSeries,
 	horror: getHorrorMovies,
 	comedy: getComedyMovies,
 	romance: getRomanceMovies,

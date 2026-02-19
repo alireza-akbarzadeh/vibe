@@ -1,10 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { LikedLibraryDomain } from '@/domains/library/containers/liked.domain'
+import { createFileRoute } from "@tanstack/react-router";
+import { LikedLibraryDomain } from "@/domains/library/containers/liked.domain";
 
-export const Route = createFileRoute('/(library)/library/liked')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute("/(library)/library/liked")({
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-  return <LikedLibraryDomain />
+	return <LikedLibraryDomain />;
 }

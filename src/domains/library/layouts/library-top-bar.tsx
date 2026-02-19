@@ -1,20 +1,18 @@
-import { useLocation, useNavigate, useRouteContext, useRouter } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
-	ChevronLeft,
-	ChevronRight,
-	Command,
-	Search,
-} from "lucide-react";
+	useLocation,
+	useNavigate,
+	useRouteContext,
+	useRouter,
+} from "@tanstack/react-router";
+import { ChevronLeft, ChevronRight, Command, Search } from "lucide-react";
 import { useRef, useState } from "react";
+import { motion } from "@/components/motion";
 import { NotificationCenter } from "@/components/notification/notification";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/components/ui/link";
 import { UserMenu } from "@/components/user-menu/user-menu";
 import { cn } from "@/lib/utils";
 import { breadcrumbMap } from "../library-constants";
-
-
 
 export const LibraryTopBar = () => {
 	const navigate = useNavigate();
@@ -75,7 +73,9 @@ export const LibraryTopBar = () => {
 						</>
 					)}
 					<span className="text-foreground font-semibold text-xs truncate">
-						{isRoot ? `${greeting}, ${user?.name?.split(" ")[0] ?? "there"}` : crumb}
+						{isRoot
+							? `${greeting}, ${user?.name?.split(" ")[0] ?? "there"}`
+							: crumb}
 					</span>
 				</div>
 			</div>

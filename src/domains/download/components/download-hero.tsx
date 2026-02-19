@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Download, Shield, Users, Zap } from "lucide-react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 
 export function DownloadHero() {

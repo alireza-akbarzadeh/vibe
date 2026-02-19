@@ -1,4 +1,4 @@
-import { base } from "@/orpc/router/base";
+import { os } from "@/orpc/server";
 import { bulkCreate, create } from "./create";
 import { bulkDelete, remove } from "./delete";
 import { find, findByTmdbId, list } from "./get";
@@ -17,7 +17,7 @@ import { update } from "./update";
  * - delete: Delete person
  * - bulkDelete: Delete multiple persons
  */
-export const PersonRouter = base.router({
+export const personProcedures = os.router({
 	create,
 	bulkCreate,
 	find,

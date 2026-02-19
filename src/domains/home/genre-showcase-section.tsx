@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
 import { Film, Flame, Headphones, Play, Star, Trophy } from "lucide-react";
 import { useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Typography } from "@/components/ui/typography";

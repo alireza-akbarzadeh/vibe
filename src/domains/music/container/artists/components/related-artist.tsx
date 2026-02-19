@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { BadgeCheck, UserCheck, UserPlus } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { Artist } from "../artist.domains";
 
@@ -11,7 +11,7 @@ export function RelatedArtists({ artists }: { artists: Artist[] }) {
 		setFollowedArtists((prev) =>
 			prev.includes(artistId)
 				? prev.filter((id) => id !== artistId)
-				: [...prev, artistId]
+				: [...prev, artistId],
 		);
 	};
 
@@ -77,10 +77,11 @@ export function RelatedArtists({ artists }: { artists: Artist[] }) {
 								<Button
 									onClick={() => handleFollow(artist.id)}
 									size="sm"
-									className={`rounded-full font-semibold shadow-xl transition-all ${followedArtists.includes(artist.id)
-										? "bg-white/20 backdrop-blur-xl border border-white/30 text-white hover:bg-white/30"
-										: "bg-white text-black hover:bg-gray-200"
-										}`}
+									className={`rounded-full font-semibold shadow-xl transition-all ${
+										followedArtists.includes(artist.id)
+											? "bg-white/20 backdrop-blur-xl border border-white/30 text-white hover:bg-white/30"
+											: "bg-white text-black hover:bg-gray-200"
+									}`}
 								>
 									{followedArtists.includes(artist.id) ? (
 										<>

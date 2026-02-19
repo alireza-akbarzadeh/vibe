@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Film, Loader2, Play, Sparkles } from "lucide-react";
+import { motion } from "@/components/motion";
 import {
 	fadeInUp,
 	MotionPage,
 	staggerContainer,
 } from "@/components/motion/motion-page.tsx";
+import type { MediaItem } from "@/domains/dashboard/movies/media.store";
 import { useLatestReleases, usePopularSeries } from "@/hooks/useLibrary";
 
 export const Route = createFileRoute("/(library)/library/videos")({
@@ -116,7 +117,7 @@ function LibraryVideoPage() {
 						viewport={{ once: true }}
 						className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6"
 					>
-						{series.map((s: any) => (
+						{series.map((s: MediaItem) => (
 							<motion.div
 								key={s.id}
 								variants={fadeInUp}
@@ -159,7 +160,7 @@ function LibraryVideoPage() {
 	);
 }
 
-function VideoCard({ item }: { item: any }) {
+function VideoCard({ item }: { item: MediaItem }) {
 	return (
 		<motion.div
 			variants={fadeInUp}

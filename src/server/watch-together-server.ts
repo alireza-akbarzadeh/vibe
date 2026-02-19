@@ -1,5 +1,5 @@
+import { createServer } from "node:http";
 import { Server } from "socket.io";
-import { createServer } from "http";
 
 // This is a minimal Socket.IO server for Watch Together sessions
 const httpServer = createServer();
@@ -8,13 +8,19 @@ const io = new Server(httpServer, {
 });
 
 // Room state: { [roomId]: { users: Set<socketId>, playback: { time, playing } } }
-const rooms: Record<string, { users: Set<string>; playback: { time: number; playing: boolean } }> = {};
+const rooms: Record<
+	string,
+	{ users: Set<string>; playback: { time: number; playing: boolean } }
+> = {};
 
 io.on("connection", (socket) => {
 	socket.on("join-room", ({ roomId, user }) => {
 		socket.join(roomId);
 		if (!rooms[roomId]) {
-			rooms[roomId] = { users: new Set(), playback: { time: 0, playing: false } };
+			rooms[roomId] = {
+				users: new Set(),
+				playback: { time: 0, playing: false },
+			};
 		}
 		rooms[roomId].users.add(socket.id);
 		// Send current playback state to new user

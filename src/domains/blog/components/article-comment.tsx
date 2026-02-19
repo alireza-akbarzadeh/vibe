@@ -1,7 +1,7 @@
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { Send, Sparkles } from "lucide-react";
 import { useRef, useState } from "react";
+import { AnimatePresence, LayoutGroup, motion } from "@/components/motion";
 import { commentActions, commentStore } from "../store/comment-store";
 import { CommentItem } from "./comment-item";
 
@@ -20,12 +20,12 @@ export function ArticleComments() {
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter" && e.shiftKey) {
 			e.preventDefault();
-			handleSubmit(e as any);
+			handleSubmit(e as React.FormEvent);
 		}
 	};
 
 	return (
-		// biome-ignore lint/correctness/useUniqueElementIds: <explanation>
+		// biome-ignore lint/correctness/useUniqueElementIds: The ID is used for scrolling to the comments section.
 		<div id="comments-section" className="mt-40 max-w-4xl mx-auto px-4 md:px-0">
 			<div className="flex items-center gap-4 mb-12">
 				<div className="bg-purple-500/10 p-3 rounded-2xl border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.15)]">

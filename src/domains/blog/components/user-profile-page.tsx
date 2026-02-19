@@ -1,6 +1,5 @@
 import { useNavigate } from "@tanstack/react-router"; // Changed from Link for the back button
 import { useStore } from "@tanstack/react-store";
-import { AnimatePresence, motion } from "framer-motion";
 import {
 	ArrowLeft,
 	Bookmark,
@@ -12,6 +11,7 @@ import {
 	Zap,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { blogStore } from "@/domains/blog/store/blog.store";
 import { MOCK_ARTICLES } from "../blog-mock";

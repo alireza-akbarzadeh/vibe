@@ -1,12 +1,10 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
 	Bookmark,
 	Camera,
 	Check,
 	Clock,
 	Copy,
-	ExternalLink,
 	Eye,
 	EyeOff,
 	Heart,
@@ -20,8 +18,10 @@ import {
 	Star,
 	X,
 } from "lucide-react";
-import React, { useRef, useState } from "react";
+import type React from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "@/components/motion";
 import { fadeInUp, MotionPage } from "@/components/motion/motion-page.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Card, CardContent } from "@/components/ui/card.tsx";
@@ -126,9 +126,7 @@ function ProfilePage() {
 		}
 	};
 
-	const handlePhotoUpload = async (
-		e: React.ChangeEvent<HTMLInputElement>,
-	) => {
+	const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
@@ -230,10 +228,7 @@ function ProfilePage() {
 					>
 						<div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/40 transition-all" />
 						<img
-							src={
-								user?.image ||
-								`https://avatar.vercel.sh/${user?.email}`
-							}
+							src={user?.image || `https://avatar.vercel.sh/${user?.email}`}
 							alt={user?.name ?? "User"}
 							className="relative w-32 h-32 md:w-40 md:h-40 rounded-full object-cover ring-1 ring-white/10 shadow-2xl"
 						/>
@@ -269,17 +264,12 @@ function ProfilePage() {
 								<div className="flex items-center gap-2">
 									<Input
 										value={editName}
-										onChange={(e) =>
-											setEditName(e.target.value)
-										}
+										onChange={(e) => setEditName(e.target.value)}
 										onKeyDown={(e) => {
-											if (e.key === "Enter")
-												handleSaveName();
+											if (e.key === "Enter") handleSaveName();
 											if (e.key === "Escape") {
 												setIsEditingName(false);
-												setEditName(
-													user?.name ?? "",
-												);
+												setEditName(user?.name ?? "");
 											}
 										}}
 										className="text-2xl font-black tracking-tighter bg-white/5 border-white/10 rounded-xl h-12 max-w-xs"
@@ -340,12 +330,10 @@ function ProfilePage() {
 							<Clock className="w-3 h-3" />
 							Vibing since{" "}
 							{stats?.memberSince
-								? new Date(
-									stats.memberSince,
-								).toLocaleDateString("en-US", {
-									month: "long",
-									year: "numeric",
-								})
+								? new Date(stats.memberSince).toLocaleDateString("en-US", {
+										month: "long",
+										year: "numeric",
+									})
 								: "—"}
 						</div>
 					</div>
@@ -388,9 +376,7 @@ function ProfilePage() {
 									<KeyRound className="w-5 h-5 text-amber-400" />
 								</div>
 								<div>
-									<p className="text-sm font-bold">
-										Password
-									</p>
+									<p className="text-sm font-bold">Password</p>
 									<p className="text-xs text-muted-foreground">
 										Change your account password
 									</p>
@@ -399,9 +385,7 @@ function ProfilePage() {
 							<Button
 								variant="ghost"
 								size="sm"
-								onClick={() =>
-									setShowPasswordForm(!showPasswordForm)
-								}
+								onClick={() => setShowPasswordForm(!showPasswordForm)}
 								className="rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer"
 							>
 								{showPasswordForm ? "Cancel" : "Change"}
@@ -428,28 +412,16 @@ function ProfilePage() {
 										</Label>
 										<div className="relative">
 											<Input
-												type={
-													showCurrentPw
-														? "text"
-														: "password"
-												}
+												type={showCurrentPw ? "text" : "password"}
 												value={currentPassword}
-												onChange={(e) =>
-													setCurrentPassword(
-														e.target.value,
-													)
-												}
+												onChange={(e) => setCurrentPassword(e.target.value)}
 												placeholder="••••••••"
 												className="bg-white/5 border-white/10 rounded-xl pr-10"
 												required
 											/>
 											<button
 												type="button"
-												onClick={() =>
-													setShowCurrentPw(
-														!showCurrentPw,
-													)
-												}
+												onClick={() => setShowCurrentPw(!showCurrentPw)}
 												className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
 											>
 												{showCurrentPw ? (
@@ -466,17 +438,9 @@ function ProfilePage() {
 										</Label>
 										<div className="relative">
 											<Input
-												type={
-													showNewPw
-														? "text"
-														: "password"
-												}
+												type={showNewPw ? "text" : "password"}
 												value={newPassword}
-												onChange={(e) =>
-													setNewPassword(
-														e.target.value,
-													)
-												}
+												onChange={(e) => setNewPassword(e.target.value)}
 												placeholder="Min 8 characters"
 												className="bg-white/5 border-white/10 rounded-xl pr-10"
 												required
@@ -484,9 +448,7 @@ function ProfilePage() {
 											/>
 											<button
 												type="button"
-												onClick={() =>
-													setShowNewPw(!showNewPw)
-												}
+												onClick={() => setShowNewPw(!showNewPw)}
 												className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
 											>
 												{showNewPw ? (
@@ -504,11 +466,7 @@ function ProfilePage() {
 										<Input
 											type="password"
 											value={confirmPassword}
-											onChange={(e) =>
-												setConfirmPassword(
-													e.target.value,
-												)
-											}
+											onChange={(e) => setConfirmPassword(e.target.value)}
 											placeholder="••••••••"
 											className="bg-white/5 border-white/10 rounded-xl"
 											required
@@ -538,12 +496,9 @@ function ProfilePage() {
 								<Share2 className="w-5 h-5 text-emerald-400" />
 							</div>
 							<div>
-								<p className="text-sm font-bold">
-									Share Your Taste
-								</p>
+								<p className="text-sm font-bold">Share Your Taste</p>
 								<p className="text-xs text-muted-foreground">
-									Let friends see your favorites &amp;
-									watchlist
+									Let friends see your favorites &amp; watchlist
 								</p>
 							</div>
 						</div>
@@ -609,12 +564,7 @@ function ProfilePage() {
 														stat.bg,
 													)}
 												>
-													<Icon
-														className={cn(
-															"w-6 h-6",
-															stat.color,
-														)}
-													/>
+													<Icon className={cn("w-6 h-6", stat.color)} />
 												</div>
 												<div>
 													<p className="text-3xl font-black tracking-tighter text-foreground tabular-nums">
@@ -657,9 +607,7 @@ function ProfilePage() {
 				<TabsContent value="favorites">
 					<MediaGrid
 						items={stats?.recentFavorites}
-						emptyIcon={
-							<Heart className="w-12 h-12 text-muted-foreground/20" />
-						}
+						emptyIcon={<Heart className="w-12 h-12 text-muted-foreground/20" />}
 						emptyText="No favorites yet. Start exploring and tap the heart icon!"
 						viewAllHref="/library/liked"
 					/>
@@ -679,9 +627,7 @@ function ProfilePage() {
 				<TabsContent value="history">
 					<HistoryGrid
 						items={stats?.recentHistory}
-						emptyIcon={
-							<Clock className="w-12 h-12 text-muted-foreground/20" />
-						}
+						emptyIcon={<Clock className="w-12 h-12 text-muted-foreground/20" />}
 						emptyText="No viewing history yet. Start watching something!"
 						viewAllHref="/library/history"
 					/>
@@ -714,12 +660,8 @@ function MediaGrid({
 	if (!items || items.length === 0) {
 		return (
 			<div className="py-20 text-center">
-				<div className="mx-auto mb-4 flex justify-center">
-					{emptyIcon}
-				</div>
-				<p className="text-muted-foreground font-medium italic">
-					{emptyText}
-				</p>
+				<div className="mx-auto mb-4 flex justify-center">{emptyIcon}</div>
+				<p className="text-muted-foreground font-medium italic">{emptyText}</p>
 			</div>
 		);
 	}
@@ -744,10 +686,7 @@ function MediaGrid({
 							/>
 							<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
 								<div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white shadow-glow">
-									<Play
-										className="w-6 h-6"
-										fill="currentColor"
-									/>
+									<Play className="w-6 h-6" fill="currentColor" />
 								</div>
 							</div>
 							<div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm">
@@ -782,15 +721,15 @@ function HistoryGrid({
 	viewAllHref,
 }: {
 	items:
-	| Array<{
-		id: string;
-		mediaId: string;
-		progress: number;
-		completed: boolean;
-		viewedAt: string;
-		media: MediaItem;
-	}>
-	| undefined;
+		| Array<{
+				id: string;
+				mediaId: string;
+				progress: number;
+				completed: boolean;
+				viewedAt: string;
+				media: MediaItem;
+		  }>
+		| undefined;
 	emptyIcon: React.ReactNode;
 	emptyText: string;
 	viewAllHref: string;
@@ -798,12 +737,8 @@ function HistoryGrid({
 	if (!items || items.length === 0) {
 		return (
 			<div className="py-20 text-center">
-				<div className="mx-auto mb-4 flex justify-center">
-					{emptyIcon}
-				</div>
-				<p className="text-muted-foreground font-medium italic">
-					{emptyText}
-				</p>
+				<div className="mx-auto mb-4 flex justify-center">{emptyIcon}</div>
+				<p className="text-muted-foreground font-medium italic">{emptyText}</p>
 			</div>
 		);
 	}

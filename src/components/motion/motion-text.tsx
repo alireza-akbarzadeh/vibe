@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "@/components/motion";
 export function MotionText({
 	text,
 	className,
@@ -10,7 +10,7 @@ export function MotionText({
 		<span className={className}>
 			{text.split("").map((char, i) => (
 				<motion.span
-					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+					// biome-ignore lint/suspicious/noArrayIndexKey: The index is used as a key for a list of characters, which is stable.
 					key={i}
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}

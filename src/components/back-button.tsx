@@ -1,6 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import { motion } from "@/components/motion";
 import { cn } from "@/lib/utils";
 
 interface BackButtonProps {

@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ArrowLeft, Music } from "lucide-react";
 import { useEffect, useState } from "react";
+import { motion } from "@/components/motion";
 import { MSG } from "@/constants/constants";
 
 interface AuthLayoutProps {

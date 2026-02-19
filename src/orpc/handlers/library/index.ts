@@ -1,6 +1,6 @@
-import { base } from "@/orpc/router/base";
+import { os } from "@/orpc/server";
 import { getLibraryDashboard } from "./dashboard";
 
-export const LibraryRouter = base.router({
+export const libraryProcedures = os.router({
 	dashboard: getLibraryDashboard,
 });

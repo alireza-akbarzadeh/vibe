@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Play } from "lucide-react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Typography } from "@/components/ui/typography";

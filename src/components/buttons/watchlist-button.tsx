@@ -1,7 +1,8 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
-import { AnimatePresence, motion } from "framer-motion";
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: The index is used as a key for a list of characters, which is stable. */
+
 import { Check, Loader2, Plus } from "lucide-react";
 import { startTransition, useOptimistic } from "react";
+import { AnimatePresence, motion } from "@/components/motion";
 import { useWatchlist } from "@/domains/movies/hooks/useWatchlist";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -15,20 +16,23 @@ interface WatchListButtonCompactProps {
 export function WatchListButton({
 	mediaId,
 	variant = "default",
-	className
+	className,
 }: WatchListButtonCompactProps) {
-	const { useIsInWatchlist, useAddToWatchlist, useRemoveFromWatchlist } = useWatchlist();
-	const { data: isInWatchlist = false, isLoading: isChecking } = useIsInWatchlist(mediaId);
+	const { useIsInWatchlist, useAddToWatchlist, useRemoveFromWatchlist } =
+		useWatchlist();
+	const { data: isInWatchlist = false, isLoading: isChecking } =
+		useIsInWatchlist(mediaId);
 
 	const addMutation = useAddToWatchlist();
 	const removeMutation = useRemoveFromWatchlist();
 
 	const [optimisticState, setOptimisticState] = useOptimistic(
 		isInWatchlist,
-		(_, newState: boolean) => newState
+		(_, newState: boolean) => newState,
 	);
 
-	const isLoading = isChecking || addMutation.isPending || removeMutation.isPending;
+	const isLoading =
+		isChecking || addMutation.isPending || removeMutation.isPending;
 	const isPending = addMutation.isPending || removeMutation.isPending;
 
 	const handleClick = async () => {
@@ -62,7 +66,7 @@ export function WatchListButton({
 					optimisticState
 						? "text-yellow-500 bg-yellow-500/10 border-yellow-500/20 shadow-[0_0_20px_rgba(234,179,8,0.15)]"
 						: "text-white/40 hover:text-white bg-white/5 hover:bg-white/10 border-white/5",
-					className
+					className,
 				)}
 			>
 				{/* Ripple effect */}
@@ -128,8 +132,10 @@ export function WatchListButton({
 				disabled={isLoading}
 				className={cn(
 					"gap-2 rounded-xl transition-all",
-					optimisticState ? "text-yellow-500 bg-yellow-500/10" : "text-white/60 hover:text-white",
-					className
+					optimisticState
+						? "text-yellow-500 bg-yellow-500/10"
+						: "text-white/60 hover:text-white",
+					className,
 				)}
 			>
 				{isPending ? (
@@ -139,7 +145,7 @@ export function WatchListButton({
 				) : (
 					<Plus className="h-4 w-4" />
 				)}
-				<span className="font-bold">{optimisticState ? 'Saved' : 'Save'}</span>
+				<span className="font-bold">{optimisticState ? "Saved" : "Save"}</span>
 			</Button>
 		);
 	}
@@ -160,7 +166,7 @@ export function WatchListButton({
 					optimisticState
 						? "bg-yellow-500 hover:bg-yellow-600 text-black border-yellow-400 shadow-[0_0_25px_rgba(234,179,8,0.3)]"
 						: "bg-white/5 hover:bg-white/10 text-white border-white/10 backdrop-blur-md",
-					className
+					className,
 				)}
 			>
 				{isPending ? (

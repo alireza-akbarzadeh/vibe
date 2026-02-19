@@ -8,11 +8,11 @@ interface LoginSearchParams {
 export const Route = createFileRoute("/(auth)/login")({
 	component: LoginPage,
 	validateSearch: (search: Record<string, unknown>): LoginSearchParams => ({
-		redirect: typeof search.redirect === 'string' ? search.redirect : undefined
-	})
+		redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+	}),
 });
 
 function LoginPage() {
-	const { redirect } = Route.useSearch()
+	const { redirect } = Route.useSearch();
 	return <LoginDomain redirectUrl={redirect} />;
 }

@@ -16,9 +16,11 @@ export const getProduct = authedProcedure
 			});
 
 			const price = product.prices[0];
-			const priceAmount = 'priceAmount' in price ? price.priceAmount : 0;
-			const priceCurrency = 'priceCurrency' in price ? price.priceCurrency : 'USD';
-			const recurringInterval = 'recurringInterval' in price ? price.recurringInterval : null;
+			const priceAmount = "priceAmount" in price ? price.priceAmount : 0;
+			const priceCurrency =
+				"priceCurrency" in price ? price.priceCurrency : "USD";
+			const recurringInterval =
+				"recurringInterval" in price ? price.recurringInterval : null;
 
 			return {
 				id: product.id,
@@ -26,7 +28,12 @@ export const getProduct = authedProcedure
 				description: product.description,
 				priceAmount,
 				priceCurrency,
-				recurringInterval: recurringInterval as "day" | "week" | "month" | "year" | null,
+				recurringInterval: recurringInterval as
+					| "day"
+					| "week"
+					| "month"
+					| "year"
+					| null,
 				isRecurring: product.isRecurring,
 			};
 		} catch (error) {

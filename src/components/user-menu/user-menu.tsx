@@ -1,6 +1,5 @@
 import { useRouter } from "@tanstack/react-router";
 import type { User } from "better-auth";
-import { AnimatePresence, motion } from "framer-motion";
 import {
 	BadgeCheck,
 	ChevronRight,
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "@/components/motion";
 import { Image } from "@/components/ui/image.tsx";
 import { ADMIN_ACCESS } from "@/constants/constants";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -35,7 +35,6 @@ import {
 import { Link } from "../ui/link";
 import { RoleBadge, SubscriptionBadge } from "./subscription-badge";
 
-
 interface NavItem {
 	to: string;
 	icon: React.ElementType;
@@ -44,7 +43,6 @@ interface NavItem {
 	highlight?: boolean;
 	onClick?: () => void;
 }
-
 
 function UserAvatar({
 	src,
@@ -71,10 +69,7 @@ function UserAvatar({
 				)}
 			>
 				<Image
-					src={
-						src ||
-						`https://avatar.iran.liara.run/username?username=${name}`
-					}
+					src={src || `https://avatar.iran.liara.run/username?username=${name}`}
 					alt={name}
 					className="h-full w-full object-cover"
 				/>
@@ -84,9 +79,7 @@ function UserAvatar({
 					className={cn(
 						"absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-[#0b0b0c]",
 						dotSize,
-						currentPlan?.includes("Family")
-							? "bg-amber-500"
-							: "bg-purple-500",
+						currentPlan?.includes("Family") ? "bg-amber-500" : "bg-purple-500",
 					)}
 				>
 					<div
@@ -102,7 +95,6 @@ function UserAvatar({
 		</div>
 	);
 }
-
 
 function useMenuItems(user: {
 	role?: string | null;
@@ -127,9 +119,7 @@ function useMenuItems(user: {
 			to: "/pricing",
 			icon: Sparkles,
 			label:
-				user.subscriptionStatus === "FREE"
-					? "Upgrade Plan"
-					: "Manage Plan",
+				user.subscriptionStatus === "FREE" ? "Upgrade Plan" : "Manage Plan",
 			desc:
 				user.subscriptionStatus === "FREE"
 					? "Get premium features"
@@ -162,7 +152,6 @@ function useMenuItems(user: {
 	return items;
 }
 
-
 function DesktopMenu({
 	user,
 	items,
@@ -184,10 +173,10 @@ function DesktopMenu({
 			timeout.current = undefined;
 		}
 		setOpen(true);
-	}
+	};
 	const handleLeave = () => {
 		timeout.current = setTimeout(() => setOpen(false), 200);
-	}
+	};
 
 	useEffect(() => {
 		return () => {
@@ -251,9 +240,7 @@ function DesktopMenu({
 										src={user.image}
 										name={user.name}
 										size="lg"
-										subscriptionStatus={
-											user.subscriptionStatus
-										}
+										subscriptionStatus={user.subscriptionStatus}
 										currentPlan={user.currentPlan}
 									/>
 									<div className="flex-1 min-w-0 pt-0.5">
@@ -264,13 +251,9 @@ function DesktopMenu({
 											{user.email}
 										</p>
 										<div className="flex flex-wrap gap-1.5 mt-2.5">
-											<RoleBadge
-												role={user.role as string}
-											/>
+											<RoleBadge role={user.role as string} />
 											<SubscriptionBadge
-												status={
-													user.subscriptionStatus
-												}
+												status={user.subscriptionStatus}
 												currentPlan={user.currentPlan}
 											/>
 										</div>
@@ -302,9 +285,7 @@ function DesktopMenu({
 											.filter(
 												(b) =>
 													b.always ||
-													(b.premium &&
-														user.subscriptionStatus ===
-														"PREMIUM"),
+													(b.premium && user.subscriptionStatus === "PREMIUM"),
 											)
 											.map((b) => (
 												<div
@@ -398,7 +379,6 @@ function DesktopMenu({
 	);
 }
 
-
 function MobileMenu({
 	user,
 	items,
@@ -437,9 +417,7 @@ function MobileMenu({
 					</div>
 
 					<DrawerHeader className="px-5 pt-3 pb-4 text-left">
-						<DrawerTitle className="sr-only">
-							Account Menu
-						</DrawerTitle>
+						<DrawerTitle className="sr-only">Account Menu</DrawerTitle>
 						{/* Profile block */}
 						<div className="flex items-center gap-3.5">
 							<UserAvatar
@@ -493,9 +471,7 @@ function MobileMenu({
 									.filter(
 										(b) =>
 											b.always ||
-											(b.premium &&
-												user.subscriptionStatus ===
-												"PREMIUM"),
+											(b.premium && user.subscriptionStatus === "PREMIUM"),
 									)
 									.map((b) => (
 										<div
@@ -521,7 +497,7 @@ function MobileMenu({
 							return (
 								<DrawerClose key={item.to} asChild>
 									<Link
-										to={item.to as any}
+										to={item.to}
 										onClick={(e) => {
 											if (item.onClick) {
 												e.preventDefault();
@@ -538,9 +514,7 @@ function MobileMenu({
 										<div
 											className={cn(
 												"rounded-xl p-2",
-												item.highlight
-													? "bg-indigo-500/20"
-													: "bg-white/4",
+												item.highlight ? "bg-indigo-500/20" : "bg-white/4",
 											)}
 										>
 											<Icon className="size-5" />
@@ -638,4 +612,3 @@ export function UserMenu() {
 		/>
 	);
 }
-

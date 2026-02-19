@@ -2,7 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import {
 	ChevronLeft,
 	ChevronRight,
@@ -14,6 +13,7 @@ import {
 	Trophy,
 } from "lucide-react";
 import { useRef } from "react";
+import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Typography } from "@/components/ui/typography";

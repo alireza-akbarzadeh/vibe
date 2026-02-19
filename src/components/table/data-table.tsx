@@ -1,18 +1,18 @@
-import { TableBody } from "./table-body"
-import { TableBulkActions } from "./table-bulk-actions"
-import { TableRoot } from "./table-context"
-import { TableFilterTabs } from "./table-filter-tabs"
-import { TableLoading } from "./table-loading"
-import { TablePagination } from "./table-pagination"
-import { TableSearch } from "./table-search"
-import { TableStatusFilters } from "./table-status-filters"
+import { TableBody } from "./table-body";
+import { TableBulkActions } from "./table-bulk-actions";
+import { TableRoot } from "./table-context";
+import { TableFilterTabs } from "./table-filter-tabs";
+import { TableLoading } from "./table-loading";
+import { TablePagination } from "./table-pagination";
+import { TableSearch } from "./table-search";
+import { TableStatusFilters } from "./table-status-filters";
 
 /**
  * # Unified Data Table System
  * A compound component system powered by TanStack Table and React Context.
  * * ## Core Concepts:
  * 1. **Context Driven**: All sub-components must be wrapped in `<Table.Root>`.
- * 2. **Modular UI**: Sub-components (Search, Pagination, etc.) can be placed anywhere 
+ * 2. **Modular UI**: Sub-components (Search, Pagination, etc.) can be placed anywhere
  * within the Root to allow for flexible layouts (Mobile vs Desktop).
  * 3. **Prop-less Sync**: Sub-components pull the `table` instance automatically via context.
  * * ## Component Registry:
@@ -38,12 +38,12 @@ import { TableStatusFilters } from "./table-status-filters"
  * ```
  */
 export const Table = {
-    Root: TableRoot,
-    Search: TableSearch,
-    FilterTabs: TableFilterTabs,
-    StatusFilters: TableStatusFilters,
-    Body: TableBody,
-    Pagination: TablePagination,
-    BulkActions: TableBulkActions,
-    Loading: TableLoading,
-}
+	Root: TableRoot,
+	Search: TableSearch,
+	FilterTabs: TableFilterTabs,
+	StatusFilters: TableStatusFilters,
+	Body: TableBody,
+	Pagination: TablePagination,
+	BulkActions: TableBulkActions,
+	Loading: TableLoading,
+};

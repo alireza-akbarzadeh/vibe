@@ -30,7 +30,7 @@ export const updateSubscription = authedProcedure
 
 			// Update the subscription
 			let subscriptionUpdate: any;
-			
+
 			if (input.productPriceId) {
 				// Change to a different product
 				subscriptionUpdate = {
@@ -43,7 +43,8 @@ export const updateSubscription = authedProcedure
 				};
 			} else {
 				throw errors.BAD_REQUEST({
-					message: "Either productPriceId or cancelAtPeriodEnd must be provided",
+					message:
+						"Either productPriceId or cancelAtPeriodEnd must be provided",
 				});
 			}
 

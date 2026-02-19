@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { Lock, LucideEye, LucideEyeOff, type LucideProps } from "lucide-react";
 import { type ComponentProps, useId, useState } from "react";
 import type { Except } from "type-fest";
+import { motion } from "@/components/motion";
 import { PropsProvider } from "@/components/props-provider";
 import { cn } from "@/lib/utils";
 import { Button } from "../button";
@@ -13,7 +13,7 @@ export interface InputPasswordProps
 	extends Except<ComponentProps<typeof Input>, "type"> {
 	isInvalid: boolean;
 	errorMessage: string;
-	email?: string
+	email?: string;
 	label?: string;
 }
 
@@ -48,8 +48,9 @@ function InputPassword(props: InputPasswordProps) {
 					id={passwordId}
 					type={showPassword ? "text" : "password"}
 					placeholder="Enter your password"
-					className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
-						} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+					className={`pl-12 h-12 bg-white/5 border ${
+						isInvalid ? "border-red-500" : "border-white/10"
+					} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 					{...rest}
 				/>
 				<Button

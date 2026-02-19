@@ -11,13 +11,11 @@ type ExternalLink = `http${"s" | ""}://${string}.${string}`;
 type AnchorLink = `#${string}`;
 type ValidLink = InternalLink | ExternalLink | AnchorLink;
 
-
-
 type LinkProps<To extends ValidLink> = (To extends InternalLink
 	? LinkComponentProps<"a", RegisteredRouter, string, To>
 	: ComponentProps<"a">) & {
-		to: To;
-	};
+	to: To;
+};
 
 function Link<To extends ValidLink>(props: LinkProps<To>) {
 	switch (true) {

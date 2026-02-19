@@ -1,11 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  '/(admin)/dashboard/notifications/create/',
+	"/(admin)/dashboard/notifications/create/",
 )({
-  component: RouteComponent,
-})
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-  return <div>Hello "/(admin)/dashboard/notifications/create/"!</div>
+	return <div>Hello "/(admin)/dashboard/notifications/create/"!</div>;
 }

@@ -156,7 +156,7 @@ export const movieWatchlistStatusQueryOptions = (mediaId: string) =>
 					(item) => item.mediaId === mediaId,
 				);
 				return { inWatchlist };
-			} catch (error) {
+			} catch (_error) {
 				// Not authenticated or error - return false
 				return { inWatchlist: false };
 			}

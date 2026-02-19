@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
 	Heart,
 	ListMusic,
@@ -14,6 +13,7 @@ import {
 	VolumeX,
 } from "lucide-react";
 import { useState } from "react";
+import { motion } from "@/components/motion";
 import { Slider } from "@/components/ui/slider.tsx";
 import { libraryActions } from "@/domains/library/store/library-actions.ts";
 import { useLibraryStore } from "@/domains/library/store/library-store.ts";
@@ -102,9 +102,7 @@ export const MiniPlayer = () => {
 							whileTap={{ scale: 0.9 }}
 							className="ml-2 text-muted-foreground hover:text-primary transition-colors"
 						>
-							<Heart
-								className="w-4 h-4"
-							/>
+							<Heart className="w-4 h-4" />
 						</motion.button>
 					)}
 				</div>

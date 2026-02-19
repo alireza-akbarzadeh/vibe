@@ -23,9 +23,12 @@ export const getSubscription = authedProcedure
 			}
 
 			const price = subscription.prices?.[0];
-			const priceAmount = price && 'priceAmount' in price ? price.priceAmount : 0;
-			const priceCurrency = price && 'priceCurrency' in price ? price.priceCurrency : 'USD';
-			const recurringInterval = price && 'recurringInterval' in price ? price.recurringInterval : null;
+			const priceAmount =
+				price && "priceAmount" in price ? price.priceAmount : 0;
+			const priceCurrency =
+				price && "priceCurrency" in price ? price.priceCurrency : "USD";
+			const recurringInterval =
+				price && "recurringInterval" in price ? price.recurringInterval : null;
 
 			return {
 				id: subscription.id,
@@ -34,8 +37,14 @@ export const getSubscription = authedProcedure
 				amount: priceAmount,
 				currency: priceCurrency,
 				interval: recurringInterval as string | null,
-				currentPeriodStart: subscription.currentPeriodStart instanceof Date ? subscription.currentPeriodStart.toISOString() : subscription.currentPeriodStart,
-				currentPeriodEnd: subscription.currentPeriodEnd instanceof Date ? subscription.currentPeriodEnd.toISOString() : subscription.currentPeriodEnd,
+				currentPeriodStart:
+					subscription.currentPeriodStart instanceof Date
+						? subscription.currentPeriodStart.toISOString()
+						: subscription.currentPeriodStart,
+				currentPeriodEnd:
+					subscription.currentPeriodEnd instanceof Date
+						? subscription.currentPeriodEnd.toISOString()
+						: subscription.currentPeriodEnd,
 				cancelAtPeriodEnd: subscription.cancelAtPeriodEnd,
 			};
 		} catch (error: any) {

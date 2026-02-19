@@ -35,8 +35,7 @@ export const getSubscriptionStats = adminProcedure
 
 		for (const sub of items) {
 			const price = sub.prices?.[0];
-			const amount =
-				price && "priceAmount" in price ? price.priceAmount : 0;
+			const amount = price && "priceAmount" in price ? price.priceAmount : 0;
 			const interval =
 				price && "recurringInterval" in price
 					? price.recurringInterval
@@ -67,8 +66,7 @@ export const getSubscriptionStats = adminProcedure
 
 		// Get customers count
 		const customers = await polarClient.customers.list({ limit: 1 });
-		const totalCustomers =
-			customers.result.pagination.totalCount || 0;
+		const totalCustomers = customers.result.pagination.totalCount || 0;
 
 		// Get local DB stats
 		const [localUserCount, paidUserCount] = await Promise.all([

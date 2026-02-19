@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { ZoomIn } from "lucide-react";
+import { motion } from "@/components/motion";
 import type { MovieImage } from "@/domains/movies/movie-types.ts";
 
 interface MovieImageProps {

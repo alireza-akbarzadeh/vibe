@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "@/components/motion";
 
 import { Card } from "@/components/ui/card.tsx";
 import type { Stats } from "@/domains/movies/containers/stats-bar.tsx";

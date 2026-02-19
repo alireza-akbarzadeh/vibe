@@ -1,4 +1,4 @@
-export { CastCarousel } from "./cast-carousel";
+export { CastAndCrew } from "./cast-and-crew";
 export { ImagesGallery } from "./image-gallery";
 export { MoviesList } from "./movie-list";
 export { StatsBar } from "./stats-bar";

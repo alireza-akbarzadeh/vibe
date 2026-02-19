@@ -1,8 +1,11 @@
-import { adminProcedure } from "@/orpc/context";
-import { assignUserPermissionInput, removeUserPermissionInput } from "@/orpc/models/user-access";
-import { prisma } from "@/lib/db";
-import { auditLog } from "./audit";
 import { z } from "zod";
+import { prisma } from "@/lib/db";
+import { adminProcedure } from "@/orpc/context";
+import {
+	assignUserPermissionInput,
+	removeUserPermissionInput,
+} from "@/orpc/models/user-access";
+import { auditLog } from "./audit";
 
 export const assignUserPermission = adminProcedure
 	.input(assignUserPermissionInput)

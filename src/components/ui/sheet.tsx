@@ -100,7 +100,7 @@ const sheetVariants = cva(
 
 interface SheetContentProps
 	extends ComponentProps<typeof SheetPrimitive.Content>,
-	VariantProps<typeof sheetVariants> {
+		VariantProps<typeof sheetVariants> {
 	noCLose?: boolean;
 }
 
@@ -120,8 +120,7 @@ function SheetContent({
 			>
 				{children}
 				{noCLose ? null : (
-
-					< SheetPrimitive.Close
+					<SheetPrimitive.Close
 						className="
 				absolute right-4 top-4
 				rounded-full p-2
@@ -139,9 +138,8 @@ function SheetContent({
 						<span className="sr-only">Close</span>
 					</SheetPrimitive.Close>
 				)}
-
 			</SheetPrimitive.Content>
-		</SheetPortal >
+		</SheetPortal>
 	);
 }
 

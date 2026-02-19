@@ -1,5 +1,4 @@
 import { useRouteContext } from "@tanstack/react-router";
-import { LayoutGroup, motion } from "framer-motion";
 import {
 	Bookmark,
 	BookOpen,
@@ -20,6 +19,7 @@ import {
 	Zap,
 } from "lucide-react";
 import React from "react";
+import { LayoutGroup, motion } from "@/components/motion";
 import {
 	CommandDialog,
 	CommandEmpty,
@@ -62,7 +62,10 @@ const userNavItems: LibraryNav[] = [
 function SubscriptionBadge({
 	status,
 	isOpen,
-}: { status?: string; isOpen: boolean }) {
+}: {
+	status?: string;
+	isOpen: boolean;
+}) {
 	if (!isOpen) return null;
 
 	const isPremium = status === "PREMIUM";
@@ -75,9 +78,8 @@ function SubscriptionBadge({
 				"mt-1 flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest w-fit",
 				isFree && "bg-zinc-800/60 text-zinc-500",
 				isPremium &&
-				"bg-purple-500/10 text-purple-400 border border-purple-500/20",
-				isFamily &&
-				"bg-amber-500/10 text-amber-400 border border-amber-500/20",
+					"bg-purple-500/10 text-purple-400 border border-purple-500/20",
+				isFamily && "bg-amber-500/10 text-amber-400 border border-amber-500/20",
 			)}
 		>
 			{isFree && <Sparkles className="w-2.5 h-2.5" />}
@@ -159,9 +161,7 @@ export const LibraryAppSidebar = () => {
 								<Search className="w-4 h-4 shrink-0 text-muted-foreground/40" />
 								{isOpen && (
 									<>
-										<span className="flex-1 text-left">
-											Search…
-										</span>
+										<span className="flex-1 text-left">Search…</span>
 										<kbd className="text-[10px] text-muted-foreground/30 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">
 											⌘K
 										</kbd>
@@ -174,10 +174,7 @@ export const LibraryAppSidebar = () => {
 						<nav className="flex-1 overflow-y-auto px-3 no-scrollbar space-y-5">
 							<div className="space-y-0.5">
 								{mainNavItems.map((item) => (
-									<LibraryNavLink
-										key={item.href}
-										item={item}
-									/>
+									<LibraryNavLink key={item.href} item={item} />
 								))}
 							</div>
 
@@ -189,10 +186,7 @@ export const LibraryAppSidebar = () => {
 								)}
 								<div className="space-y-0.5">
 									{mediaNavItems.map((item) => (
-										<LibraryNavLink
-											key={item.href}
-											item={item}
-										/>
+										<LibraryNavLink key={item.href} item={item} />
 									))}
 								</div>
 							</div>
@@ -205,10 +199,7 @@ export const LibraryAppSidebar = () => {
 								)}
 								<div className="space-y-0.5">
 									{userNavItems.map((item) => (
-										<LibraryNavLink
-											key={item.href}
-											item={item}
-										/>
+										<LibraryNavLink key={item.href} item={item} />
 									))}
 								</div>
 							</div>
@@ -274,24 +265,22 @@ export const LibraryAppSidebar = () => {
 					<CommandEmpty>No results found.</CommandEmpty>
 
 					<CommandGroup heading="Navigation">
-						{[
-							...mainNavItems,
-							...mediaNavItems,
-							...userNavItems,
-						].map((item) => (
-							<CommandItem
-								key={item.href}
-								onSelect={() =>
-									runCommand(() => {
-										window.location.href = item.href;
-									})
-								}
-								className="aria-selected:bg-white/5"
-							>
-								<item.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-								<span>{item.label}</span>
-							</CommandItem>
-						))}
+						{[...mainNavItems, ...mediaNavItems, ...userNavItems].map(
+							(item) => (
+								<CommandItem
+									key={item.href}
+									onSelect={() =>
+										runCommand(() => {
+											window.location.href = item.href;
+										})
+									}
+									className="aria-selected:bg-white/5"
+								>
+									<item.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+									<span>{item.label}</span>
+								</CommandItem>
+							),
+						)}
 					</CommandGroup>
 
 					<CommandSeparator className="bg-white/5" />

@@ -1,8 +1,13 @@
 import { useNavigate } from "@tanstack/react-router";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Play, Star } from "lucide-react";
 import { useRef, useState } from "react";
 import { AddButton } from "@/components/buttons/add-button";
+import {
+	motion,
+	useMotionValue,
+	useSpring,
+	useTransform,
+} from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import type { MediaList } from "@/orpc/models/media.schema";
 import type { MovieVariantCard } from "./movie-carousel";
@@ -70,7 +75,7 @@ export function MovieCard({
 			transition={{
 				delay: index * 0.05,
 				duration: 0.8,
-				ease: [0.215, 0.61, 0.355, 1.0]
+				ease: [0.215, 0.61, 0.355, 1.0],
 			}}
 			onMouseMove={handleMouseMove}
 			onMouseEnter={() => setIsHovered(true)}
@@ -96,7 +101,9 @@ export function MovieCard({
 					alt={movie.title}
 					animate={{
 						scale: isHovered ? 1.1 : 1,
-						filter: isHovered ? "brightness(0.7) blur(2px)" : "brightness(1) blur(0px)",
+						filter: isHovered
+							? "brightness(0.7) blur(2px)"
+							: "brightness(1) blur(0px)",
 					}}
 					transition={{ duration: 0.6 }}
 					className="absolute inset-0 w-full h-full object-cover"
@@ -111,7 +118,7 @@ export function MovieCard({
 					animate={{
 						opacity: isHovered ? 1 : 0,
 						scale: isHovered ? 1 : 0.5,
-						y: isHovered ? 0 : 20
+						y: isHovered ? 0 : 20,
 					}}
 					className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
 				>
@@ -121,15 +128,19 @@ export function MovieCard({
 				</motion.div>
 
 				{/* Progress Bar */}
-				{showProgress && "progress" in movie && typeof (movie as { progress?: number }).progress === "number" && (
-					<div className="absolute bottom-0 left-0 right-0 h-1.5 bg-white/10 z-30">
-						<motion.div
-							initial={{ width: 0 }}
-							animate={{ width: `${(movie as { progress: number }).progress}%` }}
-							className="h-full bg-linear-to-r from-purple-500 via-pink-500 to-red-500"
-						/>
-					</div>
-				)}
+				{showProgress &&
+					"progress" in movie &&
+					typeof (movie as { progress?: number }).progress === "number" && (
+						<div className="absolute bottom-0 left-0 right-0 h-1.5 bg-white/10 z-30">
+							<motion.div
+								initial={{ width: 0 }}
+								animate={{
+									width: `${(movie as { progress: number }).progress}%`,
+								}}
+								className="h-full bg-linear-to-r from-purple-500 via-pink-500 to-red-500"
+							/>
+						</div>
+					)}
 
 				{/* Premium Rating Badge */}
 				<motion.div
@@ -214,7 +225,7 @@ export function MovieCard({
 				<motion.div
 					animate={{
 						opacity: isHovered ? 0.4 : 0,
-						scale: isHovered ? 1.2 : 1
+						scale: isHovered ? 1.2 : 1,
 					}}
 					className="absolute -inset-20 bg-linear-to-tr from-purple-500/20 via-pink-500/20 to-transparent pointer-events-none blur-3xl z-10"
 				/>

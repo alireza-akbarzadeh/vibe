@@ -22,26 +22,27 @@ function Command({
 	);
 }
 
-interface CommandDialogProps extends React.ComponentPropsWithoutRef<typeof Dialog> {
-	children: React.ReactNode
+interface CommandDialogProps
+	extends React.ComponentPropsWithoutRef<typeof Dialog> {
+	children: React.ReactNode;
 }
 
 // FIX: Ensure this is the ONLY declaration of CommandDialog in this file
 export function CommandDialog({ children, ...props }: CommandDialogProps) {
-	const isDesktop = useMediaQuery("(min-width: 768px)")
+	const isDesktop = useMediaQuery("(min-width: 768px)");
 
-	// We use a state to ensure we don't get hydration errors 
+	// We use a state to ensure we don't get hydration errors
 	// between server-side and client-side rendering
-	const [mounted, setMounted] = React.useState(false)
-	React.useEffect(() => setMounted(true), [])
+	const [mounted, setMounted] = React.useState(false);
+	React.useEffect(() => setMounted(true), []);
 
 	const CommandContent = (
 		<Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:size-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:size-5">
 			{children}
 		</Command>
-	)
+	);
 
-	if (!mounted) return null
+	if (!mounted) return null;
 
 	if (isDesktop) {
 		return (
@@ -50,18 +51,16 @@ export function CommandDialog({ children, ...props }: CommandDialogProps) {
 					{CommandContent}
 				</DialogContent>
 			</Dialog>
-		)
+		);
 	}
 
 	return (
 		<Drawer {...props}>
 			<DrawerContent className="p-0">
-				<div className="overflow-hidden rounded-t-[10px]">
-					{CommandContent}
-				</div>
+				<div className="overflow-hidden rounded-t-[10px]">{CommandContent}</div>
 			</DrawerContent>
 		</Drawer>
-	)
+	);
 }
 
 function CommandInput({
