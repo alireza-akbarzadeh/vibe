@@ -1,6 +1,6 @@
-import { os } from "@/orpc/server";
+import { os } from "@/orpc/root";
 import { getPlatformStats } from "./health.handlers";
 
-export const healthProcedures = os.router({
+export const HealthRouter = os.router({
 	platformStats: getPlatformStats,
 });

@@ -25,7 +25,7 @@ export const createCollection = collectionCreateProcedure
 			}),
 		),
 	)
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, ctx }) => {
 		const collection = await prisma.collection.create({
 			data: input,
 		});

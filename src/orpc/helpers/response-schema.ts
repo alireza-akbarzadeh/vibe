@@ -2,6 +2,8 @@ import { z } from "zod";
 
 export const PaginationInputSchema = z.object({
 	limit: z.number().min(1).max(100).default(20),
+	page: z.number().min(1).default(1),
+	search: z.string().optional(),
 	cursor: z.string().cuid().optional(), // cuid is a good choice for cursor
 });
 

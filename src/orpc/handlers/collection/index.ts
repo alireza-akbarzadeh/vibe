@@ -1,10 +1,10 @@
-import { os } from "@/orpc/server";
+import { os } from "@/orpc/root";
 import { bulkCreateCollection, createCollection } from "./create";
 import { deleteCollection } from "./delete";
 import { listCollections } from "./get";
 import { updateCollection } from "./update";
 
-export const collectionProcedures = os.router({
+export const CollectionRouter = os.router({
 	list: listCollections,
 	create: createCollection,
 	bulkCreate: bulkCreateCollection,

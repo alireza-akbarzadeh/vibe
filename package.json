@@ -6,8 +6,9 @@
     "node": "22.x"
   },
   "scripts": {
-    "dev": "concurrently \"npm:dev:vite\" \"npm:dev:ngrok\" \"npm:db:studio\"",
-    "dev:vite": "TSS_DEV_SERVER='true' NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3001 | pino-pretty",
+    "dev": "concurrently \"npm:dev:vite\"",
+    "dev-2": "concurrently \"npm:dev:vite\" \"npm:dev:ngrok\" \"npm:db:studio\"",
+    "dev:vite": "TSS_DEV_SERVER='true' NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000 | pino-pretty",
     "dev:ngrok": "ngrok start vibe --config ngrok.yml",
     "dev:raw": "TSS_DEV_SERVER='true' NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000",
     "kill": "lsof -ti:3000 | xargs kill -9",

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
+import { os } from "@/orpc/root";
 import { RoomPublicOutputSchema } from "@/orpc/types/streaming/room.output";
 import { CreateRoomInputSchema } from "@/orpc/types/streaming/room.types";
 import { ChatService } from "@/server/services/chat.service";
@@ -107,10 +108,7 @@ export const joinRoom = publicProcedure
 			return {
 				status: 200,
 				message: "Successfully joined room",
-				data: {
-					roomId: member.roomId,
-					userId: member.userId,
-				},
+				data: member,
 			};
 		} catch (error) {
 			if (error instanceof RoomNotFoundError) {
@@ -162,7 +160,7 @@ export const getRoomMessages = publicProcedure
 						editedAt: z.date().nullable(),
 						isDeleted: z.boolean(),
 						deletedAt: z.date().nullable(),
-						reactions: z.record(z.number()),
+						reactions: z.record(z.string(), z.number()),
 						createdAt: z.date(),
 						updatedAt: z.date(),
 					}),
@@ -195,9 +193,9 @@ export const getRoomMessages = publicProcedure
 	});
 
 // Export all room procedures
-export const roomProcedures = {
+export const RoomRouter = os.router({
 	createRoom,
 	getRoom,
 	joinRoom,
 	getRoomMessages,
-};
+});

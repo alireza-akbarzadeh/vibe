@@ -37,7 +37,7 @@ export const ChatMessageOutputSchema = z.object({
 	editedAt: z.date().nullable(),
 	isDeleted: z.boolean(),
 	deletedAt: z.date().nullable(),
-	reactions: z.record(z.number()),
+	reactions: z.record(z.string(), z.number()),
 	createdAt: z.date(),
 	updatedAt: z.date(),
 });

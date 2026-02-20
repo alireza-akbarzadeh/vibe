@@ -1,4 +1,4 @@
-import { os } from "@/orpc/server";
+import { os } from "@/orpc/root";
 import { cancelSubscription } from "./cancel-subscription";
 import { createCheckout } from "./create-checkout";
 import { getCustomer } from "./get-customer";
@@ -9,7 +9,7 @@ import { listSubscriptions } from "./list-subscriptions";
 import { updateSubscription } from "./update-subscription";
 import { getWebhookStats, syncSubscriptionStatus } from "./webhook-utils";
 
-export const polarProcedures = os.router({
+export const PolarRouter = os.router({
 	// Products
 	listProducts,
 	getProduct,

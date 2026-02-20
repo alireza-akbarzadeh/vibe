@@ -1,10 +1,10 @@
-import { os } from "@/orpc/server";
+import { os } from "@/orpc/root";
 import { addFavorite } from "./create";
 import { removeFavorite } from "./delete";
 import { checkFavorite, listFavorites } from "./get";
 import { toggleFavorite } from "./toggle";
 
-export const favoriteProcedures = os.router({
+export const FavoriteRouter = os.router({
 	add: addFavorite,
 	list: listFavorites,
 	check: checkFavorite,

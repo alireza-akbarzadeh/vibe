@@ -1,5 +1,5 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";

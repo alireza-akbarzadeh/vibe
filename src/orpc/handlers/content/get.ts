@@ -9,7 +9,6 @@ import { recommendationOutputSchema } from "@/orpc/models/recommendation";
 
 /* ---------------------------- Latest Releases ---------------------------- */
 export const getLatestReleases = publicProcedure
-	.route({ method: "GET" })
 	.input(latestReleasesInputSchema)
 	.output(ApiResponseSchema(recommendationOutputSchema))
 	.handler(async ({ input }) => {
@@ -488,6 +487,7 @@ export const getRomanceMovies = publicProcedure
 		};
 	});
 
+/* ---------------------------- Top IMDB Rated ---------------------------- */
 /* ---------------------------- Top IMDB Rated ---------------------------- */
 export const getTopIMDB = publicProcedure
 	.route({ method: "GET" })

@@ -1,4 +1,3 @@
-import { os } from "@orpc/server";
 import type { DatabaseClient } from "@/server/db";
 import type { AuthContext } from "../middleware/middleware";
 import {
@@ -7,37 +6,13 @@ import {
 	withAuth,
 	withRequire,
 } from "../middleware/middleware";
+import { os } from "../root";
 
 // Define the shape of our context
 export type ORPCContext = { db: DatabaseClient } & Partial<AuthContext>;
 
 // Create a base procedure builder with the context type and error definitions
-export const base = os.$context<ORPCContext>().errors({
-	NOT_FOUND: {
-		status: 404,
-		message: "Not Found",
-	},
-	UNAUTHORIZED: {
-		status: 401,
-		message: "Unauthorized",
-	},
-	FORBIDDEN: {
-		status: 403,
-		message: "Forbidden",
-	},
-	BAD_REQUEST: {
-		status: 400,
-		message: "Bad Request",
-	},
-	CONFLICT: {
-		status: 409,
-		message: "Conflict",
-	},
-	TOO_MANY_REQUESTS: {
-		status: 429,
-		message: "Too Many Requests",
-	},
-});
+export const base = os;
 
 // The public procedure is the base procedure. The context is injected at the request handler.
 export const publicProcedure = base;

@@ -58,6 +58,7 @@ export const ProfileSchema = BaseUserEntitySchema.extend({
 	pin: z.string().nullable(),
 	isKids: z.boolean().default(false),
 	language: z.string().default("en"),
+	preferences: z.record(z.string(), z.any()).optional(),
 });
 
 export const ProfileCreateSchema = ProfileSchema.pick({

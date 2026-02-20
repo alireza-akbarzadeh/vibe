@@ -25,7 +25,7 @@ export const UserProfileSchema = z.object({
 	userId: z.string().cuid(),
 	bio: z.string().max(500).nullable(),
 	avatar: z.string().url().nullable(),
-	preferences: z.record(z.any()).optional(),
+	preferences: z.record(z.string(), z.any()).optional(),
 	createdAt: z.date(),
 	updatedAt: z.date(),
 });

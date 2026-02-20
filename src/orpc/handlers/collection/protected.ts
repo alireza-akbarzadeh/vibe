@@ -37,7 +37,7 @@ export const listCollections = publicProcedure
 			}),
 		),
 	)
-	.handler(async ({ input }) => {
+	.query(async ({ input }) => {
 		const { page, limit, search, type } = input;
 		const where: CollectionWhereInput = { ...(type ? { type } : {}) };
 

@@ -1,7 +1,7 @@
-import { os } from "@/orpc/server";
+import { os } from "@/orpc/root";
 import { getGenreBasedRecommendations, getTopRated, getTrending } from "./get";
 
-export const recommendationProcedures = os.router({
+export const RecommendationRouter = os.router({
 	genreBased: getGenreBasedRecommendations,
 	trending: getTrending,
 	topRated: getTopRated,

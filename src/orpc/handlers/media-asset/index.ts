@@ -1,4 +1,4 @@
-import { os } from "@/orpc/server";
+import { os } from "@/orpc/root";
 import { bulkCreateImages } from "./image-create";
 import { deleteAllImages, deleteImage } from "./image-delete";
 import { getMediaImages, listImages } from "./image-get";
@@ -23,7 +23,7 @@ import { getMediaVideos, listVideos } from "./video-get";
  * - deleteImage: Delete single image
  * - deleteAllImages: Delete all images for a media
  */
-export const mediaAssetProcedures = os.router({
+export const MediaAssetRouter = os.router({
 	// Video operations
 	bulkCreateVideos,
 	listVideos,

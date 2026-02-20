@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
@@ -17,7 +18,7 @@ export const listCollections = publicProcedure
 	)
 	.handler(async ({ input }) => {
 		const { page, limit, search, type } = input;
-		const where: CollectionWhereInput = { ...(type ? { type } : {}) };
+		const where: Prisma.CollectionWhereInput = { ...(type ? { type } : {}) };
 
 		if (search) {
 			where.title = { contains: search, mode: "insensitive" };

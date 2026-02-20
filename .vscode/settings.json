@@ -32,7 +32,7 @@
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit"
 	},
-	"cSpell.words": ["orpc", "vaul"],
+	"cSpell.words": ["oprc", "orpc", "vaul"],
 	"a-file-icon-vscode.activeIconPacks": [
 		"rails",
 		"angular",

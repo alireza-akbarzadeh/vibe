@@ -1,50 +1,48 @@
-import { os } from "@orpc/server";
-import { castProcedures } from "./handlers/cast";
-import { collectionProcedures } from "./handlers/collection";
-import { contentProcedures } from "./handlers/content";
-import { creatorProcedures } from "./handlers/creator";
-import { favoriteProcedures } from "./handlers/favorite";
-import { genreProcedures } from "./handlers/genre";
-import { healthProcedures } from "./handlers/health/health.handlers";
-import { libraryProcedures } from "./handlers/library";
-import { mediaProcedures } from "./handlers/media";
-import { mediaAssetProcedures } from "./handlers/media-asset";
-import { peopleProcedures } from "./handlers/people";
-import { permissionProcedures } from "./handlers/permission";
-import { personProcedures } from "./handlers/person";
-import { polarProcedures } from "./handlers/polar";
-import { profileProcedures } from "./handlers/profile";
-import { recommendationProcedures } from "./handlers/recommendation";
-import { reviewProcedures } from "./handlers/review";
-import { roleProcedures } from "./handlers/role";
-import { roomProcedures } from "./handlers/streaming/room.handlers";
-import { userProcedures } from "./handlers/user/user.handlers";
-import { viewingHistoryProcedures } from "./handlers/viewing-history";
-import { watchListProcedures } from "./handlers/watchlist";
+import { CastRouter } from "./handlers/cast";
+import { CollectionRouter } from "./handlers/collection";
+import { ContentRouter } from "./handlers/content";
+import { CreatorRouter } from "./handlers/creator";
+import { FavoriteRouter } from "./handlers/favorite";
+import { GenreRouter } from "./handlers/genre";
+import { HealthRouter } from "./handlers/health";
+import { LibraryRouter } from "./handlers/library";
+import { MediaRouter } from "./handlers/media";
+import { MediaAssetRouter } from "./handlers/media-asset";
+import { PermissionRouter } from "./handlers/permission";
+import { PersonRouter } from "./handlers/person";
+import { PolarRouter } from "./handlers/polar";
+import { ProfileRouter } from "./handlers/profile";
+import { RecommendationRouter } from "./handlers/recommendation";
+import { ReviewRouter } from "./handlers/review";
+import { roleRouter } from "./handlers/role";
+import { RoomRouter } from "./handlers/streaming/room.handlers";
+import { userRouter } from "./handlers/user";
+import { ViewingHistoryRouter } from "./handlers/viewing-history";
+import { WatchListRouter } from "./handlers/watchlist";
+import { os } from "./root";
 
 export const appRouter = os.router({
-	cast: castProcedures,
-	collection: collectionProcedures,
-	content: contentProcedures,
-	creator: creatorProcedures,
-	favorite: favoriteProcedures,
-	genre: genreProcedures,
-	health: healthProcedures,
-	library: libraryProcedures,
-	media: mediaProcedures,
-	mediaAsset: mediaAssetProcedures,
-	people: peopleProcedures,
-	permission: permissionProcedures,
-	person: personProcedures,
-	polar: polarProcedures,
-	profile: profileProcedures,
-	recommendation: recommendationProcedures,
-	review: reviewProcedures,
-	role: roleProcedures,
-	room: roomProcedures,
-	user: userProcedures,
-	viewingHistory: viewingHistoryProcedures,
-	watchlist: watchListProcedures,
+	cast: CastRouter,
+	collection: CollectionRouter,
+	content: ContentRouter,
+	creator: CreatorRouter,
+	favorite: FavoriteRouter,
+	genre: GenreRouter,
+	health: HealthRouter,
+	library: LibraryRouter,
+	media: MediaRouter,
+	mediaAsset: MediaAssetRouter,
+	permission: PermissionRouter,
+	people: PersonRouter,
+	polar: PolarRouter,
+	profile: ProfileRouter,
+	recommendation: RecommendationRouter,
+	review: ReviewRouter,
+	role: roleRouter,
+	room: RoomRouter,
+	user: userRouter,
+	viewingHistory: ViewingHistoryRouter,
+	wristband: WatchListRouter,
 });
 
 export type AppRouter = typeof appRouter;

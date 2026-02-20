@@ -28,23 +28,21 @@ const prismaWithQueryLogging = new PrismaClient({
 	},
 });
 
-type ExtendedPrismaClient = typeof prismaWithQueryLogging;
-
 declare global {
-	var __prisma: ExtendedPrismaClient | undefined;
+	var __prisma: PrismaClient | undefined;
 }
 
-const prisma: ExtendedPrismaClient =
-	globalThis.__prisma || prismaWithQueryLogging;
+const prisma = (globalThis.__prisma ||
+	prismaWithQueryLogging) as unknown as PrismaClient;
 
 if (process.env.NODE_ENV !== "production") {
 	globalThis.__prisma = prisma;
 }
 
 export class DatabaseClient {
-	private readonly prisma: ExtendedPrismaClient;
+	private readonly prisma: PrismaClient;
 
-	constructor(prismaInstance: ExtendedPrismaClient) {
+	constructor(prismaInstance: PrismaClient) {
 		this.prisma = prismaInstance;
 	}
 
@@ -107,7 +105,7 @@ export class DatabaseClient {
 		}
 	}
 
-	get client(): ExtendedPrismaClient {
+	get client() {
 		return this.prisma;
 	}
 }

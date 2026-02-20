@@ -46,3 +46,5 @@ export const router = base.router({
 	polarAdmin: PolarAdminRouter,
 	library: LibraryRouter,
 });
+
+export type AppRouter = typeof router;
