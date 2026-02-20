@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 
 const ListAuditLogsInputSchema = z.object({

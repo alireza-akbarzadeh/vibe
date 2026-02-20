@@ -1,7 +1,7 @@
 import { ORPCError } from "@orpc/server";
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { rpcLogger } from "@/lib/rpc-logger";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";

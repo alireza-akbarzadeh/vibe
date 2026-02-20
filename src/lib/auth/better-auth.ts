@@ -11,7 +11,7 @@ import {
 	passwordResetEmail,
 	welcomeVerifyEmail,
 } from "@/integrations/resend/email-templates";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import type { authClient } from "./auth-client";
 
 const emailFrom = "Vibe <noreply@vibeapp.com>";

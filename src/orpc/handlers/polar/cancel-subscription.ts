@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import { CancelSubscriptionInputSchema } from "../../models/polar";
 

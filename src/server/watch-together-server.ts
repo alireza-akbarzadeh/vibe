@@ -1,9 +1,21 @@
 import { createServer } from "node:http";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
+import type { UserPublic } from "@/orpc/models/core";
+
+interface ServerToClientEvents {
+	"playback-state": (state: { time: number; playing: boolean }) => void;
+	"user-joined": (payload: { user: UserPublic; id: string }) => void;
+	"user-left": (payload: { id: string }) => void;
+}
+
+interface ClientToServerEvents {
+	"join-room": (payload: { roomId: string; user: UserPublic }) => void;
+	"playback-update": (payload: { roomId: string; time: number; playing: boolean }) => void;
+}
 
 // This is a minimal Socket.IO server for Watch Together sessions
 const httpServer = createServer();
-const io = new Server(httpServer, {
+const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
 	cors: { origin: "*" },
 });
 
@@ -13,7 +25,7 @@ const rooms: Record<
 	{ users: Set<string>; playback: { time: number; playing: boolean } }
 > = {};
 
-io.on("connection", (socket) => {
+io.on("connection", (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
 	socket.on("join-room", ({ roomId, user }) => {
 		socket.join(roomId);
 		if (!rooms[roomId]) {

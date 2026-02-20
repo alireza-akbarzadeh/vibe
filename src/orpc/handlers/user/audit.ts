@@ -1,5 +1,5 @@
 import type { Prisma } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 
 export async function auditLog(params: {
 	userId: string;

@@ -20,7 +20,7 @@ import { TestAuthRouter } from "../handlers/test-auth";
 import { userRouter } from "../handlers/user";
 import { ViewingHistoryRouter } from "../handlers/viewing-history";
 import { WatchListRouter } from "../handlers/watchlist";
-import { base } from "../router/base";
+import { base } from "../context";
 
 export const router = base.router({
 	health: HealthRouter,

@@ -1,6 +1,6 @@
 // src/orpc/procedures/collection.ts
 import { z } from "zod";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { collectionDeleteProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 

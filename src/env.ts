@@ -8,10 +8,6 @@ export const env = createEnv({
 		BETTER_AUTH_URL: z.string().url(),
 		BETTER_AUTH_SECRET: z.string().min(32),
 
-		SENTRY_ORG: z.string().min(1).optional(),
-		SENTRY_PROJECT: z.string().min(1).optional(),
-		SENTRY_AUTH_TOKEN: z.string().min(1).optional(),
-
 		GOOGLE_CLIENT_ID: z.string().min(1),
 		GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
 
@@ -47,10 +43,9 @@ export const env = createEnv({
 		VITE_API_BASE_URL: z.string().url().optional(),
 		VITE_CDN_ADDRESS: z.string().url().optional(),
 		VITE_APP_URL: z.string().url().optional(),
-		VITE_VISUALIZE: z.string().optional(),
 
 		// Polar Product IDs (client-accessible)
-		VITE_POLAR_FREE_PRODUCT_ID: z.string().uuid(),
+		VITE_POLAR_FREE_PRODUCT_ID: z.string().uuid().optional(),
 		VITE_POLAR_PREMIUM_MONTHLY_PRODUCT_ID: z.string().uuid(),
 		VITE_POLAR_PREMIUM_YEARLY_PRODUCT_ID: z.string().uuid(),
 		VITE_POLAR_FAMILY_MONTHLY_PRODUCT_ID: z.string().uuid(),

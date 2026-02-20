@@ -84,7 +84,7 @@ const config = defineConfig({
         'node:stream',
         'node:stream/web',
         'node:async_hooks',
-        '@sentry/tanstack-start',
+        '@sentry/tanstackstart-react',
       ],
     },
   },

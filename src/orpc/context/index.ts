@@ -1,6 +1,4 @@
 import { os } from "@orpc/server";
-import SuperJSON from "superjson";
-
 import type { DatabaseClient } from "@/server/db";
 import type { AuthContext } from "../middleware/middleware";
 import {
@@ -10,10 +8,10 @@ import {
 	withRequire,
 } from "../middleware/middleware";
 
-import { withDb } from "../middleware/with-db";
+// Define the shape of our context
+export type ORPCContext = { db: DatabaseClient } & Partial<AuthContext>;
 
-export type ORPCContext = { db: DatabaseClient; auth: AuthContext };
-
+// Create a base procedure builder with the context type and error definitions
 export const base = os.$context<ORPCContext>().errors({
 	NOT_FOUND: {
 		status: 404,
@@ -41,8 +39,10 @@ export const base = os.$context<ORPCContext>().errors({
 	},
 });
 
-export const publicProcedure = base.use(withDb);
+// The public procedure is the base procedure. The context is injected at the request handler.
+export const publicProcedure = base;
 
+// Create more specific procedures by chaining middleware
 export const authedProcedure = publicProcedure.use(withAuth);
 
 export const adminProcedure = authedProcedure.use(requireAdmin());

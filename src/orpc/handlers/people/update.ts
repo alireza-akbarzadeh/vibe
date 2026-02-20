@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { updatePeopleInputSchema } from "@/orpc/models/people.input.schema";

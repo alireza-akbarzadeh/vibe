@@ -28,7 +28,7 @@ export function useSubscription() {
 				limit: 10,
 			},
 		}),
-		select: (result) => {
+		select: (result): SubscriptionStatus => {
 			if (!result?.subscriptions || result.subscriptions.length === 0) {
 				return {
 					status: "FREE" as const,

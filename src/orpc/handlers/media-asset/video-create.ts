@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { VideoType } from "@/generated/prisma/client";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {

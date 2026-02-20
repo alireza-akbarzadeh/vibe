@@ -1,4 +1,4 @@
-import { os } from "@orpc/server";
+import type { Middleware } from "@orpc/server";
 import type { SubscriptionStatus } from "@prisma/client";
 import { type AuthSessionType, auth } from "@/lib/auth/better-auth";
 import type { ORPCContext } from "../context";
@@ -7,71 +7,66 @@ import { userHasPermission } from "../helpers/helper";
 
 export interface AuthContext extends AuthSessionType {}
 
-export const withAuth = os
-	.$context<ORPCContext>()
-	.middleware(async ({ next, context }) => {
-		const { session, user } = await auth.api.getSession();
+export const withAuth: Middleware<ORPCContext> = async ({ next, ctx }) => {
+	const sessionData = await auth.api.getSession();
+	if (!sessionData) {
+		throw new Error("UNAUTHENTICATED");
+	}
+	const { user, session } = sessionData;
+	return next({ ctx: { ...ctx, user, session } });
+};
 
-		if (!user || !session) {
-			throw new Error("UNAUTHENTICATED");
-		}
-
-		return next({ context: { ...context, user, session } });
-	});
-
-export const requireSubscription = (tiers: Tier | Tier[]) =>
-	os.$context<ORPCContext>().middleware(({ next, context }) => {
+export const requireSubscription =
+	(tiers: Tier | Tier[]): Middleware<ORPCContext> =>
+	async ({ next, ctx }) => {
 		const allowed = Array.isArray(tiers) ? tiers : [tiers];
-		const status = (context as AuthContext).user
+		const status = (ctx as AuthContext).user
 			?.subscriptionStatus as SubscriptionStatus;
-
 		if (!allowed.includes(status as Tier)) {
 			throw new Error("SUBSCRIPTION_REQUIRED");
 		}
+		return next({ ctx });
+	};
 
-		return next({ context });
-	});
-
-export const requireRole = (role: Role) =>
-	os.$context<ORPCContext>().middleware(({ next, context }) => {
-		if ((context as AuthContext).user?.role !== role) {
+export const requireRole =
+	(role: Role): Middleware<ORPCContext> =>
+	async ({ next, ctx }) => {
+		if ((ctx as AuthContext).user?.role !== role) {
 			throw new Error("FORBIDDEN");
 		}
+		return next({ ctx });
+	};
 
-		return next({ context });
-	});
-
-export const requireAdmin = () =>
-	os.$context<ORPCContext>().middleware(async ({ next, context }) => {
-		if ((context as AuthContext).user?.role !== "ADMIN") {
+export const requireAdmin =
+	(): Middleware<ORPCContext> =>
+	async ({ next, ctx }) => {
+		if ((ctx as AuthContext).user?.role !== "ADMIN") {
 			throw new Error("UNAUTHORIZED");
 		}
+		return next({ ctx });
+	};
 
-		return next({ context });
-	});
-
-export const withRequire = (options: {
-	role?: Role;
-	permission?: { resource: string; action: string };
-}) =>
-	os.$context<ORPCContext>().middleware(({ next, context }) => {
-		if (!(context as AuthContext).user) {
+export const withRequire =
+	(options: {
+		role?: Role;
+		permission?: { resource: string; action: string };
+	}): Middleware<ORPCContext> =>
+	async ({ next, ctx }) => {
+		if (!(ctx as AuthContext).user) {
 			throw new Error("UNAUTHENTICATED");
 		}
-		if (options.role && (context as AuthContext).user.role !== options.role) {
+		if (options.role && (ctx as AuthContext).user.role !== options.role) {
 			throw new Error("FORBIDDEN");
 		}
-
 		if (
 			options.permission &&
 			!userHasPermission(
-				(context as AuthContext).user.id,
+				(ctx as AuthContext).user.id,
 				options.permission.resource,
 				options.permission.action,
 			)
 		) {
 			throw new Error("FORBIDDEN");
 		}
-
-		return next({ context });
-	});
+		return next({ ctx });
+	};

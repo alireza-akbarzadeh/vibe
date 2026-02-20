@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { roleProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { UserRoleSchema } from "@/orpc/models/role";

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { db } from "@/server/db";
+
 import type { User, UserPrivate, UserPublic } from "@/orpc/models/core";
 import type { RoomPublic } from "@/orpc/models/streaming";
 import { RoomRepository } from "@/server/repositories/room.repository";
@@ -173,9 +173,7 @@ export class UserService {
 	/**
 	 * List users with pagination
 	 */
-	async listUsers(
-		options: { limit?: number; cursor?: string } = {},
-	): Promise<{
+	async listUsers(options: { limit?: number; cursor?: string } = {}): Promise<{
 		users: UserPublic[];
 		nextCursor?: string;
 	}> {
@@ -241,13 +239,6 @@ export class UserService {
 		action: string,
 	): Promise<boolean> {
 		return await this.userRepository.hasPermission(userId, resource, action);
-	}
-
-	/**
-	 * Get user's rooms
-	 */
-	async getUserRooms(userId: string): Promise<RoomPublic[]> {
-		return this.roomRepository.findForUser(userId);
 	}
 
 	/**

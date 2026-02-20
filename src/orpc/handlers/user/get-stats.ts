@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 
 const UserStatsSchema = z.object({

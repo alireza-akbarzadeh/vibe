@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { subscribedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { removeFromWatchListInput } from "@/orpc/models/watchlist";

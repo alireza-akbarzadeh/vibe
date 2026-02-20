@@ -88,7 +88,7 @@ export function trackStatsQueryOptions() {
 
 import { queryOptions } from "@tanstack/react-query";
 import type { z } from "zod";
-import { PlatformStatsSchema } from "@/orpc/handlers/health/health.handlers";
+import { PlatformStatsSchema } from "@/orpc/models/health";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 
 const PlatformStatsResponseSchema = ApiResponseSchema(PlatformStatsSchema);

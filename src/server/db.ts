@@ -2,55 +2,49 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { type Prisma, PrismaClient } from "@prisma/client";
 import { env } from "@/env";
 
-// Database adapter configuration
-const adapter = new PrismaPg({
-	connectionString: env.DATABASE_URL,
-});
+const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
 
-// Global prisma instance for development hot-reload protection
-declare global {
-	var __db: PrismaClient | undefined;
-}
-
-const createPrismaClient = () => {
-	const prisma = new PrismaClient({
-		adapter,
-		log: [
-			{ emit: "stdout", level: "error" },
-			{ emit: "stdout", level: "warn" },
-			{ emit: "stdout", level: "query" },
-		],
-	}).$extends({
-		query: {
-			$allModels: {
-				async $allOperations({ model, operation, args, query }) {
-					const start = Date.now();
-					const result = await query(args);
-					const end = Date.now();
-					const duration = end - start;
-					if (duration > 1000) {
-						console.warn(
-							`🐌 Slow query: ${model}.${operation} (${duration.toFixed(2)}ms)`,
-						);
-					}
-					return result;
-				},
+const prismaWithQueryLogging = new PrismaClient({
+	adapter,
+	log: [
+		{ emit: "stdout", level: "error" },
+		{ emit: "stdout", level: "warn" },
+	],
+}).$extends({
+	query: {
+		$allModels: {
+			async $allOperations({ model, operation, args, query }) {
+				const start = Date.now();
+				const result = await query(args);
+				const duration = Date.now() - start;
+				if (duration > 1000) {
+					console.warn(
+						`🐌 Slow query: ${model}.${operation} (${duration.toFixed(2)}ms)`,
+					);
+				}
+				return result;
 			},
 		},
-	});
-	return prisma;
-};
+	},
+});
 
-const prisma = globalThis.__db || createPrismaClient();
+type ExtendedPrismaClient = typeof prismaWithQueryLogging;
+
+declare global {
+	var __prisma: ExtendedPrismaClient | undefined;
+}
+
+const prisma: ExtendedPrismaClient =
+	globalThis.__prisma || prismaWithQueryLogging;
 
 if (process.env.NODE_ENV !== "production") {
-	globalThis.__db = prisma;
+	globalThis.__prisma = prisma;
 }
 
 export class DatabaseClient {
-	private readonly prisma: PrismaClient;
+	private readonly prisma: ExtendedPrismaClient;
 
-	constructor(prismaInstance: PrismaClient) {
+	constructor(prismaInstance: ExtendedPrismaClient) {
 		this.prisma = prismaInstance;
 	}
 
@@ -73,15 +67,47 @@ export class DatabaseClient {
 		try {
 			await this.prisma.$queryRaw`SELECT 1`;
 			const end = Date.now();
-			const latency = end - start;
-			return { status: "healthy", latency };
+			return { status: "healthy", latency: end - start };
 		} catch (_error) {
 			const end = Date.now();
 			return { status: "unhealthy", latency: end - start };
 		}
 	}
 
-	get client(): PrismaClient {
+	async getConnectionStats(): Promise<{
+		total_connections: number;
+		active_connections: number;
+		idle_connections: number;
+	} | null> {
+		try {
+			const stats = await this.prisma.$queryRaw<
+				[
+					{
+						total_connections: bigint;
+						active_connections: bigint;
+						idle_connections: bigint;
+					},
+				]
+			>`
+                SELECT
+                  (SELECT count(*) FROM pg_stat_activity) as total_connections,
+                  (SELECT count(*) FROM pg_stat_activity WHERE state = 'active') as active_connections,
+                  (SELECT count(*) FROM pg_stat_activity WHERE state = 'idle') as idle_connections
+            `;
+			return stats[0]
+				? {
+						total_connections: Number(stats[0].total_connections),
+						active_connections: Number(stats[0].active_connections),
+						idle_connections: Number(stats[0].idle_connections),
+					}
+				: null;
+		} catch (error) {
+			console.error("Failed to get connection stats:", error);
+			return null;
+		}
+	}
+
+	get client(): ExtendedPrismaClient {
 		return this.prisma;
 	}
 }

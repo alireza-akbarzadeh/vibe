@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { UserAccessOutput, userIdInput } from "@/orpc/models/user-access";
 

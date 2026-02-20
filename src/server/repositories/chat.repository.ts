@@ -1,13 +1,13 @@
 import { db } from "@/server/db";
-import type { Message, MessageCreate } from "@/orpc/models/streaming";
+import type { ChatMessageCreate } from "@/orpc/models/streaming";
 
 export class ChatRepository {
 	async findMessagesByRoom(
 		roomId: string,
 		limit: number,
 		cursor?: string,
-	): Promise<Message[]> {
-		return db.message.findMany({
+	) {
+		return db.client.message.findMany({
 			where: { roomId },
 			take: limit,
 			cursor: cursor ? { id: cursor } : undefined,
@@ -17,7 +17,7 @@ export class ChatRepository {
 		});
 	}
 
-	async createMessage(data: MessageCreate): Promise<Message> {
-		return db.message.create({ data });
+	async createMessage(data: ChatMessageCreate) {
+		return db.client.message.create({ data });
 	}
 }

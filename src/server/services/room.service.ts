@@ -91,6 +91,8 @@ export class RoomService {
 		// TODO: Check user plan for max capacity
 		const roomData: RoomCreate = {
 			...input,
+			description: input.description ?? null,
+			maxCapacity: input.maxCapacity ?? 10,
 			currentMediaId: null,
 		};
 
@@ -98,9 +100,12 @@ export class RoomService {
 
 		// Add owner as the first member
 		await this.roomRepository.addMemberToRoom({
-				roomId: room.id,
-				userId: room.ownerId,
-			});
+			roomId: room.id,
+			userId: room.ownerId,
+			profileId: null,
+			isHost: true,
+			isModerator: true,
+		});
 
 		return room;
 	}
@@ -156,7 +161,13 @@ export class RoomService {
 			throw new UserAlreadyInRoomError(userId, roomId);
 		}
 
-		return await this.roomRepository.addMemberToRoom({ roomId, userId, role: "VIEWER" });
+		return await this.roomRepository.addMemberToRoom({
+			roomId,
+			userId,
+			profileId: null,
+			isHost: false,
+			isModerator: false,
+		});
 	}
 
 	async leaveRoom(roomId: string, userId: string): Promise<void> {

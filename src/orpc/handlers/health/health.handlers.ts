@@ -1,24 +1,19 @@
 import { z } from "zod";
 import { publicProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
+import { PlatformStatsSchema } from "@/orpc/models/health";
 import { db } from "@/server/db";
 import { UserService } from "@/server/services/user.service";
 
 // Health check schemas
+
+const userService = new UserService();
+
 export const HealthCheckSchema = z.object({
 	status: z.enum(["healthy", "unhealthy"]),
 	latency: z.number(),
-	timestamp: z.string(),
+	timestamp: z.string().datetime(),
 });
-
-export const PlatformStatsSchema = z.object({
-	totalUsers: z.number(),
-	totalMovies: z.number(),
-	totalTracks: z.number(),
-	totalMedia: z.number(),
-});
-
-const userService = new UserService();
 
 // Basic health check procedure
 export const healthCheck = publicProcedure
