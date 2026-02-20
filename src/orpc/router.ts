@@ -11,6 +11,7 @@ import { MediaAssetRouter } from "./handlers/media-asset";
 import { PermissionRouter } from "./handlers/permission";
 import { PersonRouter } from "./handlers/person";
 import { PolarRouter } from "./handlers/polar";
+import { PolarAdminRouter } from "./handlers/polar/admin";
 import { ProfileRouter } from "./handlers/profile";
 import { RecommendationRouter } from "./handlers/recommendation";
 import { ReviewRouter } from "./handlers/review";
@@ -33,8 +34,9 @@ export const appRouter = os.router({
 	media: MediaRouter,
 	mediaAsset: MediaAssetRouter,
 	permission: PermissionRouter,
-	people: PersonRouter,
+	person: PersonRouter,
 	polar: PolarRouter,
+	polarAdmin: PolarAdminRouter,
 	profile: ProfileRouter,
 	recommendation: RecommendationRouter,
 	review: ReviewRouter,
