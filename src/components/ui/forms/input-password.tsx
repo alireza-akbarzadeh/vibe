@@ -48,9 +48,8 @@ function InputPassword(props: InputPasswordProps) {
 					id={passwordId}
 					type={showPassword ? "text" : "password"}
 					placeholder="Enter your password"
-					className={`pl-12 h-12 bg-white/5 border ${
-						isInvalid ? "border-red-500" : "border-white/10"
-					} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
+					className={`pl-12 h-12 bg-white/5 border ${isInvalid ? "border-red-500" : "border-white/10"
+						} text-white placeholder:text-gray-500 focus:border-purple-500/50 focus:ring-purple-500/20 rounded-xl transition-all`}
 					{...rest}
 				/>
 				<Button
@@ -66,15 +65,6 @@ function InputPassword(props: InputPasswordProps) {
 					</PropsProvider>
 				</Button>
 			</div>
-			{isInvalid && (
-				<motion.div
-					initial={{ opacity: 0, y: -10 }}
-					animate={{ opacity: 1, y: 0 }}
-					className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm"
-				>
-					{errorMessage}
-				</motion.div>
-			)}
 		</div>
 	);
 }

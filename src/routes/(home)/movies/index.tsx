@@ -9,7 +9,7 @@ export const Route = createFileRoute("/(home)/movies/")({
     loader: async ({ context }) => {
         await Promise.all([
             context.queryClient.ensureQueryData(
-                orpc.content.latestReleases.queryOptions({ input: { type: "MOVIE", limit: 15 } })
+                orpc.contents.latestReleases.queryOptions({ input: { type: "MOVIE", limit: 15 } })
             ),
             context.queryClient.ensureQueryData(
                 orpc.recommendations.trending.queryOptions({ input: { type: "MOVIE", limit: 15, days: 7 } })

@@ -1,5 +1,4 @@
 import { orpc } from "@/lib/orpc";
-import type { MediaList } from "@/orpc/models/media.schema";
 
 /** Section slug to API endpoint mapping */
 export type SectionSlug =
