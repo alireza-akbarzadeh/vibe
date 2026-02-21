@@ -106,7 +106,8 @@ function RouteComponent() {
 					{isLoading ? (
 						<div className="space-y-3">
 							{[...Array(10)].map((_, i) => (
-								<Skeleton key={i} className="h-12 w-full" />
+								<Skeleton key={`skeleton-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+									i}`} className="h-12 w-full" />
 							))}
 						</div>
 					) : data && data.subscriptions.length > 0 ? (
@@ -149,9 +150,9 @@ function RouteComponent() {
 											<TableCell className="text-xs text-muted-foreground">
 												{subscription.currentPeriodEnd
 													? formatDistanceToNow(
-															new Date(subscription.currentPeriodEnd),
-															{ addSuffix: true },
-														)
+														new Date(subscription.currentPeriodEnd),
+														{ addSuffix: true },
+													)
 													: "—"}
 											</TableCell>
 										</TableRow>
