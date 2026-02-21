@@ -19,7 +19,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 import { UserAccessPanel } from "./user-access-panel";
 
 type UserAccess = {

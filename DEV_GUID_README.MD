@@ -526,7 +526,7 @@ Get webhook processing statistics (admin only).
 ### Client-Side with ORPC Client
 
 ```typescript
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 // List products
 const products = await client.polar.listProducts({
@@ -606,7 +606,7 @@ function PricingPage() {
 ```typescript
 // src/hooks/usePolarSubscriptions.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 export function usePolarSubscriptions() {
   return useQuery({
@@ -1374,7 +1374,7 @@ Get webhook processing statistics (admin only).
 ### Client-Side with ORPC Client
 
 ```typescript
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 // List products
 const products = await client.polar.listProducts({
@@ -1454,7 +1454,7 @@ function PricingPage() {
 ```typescript
 // src/hooks/usePolarSubscriptions.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 export function usePolarSubscriptions() {
   return useQuery({

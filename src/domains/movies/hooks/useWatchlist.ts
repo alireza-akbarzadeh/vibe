@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 // Query key factory
 export const watchlistKeys = {

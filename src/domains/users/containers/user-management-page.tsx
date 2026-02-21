@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { AppDialog } from "@/components/app-dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 import { InviteUserForm } from "../components/invite-user-form";
 import { UserStatCard } from "../components/user-status-card";
 import { UserManagementTable } from "./user-table";

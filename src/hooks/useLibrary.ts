@@ -1,35 +1,34 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 // ─── Library Dashboard ──────────────────────────────────────────────────────
 
 export function useLibraryDashboard() {
-	return useQuery({
-		queryKey: ["library", "dashboard"],
-		queryFn: () => client.library.dashboard(),
-		staleTime: 2 * 60 * 1000,
-	});
+	return useQuery(
+		orpc.library.dashboard.queryOptions({
+			staleTime: 2 * 60 * 1000,
+		}),
+	);
 }
 
 // ─── Favorites ──────────────────────────────────────────────────────────────
 
 export function useFavorites(options?: { page?: number; limit?: number }) {
-	return useQuery({
-		queryKey: ["library", "favorites", options],
-		queryFn: () =>
-			client.favorites.list({
+	return useQuery(
+		orpc.favorites.list.queryOptions({
+			input: {
 				page: options?.page ?? 1,
 				limit: options?.limit ?? 20,
-			}),
-		staleTime: 60 * 1000,
-	});
+			},
+			staleTime: 60 * 1000,
+		}),
+	);
 }
 
 export function useCheckFavorite(mediaId: string | undefined) {
 	return useQuery({
-		queryKey: ["library", "favorites", "check", mediaId],
-		queryFn: () => client.favorites.check({ mediaId: mediaId! }),
+		...orpc.favorites.check.queryOptions({ input: { mediaId: mediaId! } }),
 		enabled: !!mediaId,
 		staleTime: 60 * 1000,
 	});
@@ -37,21 +36,24 @@ export function useCheckFavorite(mediaId: string | undefined) {
 
 export function useToggleFavorite() {
 	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: (mediaId: string) => client.favorites.toggle({ mediaId }),
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: ["library", "favorites"] });
-			queryClient.invalidateQueries({ queryKey: ["library", "dashboard"] });
-			toast.success(
-				data.data.isFavorite ? "Added to favorites" : "Removed from favorites",
-			);
-		},
-		onError: (error: Error) => {
-			toast.error("Failed to update favorites", {
-				description: error.message,
-			});
-		},
-	});
+	return useMutation(
+		orpc.favorites.toggle.mutationOptions({
+			onSuccess: (data) => {
+				queryClient.invalidateQueries({ queryKey: ["library", "favorites"] });
+				queryClient.invalidateQueries({ queryKey: ["library", "dashboard"] });
+				toast.success(
+					data.data.isFavorite
+						? "Added to favorites"
+						: "Removed from favorites",
+				);
+			},
+			onError: (error: Error) => {
+				toast.error("Failed to update favorites", {
+					description: error.message,
+				});
+			},
+		}),
+	);
 }
 
 // ─── Watchlist ──────────────────────────────────────────────────────────────
@@ -239,7 +241,7 @@ export function useUpdateProfile() {
 			pin?: string | null;
 			isKids?: boolean;
 			language?: string;
-		}) => client.profiles.update(params),
+		}) => orpc.profiles.update.mutationOptions({ input: params }),
 		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({
 				queryKey: ["library", "profiles", variables.id],

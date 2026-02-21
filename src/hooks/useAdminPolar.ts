@@ -1,68 +1,50 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 // Admin Products
 export function useAdminProducts() {
-	return useQuery({
-		queryKey: ["admin", "products"],
-		queryFn: async () => {
-			return client.polar.listProducts({ limit: 100, page: 1 });
-		},
-	});
+	return useQuery(
+		orpc.polar.listProducts.queryOptions({ input: { limit: 100, page: 1 } }),
+	);
 }
 
 export function useAdminCreateProduct() {
 	const queryClient = useQueryClient();
 
-	return useMutation({
-		mutationFn: async (input: {
-			name: string;
-			description?: string;
-			recurringInterval: "day" | "week" | "month" | "year";
-			recurringIntervalCount?: number;
-			prices: Array<{ priceAmount: number; priceCurrency?: string }>;
-			trialInterval?: "day" | "week" | "month" | "year" | null;
-			trialIntervalCount?: number | null;
-		}) => {
-			return client.polarAdmin.createProduct(input);
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
-			queryClient.invalidateQueries({ queryKey: ["polar", "products"] });
-		},
-	});
+	return useMutation(
+		orpc.polarAdmin.createProduct.mutationOptions({
+			onSuccess: () => {
+				queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
+				queryClient.invalidateQueries({ queryKey: ["polar", "products"] });
+			},
+		}),
+	);
 }
 
 export function useAdminUpdateProduct() {
 	const queryClient = useQueryClient();
 
-	return useMutation({
-		mutationFn: async (input: {
-			productId: string;
-			name?: string;
-			description?: string | null;
-		}) => {
-			return client.polarAdmin.updateProduct(input);
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
-			queryClient.invalidateQueries({ queryKey: ["polar", "products"] });
-		},
-	});
+	return useMutation(
+		orpc.polarAdmin.updateProduct.mutationOptions({
+			onSuccess: () => {
+				queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
+				queryClient.invalidateQueries({ queryKey: ["polar", "products"] });
+			},
+		}),
+	);
 }
 
 export function useAdminArchiveProduct() {
 	const queryClient = useQueryClient();
 
-	return useMutation({
-		mutationFn: async (productId: string) => {
-			return client.polarAdmin.archiveProduct({ productId });
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
-			queryClient.invalidateQueries({ queryKey: ["polar", "products"] });
-		},
-	});
+	return useMutation(
+		orpc.polarAdmin.archiveProduct.mutationOptions({
+			onSuccess: () => {
+				queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
+				queryClient.invalidateQueries({ queryKey: ["polar", "products"] });
+			},
+		}),
+	);
 }
 
 // Admin Subscriptions
@@ -72,45 +54,36 @@ export function useAdminAllSubscriptions(params: {
 	status?: string;
 	productId?: string;
 }) {
-	return useQuery({
-		queryKey: ["admin", "subscriptions", params],
-		queryFn: async () => {
-			return client.polarAdmin.listAllSubscriptions({
+	return useQuery(
+		orpc.polarAdmin.listAllSubscriptions.queryOptions({
+			input: {
 				...params,
-				status: params.status as any,
-			});
-		},
-	});
+				status: params.status,
+			},
+		}),
+	);
 }
 
 // Admin: Cancel any subscription
 export function useAdminCancelSubscription() {
 	const queryClient = useQueryClient();
 
-	return useMutation({
-		mutationFn: async (input: {
-			subscriptionId: string;
-			immediately?: boolean;
-			reason?: string;
-		}) => {
-			return client.polarAdmin.cancelSubscription(input);
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["admin", "subscriptions"] });
-			queryClient.invalidateQueries({ queryKey: ["admin", "stats"] });
-		},
-	});
+	return useMutation(
+		orpc.polarAdmin.cancelSubscription.mutationOptions({
+			onSuccess: () => {
+				queryClient.invalidateQueries({ queryKey: ["admin", "subscriptions"] });
+				queryClient.invalidateQueries({ queryKey: ["admin", "stats"] });
+			},
+		}),
+	);
 }
 
 // Admin: Get subscription detail
 export function useAdminSubscriptionDetail(subscriptionId: string | undefined) {
 	return useQuery({
-		queryKey: ["admin", "subscription", subscriptionId],
-		queryFn: async () => {
-			return client.polarAdmin.getSubscriptionDetail({
-				subscriptionId: subscriptionId!,
-			});
-		},
+		...orpc.polarAdmin.getSubscriptionDetail.queryOptions({
+			input: { subscriptionId: subscriptionId },
+		}),
 		enabled: !!subscriptionId,
 	});
 }
@@ -118,11 +91,8 @@ export function useAdminSubscriptionDetail(subscriptionId: string | undefined) {
 // Admin: Get subscription stats / analytics
 export function useAdminSubscriptionStats() {
 	return useQuery({
-		queryKey: ["admin", "stats"],
-		queryFn: async () => {
-			return client.polarAdmin.getSubscriptionStats();
-		},
-		staleTime: 60 * 1000, // 1 minute
+		...orpc.polarAdmin.getSubscriptionStats.queryOptions(),
+		staleTime: 60 * 1000,
 	});
 }
 
@@ -131,10 +101,7 @@ export function useAdminAllCustomers(params: {
 	limit?: number;
 	page?: number;
 }) {
-	return useQuery({
-		queryKey: ["admin", "customers", params],
-		queryFn: async () => {
-			return client.polarAdmin.listAllCustomers(params);
-		},
-	});
+	return useQuery(
+		orpc.polarAdmin.listAllCustomers.queryOptions({ input: params }),
+	);
 }

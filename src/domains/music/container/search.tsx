@@ -9,7 +9,7 @@ import {
 	musicStore,
 	type Song,
 } from "@/domains/music/music.store";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 import { MusicSearch } from "../components/music-search";
 
 // Define types for search results
@@ -118,11 +118,10 @@ export function SearchView() {
 						type="button"
 						key={filter}
 						onClick={() => setActiveFilter(filter)}
-						className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-							activeFilter === filter
+						className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${activeFilter === filter
 								? "bg-white text-black"
 								: "bg-white/10 text-white hover:bg-white/20"
-						}`}
+							}`}
 					>
 						{filter}
 					</button>

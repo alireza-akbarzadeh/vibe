@@ -1,4 +1,4 @@
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 import type { MediaList } from "@/orpc/models/media.schema";
 
 /** Section slug to API endpoint mapping */

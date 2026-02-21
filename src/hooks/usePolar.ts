@@ -1,31 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { client } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 /**
  * Fetch all available products
  */
 export function usePolarProducts(options?: { limit?: number; page?: number }) {
-	return useQuery({
-		queryKey: ["polar", "products", options],
-		queryFn: () =>
-			client.polar.listProducts({
+	return useQuery(
+		orpc.polar.listProducts.queryOptions({
+			input: {
 				limit: options?.limit || 20,
 				page: options?.page || 1,
-			}),
-		staleTime: 5 * 60 * 1000, // 5 minutes
-	});
+			},
+		}),
+	);
 }
 
 /**
  * Fetch a specific product
  */
 export function usePolarProduct(productId: string | undefined) {
-	return useQuery({
-		queryKey: ["polar", "product", productId],
-		queryFn: () => client.polar.getProduct({ productId: productId! }),
-		enabled: !!productId,
-		staleTime: 5 * 60 * 1000,
-	});
+	return useQuery(
+		orpc.polar.getProduct.queryOptions({
+			input: { productId: productId! },
+			enabled: !!productId,
+		}),
+	);
 }
 
 /**
@@ -37,57 +36,48 @@ export function usePolarSubscriptions(options?: {
 	status?: string;
 	productId?: string;
 }) {
-	return useQuery({
-		queryKey: ["polar", "subscriptions", options],
-		queryFn: () =>
-			client.polar.listSubscriptions({
+	return useQuery(
+		orpc.polar.listSubscriptions.queryOptions({
+			input: {
 				limit: options?.limit || 20,
 				page: options?.page || 1,
 				status: options?.status as any,
 				productId: options?.productId,
-			}),
-		staleTime: 2 * 60 * 1000, // 2 minutes
-	});
+			},
+		}),
+	);
 }
 
 /**
  * Fetch a specific subscription
  */
 export function usePolarSubscription(subscriptionId: string | undefined) {
-	return useQuery({
-		queryKey: ["polar", "subscription", subscriptionId],
-		queryFn: () =>
-			client.polar.getSubscription({ subscriptionId: subscriptionId! }),
-		enabled: !!subscriptionId,
-		staleTime: 2 * 60 * 1000,
-	});
+	return useQuery(
+		orpc.polar.getSubscription.queryOptions({
+			input: { subscriptionId: subscriptionId! },
+			enabled: !!subscriptionId,
+		}),
+	);
 }
 
 /**
  * Fetch customer information
  */
 export function usePolarCustomer() {
-	return useQuery({
-		queryKey: ["polar", "customer"],
-		queryFn: () => client.polar.getCustomer(),
-		staleTime: 5 * 60 * 1000,
-	});
+	return useQuery(orpc.polar.getCustomer.queryOptions());
 }
 
 /**
  * Create a checkout session
  */
 export function useCreateCheckout() {
-	return useMutation({
-		mutationFn: (params: {
-			productPriceId: string;
-			successUrl?: string;
-			customerEmail?: string;
-		}) => client.polar.createCheckout(params),
-		onSuccess: (data) => {
-			window.location.href = data.url;
-		},
-	});
+	return useMutation(
+		orpc.polar.createCheckout.mutationOptions({
+			onSuccess: (data) => {
+				window.location.href = data.url;
+			},
+		}),
+	);
 }
 
 /**
@@ -96,15 +86,15 @@ export function useCreateCheckout() {
 export function useCancelSubscription() {
 	const queryClient = useQueryClient();
 
-	return useMutation({
-		mutationFn: (params: { subscriptionId: string; immediately?: boolean }) =>
-			client.polar.cancelSubscription(params),
-		onSuccess: () => {
-			// Invalidate subscriptions cache
-			queryClient.invalidateQueries({ queryKey: ["polar", "subscriptions"] });
-			queryClient.invalidateQueries({ queryKey: ["polar", "customer"] });
-		},
-	});
+	return useMutation(
+		orpc.polar.cancelSubscription.mutationOptions({
+			onSuccess: () => {
+				// Invalidate subscriptions cache
+				queryClient.invalidateQueries({ queryKey: ["polar", "subscriptions"] });
+				queryClient.invalidateQueries({ queryKey: ["polar", "customer"] });
+			},
+		}),
+	);
 }
 
 /**
@@ -113,20 +103,17 @@ export function useCancelSubscription() {
 export function useUpdateSubscription() {
 	const queryClient = useQueryClient();
 
-	return useMutation({
-		mutationFn: (params: {
-			subscriptionId: string;
-			productPriceId?: string;
-			cancelAtPeriodEnd?: boolean;
-		}) => client.polar.updateSubscription(params),
-		onSuccess: (_, variables) => {
-			// Invalidate specific subscription and list
-			queryClient.invalidateQueries({
-				queryKey: ["polar", "subscription", variables.subscriptionId],
-			});
-			queryClient.invalidateQueries({ queryKey: ["polar", "subscriptions"] });
-		},
-	});
+	return useMutation(
+		orpc.polar.updateSubscription.mutationOptions({
+			onSuccess: (_, variables) => {
+				// Invalidate specific subscription and list
+				queryClient.invalidateQueries({
+					queryKey: ["polar", "subscription", variables.subscriptionId],
+				});
+				queryClient.invalidateQueries({ queryKey: ["polar", "subscriptions"] });
+			},
+		}),
+	);
 }
 
 /**
@@ -136,14 +123,14 @@ export function useUpdateSubscription() {
 export function useSyncSubscriptionStatus() {
 	const queryClient = useQueryClient();
 
-	return useMutation({
-		mutationFn: (userId: string) =>
-			client.polar.syncSubscriptionStatus({ userId }),
-		onSuccess: () => {
-			// Invalidate all user-related queries
-			queryClient.invalidateQueries({ queryKey: ["polar"] });
-		},
-	});
+	return useMutation(
+		orpc.polar.syncSubscriptionStatus.mutationOptions({
+			onSuccess: () => {
+				// Invalidate all user-related queries
+				queryClient.invalidateQueries({ queryKey: ["polar"] });
+			},
+		}),
+	);
 }
 
 /**

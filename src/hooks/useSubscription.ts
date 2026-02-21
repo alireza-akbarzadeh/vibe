@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { client, orpc } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 
 interface SubscriptionStatus {
 	status: "FREE" | "PREMIUM" | "FAMILY" | "CANCELLED" | "NONE";
@@ -66,36 +66,28 @@ export function useSubscription() {
 	});
 
 	// Cancel subscription mutation using Polar
-	const cancelMutation = useMutation({
-		mutationFn: async () => {
-			if (!subscription?.subscriptionId) {
-				throw new Error("No active subscription found");
-			}
+	const cancelMutation = useMutation(
+		orpc.polar.cancelSubscription.mutationOptions({
+			onSuccess: (data) => {
+				// Invalidate and refetch subscription status
+				queryClient.invalidateQueries({ queryKey: ["subscription", "status"] });
+				queryClient.invalidateQueries({ queryKey: ["polar", "subscriptions"] });
 
-			return await client.polar.cancelSubscription({
-				subscriptionId: subscription.subscriptionId,
-				immediatelys: false,
-			});
-		},
-		onSuccess: (data) => {
-			// Invalidate and refetch subscription status
-			queryClient.invalidateQueries({ queryKey: ["subscription", "status"] });
-			queryClient.invalidateQueries({ queryKey: ["polar", "subscriptions"] });
-
-			// Show success message
-			if (data.success) {
-				toast.success(
-					data.message ||
-						"Subscription will end at the end of your billing period",
-				);
-			}
-		},
-		onError: (error: Error) => {
-			toast.error("Failed to cancel subscription", {
-				description: error.message,
-			});
-		},
-	});
+				// Show success message
+				if (data.success) {
+					toast.success(
+						data.message ||
+							"Subscription will end at the end of your billing period",
+					);
+				}
+			},
+			onError: (error: Error) => {
+				toast.error("Failed to cancel subscription", {
+					description: error.message,
+				});
+			},
+		}),
+	);
 
 	return {
 		subscription,

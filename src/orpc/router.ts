@@ -28,7 +28,7 @@ export const appRouter = os.router({
 	content: ContentRouter,
 	creator: CreatorRouter,
 	favorite: FavoriteRouter,
-	genre: GenreRouter,
+	genres: GenreRouter,
 	health: HealthRouter,
 	library: LibraryRouter,
 	media: MediaRouter,
@@ -38,13 +38,14 @@ export const appRouter = os.router({
 	polar: PolarRouter,
 	polarAdmin: PolarAdminRouter,
 	profile: ProfileRouter,
-	recommendation: RecommendationRouter,
-	review: ReviewRouter,
+	recommendations: RecommendationRouter,
+	reviews: ReviewRouter,
 	role: roleRouter,
 	room: RoomRouter,
 	user: userRouter,
 	viewingHistory: ViewingHistoryRouter,
 	wristband: WatchListRouter,
+	watchlist: WatchListRouter,
 });
 
 export type AppRouter = typeof appRouter;
