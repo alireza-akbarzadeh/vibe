@@ -1,4 +1,4 @@
-import { db } from "@/server/db";
+import { db } from "@/lib/db.server";
 import type { ChatMessageCreate } from "@/orpc/models/streaming";
 
 export class ChatRepository {

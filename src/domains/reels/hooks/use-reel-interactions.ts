@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 import { updateReelAction } from "../reels.store";
 import type { VideoReel } from "../reels.types";
 

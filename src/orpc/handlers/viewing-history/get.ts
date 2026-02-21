@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { viewingHistoryQueryInput } from "@/orpc/models/viewing-history";
@@ -41,7 +41,7 @@ export const getViewingHistory = authedProcedure
 		const skip = (page - 1) * limit;
 
 		// Verify profile belongs to user
-		const profile = await prisma.profile.findFirst({
+		const profile = await db.client.profile.findFirst({
 			where: {
 				id: profileId,
 				userId: context.user.id,
@@ -53,8 +53,8 @@ export const getViewingHistory = authedProcedure
 		}
 
 		const [items, total] = await Promise.all([
-			prisma.viewingHistory.findMany({
-				where: { profileId },
+			db.client.media.findMany({
+				where: { id: profileId },
 				include: {
 					media: {
 						select: {
@@ -67,11 +67,11 @@ export const getViewingHistory = authedProcedure
 						},
 					},
 				},
-				orderBy: { viewedAt: "desc" },
+				orderBy: { createdAt: "desc" },
 				skip,
 				take: limit,
 			}),
-			prisma.viewingHistory.count({
+			db.client.viewingHistory.count({
 				where: { profileId },
 			}),
 		]);
@@ -82,7 +82,7 @@ export const getViewingHistory = authedProcedure
 			data: {
 				items: items.map((item) => ({
 					id: item.id,
-					profileId: item.profileId,
+					profileId: item.ID,
 					mediaId: item.mediaId,
 					progress: item.progress,
 					completed: item.completed,
@@ -132,7 +132,7 @@ export const getContinueWatching = authedProcedure
 		const { profileId, limit } = input;
 
 		// Verify profile belongs to user
-		const profile = await prisma.profile.findFirst({
+		const profile = await db.client.profile.findFirst({
 			where: {
 				id: profileId,
 				userId: context.user.id,
@@ -143,7 +143,7 @@ export const getContinueWatching = authedProcedure
 			throw errors.FORBIDDEN({ message: "Profile does not belong to you" });
 		}
 
-		const items = await prisma.viewingHistory.findMany({
+		const items = await db.client.viewingHistory.findMany({
 			where: {
 				profileId,
 				completed: false,

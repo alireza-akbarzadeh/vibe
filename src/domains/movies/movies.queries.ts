@@ -1,4 +1,4 @@
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 /** Query options for media list (used for search and browse) */
 export function mediaListQueryOptions(input: {

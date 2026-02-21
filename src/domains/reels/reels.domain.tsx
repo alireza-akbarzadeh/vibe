@@ -6,7 +6,7 @@ import { Loader2, Search } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 import CommentModal from "./components/reel-comment";
 import { VideoCard } from "./components/reels-video-card";
 import { reelsStore, setActiveTab, setVideos } from "./reels.store";

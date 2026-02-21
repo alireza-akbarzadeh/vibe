@@ -1,4 +1,5 @@
 import type { SubscriptionStatus } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, apiKey, emailOTP, twoFactor } from "better-auth/plugins";
@@ -12,12 +13,11 @@ import {
 	passwordResetEmail,
 	welcomeVerifyEmail,
 } from "@/integrations/resend/email-templates";
-import { prisma } from "@/lib/db.server";
 
 const emailFrom = "Vibe <noreply@vibeapp.com>";
 
 export const auth = betterAuth({
-	database: prismaAdapter(prisma, {
+	database: prismaAdapter(new PrismaClient(), {
 		provider: "postgresql",
 	}),
 	trustedOrigins: ["http://localhost:3000", "https://vibeapp.com"],

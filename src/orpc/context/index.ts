@@ -1,14 +1,10 @@
-import type { DatabaseClient } from "@/server/db";
-import type { AuthContext } from "../middleware/middleware";
 import {
 	requireAdmin,
 	requireSubscription,
 	withAuth,
 	withRequire,
-} from "../middleware/middleware";
-import { os } from "../root";
-
-export type ORPCContext = { db: DatabaseClient } & Partial<AuthContext>;
+} from "@/orpc/middleware/middleware";
+import { os } from "@/orpc/root";
 
 export const base = os;
 export const publicProcedure = base;

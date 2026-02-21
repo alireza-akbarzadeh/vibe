@@ -19,7 +19,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 import { UserAccessPanel } from "./user-access-panel";
 
 type UserAccess = {
@@ -58,12 +58,11 @@ export function AccessControlPage() {
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 
 	const { data, isLoading } = useQuery(
-		orpc.users.listUsersWithAccess.queryOptions({
+		orpc.user.listUsersWithAccess.queryOptions({
 			input: {
 				page: 1,
 				limit: 10,
 			},
-			queryKey: ["users-access"],
 		}),
 	);
 

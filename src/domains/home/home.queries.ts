@@ -7,7 +7,7 @@ import {
 	Volume2,
 } from "lucide-react";
 import type { ValidLink } from "@/components/ui/link";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 /** Trending content - movies/shows that are hot right now */
 export function trendingQueryOptions(limit = 10, enabled = true) {

@@ -19,7 +19,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 type UserAccess = {
 	id: string;

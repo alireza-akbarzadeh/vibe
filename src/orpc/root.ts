@@ -1,6 +1,14 @@
 import { os as createOS } from "@orpc/server";
+import type { getRequestHeaders } from "@tanstack/react-start/server";
 import { z } from "zod";
-import type { ORPCContext } from "./context";
+import type { DatabaseClient } from "@/lib/db.server";
+import type { AuthContext } from "./middleware/middleware";
+
+// Definition moved from context/index.ts
+export type ORPCContext = {
+	db: DatabaseClient;
+	headers: ReturnType<typeof getRequestHeaders>;
+} & Partial<AuthContext>;
 
 const errorDefinitions = {
 	UNAUTHENTICATED: {

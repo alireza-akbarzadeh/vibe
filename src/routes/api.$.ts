@@ -5,10 +5,9 @@ import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { createFileRoute } from "@tanstack/react-router";
-import type { ORPCContext } from "@/orpc/context";
+import { getAuthFromRequest } from "@/lib/auth/server-auth";
+import { db } from "@/lib/db.server";
 import { appRouter } from "@/orpc/router";
-
-import { db } from "@/server/db";
 
 const handler = new OpenAPIHandler(appRouter, {
 	plugins: [
@@ -28,20 +27,19 @@ const handler = new OpenAPIHandler(appRouter, {
 });
 
 async function handle({ request }: { request: Request }) {
-	const context: ORPCContext = {
-		db,
-		user: undefined,
-		session: undefined,
-	};
-
-	// Log what URL is being requested
 	const url = new URL(request.url);
 	console.log("🔍 Request URL:", url.pathname);
 
 	try {
+		const auth = await getAuthFromRequest();
+
 		const { response } = await handler.handle(request, {
 			prefix: "/api",
-			context,
+			context: {
+				db,
+				user: auth?.user,
+				session: auth?.session,
+			},
 		});
 
 		console.log("✅ Response status:", response?.status);

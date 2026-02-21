@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 /**
  * Fetch all available products
@@ -41,7 +41,7 @@ export function usePolarSubscriptions(options?: {
 			input: {
 				limit: options?.limit || 20,
 				page: options?.page || 1,
-				status: options?.status as any,
+				status: options?.status,
 				productId: options?.productId,
 			},
 		}),

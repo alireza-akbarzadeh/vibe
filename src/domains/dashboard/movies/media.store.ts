@@ -1,6 +1,6 @@
 import { Store } from "@tanstack/store";
 import { toast } from "sonner";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 import type { ListMediaInput } from "@/orpc/models/media.input.schema";
 import type { MediaList } from "@/orpc/models/media.schema";
 

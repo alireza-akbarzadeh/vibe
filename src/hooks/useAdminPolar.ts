@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
+import type { SubscriptionResponse } from "@/orpc/models/polar";
 
 // Admin Products
 export function useAdminProducts() {
@@ -58,7 +59,7 @@ export function useAdminAllSubscriptions(params: {
 		orpc.polarAdmin.listAllSubscriptions.queryOptions({
 			input: {
 				...params,
-				status: params.status,
+				status: params.status as SubscriptionResponse["status"],
 			},
 		}),
 	);
@@ -79,10 +80,10 @@ export function useAdminCancelSubscription() {
 }
 
 // Admin: Get subscription detail
-export function useAdminSubscriptionDetail(subscriptionId: string | undefined) {
+export function useAdminSubscriptionDetail(subscriptionId: string) {
 	return useQuery({
 		...orpc.polarAdmin.getSubscriptionDetail.queryOptions({
-			input: { subscriptionId: subscriptionId },
+			input: { subscriptionId },
 		}),
 		enabled: !!subscriptionId,
 	});

@@ -27,7 +27,7 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { useAppForm } from "@/components/ui/forms/form";
 import { Label } from "@/components/ui/label";
 import { CompactField } from "@/domains/dashboard/components/user-table/compact-field";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 
 import type { MediaFormData } from "../../media.schema";

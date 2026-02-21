@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 import type { SubscriptionResponse } from "@/orpc/models/polar";
 
 interface SubscriptionStatus {

@@ -11,7 +11,7 @@ import type {
 	RoomPublic,
 	RoomUpdate,
 } from "@/orpc/models/streaming";
-import { db } from "@/server/db";
+import { db } from "@/lib/db.server";
 
 export class RoomRepository {
 	// Room methods

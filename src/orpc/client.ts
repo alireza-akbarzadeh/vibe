@@ -8,7 +8,7 @@ import { createIsomorphicFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { db } from "@/lib/db.server";
 import { type AppRouter, appRouter } from "@/orpc/router";
-import { getAuthFromRequest } from "./auth/server-auth";
+import { getAuthFromRequest } from "../lib/auth/server-auth";
 
 const getORPCClient = createIsomorphicFn()
 	.server(() =>

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MediaManagementTable } from "@/domains/dashboard/movies/containers/media-table";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 export const Route = createFileRoute("/(admin)/dashboard/movies/")({
 	// Fast server-side data loading for admin dashboard

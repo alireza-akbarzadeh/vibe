@@ -18,7 +18,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 export const Route = createFileRoute("/(admin)/dashboard/audit-logs/")({
 	component: RouteComponent,

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
 import { adminProcedure } from "@/orpc/context";
-import { SubscriptionStatusSchema } from "../../../models/polar";
+import { SubscriptionStatusSchema } from "@/orpc/models/polar";
 
 const AdminListSubscriptionsInputSchema = z.object({
 	limit: z.number().min(1).max(100).default(20),

@@ -1,5 +1,5 @@
 import { Store } from "@tanstack/react-store";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 export interface Song {
 	id: string;

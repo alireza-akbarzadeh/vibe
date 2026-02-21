@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 import { layoutSize } from "../reels.domain";
 import { closeComments, reelsStore } from "../reels.store";
 import type { CommentItem } from "../reels.types";

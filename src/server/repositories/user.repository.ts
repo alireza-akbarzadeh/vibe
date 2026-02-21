@@ -1,7 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import type { User } from "@/orpc/models/core";
 
-import { db } from "@/server/db";
+import { db } from "@/lib/db.server";
 
 export interface UserQueryOptions {
 	select?: Prisma.UserSelect;

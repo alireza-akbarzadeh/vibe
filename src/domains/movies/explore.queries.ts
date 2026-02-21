@@ -1,4 +1,4 @@
-import { orpc } from "@/lib/orpc";
+import { orpc } from "@/orpc/client";
 
 /** Section slug to API endpoint mapping */
 export type SectionSlug =

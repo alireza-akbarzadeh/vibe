@@ -1,6 +1,6 @@
-import { orpc } from "@/lib/orpc";
-import { watchListOutput } from "@/orpc/models/watchlist";
 import { z } from "zod";
+import { orpc } from "@/orpc/client";
+import { watchListOutput } from "@/orpc/models/watchlist";
 
 type WatchListItem = z.infer<typeof watchListOutput>;
 

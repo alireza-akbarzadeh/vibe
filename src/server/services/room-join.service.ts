@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { db } from "@/server/db";
+import { db } from "@/lib/db.server";
 import type { RoomMember } from "@/orpc/models/streaming";
 
 // Input schema for atomic room join

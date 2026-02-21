@@ -3,11 +3,10 @@ import "@/polyfill";
 import { LoggingHandlerPlugin } from "@orpc/experimental-pino";
 import { RPCHandler } from "@orpc/server/fetch";
 import { createFileRoute } from "@tanstack/react-router";
-import { auth } from "@/lib/auth/better-auth";
+import { getAuthFromRequest } from "@/lib/auth/server-auth";
+import { db } from "@/lib/db.server";
 import { rpcLogger } from "@/lib/rpc-logger";
-import type { ORPCContext } from "@/orpc/context";
 import { appRouter } from "@/orpc/router";
-import { db } from "@/server/db";
 
 const handler = new RPCHandler(appRouter, {
 	plugins: [
@@ -36,19 +35,15 @@ async function handle({ request }: { request: Request }) {
 			);
 		}
 
-		const session = await auth.api.getSession({
-			headers: request.headers,
-		});
-
-		const context: ORPCContext = {
-			user: session?.user ?? undefined,
-			session: session?.session ?? undefined,
-			db,
-		};
+		const auth = await getAuthFromRequest();
 
 		const { response } = await handler.handle(request, {
 			prefix: "/api/rpc",
-			context,
+			context: {
+				db,
+				user: auth?.user,
+				session: auth?.session,
+			},
 		});
 
 		return response ?? new Response("Not Found", { status: 404 });
