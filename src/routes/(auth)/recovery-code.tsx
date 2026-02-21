@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
-import { useForm } from "@/components/ui/forms/form.tsx";
+import { useAppForm } from "@/components/ui/forms/form.tsx";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AuthLayout from "@/domains/auth/auth-layout";
@@ -34,7 +34,7 @@ function RecoveryCodePage() {
 	const [showNewCodes, setShowNewCodes] = useState(false);
 	const [newBackupCodes, setNewBackupCodes] = useState<string[]>([]);
 
-	const form = useForm(recoveryCodeSchema, {
+	const form = useAppForm(recoveryCodeSchema, {
 		defaultValues: {
 			recoveryCode: "",
 		},

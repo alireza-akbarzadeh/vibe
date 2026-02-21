@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
-import { useForm } from "@/components/ui/forms/form";
+import { useAppForm } from "@/components/ui/forms/form";
 import { InputPassword } from "@/components/ui/forms/input-password";
 import { Input } from "@/components/ui/input";
 import { socialProviders } from "@/config/socials";
@@ -61,7 +61,7 @@ export function LoginDomain(props: LoginDomainProps) {
 	const navigate = useNavigate();
 	const router = useRouter();
 
-	const form = useForm(loginFormSchema, {
+	const form = useAppForm(loginFormSchema, {
 		defaultValues: {
 			email: "",
 			password: "",
@@ -312,7 +312,7 @@ export function LoginDomain(props: LoginDomainProps) {
 											value={field.state.value}
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
-											errorMessage={field.state.meta.errors?.[0]?.message ?? ""}
+											errorMessage={field.state.meta.errors?.[0]?.message || ""}
 											isInvalid={
 												!!field.state.meta.errors?.length &&
 												field.state.meta.isTouched

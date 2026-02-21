@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
-import { useForm } from "@/components/ui/forms/form.tsx";
+import { useAppForm } from "@/components/ui/forms/form.tsx";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MSG } from "@/constants/constants";
@@ -35,12 +35,13 @@ function ForgotPasswordPage() {
 	const emailId = useId();
 	const { email } = Route.useSearch();
 
-	const form = useForm(forgotPasswordSchema, {
+	const form = useAppForm(forgotPasswordSchema, {
 		defaultValues: {
 			email: email,
 		},
 		validators: {
 			onChange: forgotPasswordSchema,
+			onBlur: forgotPasswordSchema,
 		},
 		onSubmit: async ({ value }) => {
 			const { error } = await requestPasswordReset({
@@ -154,9 +155,8 @@ function ForgotPasswordPage() {
 														value={field.state.value}
 														onBlur={field.handleBlur}
 														onChange={(e) => field.handleChange(e.target.value)}
-														className={`pl-12 h-12 bg-white/3 border ${
-															isInvalid ? "border-red-500" : "border-white/10"
-														} text-white placeholder:text-gray-600 focus:border-purple-500/50 rounded-xl transition-all`}
+														className={`pl-12 h-12 bg-white/3 border ${isInvalid ? "border-red-500" : "border-white/10"
+															} text-white placeholder:text-gray-600 focus:border-purple-500/50 rounded-xl transition-all`}
 													/>
 												</div>
 											</div>

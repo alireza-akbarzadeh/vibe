@@ -15,9 +15,9 @@ import { cn, createContextFactory } from "@/lib/utils";
 
 // --- UI Interfaces ---
 
-interface FieldLabelProps extends ComponentProps<typeof Label> {}
-interface FieldDetailProps extends ComponentProps<"p">, AsChildProps {}
-interface FieldMessageProps extends ComponentProps<"p">, AsChildProps {}
+interface FieldLabelProps extends ComponentProps<typeof Label> { }
+interface FieldDetailProps extends ComponentProps<"p">, AsChildProps { }
+interface FieldMessageProps extends ComponentProps<"p">, AsChildProps { }
 interface FieldContainerProps extends ComponentProps<"div"> {
 	label?: string;
 	detail?: string;
@@ -36,7 +36,7 @@ const [FieldContextProvider, useFieldContext] =
 
 // --- Main Hook ---
 
-export function useForm<
+export function useAppForm<
 	TFormSchema extends z.ZodType,
 	TFormData = z.infer<TFormSchema>,
 >(
@@ -73,6 +73,7 @@ export function useForm<
 		any,
 		any
 	>;
+	// @ts-expect-error comlcated type
 	const form = useTanStackForm<TFormData>({
 		validatorAdapter: zodValidator(schema),
 		validators: {
@@ -110,8 +111,10 @@ export function useForm<
 		detail?: string;
 		icon?: React.ElementType;
 		className?: string;
+		// @ts-expect-error comlcated type
 		children: (field: FieldApi<TFormData, TName, any, any, any>) => ReactNode;
 	}) => {
+		// @ts-expect-error comlcated type
 		const field = useField({ form, name: name as any });
 
 		return (

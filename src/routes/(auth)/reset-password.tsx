@@ -1,4 +1,4 @@
-import { useForm } from "@tanstack/react-form";
+
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
 	ArrowLeft,
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
+import { useAppForm } from "@/components/ui/forms/form";
 import { InputPassword } from "@/components/ui/forms/input-password";
 import { MSG } from "@/constants/constants";
 import { requestPasswordReset, resetPassword } from "@/lib/auth/auth-client";
@@ -43,13 +44,14 @@ function ResetPasswordVerifyPage() {
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [resendTimer, setResendTimer] = useState(60);
 
-	const form = useForm({
+	const form = useAppForm(verifyResetSchema, {
 		defaultValues: {
 			password: "",
 			confirmPassword: "",
 		},
 		validators: {
 			onChange: verifyResetSchema,
+			onBlur: verifyResetSchema,
 		},
 		onSubmit: async ({ value }) => {
 			const { error } = await resetPassword({
@@ -176,12 +178,7 @@ function ResetPasswordVerifyPage() {
 								</div>
 							)}
 
-							<form
-								onSubmit={(e) => {
-									e.preventDefault();
-									e.stopPropagation();
-									form.handleSubmit();
-								}}
+							<form.Root
 								className="space-y-4"
 							>
 								<form.Field name="password">
@@ -208,8 +205,8 @@ function ResetPasswordVerifyPage() {
 											placeholder="••••••••"
 											value={field.state.value}
 											onBlur={field.handleBlur}
-											onChange={(e) => field.handleChange(e.target.value)}
 											errorMessage={field.state.meta.errors?.[0]?.message || ""}
+											onChange={(e) => field.handleChange(e.target.value)}
 											isInvalid={
 												!!field.state.meta.errors?.length &&
 												field.state.meta.isTouched
@@ -259,7 +256,7 @@ function ResetPasswordVerifyPage() {
 										)}
 									</div>
 								)}
-							</form>
+							</form.Root>
 
 							{/* Security note */}
 							<div className="mt-6 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10 flex items-start gap-3">

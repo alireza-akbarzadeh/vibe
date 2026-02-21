@@ -24,10 +24,10 @@ import {
 import { CompactMultiSelect } from "@/components/ui/compact-multi-select";
 import { CompactSelect } from "@/components/ui/compact-select";
 import { DatePicker } from "@/components/ui/date-picker";
-import { useForm } from "@/components/ui/forms/form";
+import { useAppForm } from "@/components/ui/forms/form";
 import { Label } from "@/components/ui/label";
 import { CompactField } from "@/domains/dashboard/components/user-table/compact-field";
-import { client, orpc } from "@/orpc/client";
+import { orpc } from "@/orpc/client";
 import type { MediaFormData } from "../../media.schema";
 import { mediaFormSchema } from "../../media.schema";
 import { MediaFormHeader } from "./media-form-header";
@@ -43,17 +43,14 @@ export function MediaForm({
 	const isEditMode = mode === "edit" || !!initialData?.id;
 
 	// Use TanStack Query with ORPC for data fetching
-	const { data: genresData } = useSuspenseQuery(
-		orpc.genres.list.queryOptions(),
-	);
+	const { data: genres } = useSuspenseQuery(orpc.genre.list.queryOptions());
 	const { data: collectionsData } = useSuspenseQuery(
-		orpc.collections.list.queryOptions({ input: { page: 1, limit: 100 } }),
+		orpc.collection.list.queryOptions({ input: { page: 1, limit: 100 } }),
 	);
 
-	const genres = genresData.data || [];
-	const collections = collectionsData.data?.items || [];
+	const collections = collectionsData?.data?.items || [];
 
-	const form = useForm(mediaFormSchema, {
+	const form = useAppForm(mediaFormSchema, {
 		defaultValues: initialData ?? {
 			title: "",
 			description: "",

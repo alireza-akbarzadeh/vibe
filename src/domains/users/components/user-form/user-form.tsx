@@ -16,7 +16,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useForm } from "@/components/ui/forms/form";
+import { useAppForm } from "@/components/ui/forms/form";
 import { CompactField } from "@/domains/dashboard/components/user-table/compact-field";
 
 import type { UserAccount } from "../../server/users.functions";
@@ -34,7 +34,7 @@ export function UserForm({
 	const isEditMode = mode === "edit" || !!initialData?.id;
 	console.log("initialData:", initialData);
 
-	const form = useForm(userAccountSchema, {
+	const form = useAppForm(userAccountSchema, {
 		defaultValues: initialData ?? {
 			name: "",
 			email: "",

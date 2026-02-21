@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { motion } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useForm } from "@/components/ui/forms/form";
+import { useAppForm } from "@/components/ui/forms/form";
 import { InputPassword } from "@/components/ui/forms/input-password";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -61,7 +61,7 @@ export function RegisterDomain(props: RegisterDomainProps) {
 	const [socialLoading, setSocialLoading] = useState<string | null>(null);
 	const navigate = useNavigate();
 
-	const form = useForm(registerFormSchema, {
+	const form = useAppForm(registerFormSchema, {
 		defaultValues: {
 			name: "",
 			email: "",
