@@ -8,16 +8,11 @@ import {
 } from "../middleware/middleware";
 import { os } from "../root";
 
-// Define the shape of our context
 export type ORPCContext = { db: DatabaseClient } & Partial<AuthContext>;
 
-// Create a base procedure builder with the context type and error definitions
 export const base = os;
-
-// The public procedure is the base procedure. The context is injected at the request handler.
 export const publicProcedure = base;
 
-// Create more specific procedures by chaining middleware
 export const authedProcedure = publicProcedure.use(withAuth);
 
 export const adminProcedure = authedProcedure.use(requireAdmin());

@@ -1,22 +1,24 @@
 import type { Middleware } from "@orpc/server";
 import type { SubscriptionStatus } from "@prisma/client";
 import { type AuthSessionType, auth } from "@/lib/auth/better-auth";
-import type { AppErrorMap, ORPCContext } from "../context";
+import type { ORPCContext } from "../context";
 import type { Role, Tier } from "../helpers/constants";
 import { userHasPermission } from "../helpers/helper";
+import type { AppErrorMap } from "../root";
 
 export interface AuthContext extends AuthSessionType {}
 
 type AppMiddleware<
+	TInContext extends ORPCContext,
 	TOutContext extends ORPCContext,
 	TInput = unknown,
 	TOutput = unknown,
-> = Middleware<ORPCContext, TOutContext, TInput, TOutput, AppErrorMap, {}>;
+> = Middleware<TInContext, TOutContext, TInput, TOutput, AppErrorMap, {}>;
 
-export const withAuth: AppMiddleware<ORPCContext & AuthContext> = async ({
-	next,
-	context,
-}) => {
+export const withAuth: AppMiddleware<
+	ORPCContext,
+	ORPCContext & AuthContext
+> = async ({ next, context }) => {
 	const sessionData = await auth.api.getSession();
 	if (!sessionData) {
 		throw new Error("UNAUTHENTICATED");
@@ -26,7 +28,9 @@ export const withAuth: AppMiddleware<ORPCContext & AuthContext> = async ({
 };
 
 export const requireSubscription =
-	(tiers: Tier | Tier[]): AppMiddleware<ORPCContext> =>
+	(
+		tiers: Tier | Tier[],
+	): AppMiddleware<ORPCContext & AuthContext, ORPCContext & AuthContext> =>
 	async ({ next, context }) => {
 		const allowed = Array.isArray(tiers) ? tiers : [tiers];
 		const status = (context as AuthContext).user
@@ -38,7 +42,9 @@ export const requireSubscription =
 	};
 
 export const requireRole =
-	(role: Role): AppMiddleware<ORPCContext> =>
+	(
+		role: Role,
+	): AppMiddleware<ORPCContext & AuthContext, ORPCContext & AuthContext> =>
 	async ({ next, context }) => {
 		if ((context as AuthContext).user?.role !== role) {
 			throw new Error("FORBIDDEN");
@@ -47,7 +53,7 @@ export const requireRole =
 	};
 
 export const requireAdmin =
-	(): AppMiddleware<ORPCContext> =>
+	(): AppMiddleware<ORPCContext & AuthContext, ORPCContext & AuthContext> =>
 	async ({ next, context }) => {
 		if ((context as AuthContext).user?.role !== "ADMIN") {
 			throw new Error("UNAUTHORIZED");
@@ -59,7 +65,7 @@ export const withRequire =
 	(options: {
 		role?: Role;
 		permission?: { resource: string; action: string };
-	}): AppMiddleware<ORPCContext> =>
+	}): AppMiddleware<ORPCContext & AuthContext, ORPCContext & AuthContext> =>
 	async ({ next, context }) => {
 		if (!(context as AuthContext).user) {
 			throw new Error("UNAUTHENTICATED");
