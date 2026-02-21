@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import 'dotenv/config';
-import { GenreType, MediaStatus, MediaType } from '../src/generated/prisma/enums';
+import { GenreType, MediaStatus, MediaType } from "@prisma/client";
 
 /**
  * Prisma 7+ with custom output paths requires an adapter for PostgreSQL
@@ -14,11 +14,14 @@ const adapter = new PrismaPg({
 
 const prisma = new PrismaClient({ adapter })
 
+     
+
+
 const TMDB_BEARER_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YTQ5Y2I0ODRiYTE4ZjUzYmY5MTBiNTg2ZTFlODU4OSIsIm5iZiI6MTYyMjQwNzYwMi4wMjcsInN1YiI6IjYwYjNmOWIyYWJmOGUyMDAyYmRhMWRmZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ixH4tVwZjRV6EX0p3bI3ZtNL15mxomUknidiiaueMwY';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-const query="animation"
+const query="action"
 
 
 import dns from 'node:dns';
