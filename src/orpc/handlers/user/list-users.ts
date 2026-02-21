@@ -1,5 +1,5 @@
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
-import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 

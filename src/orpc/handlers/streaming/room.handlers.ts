@@ -20,7 +20,7 @@ const chatService = new ChatService();
 export const createRoom = publicProcedure
 	.input(CreateRoomInputSchema)
 	.output(ResponseSchema.ApiResponseSchema(RoomPublicOutputSchema))
-	.handler(async ({ input }) => {
+	.handler(async ({ input, errors }) => {
 		try {
 			const room = await roomService.createRoom(input);
 			return {
@@ -30,19 +30,12 @@ export const createRoom = publicProcedure
 			};
 		} catch (error) {
 			if (error instanceof RoomServiceError) {
-				return {
-					status: 400,
-					message: error.message,
-					data: null,
-				};
+				throw errors.BAD_REQUEST({ message: error.message });
 			}
 
-			console.error("Unexpected error in createRoom:", error);
-			return {
-				status: 500,
+			throw errors.INTERNAL_SERVER_ERROR({
 				message: "An unexpected error occurred",
-				data: null,
-			};
+			});
 		}
 	});
 
@@ -50,15 +43,11 @@ export const createRoom = publicProcedure
 export const getRoom = publicProcedure
 	.input(z.object({ roomId: z.string().cuid() }))
 	.output(ResponseSchema.ApiResponseSchema(RoomPublicOutputSchema))
-	.handler(async ({ input }) => {
+	.handler(async ({ input, errors }) => {
 		try {
 			const room = await roomService.getRoom(input.roomId);
 			if (!room) {
-				return {
-					status: 404,
-					message: "Room not found",
-					data: null,
-				};
+				throw errors.NOT_FOUND({ message: "Room not found" });
 			}
 
 			return {
@@ -68,19 +57,12 @@ export const getRoom = publicProcedure
 			};
 		} catch (error) {
 			if (error instanceof RoomServiceError) {
-				return {
-					status: 400,
-					message: error.message,
-					data: null,
-				};
+				throw errors.BAD_REQUEST({ message: error.message });
 			}
 
-			console.error("Unexpected error in getRoom:", error);
-			return {
-				status: 500,
+			throw errors.INTERNAL_SERVER_ERROR({
 				message: "An unexpected error occurred",
-				data: null,
-			};
+			});
 		}
 	});
 
@@ -102,7 +84,7 @@ export const joinRoom = publicProcedure
 			}),
 		),
 	)
-	.handler(async ({ input }) => {
+	.handler(async ({ input, errors }) => {
 		try {
 			const member = await roomService.joinRoom(input);
 			return {
@@ -112,26 +94,15 @@ export const joinRoom = publicProcedure
 			};
 		} catch (error) {
 			if (error instanceof RoomNotFoundError) {
-				return {
-					status: 404,
-					message: "Room not found",
-					data: null,
-				};
+				throw errors.NOT_FOUND({ message: error.message });
 			}
 			if (error instanceof RoomFullError) {
-				return {
-					status: 400,
-					message: "Room is full",
-					data: null,
-				};
+				throw errors.BAD_REQUEST({ message: error.message });
 			}
 
-			console.error("Unexpected error in joinRoom:", error);
-			return {
-				status: 500,
+			throw errors.INTERNAL_SERVER_ERROR({
 				message: "An unexpected error occurred",
-				data: null,
-			};
+			});
 		}
 	});
 

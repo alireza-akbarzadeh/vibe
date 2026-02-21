@@ -1,3 +1,4 @@
+import { base } from "../context";
 import { CastRouter } from "../handlers/cast";
 import { CollectionRouter } from "../handlers/collection";
 import { ContentRouter } from "../handlers/content";
@@ -20,7 +21,6 @@ import { TestAuthRouter } from "../handlers/test-auth";
 import { userRouter } from "../handlers/user";
 import { ViewingHistoryRouter } from "../handlers/viewing-history";
 import { WatchListRouter } from "../handlers/watchlist";
-import { base } from "../context";
 
 export const router = base.router({
 	health: HealthRouter,

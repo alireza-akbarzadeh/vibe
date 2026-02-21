@@ -1,3 +1,4 @@
+import { type SubscriptionStatus } from "@prisma/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, apiKey, emailOTP, twoFactor } from "better-auth/plugins";
@@ -163,4 +164,16 @@ export const auth = betterAuth({
 	},
 });
 
-export type AuthSessionType = typeof auth.$Infer.Session;
+export type ExtendedUser = typeof auth.$Infer.User & {
+	subscriptionStatus: SubscriptionStatus;
+	customerId: string | null;
+	currentPlan: string | null;
+	agreeToTerms: boolean;
+	phoneNumber: string | null;
+	banned: boolean;
+};
+
+export type AuthSessionType = {
+	user: ExtendedUser;
+	session: (typeof auth.$Infer.Session)["session"];
+};

@@ -2,12 +2,12 @@ import { z } from "zod";
 
 // Output schemas for room operations
 export const RoomPublicOutputSchema = z.object({
-	id: z.string().cuid(),
+	id: z.cuid(),
 	name: z.string(),
 	description: z.string().nullable(),
 	isPrivate: z.boolean(),
 	maxCapacity: z.number().int().positive(),
-	ownerId: z.string().cuid(),
+	ownerId: z.cuid(),
 	currentMediaId: z.string().cuid().nullable(),
 	isActive: z.boolean(),
 	createdAt: z.date(),
@@ -15,9 +15,9 @@ export const RoomPublicOutputSchema = z.object({
 });
 
 export const RoomMemberOutputSchema = z.object({
-	id: z.string().cuid(),
-	roomId: z.string().cuid(),
-	userId: z.string().cuid(),
+	id: z.cuid(),
+	roomId: z.cuid(),
+	userId: z.cuid(),
 	profileId: z.string().cuid().nullable(),
 	isHost: z.boolean(),
 	joinedAt: z.date(),
@@ -26,9 +26,9 @@ export const RoomMemberOutputSchema = z.object({
 });
 
 export const ChatMessageOutputSchema = z.object({
-	id: z.string().cuid(),
-	roomId: z.string().cuid(),
-	userId: z.string().cuid(),
+	id: z.cuid(),
+	roomId: z.cuid(),
+	userId: z.cuid(),
 	profileId: z.string().cuid().nullable(),
 	content: z.string(),
 	type: z.enum(["TEXT", "EMOJI", "SYSTEM", "REACTION"]),
@@ -43,13 +43,13 @@ export const ChatMessageOutputSchema = z.object({
 });
 
 export const PlaybackStateOutputSchema = z.object({
-	id: z.string().cuid(),
-	roomId: z.string().cuid(),
-	mediaId: z.string().cuid().nullable(),
+	id: z.cuid(),
+	roomId: z.cuid(),
+	mediaId: z.cuid().nullable(),
 	currentTime: z.number().nonnegative(),
 	isPlaying: z.boolean(),
 	playbackRate: z.number().positive(),
-	lastUpdatedBy: z.string().cuid(),
+	lastUpdatedBy: z.cuid(),
 	version: z.number().int().nonnegative(),
 	createdAt: z.date(),
 	updatedAt: z.date(),

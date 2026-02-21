@@ -1,4 +1,4 @@
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import {

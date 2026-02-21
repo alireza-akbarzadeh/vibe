@@ -25,7 +25,7 @@ export const createCollection = collectionCreateProcedure
 			}),
 		),
 	)
-	.handler(async ({ input, ctx }) => {
+	.handler(async ({ input, context }) => {
 		const collection = await prisma.collection.create({
 			data: input,
 		});
@@ -58,7 +58,7 @@ export const bulkCreateCollection = collectionCreateProcedure
 	.handler(async ({ input, context, errors }) => {
 		if (!input.length) {
 			throw errors.BAD_REQUEST({
-				message: "No collections provided",
+				message: "No collections provided to create",
 			});
 		}
 
@@ -88,7 +88,7 @@ export const bulkCreateCollection = collectionCreateProcedure
 
 		if (!newCollections.length) {
 			throw errors.CONFLICT({
-				message: "All provided collections already exist",
+				message: "Some collections already exist",
 			});
 		}
 
