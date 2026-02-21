@@ -1,7 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { redirect } from "@tanstack/react-router";
 import { createMiddleware } from "@tanstack/react-start";
-import type { getSession } from "@/lib/auth/auth-server";
+import { getSession } from "@/lib/auth/auth-server";
 import { prisma } from "@/lib/db.server";
 
 interface MyRouterContext {
