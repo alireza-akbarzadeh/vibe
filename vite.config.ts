@@ -46,11 +46,11 @@ const config = defineConfig({
         },
       },
     }),
-    sentryTanstackStart({
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-    }),
+    // sentryTanstackStart({
+    //   org: process.env.SENTRY_ORG,
+    //   project: process.env.SENTRY_PROJECT,
+    //   authToken: process.env.SENTRY_AUTH_TOKEN,
+    // }),
     devtools({
       eventBusConfig: {
         port: 42070,

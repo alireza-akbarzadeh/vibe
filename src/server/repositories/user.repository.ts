@@ -254,27 +254,21 @@ export class UserRepository {
 	/**
 	 * Get user with full profile data
 	 */
-	async getFullProfile(userId: string): Promise<User | null> {
-		return await this.findById(userId, {
-			include: {
-				profiles: true,
-				subscriptions: {
-					orderBy: { startedAt: "desc" },
-					take: 1,
-				},
-				roles: {
-					include: {
-						role: true,
-					},
-				},
-				permissions: {
-					include: {
-						permission: true,
-					},
-				},
-			},
-		});
-	}
+	async getFullProfile(userId: string): Promise<any | null> {
+        return await db.client.user.findUnique({
+            where: { id: userId },
+            include: {
+                sessions: {
+                    orderBy: { createdAt: 'desc' },
+                    take: 1,
+                },
+                profiles: {
+                    orderBy: { createdAt: 'asc' },
+                    take: 1,
+                },
+            },
+        });
+    }
 
 	/**
 	 * Bulk create users

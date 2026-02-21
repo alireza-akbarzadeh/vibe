@@ -123,15 +123,19 @@ export class UserService {
 	 * Get user with full profile data
 	 */
 	async getPrivateUserData(userId: string): Promise<UserPrivate> {
-		const user = await this.userRepository.getFullProfile(userId);
-		if (!user) {
-			throw new UserNotFoundError(userId);
-		}
+        const user = await this.userRepository.getFullProfile(userId);
+        if (!user) {
+            throw new UserNotFoundError(userId);
+        }
 
-		// Remove password from response
-		const { ...userWithoutPassword } = user;
-		return userWithoutPassword as UserPrivate;
-	}
+        const { password, sessions, profiles, ...userWithoutPassword } = user;
+
+        return {
+            ...userWithoutPassword,
+            bio: profiles[0]?.bio || null,
+            lastLoginAt: sessions[0]?.createdAt || null,
+        } as UserPrivate;
+    }
 
 	/**
 	 * Update user

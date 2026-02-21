@@ -51,7 +51,7 @@
     "@polar-sh/sdk": "^0.43.1",
     "@polar-sh/tanstack-start": "^0.4.3",
     "@prisma/adapter-pg": "^7.2.0",
-    "@prisma/client": "^7.4.0",
+    "@prisma/client": "^6.19.2",
     "@radix-ui/react-separator": "^1.1.8",
     "@sentry/node": "^9.20.0",
     "@sentry/tanstackstart-react": "^9.47.1",
@@ -143,12 +143,6 @@
   "overrides": {
     "@tanstack/zod-adapter": {
       "zod": "^4.3.6"
-    }
-  },
-  "prisma": {
-    "import": {
-      "schemas": "prisma/schema/*.prisma",
-      "output": "prisma/schema.prisma"
     }
   }
 }

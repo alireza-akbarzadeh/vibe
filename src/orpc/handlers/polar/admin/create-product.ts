@@ -1,4 +1,4 @@
-import { PresentmentCurrency } from "@polar-sh/sdk/dist/sdk";
+import { PresentmentCurrency } from "@polar-sh/sdk/models/components/presentmentcurrency.js";
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
 import { logger } from "@/lib/logger";

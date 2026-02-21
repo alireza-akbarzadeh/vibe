@@ -19,6 +19,7 @@ model User {
     subscriptionStatus SubscriptionStatus @default(FREE)
     currentPlan        String? // e.g., "Premium-Monthly", "Premium-Yearly", "Family-Monthly", "Family-Yearly"
     customerId         String?
+    lastLoginAt        DateTime?
 
     // Auth Relations
     sessions   Session[]
