@@ -1,4 +1,4 @@
-import { os } from "@/orpc/server";
+import { os } from "@/orpc/root";
 import { bulkCreate, create } from "./create";
 import { bulkDelete, remove } from "./delete";
 import { find, findByTmdbId, list } from "./get";

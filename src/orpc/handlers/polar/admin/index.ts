@@ -1,4 +1,4 @@
-import { base } from "../../../router/base";
+import { os } from "@/orpc/root";
 import { archiveProduct } from "./archive-product";
 import { adminCancelSubscription } from "./cancel-subscription";
 import { createProduct } from "./create-product";
@@ -7,8 +7,7 @@ import { getSubscriptionStats } from "./get-subscription-stats";
 import { listAllCustomers } from "./list-all-customers";
 import { listAllSubscriptions } from "./list-all-subscriptions";
 import { updateProduct } from "./update-product";
-
-export const PolarAdminRouter = base.router({
+export const PolarAdminRouter = os.router({
 	// Product Management
 	createProduct,
 	updateProduct,
