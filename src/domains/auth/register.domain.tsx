@@ -27,6 +27,7 @@ import { AUTH_STATUS, MSG } from "@/constants/constants";
 import { PrivacyPolicyDialog } from "@/domains/auth/privacy-dialog";
 import { TermsOfServiceDialog } from "@/domains/auth/terms-dialog";
 import { authClient } from "@/lib/auth/auth-client";
+import type { SignUpInput } from "@/lib/auth/auth-types";
 import { registerFormSchema } from "./auth-schema";
 
 const perks = [
@@ -75,7 +76,7 @@ export function RegisterDomain(props: RegisterDomainProps) {
 					password: value.password,
 					name: value.name,
 					agreeToTerms: true,
-				},
+				} as SignUpInput,
 				{
 					onError: async ({ error }) => {
 						if (error.code === AUTH_STATUS.EMAIL_ALREADY_EXISTS) {

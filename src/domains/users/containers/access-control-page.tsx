@@ -19,7 +19,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 import { UserAccessPanel } from "./user-access-panel";
 
 type UserAccess = {
@@ -57,15 +57,15 @@ export function AccessControlPage() {
 	const [selectedUser, setSelectedUser] = useState<UserAccess | null>(null);
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-	const { data, isLoading } = useQuery({
-		queryKey: ["users-access"],
-		queryFn: async () => {
-			return await client.users.listUsersWithAccess({
+	const { data, isLoading } = useQuery(
+		orpc.users.listUsersWithAccess.queryOptions({
+			input: {
 				page: 1,
 				limit: 10,
-			});
-		},
-	});
+			},
+			queryKey: ["users-access"],
+		}),
+	);
 
 	const getRoleBadgeColor = (roleName: string) => {
 		const colors: Record<string, string> = {

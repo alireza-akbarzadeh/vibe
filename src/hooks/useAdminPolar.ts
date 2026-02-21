@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 
 // Admin Products
 export function useAdminProducts() {

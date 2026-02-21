@@ -1,14 +1,13 @@
-import type { ValidLink } from "@/components/ui/link";
-import { orpc } from "@/orpc/client";
 import {
 	Film,
 	Headphones,
+	type LucideIcon,
 	Tv,
 	Video,
 	Volume2,
-	type LucideIcon,
 } from "lucide-react";
-
+import type { ValidLink } from "@/components/ui/link";
+import { orpc } from "@/lib/orpc";
 
 /** Trending content - movies/shows that are hot right now */
 export function trendingQueryOptions(limit = 10, enabled = true) {

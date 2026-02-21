@@ -24,10 +24,10 @@ import { os } from "./root";
 
 export const appRouter = os.router({
 	cast: CastRouter,
-	collection: CollectionRouter,
+	collections: CollectionRouter,
 	content: ContentRouter,
 	creator: CreatorRouter,
-	favorite: FavoriteRouter,
+	favorites: FavoriteRouter,
 	genres: GenreRouter,
 	health: HealthRouter,
 	library: LibraryRouter,
@@ -44,7 +44,6 @@ export const appRouter = os.router({
 	room: RoomRouter,
 	user: userRouter,
 	viewingHistory: ViewingHistoryRouter,
-	wristband: WatchListRouter,
 	watchlist: WatchListRouter,
 });
 

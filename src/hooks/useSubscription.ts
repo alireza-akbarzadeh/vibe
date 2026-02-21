@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
+import type { SubscriptionResponse } from "@/orpc/models/polar";
 
 interface SubscriptionStatus {
 	status: "FREE" | "PREMIUM" | "FAMILY" | "CANCELLED" | "NONE";
@@ -13,22 +14,31 @@ interface SubscriptionStatus {
 	currentPeriodEnd?: string | null;
 }
 
+interface ListSubscriptionsResponse {
+	subscriptions: SubscriptionResponse[];
+	total: number;
+	page: number;
+	limit: number;
+}
+
 export function useSubscription() {
 	const queryClient = useQueryClient();
 
 	// Get subscription status from Polar
+	const subscriptionQuery = orpc.polar.listSubscriptions.queryOptions({
+		input: {
+			page: 1,
+			limit: 10,
+		},
+	});
 	const {
 		data: subscription,
 		isLoading,
 		error,
 	} = useQuery({
-		...orpc.polar.listSubscriptions.queryOptions({
-			input: {
-				page: 1,
-				limit: 10,
-			},
-		}),
-		select: (result): SubscriptionStatus => {
+		queryKey: subscriptionQuery.queryKey,
+		queryFn: subscriptionQuery.queryFn,
+		select: (result: ListSubscriptionsResponse): SubscriptionStatus => {
 			if (!result?.subscriptions || result.subscriptions.length === 0) {
 				return {
 					status: "FREE" as const,

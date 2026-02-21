@@ -1,4 +1,4 @@
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 
 /** Query options for media list (used for search and browse) */
 export function mediaListQueryOptions(input: {
@@ -38,21 +38,7 @@ export function searchSuggestionsQueryOptions(input: {
 	category?: string;
 }) {
 	// Normalize search query to match API expectations
-	// Handle both string and undefined/null cases safely
-	const searchValue = typeof input.search === "string" ? input.search : "";
-	const normalized = searchValue.trim().replace(/\s+/g, " ");
-
-	if (!normalized || normalized.length < 2) {
-		return {
-			queryKey: ["media", "search", "empty", input.category],
-			queryFn: async () => ({
-				data: { items: [], total: 0 },
-				status: 200,
-				message: "No search query",
-			}),
-			enabled: false,
-		};
-	}
+	const normalized = (input.search || "").trim().replace(/\s+/g, " ");
 
 	// Map category to media type for API filtering
 	const getMediaType = (
@@ -71,5 +57,6 @@ export function searchSuggestionsQueryOptions(input: {
 			type: getMediaType(input.category),
 			status: ["PUBLISHED"],
 		},
+		enabled: normalized.length >= 2,
 	});
 }

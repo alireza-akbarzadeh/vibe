@@ -9,7 +9,7 @@ import {
 	musicStore,
 	type Song,
 } from "@/domains/music/music.store";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 import { MusicSearch } from "../components/music-search";
 
 // Define types for search results

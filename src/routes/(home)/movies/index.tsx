@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import MovieDiscovery from "@/domains/movies/movies";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 
 export const Route = createFileRoute("/(home)/movies/")({
     validateSearch: (search: Record<string, unknown>): MovieSearchQuery => ({

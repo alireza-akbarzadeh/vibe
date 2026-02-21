@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { MediaForm } from "@/domains/dashboard/movies/components/media-form/media-form";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 import type {
     MediaCreatorSchema,
     MediaGenreSchema,

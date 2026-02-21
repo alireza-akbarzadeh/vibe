@@ -1,4 +1,4 @@
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 import type { StaffMember } from "../containers/role-management-page";
 
 /**

@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import {
 	Clock,
@@ -27,7 +27,9 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { useAppForm } from "@/components/ui/forms/form";
 import { Label } from "@/components/ui/label";
 import { CompactField } from "@/domains/dashboard/components/user-table/compact-field";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
+
+
 import type { MediaFormData } from "../../media.schema";
 import { mediaFormSchema } from "../../media.schema";
 import { MediaFormHeader } from "./media-form-header";
@@ -43,12 +45,47 @@ export function MediaForm({
 	const isEditMode = mode === "edit" || !!initialData?.id;
 
 	// Use TanStack Query with ORPC for data fetching
-	const { data: genres } = useSuspenseQuery(orpc.genre.list.queryOptions());
+	const { data: genresData } = useSuspenseQuery(orpc.genres.list.queryOptions());
 	const { data: collectionsData } = useSuspenseQuery(
-		orpc.collection.list.queryOptions({ input: { page: 1, limit: 100 } }),
+		orpc.collections.list.queryOptions({
+			input: {
+				page: 1,
+				limit: 100,
+			},
+		}),
 	);
 
-	const collections = collectionsData?.data?.items || [];
+	const genres = genresData?.data || [];
+	const collections = collectionsData?.data.items || [];
+
+	const useCreateMedia = () =>
+		useMutation({
+			...orpc.media.create.mutationOptions(),
+			onSuccess: () => {
+				toast.success("Media created successfully");
+				navigate({ to: "/dashboard/movies" });
+			},
+			onError: (error) => {
+				console.error("Media creation error:", error);
+				toast.error("Failed to create media");
+			},
+		});
+
+	const useUpdateMedia = () =>
+		useMutation({
+			...orpc.media.update.mutationOptions(),
+			onSuccess: () => {
+				toast.success("Media updated successfully");
+				navigate({ to: "/dashboard/movies" });
+			},
+			onError: (error) => {
+				console.error("Media update error:", error);
+				toast.error("Failed to update media");
+			},
+		});
+
+	const createMedia = useCreateMedia();
+	const updateMedia = useUpdateMedia();
 
 	const form = useAppForm(mediaFormSchema, {
 		defaultValues: initialData ?? {
@@ -72,50 +109,10 @@ export function MediaForm({
 		},
 		onSubmit: async ({ value }) => {
 			const formData = value as MediaFormData;
-			try {
-				if (isEditMode && initialData?.id) {
-					// Update existing media
-					await client.media.update({
-						id: initialData.id || "",
-						title: formData.title || "",
-						description: formData.description || "",
-						thumbnail: formData.thumbnail || "",
-						type: formData.type || "MOVIE",
-						duration: formData.duration || 0,
-						releaseYear: formData.releaseYear || new Date().getFullYear(),
-						videoUrl: formData.videoUrl ?? null,
-						audioUrl: formData.audioUrl ?? null,
-						collectionId: formData.collectionId ?? null,
-						sortOrder: formData.sortOrder ?? null,
-						genreIds: formData.genreIds ?? [],
-						creatorIds: formData.creatorIds ?? [],
-					});
-					toast.success("Media updated successfully");
-				} else {
-					// Create new media
-					await client.media.create({
-						title: formData.title || "",
-						description: formData.description || "",
-						thumbnail: formData.thumbnail || "",
-						type: formData.type || "MOVIE",
-						videoUrl: formData.videoUrl ?? null,
-						audioUrl: formData.audioUrl ?? null,
-						duration: formData.duration || 0,
-						releaseYear: formData.releaseYear || new Date().getFullYear(),
-						collectionId: formData.collectionId ?? null,
-						sortOrder: formData.sortOrder ?? null,
-						genreIds: formData.genreIds ?? [],
-						creatorIds: formData.creatorIds ?? [],
-					});
-					toast.success("Media created successfully");
-				}
-				// Navigate back to media list
-				navigate({ to: "/dashboard/movies" });
-			} catch (error) {
-				console.error("Media save error:", error);
-				toast.error(
-					isEditMode ? "Failed to update media" : "Failed to create media",
-				);
+			if (isEditMode && initialData?.id) {
+				await updateMedia.mutateAsync({ ...formData, id: initialData.id });
+			} else {
+				await createMedia.mutateAsync(formData);
 			}
 		},
 	});

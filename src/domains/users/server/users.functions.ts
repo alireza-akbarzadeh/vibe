@@ -1,5 +1,5 @@
 // server/users.functions.ts
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 
 export type UserStatus =
 	| "active"

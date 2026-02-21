@@ -53,7 +53,11 @@ const config = defineConfig({
       project: process.env.SENTRY_PROJECT,
       authToken: process.env.SENTRY_AUTH_TOKEN,
     }),
-    devtools(),
+    devtools({
+      eventBusConfig: {
+        port: 42070,
+      },
+    }),
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),

@@ -1,7 +1,7 @@
 // hooks/use-favorites.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 
 // Query key factory
 export const favoritesKeys = {

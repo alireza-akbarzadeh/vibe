@@ -39,7 +39,7 @@ import {
 	SECTION_CONFIG,
 	type SectionSlug,
 } from "@/domains/movies/explore.queries";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 import type { MediaList } from "@/orpc/models/media.schema";
 
 export const Route = createFileRoute("/(home)/explore/$section")({

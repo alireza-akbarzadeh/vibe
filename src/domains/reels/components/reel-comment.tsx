@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 import { layoutSize } from "../reels.domain";
 import { closeComments, reelsStore } from "../reels.store";
 import type { CommentItem } from "../reels.types";
@@ -23,28 +23,28 @@ export default function CommentModal({ videoId }: { videoId: string }) {
 	const currentVideo = videos.find((v) => v.id === videoId);
 
 	const { data: comments, isLoading } = useQuery({
-		queryKey: ["reels", "comments", videoId],
-		queryFn: async () => {
-			const res = await client.reviews.list({
+		...orpc.reviews.list.queryOptions({
+			input: {
 				mediaId: videoId,
 				limit: 50,
 				page: 1,
-			});
-			return res.data.items.map((item) => ({
-				id: item.id,
-				user: {
-					username: item.user.name || "Unknown",
-					avatar:
-						item.user.image ||
-						`https://api.dicebear.com/7.x/avataaars/svg?seed=${item.user.name || item.id}`,
-				},
-				text: item.review || "",
-				likes: item.helpful,
-				isLiked: false,
-				timestamp: new Date(item.createdAt).toLocaleDateString(),
-			}));
-		},
-		enabled: commentModalOpen,
+			},
+			enabled: commentModalOpen,
+			select: (res) =>
+				res.data.items.map((item) => ({
+					id: item.id,
+					user: {
+						username: item.user.name || "Unknown",
+						avatar:
+							item.user.image ||
+							`https://api.dicebear.com/7.x/avataaars/svg?seed=${item.user.name || item.id}`,
+					},
+					text: item.review || "",
+					likes: item.helpful,
+					isLiked: false,
+					timestamp: new Date(item.createdAt).toLocaleDateString(),
+				})),
+		}),
 	});
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useScroll, useTransform } from "framer-motion";
 import { useMemo, useRef } from "react";
 import { useLazySection } from "@/hooks/useLazySection";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 import type { MediaList } from "@/orpc/models/media.schema";
 import type { MovieSearchQuery } from "@/routes/(home)/movies";
 import { searchSuggestionsQueryOptions } from "../movies.queries";

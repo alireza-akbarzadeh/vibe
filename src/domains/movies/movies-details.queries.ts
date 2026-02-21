@@ -1,5 +1,8 @@
-import { queryOptions } from "@tanstack/react-query";
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
+import { watchListOutput } from "@/orpc/models/watchlist";
+import { z } from "zod";
+
+type WatchListItem = z.infer<typeof watchListOutput>;
 
 /**
  * Query options for movie details page
@@ -7,29 +10,9 @@ import { orpc } from "@/orpc/client";
 
 // Fetch main movie data
 export const movieDetailsQueryOptions = (mediaId: string) =>
-	queryOptions({
+	orpc.media.find.queryOptions({
 		queryKey: ["media", "details", mediaId],
-		queryFn: async () => {
-			try {
-				const response = await orpc.media.find.queryOptions({
-					input: { id: mediaId },
-				});
-				return response.data;
-			} catch (error: any) {
-				if (error?.status === 404) {
-					throw new Error("Movie not found");
-				}
-
-				if (error?.code === "SUBSCRIPTION_REQUIRED") {
-					throw new Error(
-						"A subscription is required to view this content. Please upgrade your plan.",
-					);
-				}
-
-				const message = error?.message || "Failed to load movie details";
-				throw new Error(message);
-			}
-		},
+		input: { id: mediaId },
 		staleTime: 5 * 60 * 1000,
 		retry: (failureCount, error: unknown) => {
 			if (
@@ -91,34 +74,25 @@ export const movieSimilarQueryOptions = (
 	mediaId: string,
 	genreIds?: string[],
 ) =>
-	queryOptions({
+	orpc.media.list.queryOptions({
 		queryKey: ["media", "similar", mediaId, genreIds],
-		queryFn: async () => {
-			if (!genreIds || genreIds.length === 0) {
-				return {
-					items: [],
-					pagination: { page: 1, limit: 6, total: 0, totalPages: 0 },
-				};
-			}
-
-			const response = await orpc.media.list.queryOptions({
-				input: {
-					page: 1,
-					limit: 6,
-					type: "MOVIE",
-					genreIds,
-					status: ["PUBLISHED"],
-					sortBy: "NEWEST",
-				},
-			});
-
-			// Filter out the current movie from results
-			const filteredItems = response.data.items.filter(
-				(item) => item.id !== mediaId,
-			);
+		input: {
+			page: 1,
+			// Fetch 7 to have a better chance of getting 6 after filtering
+			limit: 7,
+			type: "MOVIE",
+			genreIds: genreIds!,
+			status: ["PUBLISHED"],
+			sortBy: "NEWEST",
+		},
+		select: (data) => {
+			// Filter out the current movie and limit to 6 results
+			const filteredItems = data.items
+				.filter((item) => item.id !== mediaId)
+				.slice(0, 6);
 
 			return {
-				...response.data,
+				...data,
 				items: filteredItems,
 			};
 		},
@@ -128,24 +102,17 @@ export const movieSimilarQueryOptions = (
 
 // Fetch watchlist status
 export const movieWatchlistStatusQueryOptions = (mediaId: string) =>
-	queryOptions({
+	orpc.watchlist.list.queryOptions({
 		queryKey: ["watchlist", "status", mediaId],
-		queryFn: async () => {
-			try {
-				const response = await orpc.watchlist.list.queryOptions({
-					input: {
-						page: 1,
-						limit: 100,
-					},
-				});
-
-				const inWatchlist = response.data.items.some(
-					(item) => item.mediaId === mediaId,
-				);
-				return { inWatchlist };
-			} catch (_error) {
-				return { inWatchlist: false };
-			}
+		input: {
+			page: 1,
+			limit: 100,
+		},
+		select: (response) => {
+			const inWatchlist = response.data.items.some(
+				(item: WatchListItem) => item.mediaId === mediaId,
+			);
+			return { inWatchlist };
 		},
 		staleTime: 30 * 1000,
 	});

@@ -1,4 +1,4 @@
-import { orpc } from "@/orpc/client";
+import { orpc } from "@/lib/orpc";
 import type { MediaList } from "@/orpc/models/media.schema";
 
 /** Section slug to API endpoint mapping */
@@ -138,32 +138,17 @@ export function getSectionInfiniteQueryOptions(
 ) {
 	const category = sectionToCategory[section];
 
-	return {
+	return orpc.media.list.queryOptions({
 		queryKey: ["section", section, limit, search, filters] as const,
-		queryFn: async ({ pageParam = 1 }) => {
-			const response = await client.media.list({
-				limit,
-				page: pageParam as number,
-				category: category,
-				search: search || undefined,
-				type: "MOVIE",
-				genreIds: filters?.genreIds,
-				releaseYearFrom: filters?.releaseYearFrom,
-				releaseYearTo: filters?.releaseYearTo,
-				sortBy: filters?.sortBy || "NEWEST",
-			});
-			return response;
+		input: {
+			limit,
+			category: category,
+			search: search || undefined,
+			type: "MOVIE",
+			genreIds: filters?.genreIds,
+			releaseYearFrom: filters?.releaseYearFrom,
+			releaseYearTo: filters?.releaseYearTo,
+			sortBy: filters?.sortBy || "NEWEST",
 		},
-		getNextPageParam: (
-			lastPage: { data?: MediaList | null },
-			allPages: unknown[],
-		) => {
-			const items = lastPage?.data?.items || [];
-			if (items.length === limit) {
-				return allPages.length + 1;
-			}
-			return undefined;
-		},
-		initialPageParam: 1,
-	};
+	});
 }
