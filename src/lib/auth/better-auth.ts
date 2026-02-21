@@ -1,4 +1,4 @@
-import { type SubscriptionStatus } from "@prisma/client";
+import type { SubscriptionStatus } from "@prisma/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, apiKey, emailOTP, twoFactor } from "better-auth/plugins";
@@ -13,7 +13,6 @@ import {
 	welcomeVerifyEmail,
 } from "@/integrations/resend/email-templates";
 import { prisma } from "@/lib/db.server";
-import type { authClient } from "./auth-client";
 
 const emailFrom = "Vibe <noreply@vibeapp.com>";
 
@@ -164,7 +163,7 @@ export const auth = betterAuth({
 	},
 });
 
-export type ExtendedUser = typeof auth.$Infer.User & {
+export type ExtendedUser = (typeof auth.$Infer.Session)["user"] & {
 	subscriptionStatus: SubscriptionStatus;
 	customerId: string | null;
 	currentPlan: string | null;

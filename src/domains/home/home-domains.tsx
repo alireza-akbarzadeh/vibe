@@ -18,35 +18,28 @@ function SectionFallback({ height = "h-96" }: { height?: string }) {
 export default function Home() {
 	return (
 		<div className="bg-[#0a0a0a] min-h-screen">
-			{/* Hero loads eagerly — first paint */}
 			<HeroSection />
 
-			{/* Platform stats with real API data */}
 			<Suspense fallback={<SectionFallback />}>
 				<LiveStatsSection />
 			</Suspense>
 
-			{/* Trending / Top Rated / Latest rows */}
 			<Suspense fallback={<SectionFallback />}>
 				<TrendingContentSection />
 			</Suspense>
 
-			{/* Genre tabs with real content */}
 			<Suspense fallback={<SectionFallback />}>
 				<GenreShowcaseSection />
 			</Suspense>
 
-			{/* Feature highlights */}
 			<Suspense fallback={<SectionFallback />}>
 				<FeatureShowcaseSection />
 			</Suspense>
 
-			{/* Device experience showcase */}
 			<Suspense fallback={<SectionFallback />}>
 				<DeviceExperienceSection />
 			</Suspense>
 
-			{/* Final CTA */}
 			<Suspense fallback={<SectionFallback height="h-64" />}>
 				<CTASection />
 			</Suspense>

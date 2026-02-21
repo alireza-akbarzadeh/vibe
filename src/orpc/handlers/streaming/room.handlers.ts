@@ -77,10 +77,17 @@ export const joinRoom = publicProcedure
 	.output(
 		ResponseSchema.ApiResponseSchema(
 			z.object({
-				memberId: z.string(),
+				id: z.string(),
+				createdAt: z.date(),
+				updatedAt: z.date(),
 				roomId: z.string(),
 				userId: z.string(),
+				profileId: z.string().nullable(),
+				isHost: z.boolean(),
+				isModerator: z.boolean(),
 				joinedAt: z.date(),
+				lastSeenAt: z.date(),
+				isActive: z.boolean(),
 			}),
 		),
 	)
@@ -110,9 +117,9 @@ export const joinRoom = publicProcedure
 export const getRoomMessages = publicProcedure
 	.input(
 		z.object({
-			roomId: z.string().cuid(),
+			roomId: z.cuid(),
 			limit: z.number().int().min(1).max(100).optional().default(50),
-			cursor: z.string().cuid().optional(),
+			cursor: z.cuid().optional(),
 		}),
 	)
 	.output(

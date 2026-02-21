@@ -1,6 +1,10 @@
 import type { Middleware } from "@orpc/server";
 import type { SubscriptionStatus } from "@prisma/client";
-import { type AuthSessionType, auth } from "@/lib/auth/better-auth";
+import {
+	type AuthSessionType,
+	auth,
+	type ExtendedUser,
+} from "@/lib/auth/better-auth";
 import type { ORPCContext } from "../context";
 import type { Role, Tier } from "../helpers/constants";
 import { userHasPermission } from "../helpers/helper";
@@ -24,7 +28,8 @@ export const withAuth: AppMiddleware<
 		throw new Error("UNAUTHENTICATED");
 	}
 	const { user, session } = sessionData;
-	return next({ context: { ...context, user, session } });
+	const typedUser = user as ExtendedUser;
+	return next({ context: { ...context, user: typedUser, session } });
 };
 
 export const requireSubscription =
