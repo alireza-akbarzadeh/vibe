@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import {
@@ -13,7 +13,7 @@ export const updatePermission = adminProcedure
 	.handler(async ({ input, context, errors }) => {
 		const { id, ...data } = input;
 
-		const existing = await prisma.permission.findUnique({
+		const existing = await db.client.permission.findUnique({
 			where: { id },
 		});
 
@@ -26,7 +26,7 @@ export const updatePermission = adminProcedure
 			const resource = data.resource ?? existing.resource;
 			const action = data.action ?? existing.action;
 
-			const duplicate = await prisma.permission.findFirst({
+			const duplicate = await db.client.permission.findFirst({
 				where: {
 					id: { not: id },
 					resource,
@@ -37,12 +37,11 @@ export const updatePermission = adminProcedure
 			if (duplicate) {
 				throw errors.CONFLICT({
 					message: "Permission already exists for this resource and action",
-					data: { field: "resource_action" },
 				});
 			}
 		}
 
-		const permission = await prisma.permission.update({
+		const permission = await db.client.permission.update({
 			where: { id },
 			data,
 		});

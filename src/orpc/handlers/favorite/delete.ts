@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { removeFavoriteInput } from "@/orpc/models/favorite";
@@ -12,7 +12,7 @@ export const removeFavorite = authedProcedure
 		),
 	)
 	.handler(async ({ input, context, errors }) => {
-		const favorite = await prisma.favorite.findUnique({
+		const favorite = await db.client.favorite.findUnique({
 			where: {
 				userId_mediaId: {
 					userId: context.user.id,
@@ -25,7 +25,7 @@ export const removeFavorite = authedProcedure
 			throw errors.NOT_FOUND({ message: "Favorite not found" });
 		}
 
-		await prisma.favorite.delete({
+		await db.client.favorite.delete({
 			where: {
 				userId_mediaId: {
 					userId: context.user.id,

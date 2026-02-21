@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import {
 	ListUsersWithAccessOutput,
@@ -31,10 +31,10 @@ export const listUsersWithAccess = adminProcedure
 		}
 
 		// Get total count
-		const total = await prisma.user.count({ where });
+		const total = await db.client.user.count({ where });
 
 		// Get users with roles and permissions
-		const users = await prisma.user.findMany({
+		const users = await db.client.user.findMany({
 			where,
 			skip,
 			take: limit,

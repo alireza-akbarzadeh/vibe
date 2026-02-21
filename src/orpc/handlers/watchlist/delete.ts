@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { subscribedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { removeFromWatchListInput } from "@/orpc/models/watchlist";
@@ -12,7 +12,7 @@ export const removeFromWatchList = subscribedProcedure
 		),
 	)
 	.handler(async ({ input, context, errors }) => {
-		const watchListItem = await prisma.watchList.findUnique({
+		const watchListItem = await db.client.watchList.findUnique({
 			where: {
 				userId_mediaId: {
 					userId: context.user.id,
@@ -25,7 +25,7 @@ export const removeFromWatchList = subscribedProcedure
 			throw errors.NOT_FOUND({ message: "Item not found in watch list" });
 		}
 
-		await prisma.watchList.delete({
+		await db.client.watchList.delete({
 			where: {
 				userId_mediaId: {
 					userId: context.user.id,

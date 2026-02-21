@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 
 const ListUsersInputSchema = z.object({
@@ -63,10 +63,10 @@ export const listUsers = authedProcedure
 		}
 
 		// Get total count
-		const total = await prisma.user.count({ where });
+		const total = await db.client.user.count({ where });
 
 		// Get users
-		const users = await prisma.user.findMany({
+		const users = await db.client.user.findMany({
 			where,
 			skip,
 			take: limit,

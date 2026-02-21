@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -14,7 +14,7 @@ export const createReview = authedProcedure
 		const userId = context.user.id;
 
 		// Check if media exists
-		const media = await prisma.media.findUnique({
+		const media = await db.client.media.findUnique({
 			where: { id: mediaId },
 		});
 
@@ -57,7 +57,7 @@ export const createReview = authedProcedure
 		const avgRating =
 			reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
 
-		await prisma.media.update({
+		await db.client.media.update({
 			where: { id: mediaId },
 			data: {
 				rating: avgRating,

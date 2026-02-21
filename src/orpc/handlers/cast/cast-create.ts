@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -18,18 +18,20 @@ export const createCastMember = adminProcedure
 		const { mediaId, personId, castType, role, order, tmdbCreditId } = input;
 
 		// Verify media exists
-		const media = await prisma.media.findUnique({ where: { id: mediaId } });
+		const media = await db.client.media.findUnique({ where: { id: mediaId } });
 		if (!media) {
 			throw { code: "NOT_FOUND", status: 404, message: "Media not found" };
 		}
 
 		// Verify person exists
-		const person = await prisma.person.findUnique({ where: { id: personId } });
+		const person = await db.client.person.findUnique({
+			where: { id: personId },
+		});
 		if (!person) {
 			throw { code: "NOT_FOUND", status: 404, message: "Person not found" };
 		}
 
-		const castMember = await prisma.mediaCast.create({
+		const castMember = await db.client.mediaCast.create({
 			data: {
 				mediaId,
 				personId,
@@ -79,7 +81,7 @@ export const bulkCreateCast = adminProcedure
 		const { mediaId, cast, skipDuplicates } = input;
 
 		// Verify media exists
-		const media = await prisma.media.findUnique({ where: { id: mediaId } });
+		const media = await db.client.media.findUnique({ where: { id: mediaId } });
 		if (!media) {
 			throw { code: "NOT_FOUND", status: 404, message: "Media not found" };
 		}
@@ -91,7 +93,7 @@ export const bulkCreateCast = adminProcedure
 		for (const member of cast) {
 			try {
 				// Verify person exists
-				const person = await prisma.person.findUnique({
+				const person = await db.client.person.findUnique({
 					where: { id: member.personId },
 				});
 				if (!person) {
@@ -101,7 +103,7 @@ export const bulkCreateCast = adminProcedure
 
 				// Check for duplicate if needed
 				if (skipDuplicates) {
-					const existing = await prisma.mediaCast.findFirst({
+					const existing = await db.client.mediaCast.findFirst({
 						where: {
 							mediaId,
 							personId: member.personId,
@@ -116,7 +118,7 @@ export const bulkCreateCast = adminProcedure
 					}
 				}
 
-				await prisma.mediaCast.create({
+				await db.client.mediaCast.create({
 					data: {
 						mediaId,
 						personId: member.personId,

@@ -13,27 +13,29 @@ export const deleteMedia = authedProcedure
 		),
 	)
 	.handler(async ({ input, context }) => {
-		const result = await context.db.transaction(async (tx) => {
-			const existing = await tx.media.findUnique({
-				where: { id: input.id },
-			});
+		const result = await context.db.transaction(
+			async (tx: Prisma.TransactionClient) => {
+				const existing = await tx.media.findUnique({
+					where: { id: input.id },
+				});
 
-			const media = await tx.media.delete({
-				where: { id: input.id },
-			});
+				const media = await tx.media.delete({
+					where: { id: input.id },
+				});
 
-			await tx.auditLog.create({
-				data: {
-					userId: context.user.id,
-					action: "DELETE",
-					resource: "MEDIA",
-					resourceId: media.id,
-					metadata: existing || Prisma.DbNull,
-				},
-			});
+				await tx.auditLog.create({
+					data: {
+						userId: context.user.id,
+						action: "DELETE",
+						resource: "MEDIA",
+						resourceId: media.id,
+						metadata: existing || Prisma.DbNull,
+					},
+				});
 
-			return media;
-		});
+				return media;
+			},
+		);
 
 		return {
 			status: 200,

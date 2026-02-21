@@ -42,7 +42,7 @@ export const createCheckout = authedProcedure
 			};
 		} catch (error) {
 			console.error("Error creating checkout:", error);
-			throw errors.INTERNAL_ERROR({
+			throw errors.INTERNAL_SERVER_ERROR({
 				message: "Failed to create checkout session",
 			});
 		}

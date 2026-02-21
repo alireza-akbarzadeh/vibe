@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { updateCastMemberInputSchema } from "@/orpc/models/cast.input.schema";
@@ -14,7 +14,7 @@ export const updateCastMember = adminProcedure
 		const { id, role, order, castType } = input;
 
 		// Verify cast member exists
-		const existingMember = await prisma.mediaCast.findUnique({
+		const existingMember = await db.client.mediaCast.findUnique({
 			where: { id },
 		});
 
@@ -26,7 +26,7 @@ export const updateCastMember = adminProcedure
 			};
 		}
 
-		const updatedMember = await prisma.mediaCast.update({
+		const updatedMember = await db.client.mediaCast.update({
 			where: { id },
 			data: {
 				...(role !== undefined && { role }),

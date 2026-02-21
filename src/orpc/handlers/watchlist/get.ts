@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 
@@ -22,7 +22,7 @@ export const checkWatchList = authedProcedure
 	.handler(async ({ input, context }) => {
 		const { mediaId } = input;
 
-		const count = await prisma.watchList.count({
+		const count = await db.client.watchList.count({
 			where: {
 				userId: context.user.id,
 				mediaId,
@@ -74,7 +74,7 @@ export const listWatchList = authedProcedure
 		const skip = (page - 1) * limit;
 
 		const [items, total] = await Promise.all([
-			prisma.watchList.findMany({
+			db.client.watchList.findMany({
 				where: { userId: context.user.id },
 				include: {
 					media: {
@@ -91,7 +91,7 @@ export const listWatchList = authedProcedure
 				skip,
 				take: limit,
 			}),
-			prisma.watchList.count({
+			db.client.watchList.count({
 				where: { userId: context.user.id },
 			}),
 		]);

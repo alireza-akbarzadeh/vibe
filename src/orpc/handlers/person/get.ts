@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { listPersonInputSchema } from "@/orpc/models/person.input.schema";
@@ -16,7 +16,7 @@ export const find = publicProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ApiResponseSchema(PersonWithKnownForSchema))
 	.handler(async ({ input }) => {
-		const person = await prisma.person.findUnique({
+		const person = await db.client.person.findUnique({
 			where: { id: input.id },
 			include: {
 				knownFor: {
@@ -79,7 +79,7 @@ export const list = publicProcedure
 
 		// Execute query with pagination
 		const [items, total] = await Promise.all([
-			prisma.person.findMany({
+			db.client.person.findMany({
 				where,
 				select: {
 					id: true,
@@ -93,7 +93,7 @@ export const list = publicProcedure
 				skip: (page - 1) * limit,
 				take: limit,
 			}),
-			prisma.person.count({ where }),
+			db.client.person.count({ where }),
 		]);
 
 		return {
@@ -127,7 +127,7 @@ export const findByTmdbId = publicProcedure
 		const { tmdbId } = input;
 
 		const [items, total] = await Promise.all([
-			prisma.person.findMany({
+			db.client.person.findMany({
 				where: { tmdbId },
 				include: {
 					knownFor: {
@@ -135,7 +135,7 @@ export const findByTmdbId = publicProcedure
 					},
 				},
 			}),
-			prisma.person.count({ where: { tmdbId } }),
+			db.client.person.count({ where: { tmdbId } }),
 		]);
 
 		return {

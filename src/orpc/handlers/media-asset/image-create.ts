@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -26,7 +26,7 @@ export const bulkCreateImages = adminProcedure
 		const { mediaId, images, skipDuplicates } = input;
 
 		// Verify media exists
-		const media = await prisma.media.findUnique({
+		const media = await db.client.media.findUnique({
 			where: { id: mediaId },
 		});
 

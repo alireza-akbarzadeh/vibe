@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { createMediaInputSchema } from "@/orpc/models/media.input.schema";
@@ -108,7 +108,7 @@ export const bulkCreateMedia = adminProcedure
 		}));
 
 		// Check for existing media by title
-		const existingMedia = await prisma.media.findMany({
+		const existingMedia = await db.client.media.findMany({
 			where: {
 				title: {
 					in: normalizedInput.map((m) => m.title),

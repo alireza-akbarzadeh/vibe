@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { listPeopleInputSchema } from "@/orpc/models/people.input.schema";
@@ -16,7 +16,7 @@ export const getPeople = publicProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ApiResponseSchema(PeopleSchema))
 	.handler(async ({ input }) => {
-		const person = await prisma.person.findUnique({
+		const person = await db.client.person.findUnique({
 			where: { id: input.id },
 		});
 
@@ -78,7 +78,7 @@ export const listPeople = publicProcedure
 
 		// Execute queries in parallel
 		const [items, total] = await Promise.all([
-			prisma.person.findMany({
+			db.client.person.findMany({
 				where,
 				orderBy,
 				skip,
@@ -92,7 +92,7 @@ export const listPeople = publicProcedure
 					popularity: true,
 				},
 			}),
-			prisma.person.count({ where }),
+			db.client.person.count({ where }),
 		]);
 
 		const totalPages = Math.ceil(total / limit);
@@ -132,10 +132,59 @@ export const getPeopleByPersonId = publicProcedure
 		),
 	)
 	.handler(async ({ input }) => {
-		// Not implemented correctly yet (removed)
+		const { person_id, page, limit } = input;
+		const skip = (page - 1) * limit;
+
+		const person = await db.client.person.findUnique({
+			where: { tmdbId: person_id },
+			select: { id: true, name: true },
+		});
+
+		if (!person) {
+			return {
+				status: 200,
+				message: "Person not found",
+				data: { items: [], total: 0 },
+			};
+		}
+
+		const [mediaCasts, total] = await Promise.all([
+			db.client.mediaCast.findMany({
+				where: { personId: person.id },
+				include: {
+					media: {
+						select: {
+							id: true,
+							title: true,
+							thumbnail: true,
+							type: true,
+							releaseYear: true,
+						},
+					},
+				},
+				skip,
+				take: limit,
+				orderBy: {
+					order: "asc",
+				},
+			}),
+			db.client.mediaCast.count({
+				where: { personId: person.id },
+			}),
+		]);
+
+		const items = mediaCasts.map((cast) => ({
+			id: cast.media?.id || cast.mediaId,
+			tmdbId: 0,
+			name: cast.media?.title || "Unknown",
+			profilePath: cast.media?.thumbnail || null,
+			popularity: 0,
+			knownForDepartment: cast.castType,
+		}));
+
 		return {
 			status: 200,
-			message: "Not implemented",
-			data: { items: [], total: 0 },
+			message: `Media for person ${person.name} retrieved successfully`,
+			data: { items, total },
 		};
 	});

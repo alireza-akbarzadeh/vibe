@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { roleProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { UserRoleSchema } from "@/orpc/models/role";
@@ -14,7 +14,7 @@ export const removeRoleFromUser = roleProcedure
 	)
 	.output(ApiResponseSchema(UserRoleSchema))
 	.handler(async ({ input, context }) => {
-		const userRole = await prisma.userRole.delete({
+		const userRole = await db.client.userRole.delete({
 			where: { userId_roleId: { userId: input.userId, roleId: input.roleId } },
 		});
 
@@ -43,7 +43,7 @@ export const removeRole = roleProcedure
 	)
 	.output(ApiResponseSchema(z.object({ id: z.string() })))
 	.handler(async ({ input }) => {
-		const role = await prisma.role.delete({
+		const role = await db.client.role.delete({
 			where: { id: input.id },
 		});
 

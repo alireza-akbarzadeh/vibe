@@ -1,7 +1,8 @@
 // src/orpc/procedures/collection.ts
+
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import type { CollectionWhereInput } from "@/generated/prisma/models";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 
@@ -37,16 +38,16 @@ export const listCollections = publicProcedure
 			}),
 		),
 	)
-	.query(async ({ input }) => {
+	.handler(async ({ input }) => {
 		const { page, limit, search, type } = input;
-		const where: CollectionWhereInput = { ...(type ? { type } : {}) };
+		const where: Prisma.CollectionWhereInput = { ...(type ? { type } : {}) };
 
 		if (search) {
 			where.title = { contains: search, mode: "insensitive" };
 		}
 
-		const total = await prisma.collection.count({ where });
-		const items = await prisma.collection.findMany({
+		const total = await db.client.collection.count({ where });
+		const items = await db.client.collection.findMany({
 			where,
 			skip: (page - 1) * limit,
 			take: limit,

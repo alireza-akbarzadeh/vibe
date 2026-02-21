@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { updatePeopleInputSchema } from "@/orpc/models/people.input.schema";
@@ -17,7 +17,7 @@ export const updatePeople = adminProcedure
 			Object.entries(updateData).filter(([, value]) => value !== null),
 		);
 
-		const person = await prisma.person.update({
+		const person = await db.client.person.update({
 			where: { id },
 			data: cleanUpdateData,
 		});

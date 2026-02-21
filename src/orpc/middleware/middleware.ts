@@ -5,10 +5,10 @@ import {
 	auth,
 	type ExtendedUser,
 } from "@/lib/auth/better-auth";
-import type { ORPCContext } from "../context";
+
 import type { Role, Tier } from "../helpers/constants";
 import { userHasPermission } from "../helpers/permission.server";
-import type { AppErrorMap } from "../root";
+import type { AppErrorMap, ORPCContext } from "../root";
 
 export interface AuthContext extends AuthSessionType {}
 

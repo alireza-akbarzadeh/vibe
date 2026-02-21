@@ -2,13 +2,12 @@
 import { defineConfig, PluginOption } from 'vite'
 import { visualizer } from 'rollup-plugin-visualizer';
 import { devtools } from '@tanstack/devtools-vite'
-import { sentryTanstackStart } from "@sentry/tanstackstart-react";
-import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 import { wss } from './src/server/ws'
+
 
 const webSocketServer = {
   name: 'webSocketServer',
@@ -47,7 +46,6 @@ const config = defineConfig({
         },
       },
     }),
-    tanstackStart(),
     sentryTanstackStart({
       org: process.env.SENTRY_ORG,
       project: process.env.SENTRY_PROJECT,

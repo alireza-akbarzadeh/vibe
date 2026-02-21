@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { profileListOutput, profileOutput } from "@/orpc/models/profile";
@@ -11,7 +11,7 @@ export const listProfiles = authedProcedure
 	.input(z.void())
 	.output(ResponseSchema.ApiResponseSchema(profileListOutput))
 	.handler(async ({ context }) => {
-		const profiles = await prisma.profile.findMany({
+		const profiles = await db.client.profile.findMany({
 			where: { userId: context.user.id },
 			orderBy: { name: "asc" },
 		});
@@ -38,7 +38,7 @@ export const getProfile = authedProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ResponseSchema.ApiResponseSchema(profileOutput))
 	.handler(async ({ input, context, errors }) => {
-		const profile = await prisma.profile.findFirst({
+		const profile = await db.client.profile.findFirst({
 			where: {
 				id: input.id,
 				userId: context.user.id,

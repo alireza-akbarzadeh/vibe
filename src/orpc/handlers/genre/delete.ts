@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { genreIdInput } from "@/orpc/models/genre";
@@ -13,7 +13,7 @@ export const deleteGenre = adminProcedure
 		),
 	)
 	.handler(async ({ input, context, errors }) => {
-		const existing = await prisma.genre.findUnique({
+		const existing = await db.client.genre.findUnique({
 			where: { id: input.id },
 		});
 
@@ -21,7 +21,7 @@ export const deleteGenre = adminProcedure
 			throw errors.NOT_FOUND({ message: "Genre not found" });
 		}
 
-		await prisma.genre.delete({
+		await db.client.genre.delete({
 			where: { id: input.id },
 		});
 

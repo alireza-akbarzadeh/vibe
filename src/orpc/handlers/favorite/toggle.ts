@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 
@@ -21,7 +21,7 @@ export const toggleFavorite = authedProcedure
 		const { mediaId } = input;
 		const userId = context.user.id;
 
-		const media = await prisma.media.findUnique({
+		const media = await db.client.media.findUnique({
 			where: { id: mediaId },
 		});
 
@@ -29,12 +29,12 @@ export const toggleFavorite = authedProcedure
 			throw errors.NOT_FOUND({ message: "Media not found" });
 		}
 
-		const existing = await prisma.favorite.findUnique({
+		const existing = await db.client.favorite.findUnique({
 			where: { userId_mediaId: { userId, mediaId } },
 		});
 
 		if (existing) {
-			await prisma.favorite.delete({
+			await db.client.favorite.delete({
 				where: { userId_mediaId: { userId, mediaId } },
 			});
 			return {
@@ -44,7 +44,7 @@ export const toggleFavorite = authedProcedure
 			};
 		}
 
-		await prisma.favorite.create({
+		await db.client.favorite.create({
 			data: { userId, mediaId },
 		});
 

@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { MediaListItemSchema } from "@/orpc/models/media.schema";
@@ -90,7 +90,7 @@ export const searchMedia = publicProcedure
 		}
 
 		const [items, total] = await Promise.all([
-			prisma.media.findMany({
+			db.client.media.findMany({
 				where,
 				select: {
 					id: true,
@@ -145,7 +145,7 @@ export const searchMedia = publicProcedure
 				],
 				take: limit,
 			}),
-			prisma.media.count({ where }),
+			db.client.media.count({ where }),
 		]);
 
 		return {

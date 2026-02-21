@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { collectionUpdateProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { createCollectionInput } from "@/orpc/models/collection";
@@ -25,7 +25,7 @@ export const updateCollection = collectionUpdateProcedure
 	)
 	.handler(async ({ input }) => {
 		const { id, ...data } = input;
-		const collection = await prisma.collection.update({
+		const collection = await db.client.collection.update({
 			where: { id },
 			data,
 		});

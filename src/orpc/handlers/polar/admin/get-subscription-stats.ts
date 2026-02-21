@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 
 /**
@@ -70,8 +70,8 @@ export const getSubscriptionStats = adminProcedure
 
 		// Get local DB stats
 		const [localUserCount, paidUserCount] = await Promise.all([
-			prisma.user.count(),
-			prisma.user.count({
+			db.client.user.count(),
+			db.client.user.count({
 				where: {
 					subscriptionStatus: { in: ["PREMIUM", "FAMILY"] },
 				},

@@ -122,7 +122,7 @@ export class UserService {
 	/**
 	 * Get user with full profile data
 	 */
-	async getUserProfile(userId: string): Promise<UserPrivate> {
+	async getPrivateUserData(userId: string): Promise<UserPrivate> {
 		const user = await this.userRepository.getFullProfile(userId);
 		if (!user) {
 			throw new UserNotFoundError(userId);
@@ -285,5 +285,12 @@ export class UserService {
 		}
 
 		return await this.userRepository.bulkCreate(validUsers);
+	}
+
+	/**
+	 * Get user rooms
+	 */
+	async getUserRooms(userId: string): Promise<RoomPublic[]> {
+		return await this.roomRepository.findByUserId(userId);
 	}
 }

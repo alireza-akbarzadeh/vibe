@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { logger } from "@/lib/logger";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { RoomPublicOutputSchema } from "@/orpc/types/streaming/room.output";
@@ -12,9 +13,9 @@ const userService = new UserService();
 export const getCurrentUser = authedProcedure
 	.input(z.void())
 	.output(ResponseSchema.ApiResponseSchema(UserPrivateSchema))
-	.handler(async ({ ctx }) => {
+	.handler(async ({ context }) => {
 		try {
-			const user = await userService.getPrivateUserData(ctx.user.id);
+			const user = await userService.getPrivateUserData(context.user.id);
 			return {
 				status: 200,
 				message: "User data retrieved successfully",
@@ -29,7 +30,7 @@ export const getCurrentUser = authedProcedure
 				};
 			}
 
-			console.error("Unexpected error in getCurrentUser:", error);
+			logger.error("Unexpected error in getCurrentUser:", error);
 			return {
 				status: 500,
 				message: "An unexpected error occurred",
@@ -42,9 +43,9 @@ export const getCurrentUser = authedProcedure
 export const getUserRooms = authedProcedure
 	.input(z.void())
 	.output(ResponseSchema.ApiResponseSchema(z.array(RoomPublicOutputSchema)))
-	.handler(async ({ ctx }) => {
+	.handler(async ({ context }) => {
 		try {
-			const rooms = await userService.getUserRooms(ctx.user.id);
+			const rooms = await userService.getUserRooms(context.user.id);
 			return {
 				status: 200,
 				message: "User rooms retrieved successfully",

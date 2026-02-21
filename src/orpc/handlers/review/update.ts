@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -47,7 +47,7 @@ export const updateReview = authedProcedure
 			const avgRating =
 				reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
 
-			await prisma.media.update({
+			await db.client.media.update({
 				where: { id: existingReview.mediaId },
 				data: { rating: avgRating },
 			});

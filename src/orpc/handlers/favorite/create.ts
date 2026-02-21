@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { addFavoriteInput, favoriteOutput } from "@/orpc/models/favorite";
@@ -8,7 +8,7 @@ export const addFavorite = authedProcedure
 	.output(ResponseSchema.ApiResponseSchema(favoriteOutput))
 	.handler(async ({ input, context, errors }) => {
 		// Check if media exists
-		const media = await prisma.media.findUnique({
+		const media = await db.client.media.findUnique({
 			where: { id: input.mediaId },
 		});
 
@@ -17,7 +17,7 @@ export const addFavorite = authedProcedure
 		}
 
 		// Check if already favorited
-		const existing = await prisma.favorite.findUnique({
+		const existing = await db.client.favorite.findUnique({
 			where: {
 				userId_mediaId: {
 					userId: context.user.id,
@@ -30,7 +30,7 @@ export const addFavorite = authedProcedure
 			throw errors.CONFLICT({ message: "Media already in favorites" });
 		}
 
-		const favorite = await prisma.favorite.create({
+		const favorite = await db.client.favorite.create({
 			data: {
 				userId: context.user.id,
 				mediaId: input.mediaId,

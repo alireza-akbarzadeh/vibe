@@ -1,8 +1,8 @@
 import { z } from "zod";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { PlatformStatsSchema } from "@/orpc/models/health";
-import { db } from "@/server/db";
 import { UserService } from "@/server/services/user.service";
 
 // Health check schemas

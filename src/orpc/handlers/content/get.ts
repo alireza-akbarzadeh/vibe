@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -15,7 +15,7 @@ export const getLatestReleases = publicProcedure
 		const { type, limit, page } = input;
 		const skip = (page - 1) * limit;
 
-		const latestReleases = await prisma.media.findMany({
+		const latestReleases = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				...(type && { type }),
@@ -66,7 +66,7 @@ export const getPopularSeries = publicProcedure
 		const { limit } = input;
 
 		// Get all series/albums and calculate total views per collection
-		const collections = await prisma.collection.findMany({
+		const collections = await db.client.collection.findMany({
 			where: {
 				type: { in: ["SERIES", "ALBUM"] },
 				media: {
@@ -107,7 +107,7 @@ export const getPopularSeries = publicProcedure
 
 		// Get full media details for sorted collections
 		const collectionIds = sortedCollections.map((c) => c.id);
-		const mediaItems = await prisma.media.findMany({
+		const mediaItems = await db.client.media.findMany({
 			where: {
 				collectionId: { in: collectionIds },
 				status: "PUBLISHED",
@@ -161,7 +161,7 @@ export const getAnimations = publicProcedure
 		const skip = (page - 1) * limit;
 
 		// Find Animation genre
-		const animationGenre = await prisma.genre.findFirst({
+		const animationGenre = await db.client.genre.findFirst({
 			where: {
 				OR: [
 					{ name: { equals: "Animation", mode: "insensitive" } },
@@ -181,7 +181,7 @@ export const getAnimations = publicProcedure
 			};
 		}
 
-		const animations = await prisma.media.findMany({
+		const animations = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				...(type && { type }),
@@ -238,7 +238,7 @@ export const getTVSeries = publicProcedure
 		const { limit, page } = input;
 		const skip = (page - 1) * limit;
 
-		const tvSeries = await prisma.media.findMany({
+		const tvSeries = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				type: "EPISODE",
@@ -286,7 +286,7 @@ export const getHorrorMovies = publicProcedure
 		const { limit, page } = input;
 		const skip = (page - 1) * limit;
 
-		const horrorGenre = await prisma.genre.findFirst({
+		const horrorGenre = await db.client.genre.findFirst({
 			where: {
 				name: { equals: "Horror", mode: "insensitive" },
 			},
@@ -303,7 +303,7 @@ export const getHorrorMovies = publicProcedure
 			};
 		}
 
-		const horrorMovies = await prisma.media.findMany({
+		const horrorMovies = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				type: "MOVIE",
@@ -356,7 +356,7 @@ export const getComedyMovies = publicProcedure
 		const { limit, page } = input;
 		const skip = (page - 1) * limit;
 
-		const comedyGenre = await prisma.genre.findFirst({
+		const comedyGenre = await db.client.genre.findFirst({
 			where: {
 				name: { equals: "Comedy", mode: "insensitive" },
 			},
@@ -373,7 +373,7 @@ export const getComedyMovies = publicProcedure
 			};
 		}
 
-		const comedyMovies = await prisma.media.findMany({
+		const comedyMovies = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				type: "MOVIE",
@@ -426,7 +426,7 @@ export const getRomanceMovies = publicProcedure
 		const { limit, page } = input;
 		const skip = (page - 1) * limit;
 
-		const romanceGenre = await prisma.genre.findFirst({
+		const romanceGenre = await db.client.genre.findFirst({
 			where: {
 				name: { equals: "Romance", mode: "insensitive" },
 			},
@@ -443,7 +443,7 @@ export const getRomanceMovies = publicProcedure
 			};
 		}
 
-		const romanceMovies = await prisma.media.findMany({
+		const romanceMovies = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				type: "MOVIE",
@@ -497,7 +497,7 @@ export const getTopIMDB = publicProcedure
 		const { type, limit, page } = input;
 		const skip = (page - 1) * limit;
 
-		const topRated = await prisma.media.findMany({
+		const topRated = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				...(type && { type }),

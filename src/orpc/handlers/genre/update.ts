@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { genreOutput, updateGenreInput } from "@/orpc/models/genre";
@@ -10,7 +10,7 @@ export const updateGenre = adminProcedure
 	.handler(async ({ input, context, errors }) => {
 		const { id, ...data } = input;
 
-		const existing = await prisma.genre.findUnique({
+		const existing = await db.client.genre.findUnique({
 			where: { id },
 		});
 
@@ -20,19 +20,18 @@ export const updateGenre = adminProcedure
 
 		// Check name uniqueness if updating name
 		if (data.name && data.name !== existing.name) {
-			const duplicate = await prisma.genre.findUnique({
+			const duplicate = await db.client.genre.findUnique({
 				where: { name: data.name },
 			});
 
 			if (duplicate) {
 				throw errors.CONFLICT({
 					message: "Genre name already exists",
-					data: { field: "name" },
 				});
 			}
 		}
 
-		const genre = await prisma.genre.update({
+		const genre = await db.client.genre.update({
 			where: { id },
 			data,
 		});

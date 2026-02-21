@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { collectionOutput } from "@/orpc/models/collection";
@@ -24,8 +24,8 @@ export const listCollections = publicProcedure
 			where.title = { contains: search, mode: "insensitive" };
 		}
 
-		const total = await prisma.collection.count({ where });
-		const items = await prisma.collection.findMany({
+		const total = await db.client.collection.count({ where });
+		const items = await db.client.collection.findMany({
 			where,
 			skip: (page - 1) * limit,
 			take: limit,

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { roleProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { RoleSchema } from "@/orpc/models/role";
@@ -14,7 +14,7 @@ export const createRole = roleProcedure
 	)
 	.output(ApiResponseSchema(RoleSchema))
 	.handler(async ({ input, context }) => {
-		const role = await prisma.role.create({
+		const role = await db.client.role.create({
 			data: input,
 		});
 

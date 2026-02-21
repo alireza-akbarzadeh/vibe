@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 
 const searchInputSchema = z.object({
@@ -31,7 +31,7 @@ export const searchContent = publicProcedure
 		};
 
 		const [items, total] = await Promise.all([
-			prisma.media.findMany({
+			db.client.media.findMany({
 				where,
 				include: {
 					genres: { include: { genre: true } },
@@ -43,7 +43,7 @@ export const searchContent = publicProcedure
 				skip,
 				take: limit,
 			}),
-			prisma.media.count({ where }),
+			db.client.media.count({ where }),
 		]);
 
 		return {

@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 
 const ListAuditLogsInputSchema = z.object({
@@ -52,10 +52,10 @@ export const listAuditLogs = authedProcedure
 		}
 
 		// Get total count
-		const total = await prisma.auditLog.count({ where });
+		const total = await db.client.auditLog.count({ where });
 
 		// Get audit logs
-		const logs = await prisma.auditLog.findMany({
+		const logs = await db.client.auditLog.findMany({
 			where,
 			skip,
 			take: limit,

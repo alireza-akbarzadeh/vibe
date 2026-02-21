@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -19,7 +19,7 @@ export const create = adminProcedure
 		const { known_for, ...personData } = input;
 
 		// Create person and their known_for movies in a transaction
-		const person = await prisma.person.create({
+		const person = await db.client.person.create({
 			data: {
 				tmdbId: personData.id,
 				adult: personData.adult,
@@ -111,7 +111,7 @@ export const bulkCreate = adminProcedure
 						try {
 							const { known_for, ...data } = personData;
 
-							await prisma.person.create({
+							await db.client.person.create({
 								data: {
 									tmdbId: data.id,
 									adult: data.adult,

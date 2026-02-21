@@ -1,4 +1,4 @@
-import { os } from "@/orpc/server";
+import { os } from "@/orpc/root";
 import { bulkCreatePeople, createPeople } from "./create";
 import { bulkDeletePeople, deletePeople } from "./delete";
 import { getPeople, getPeopleByPersonId, listPeople } from "./get";

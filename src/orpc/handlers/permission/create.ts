@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import {
@@ -14,7 +14,7 @@ export const createPermission = adminProcedure
 	.output(ResponseSchema.ApiResponseSchema(permissionOutput))
 	.handler(async ({ input, context, errors }) => {
 		// Check if permission already exists (unique resource + action)
-		const existing = await prisma.permission.findUnique({
+		const existing = await db.client.permission.findUnique({
 			where: {
 				resource_action: {
 					resource: input.resource,
@@ -26,11 +26,10 @@ export const createPermission = adminProcedure
 		if (existing) {
 			throw errors.CONFLICT({
 				message: "Permission already exists for this resource and action",
-				data: { field: "resource_action" },
 			});
 		}
 
-		const permission = await prisma.permission.create({
+		const permission = await db.client.permission.create({
 			data: input,
 		});
 
@@ -64,7 +63,7 @@ export const createPermissionBulk = adminProcedure
 		const { permissions } = input;
 
 		// 1️⃣ Find existing permissions
-		const existing = await prisma.permission.findMany({
+		const existing = await db.client.permission.findMany({
 			where: {
 				OR: permissions.map((p) => ({
 					resource: p.resource,
@@ -96,7 +95,7 @@ export const createPermissionBulk = adminProcedure
 
 		// 3️⃣ Create new permissions
 		if (toCreate.length > 0) {
-			await prisma.permission.createMany({
+			await db.client.permission.createMany({
 				data: toCreate,
 				skipDuplicates: true, // extra safety
 			});
@@ -104,7 +103,7 @@ export const createPermissionBulk = adminProcedure
 
 		// 4️⃣ Fetch created permissions (for IDs)
 		const created = toCreate.length
-			? await prisma.permission.findMany({
+			? await db.client.permission.findMany({
 					where: {
 						OR: toCreate.map((p) => ({
 							resource: p.resource,

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 
@@ -18,7 +18,7 @@ export const deleteHistoryItem = authedProcedure
 		),
 	)
 	.handler(async ({ input, context, errors }) => {
-		const item = await prisma.viewingHistory.findUnique({
+		const item = await db.client.viewingHistory.findUnique({
 			where: { id: input.historyId },
 			include: { profile: { select: { userId: true } } },
 		});
@@ -33,7 +33,7 @@ export const deleteHistoryItem = authedProcedure
 			});
 		}
 
-		await prisma.viewingHistory.delete({
+		await db.client.viewingHistory.delete({
 			where: { id: input.historyId },
 		});
 
@@ -59,7 +59,7 @@ export const clearHistory = authedProcedure
 		),
 	)
 	.handler(async ({ input, context, errors }) => {
-		const profile = await prisma.profile.findFirst({
+		const profile = await db.client.profile.findFirst({
 			where: { id: input.profileId, userId: context.user.id },
 		});
 
@@ -69,7 +69,7 @@ export const clearHistory = authedProcedure
 			});
 		}
 
-		const result = await prisma.viewingHistory.deleteMany({
+		const result = await db.client.viewingHistory.deleteMany({
 			where: { profileId: input.profileId },
 		});
 

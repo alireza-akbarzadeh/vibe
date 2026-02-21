@@ -73,7 +73,7 @@ export const updateSubscription = authedProcedure
 				throw error;
 			}
 
-			throw errors.INTERNAL_ERROR({
+			throw errors.INTERNAL_SERVER_ERROR({
 				message: "Failed to update subscription",
 			});
 		}

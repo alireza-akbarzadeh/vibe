@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 
@@ -43,7 +43,7 @@ export const deleteReview = authedProcedure
 				? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
 				: 0;
 
-		await prisma.media.update({
+		await db.client.media.update({
 			where: { id: mediaId },
 			data: {
 				rating: avgRating,

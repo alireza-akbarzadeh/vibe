@@ -30,10 +30,14 @@ export const archiveProduct = adminProcedure
 				success: true,
 				message: "Product archived successfully",
 			};
-		} catch (error: any) {
-			console.error("Error archiving product:", error);
-			throw errors.INTERNAL_ERROR({
-				message: error.message || "Failed to archive product",
+		} catch (error) {
+			if (error instanceof Error) {
+				throw errors.INTERNAL_SERVER_ERROR({
+					message: error.message || "Failed to archive product",
+				});
+			}
+			throw errors.INTERNAL_SERVER_ERROR({
+				message: "Failed to archive product",
 			});
 		}
 	});

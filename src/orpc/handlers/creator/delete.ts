@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { creatorIdInput } from "@/orpc/models/creator";
@@ -13,7 +13,7 @@ export const deleteCreator = adminProcedure
 		),
 	)
 	.handler(async ({ input, context, errors }) => {
-		const existing = await prisma.creator.findUnique({
+		const existing = await db.client.creator.findUnique({
 			where: { id: input.id },
 		});
 
@@ -21,7 +21,7 @@ export const deleteCreator = adminProcedure
 			throw errors.NOT_FOUND({ message: "Creator not found" });
 		}
 
-		await prisma.creator.delete({
+		await db.client.creator.delete({
 			where: { id: input.id },
 		});
 

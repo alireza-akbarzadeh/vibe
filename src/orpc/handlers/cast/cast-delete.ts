@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -22,7 +22,7 @@ export const deleteCastMember = adminProcedure
 	.handler(async ({ input }) => {
 		const { id } = input;
 
-		const castMember = await prisma.mediaCast.findUnique({
+		const castMember = await db.client.mediaCast.findUnique({
 			where: { id },
 		});
 
@@ -34,7 +34,7 @@ export const deleteCastMember = adminProcedure
 			};
 		}
 
-		await prisma.mediaCast.delete({
+		await db.client.mediaCast.delete({
 			where: { id },
 		});
 
@@ -60,7 +60,7 @@ export const deleteAllCast = adminProcedure
 	.handler(async ({ input }) => {
 		const { mediaId } = input;
 
-		const result = await prisma.mediaCast.deleteMany({
+		const result = await db.client.mediaCast.deleteMany({
 			where: { mediaId },
 		});
 

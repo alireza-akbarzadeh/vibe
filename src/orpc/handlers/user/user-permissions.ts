@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import {
 	assignUserPermissionInput,
@@ -14,7 +14,7 @@ export const assignUserPermission = adminProcedure
 		const { userId, permissionId, expiresAt } = input;
 
 		// Check if permission already exists
-		const existing = await prisma.userPermission.findUnique({
+		const existing = await db.client.userPermission.findUnique({
 			where: {
 				userId_permissionId: {
 					userId,
@@ -28,7 +28,7 @@ export const assignUserPermission = adminProcedure
 		}
 
 		// Assign permission
-		await prisma.userPermission.create({
+		await db.client.userPermission.create({
 			data: {
 				userId,
 				permissionId,
@@ -56,7 +56,7 @@ export const removeUserPermission = adminProcedure
 		const { userId, permissionId } = input;
 
 		// Remove permission
-		const deleted = await prisma.userPermission.delete({
+		const deleted = await db.client.userPermission.delete({
 			where: {
 				userId_permissionId: {
 					userId,

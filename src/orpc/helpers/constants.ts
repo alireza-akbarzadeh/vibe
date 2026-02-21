@@ -1,4 +1,4 @@
-import type { SubscriptionStatus } from "@/generated/prisma/enums";
+import { SubscriptionStatus } from "@prisma/client";
 
 export const Roles = ["ADMIN", "MODERATOR", "USER"] as const;
 

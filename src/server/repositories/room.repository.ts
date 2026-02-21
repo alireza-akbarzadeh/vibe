@@ -27,6 +27,12 @@ export class RoomRepository {
 		})) as Room | null;
 	}
 
+	async findByUserId(userId: string): Promise<RoomPublic[]> {
+		return (await db.client.room.findMany({
+			where: { members: { some: { userId } } },
+		})) as RoomPublic[];
+	}
+
 	async createRoom(data: RoomCreate): Promise<Room> {
 		return await db.client.room.create({
 			data: { ...data, token: crypto.randomUUID() },

@@ -101,7 +101,7 @@ async function seedPage(pageNumber: number) {
           try {
             const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 0;
 
-            await prisma.media.upsert({
+            await db.client.media.upsert({
               where: { id: movie.id.toString() },
               update: {},
               create: {

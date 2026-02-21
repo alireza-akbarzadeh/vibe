@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure, publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -16,7 +16,7 @@ export const getGenreBasedRecommendations = authedProcedure
 		const { profileId, limit, excludeWatched } = input;
 
 		// Verify profile belongs to user
-		const profile = await prisma.profile.findFirst({
+		const profile = await db.client.profile.findFirst({
 			where: {
 				id: profileId,
 				userId: context.user.id,
@@ -28,7 +28,7 @@ export const getGenreBasedRecommendations = authedProcedure
 		}
 
 		// Get viewing history for this profile
-		const viewingHistory = await prisma.viewingHistory.findMany({
+		const viewingHistory = await db.client.viewingHistory.findMany({
 			where: { profileId },
 			include: {
 				media: {
@@ -80,7 +80,7 @@ export const getGenreBasedRecommendations = authedProcedure
 		}
 
 		// Get genre names for reason string
-		const genres = await prisma.genre.findMany({
+		const genres = await db.client.genre.findMany({
 			where: { id: { in: topGenres } },
 			select: { name: true },
 		});
@@ -91,7 +91,7 @@ export const getGenreBasedRecommendations = authedProcedure
 			: [];
 
 		// Find recommendations
-		const recommendations = await prisma.media.findMany({
+		const recommendations = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				id: { notIn: watchedMediaIds },
@@ -140,7 +140,7 @@ export const getTrending = publicProcedure
 
 		// Find media with most views - sorted by viewCount and rating
 		// TODO: Add time-based filtering when we track view timestamps
-		const trending = await prisma.media.findMany({
+		const trending = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				...(type && { type }),
@@ -181,7 +181,7 @@ export const getTopRated = publicProcedure
 		const { type, limit, page } = input;
 		const skip = (page - 1) * limit;
 
-		const topRated = await prisma.media.findMany({
+		const topRated = await db.client.media.findMany({
 			where: {
 				status: "PUBLISHED",
 				...(type && { type }),

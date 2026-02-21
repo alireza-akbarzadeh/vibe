@@ -1,10 +1,14 @@
+import { PresentmentCurrency } from "@polar-sh/sdk/dist/sdk";
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
+import { logger } from "@/lib/logger";
 import { adminProcedure } from "@/orpc/context";
 
 const ProductPriceFixedCreateSchema = z.object({
 	priceAmount: z.number().min(0),
-	priceCurrency: z.string().default("USD"),
+	priceCurrency: z
+		.nativeEnum(PresentmentCurrency)
+		.default(PresentmentCurrency.Usd),
 });
 
 const CreateProductInputSchema = z.object({
@@ -40,7 +44,7 @@ export const createProduct = adminProcedure
 					type: "fixed" as const,
 					amountType: "fixed" as const,
 					priceAmount: price.priceAmount,
-					priceCurrency: price.priceCurrency as any,
+					priceCurrency: price.priceCurrency,
 				})),
 				...(input.trialInterval && {
 					trialInterval: input.trialInterval,
@@ -56,8 +60,8 @@ export const createProduct = adminProcedure
 				message: "Product created successfully",
 			};
 		} catch (error: any) {
-			console.error("Error creating product:", error);
-			throw errors.INTERNAL_ERROR({
+			logger.info("Error creating product:", error);
+			throw errors.INTERNAL_SERVER_ERROR({
 				message: error.message || "Failed to create product",
 			});
 		}

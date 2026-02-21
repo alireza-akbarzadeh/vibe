@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { authedProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
@@ -11,60 +12,62 @@ import { MediaItemSchema } from "@/orpc/models/media.schema";
 export const createMedia = authedProcedure
 	.input(createMediaInputSchema)
 	.output(ApiResponseSchema(MediaItemSchema))
-	.handler(async ({ input, ctx }) => {
+	.handler(async ({ input, context }) => {
 		const { genreIds, creatorIds, ...mediaData } = input;
 
-		const result = await ctx.db.$transaction(async (tx) => {
-			const media = await tx.media.create({
-				data: {
-					...mediaData,
-					genres: genreIds
-						? {
-								create: genreIds.map((id) => ({
-									genre: { connect: { id } },
-								})),
-							}
-						: undefined,
-					creators: creatorIds
-						? {
-								create: creatorIds.map((id) => ({
-									creator: { connect: { id } },
-									role: "ARTIST",
-								})),
-							}
-						: undefined,
-				},
-				include: {
-					genres: { include: { genre: true } },
-					creators: { include: { creator: true } },
-					collection: {
-						include: {
-							media: {
-								select: {
-									id: true,
-									title: true,
-									thumbnail: true,
-									type: true,
+		const result = await context.db.transaction(
+			async (tx: Prisma.TransactionClient) => {
+				const media = await tx.media.create({
+					data: {
+						...mediaData,
+						genres: genreIds
+							? {
+									create: genreIds.map((id) => ({
+										genre: { connect: { id } },
+									})),
+								}
+							: undefined,
+						creators: creatorIds
+							? {
+									create: creatorIds.map((id) => ({
+										creator: { connect: { id } },
+										role: "ARTIST",
+									})),
+								}
+							: undefined,
+					},
+					include: {
+						genres: { include: { genre: true } },
+						creators: { include: { creator: true } },
+						collection: {
+							include: {
+								media: {
+									select: {
+										id: true,
+										title: true,
+										thumbnail: true,
+										type: true,
+									},
+									orderBy: { sortOrder: "asc" },
 								},
-								orderBy: { sortOrder: "asc" },
 							},
 						},
 					},
-				},
-			});
+				});
 
-			await tx.auditLog.create({
-				data: {
-					userId: ctx.user.id,
-					action: "CREATE",
-					resource: "MEDIA",
-					resourceId: media.id,
-					metadata: input,
-				},
-			});
+				await tx.auditLog.create({
+					data: {
+						userId: context.user.id,
+						action: "CREATE",
+						resource: "MEDIA",
+						resourceId: media.id,
+						metadata: input,
+					},
+				});
 
-			return media;
-		});
+				return media;
+			},
+		);
 
 		return {
 			status: 200,
@@ -83,56 +86,58 @@ export const updateMedia = authedProcedure
 	.handler(async ({ input, context }) => {
 		const { id, genreIds, creatorIds, ...mediaData } = input;
 
-		const result = await context.db.transaction(async (tx) => {
-			const media = await tx.media.update({
-				where: { id },
-				data: {
-					...mediaData,
-					genres: {
-						deleteMany: {},
-						create: genreIds?.map((id) => ({
-							genre: { connect: { id } },
-						})),
+		const result = await context.db.transaction(
+			async (tx: Prisma.TransactionClient) => {
+				const media = await tx.media.update({
+					where: { id },
+					data: {
+						...mediaData,
+						genres: {
+							deleteMany: {},
+							create: genreIds?.map((id) => ({
+								genre: { connect: { id } },
+							})),
+						},
+						creators: {
+							deleteMany: {},
+							create: creatorIds?.map((id) => ({
+								creator: { connect: { id } },
+								role: "ARTIST",
+							})),
+						},
 					},
-					creators: {
-						deleteMany: {},
-						create: creatorIds?.map((id) => ({
-							creator: { connect: { id } },
-							role: "ARTIST",
-						})),
-					},
-				},
-				include: {
-					genres: { include: { genre: true } },
-					creators: { include: { creator: true } },
-					collection: {
-						include: {
-							media: {
-								select: {
-									id: true,
-									title: true,
-									thumbnail: true,
-									type: true,
+					include: {
+						genres: { include: { genre: true } },
+						creators: { include: { creator: true } },
+						collection: {
+							include: {
+								media: {
+									select: {
+										id: true,
+										title: true,
+										thumbnail: true,
+										type: true,
+									},
+									orderBy: { sortOrder: "asc" },
 								},
-								orderBy: { sortOrder: "asc" },
 							},
 						},
 					},
-				},
-			});
+				});
 
-			await tx.auditLog.create({
-				data: {
-					userId: context.user.id,
-					action: "UPDATE",
-					resource: "MEDIA",
-					resourceId: media.id,
-					metadata: input,
-				},
-			});
+				await tx.auditLog.create({
+					data: {
+						userId: context.user.id,
+						action: "UPDATE",
+						resource: "MEDIA",
+						resourceId: media.id,
+						metadata: input,
+					},
+				});
 
-			return media;
-		});
+				return media;
+			},
+		);
 
 		return {
 			status: 200,

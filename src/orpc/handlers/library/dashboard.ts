@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 
@@ -40,7 +40,7 @@ export const getLibraryDashboard = authedProcedure
 		const userId = context.user.id;
 
 		// Get the user's default profile for viewing history
-		const profile = await prisma.profile.findFirst({
+		const profile = await db.client.profile.findFirst({
 			where: { userId },
 			orderBy: { createdAt: "asc" },
 		});
@@ -54,15 +54,15 @@ export const getLibraryDashboard = authedProcedure
 			recentWatchlist,
 			recentHistory,
 		] = await Promise.all([
-			prisma.favorite.count({ where: { userId } }),
-			prisma.watchList.count({ where: { userId } }),
+			db.client.favorite.count({ where: { userId } }),
+			db.client.watchList.count({ where: { userId } }),
 			profile
-				? prisma.viewingHistory.count({
+				? db.client.viewingHistory.count({
 						where: { profileId: profile.id },
 					})
 				: Promise.resolve(0),
-			prisma.userReview.count({ where: { userId } }),
-			prisma.favorite.findMany({
+			db.client.userReview.count({ where: { userId } }),
+			db.client.favorite.findMany({
 				where: { userId },
 				include: {
 					media: {
@@ -77,7 +77,7 @@ export const getLibraryDashboard = authedProcedure
 				orderBy: { createdAt: "desc" },
 				take: 5,
 			}),
-			prisma.watchList.findMany({
+			db.client.watchList.findMany({
 				where: { userId },
 				include: {
 					media: {
@@ -93,7 +93,7 @@ export const getLibraryDashboard = authedProcedure
 				take: 5,
 			}),
 			profile
-				? prisma.viewingHistory.findMany({
+				? db.client.viewingHistory.findMany({
 						where: { profileId: profile.id },
 						include: {
 							media: {

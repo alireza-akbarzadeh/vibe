@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { createCreatorInput, creatorOutput } from "@/orpc/models/creator";
@@ -11,7 +11,7 @@ export const createCreator = adminProcedure
 	.handler(async ({ input, context }) => {
 		const { birthDate, ...rest } = input;
 
-		const creator = await prisma.creator.create({
+		const creator = await db.client.creator.create({
 			data: {
 				...rest,
 				birthDate: birthDate ? new Date(birthDate) : null,
@@ -59,7 +59,7 @@ export const bulkCreateCreator = adminProcedure
 		}));
 
 		// Get existing creators by name
-		const existingCreators = await prisma.creator.findMany({
+		const existingCreators = await db.client.creator.findMany({
 			where: {
 				name: {
 					in: normalizedInput.map((c) => c.name),
@@ -89,13 +89,13 @@ export const bulkCreateCreator = adminProcedure
 		}));
 
 		// Create in bulk
-		await prisma.creator.createMany({
+		await db.client.creator.createMany({
 			data: creatorsToCreate,
 			skipDuplicates: true,
 		});
 
 		// Fetch created creators to return full objects
-		const createdCreators = await prisma.creator.findMany({
+		const createdCreators = await db.client.creator.findMany({
 			where: {
 				name: {
 					in: newCreators.map((c) => c.name),

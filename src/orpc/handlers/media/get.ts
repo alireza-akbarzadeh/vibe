@@ -1,7 +1,7 @@
 import { ORPCError } from "@orpc/server";
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { rpcLogger } from "@/lib/rpc-logger";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
@@ -18,7 +18,7 @@ export const getMedia = publicProcedure
 	.output(ApiResponseSchema(MediaItemSchema))
 	.handler(async ({ input }) => {
 		try {
-			const media = await prisma.media.findUnique({
+			const media = await db.client.media.findUnique({
 				where: { id: input.id },
 				include: {
 					genres: { include: { genre: true } },
@@ -42,7 +42,7 @@ export const getMedia = publicProcedure
 
 			// Background task to increment view count
 			// We don't await this to keep the response fast
-			prisma.media
+			db.client.media
 				.update({
 					where: { id: input.id },
 					data: { viewCount: { increment: 1 } },
@@ -140,7 +140,7 @@ export const listMedia = publicProcedure
 					break;
 
 				case "ANIMATION": {
-					const animationGenre = await prisma.genre.findFirst({
+					const animationGenre = await db.client.genre.findFirst({
 						where: { name: { equals: "Animation", mode: "insensitive" } },
 					});
 					if (animationGenre) {
@@ -159,7 +159,7 @@ export const listMedia = publicProcedure
 				}
 
 				case "HORROR": {
-					const horrorGenre = await prisma.genre.findFirst({
+					const horrorGenre = await db.client.genre.findFirst({
 						where: { name: { equals: "Horror", mode: "insensitive" } },
 					});
 					if (horrorGenre) {
@@ -171,7 +171,7 @@ export const listMedia = publicProcedure
 				}
 
 				case "COMEDY": {
-					const comedyGenre = await prisma.genre.findFirst({
+					const comedyGenre = await db.client.genre.findFirst({
 						where: { name: { equals: "Comedy", mode: "insensitive" } },
 					});
 					if (comedyGenre) {
@@ -183,7 +183,7 @@ export const listMedia = publicProcedure
 				}
 
 				case "ROMANCE": {
-					const romanceGenre = await prisma.genre.findFirst({
+					const romanceGenre = await db.client.genre.findFirst({
 						where: { name: { equals: "Romance", mode: "insensitive" } },
 					});
 					if (romanceGenre) {
@@ -333,7 +333,7 @@ export const listMedia = publicProcedure
 		/* ------------------------------------------------------------------ */
 
 		const [items, total] = await Promise.all([
-			prisma.media.findMany({
+			db.client.media.findMany({
 				where,
 				orderBy,
 				skip,
@@ -380,7 +380,7 @@ export const listMedia = publicProcedure
 					},
 				},
 			}),
-			prisma.media.count({ where }),
+			db.client.media.count({ where }),
 		]);
 
 		return {
@@ -413,7 +413,7 @@ export const getTrendingSearches = publicProcedure
 		),
 	)
 	.handler(async ({ input }) => {
-		const items = await prisma.media.findMany({
+		const items = await db.client.media.findMany({
 			where: { status: "PUBLISHED" },
 			orderBy: [
 				{ viewCount: "desc" },

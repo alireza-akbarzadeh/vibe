@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { roleProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { RoleSchema, UserRoleSchema } from "@/orpc/models/role";
@@ -15,7 +15,7 @@ export const updateRole = roleProcedure
 	)
 	.output(ApiResponseSchema(RoleSchema))
 	.handler(async ({ input, context }) => {
-		const role = await prisma.role.update({
+		const role = await db.client.role.update({
 			where: { id: input.id },
 			data: {
 				name: input.name,
@@ -43,7 +43,7 @@ export const assignRoleToUser = roleProcedure
 	)
 	.output(ApiResponseSchema(UserRoleSchema))
 	.handler(async ({ input, context }) => {
-		const userRole = await prisma.userRole.create({
+		const userRole = await db.client.userRole.create({
 			data: {
 				userId: input.userId,
 				roleId: input.roleId,

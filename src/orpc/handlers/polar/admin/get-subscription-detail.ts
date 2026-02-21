@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { logger } from "@/lib/logger";
 import { adminProcedure } from "@/orpc/context";
 
@@ -45,7 +45,7 @@ export const getSubscriptionDetail = adminProcedure
 				price && "recurringInterval" in price ? price.recurringInterval : null;
 
 			// Find local user
-			const localUser = await prisma.user.findFirst({
+			const localUser = await db.client.user.findFirst({
 				where: { customerId: subscription.customerId },
 				select: { id: true, email: true },
 			});

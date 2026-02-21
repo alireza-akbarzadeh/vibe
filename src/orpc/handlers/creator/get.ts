@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { creatorOutput } from "@/orpc/models/creator";
@@ -34,7 +34,7 @@ export const listCreators = publicProcedure
 				}
 			: undefined;
 
-		const creators = await prisma.creator.findMany({
+		const creators = await db.client.creator.findMany({
 			where,
 			orderBy: { name: "asc" },
 			take: limit + 1,
@@ -70,7 +70,7 @@ export const getCreator = publicProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ResponseSchema.ApiResponseSchema(creatorOutput))
 	.handler(async ({ input, errors }) => {
-		const creator = await prisma.creator.findUnique({
+		const creator = await db.client.creator.findUnique({
 			where: { id: input.id },
 		});
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { createGenreInput, genreOutput } from "@/orpc/models/genre";
@@ -9,19 +9,17 @@ export const createGenre = adminProcedure
 	.input(createGenreInput)
 	.output(ResponseSchema.ApiResponseSchema(genreOutput))
 	.handler(async ({ input, context, errors }) => {
-		// Check if genre already exists
-		const existing = await prisma.genre.findUnique({
+		const existing = await db.client.genre.findUnique({
 			where: { name: input.name },
 		});
 
 		if (existing) {
 			throw errors.CONFLICT({
 				message: "Genre already exists",
-				data: { field: "name" },
 			});
 		}
 
-		const genre = await prisma.genre.create({
+		const genre = await db.client.genre.create({
 			data: input,
 		});
 
@@ -65,7 +63,7 @@ export const bulkCreateGenre = adminProcedure
 		}));
 
 		// Get existing genres (by name + type)
-		const existingGenres = await prisma.genre.findMany({
+		const existingGenres = await db.client.genre.findMany({
 			where: {
 				OR: normalizedInput.map((g) => ({
 					name: g.name,
@@ -93,13 +91,13 @@ export const bulkCreateGenre = adminProcedure
 		}
 
 		// Create in bulk
-		await prisma.genre.createMany({
+		await db.client.genre.createMany({
 			data: newGenres,
 			skipDuplicates: true,
 		});
 
 		// Fetch created genres to return full objects
-		const createdGenres = await prisma.genre.findMany({
+		const createdGenres = await db.client.genre.findMany({
 			where: {
 				OR: newGenres.map((g) => ({
 					name: g.name,

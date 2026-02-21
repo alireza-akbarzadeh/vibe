@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { profileOutput, updateProfileInput } from "@/orpc/models/profile";
@@ -10,7 +10,7 @@ export const updateProfile = authedProcedure
 		const { id, ...data } = input;
 
 		// Ensure profile belongs to user
-		const existing = await prisma.profile.findFirst({
+		const existing = await db.client.profile.findFirst({
 			where: { id, userId: context.user.id },
 		});
 
@@ -18,7 +18,7 @@ export const updateProfile = authedProcedure
 			throw errors.NOT_FOUND({ message: "Profile not found" });
 		}
 
-		const profile = await prisma.profile.update({
+		const profile = await db.client.profile.update({
 			where: { id },
 			data,
 		});

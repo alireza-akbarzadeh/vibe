@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { creatorOutput, updateCreatorInput } from "@/orpc/models/creator";
@@ -10,7 +10,7 @@ export const updateCreator = adminProcedure
 	.handler(async ({ input, context, errors }) => {
 		const { id, birthDate, ...rest } = input;
 
-		const existing = await prisma.creator.findUnique({
+		const existing = await db.client.creator.findUnique({
 			where: { id },
 		});
 
@@ -18,7 +18,7 @@ export const updateCreator = adminProcedure
 			throw errors.NOT_FOUND({ message: "Creator not found" });
 		}
 
-		const creator = await prisma.creator.update({
+		const creator = await db.client.creator.update({
 			where: { id },
 			data: {
 				...rest,

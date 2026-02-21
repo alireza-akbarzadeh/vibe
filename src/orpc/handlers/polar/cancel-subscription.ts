@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import { CancelSubscriptionInputSchema } from "../../models/polar";
 
@@ -39,7 +39,7 @@ export const cancelSubscription = authedProcedure
 			});
 
 			// Update user's subscription status in database
-			await prisma.user.update({
+			await db.client.user.update({
 				where: { id: context.user.id },
 				data: {
 					subscriptionStatus: "CANCELLED",
@@ -65,7 +65,7 @@ export const cancelSubscription = authedProcedure
 				throw error;
 			}
 
-			throw errors.INTERNAL_ERROR({
+			throw errors.INTERNAL_SERVER_ERROR({
 				message: "Failed to cancel subscription",
 			});
 		}

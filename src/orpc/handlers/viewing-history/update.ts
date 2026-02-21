@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import {
@@ -13,7 +13,7 @@ export const updateProgress = authedProcedure
 		const { profileId, mediaId, progress, completed } = input;
 
 		// Verify profile belongs to user
-		const profile = await prisma.profile.findFirst({
+		const profile = await db.client.profile.findFirst({
 			where: {
 				id: profileId,
 				userId: context.user.id,
@@ -25,7 +25,7 @@ export const updateProgress = authedProcedure
 		}
 
 		// Verify media exists
-		const media = await prisma.media.findUnique({
+		const media = await db.client.media.findUnique({
 			where: { id: mediaId },
 		});
 
@@ -34,7 +34,7 @@ export const updateProgress = authedProcedure
 		}
 
 		// Upsert viewing history
-		const history = await prisma.viewingHistory.upsert({
+		const history = await db.client.viewingHistory.upsert({
 			where: {
 				id: `${profileId}_${mediaId}`,
 			},

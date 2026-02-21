@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { bulkDeleteInputSchema } from "@/orpc/models/person.input.schema";
@@ -12,7 +12,7 @@ export const remove = adminProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ApiResponseSchema(z.object({ id: z.string() })))
 	.handler(async ({ input }) => {
-		await prisma.person.delete({
+		await db.client.person.delete({
 			where: { id: input.id },
 		});
 
@@ -30,7 +30,7 @@ export const bulkDelete = adminProcedure
 	.input(bulkDeleteInputSchema)
 	.output(ApiResponseSchema(z.object({ count: z.number() })))
 	.handler(async ({ input }) => {
-		const result = await prisma.person.deleteMany({
+		const result = await db.client.person.deleteMany({
 			where: {
 				id: { in: input.ids },
 			},

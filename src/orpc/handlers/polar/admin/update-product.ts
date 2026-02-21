@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
+import { logger } from "@/lib/logger";
 import { adminProcedure } from "@/orpc/context";
 
 const UpdateProductInputSchema = z.object({
@@ -35,10 +36,15 @@ export const updateProduct = adminProcedure
 				success: true,
 				message: "Product updated successfully",
 			};
-		} catch (error: any) {
-			console.error("Error updating product:", error);
-			throw errors.INTERNAL_ERROR({
-				message: error.message || "Failed to update product",
+		} catch (error) {
+			if (error instanceof Error) {
+				logger.error("Error updating product:", error);
+				throw errors.INTERNAL_SERVER_ERROR({
+					message: error.message || "Failed to update product",
+				});
+			}
+			throw errors.INTERNAL_SERVER_ERROR({
+				message: "Failed to update product",
 			});
 		}
 	});

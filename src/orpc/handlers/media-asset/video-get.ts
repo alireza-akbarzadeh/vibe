@@ -1,6 +1,6 @@
 import type { Prisma, VideoType } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { listVideosInputSchema } from "@/orpc/models/media-asset.input.schema";

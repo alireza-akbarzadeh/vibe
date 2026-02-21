@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -18,7 +18,7 @@ export const createPeople = adminProcedure
 	.handler(async ({ input }) => {
 		const { knownFor, ...personData } = input;
 
-		const person = await prisma.person.create({
+		const person = await db.client.person.create({
 			data: {
 				...personData,
 				originalName: personData.originalName || "",
@@ -90,7 +90,7 @@ export const bulkCreatePeople = adminProcedure
 						originalName: p.originalName || "",
 					}));
 
-					const result = await prisma.person.createMany({
+					const result = await db.client.person.createMany({
 						data: batchWithoutRelations,
 						skipDuplicates: true,
 					});
@@ -101,7 +101,7 @@ export const bulkCreatePeople = adminProcedure
 					for (let j = 0; j < batch.length; j++) {
 						const { knownFor, ...personData } = batch[j];
 						try {
-							await prisma.person.create({
+							await db.client.person.create({
 								data: {
 									...personData,
 									originalName: personData.originalName || "",

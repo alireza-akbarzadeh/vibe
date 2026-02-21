@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import { withAuth, withRequire } from "@/orpc/middleware/middleware";
-import { base } from "../router/base";
+import { os } from "../root";
 
 /**
  * Public endpoint - anyone can access
  */
-export const publicEndpoint = base
+export const publicEndpoint = os
 	.input(z.void())
 	.output(ApiResponseSchema(z.object({ message: z.string() })))
 	.handler(async () => {
@@ -20,7 +20,7 @@ export const publicEndpoint = base
 /**
  * Protected endpoint - requires authentication
  */
-export const protectedEndpoint = base
+export const protectedEndpoint = os
 	.use(withAuth)
 	.input(z.void())
 	.output(
@@ -45,7 +45,7 @@ export const protectedEndpoint = base
 /**
  * Admin-only endpoint - requires admin role
  */
-export const adminOnlyEndpoint = base
+export const adminOnlyEndpoint = os
 	.use(
 		withRequire({
 			role: "ADMIN",
@@ -66,7 +66,7 @@ export const adminOnlyEndpoint = base
 /**
  * Permission-based endpoint
  */
-export const permissionEndpoint = base
+export const permissionEndpoint = os
 	.use(
 		withRequire({
 			permission: { resource: "media", action: "create" },
@@ -84,7 +84,7 @@ export const permissionEndpoint = base
 		};
 	});
 
-export const TestAuthRouter = base.router({
+export const TestAuthRouter = os.router({
 	public: publicEndpoint,
 	protected: protectedEndpoint,
 	admin: adminOnlyEndpoint,

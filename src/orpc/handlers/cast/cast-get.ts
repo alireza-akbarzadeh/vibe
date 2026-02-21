@@ -1,6 +1,6 @@
 import type { CastType } from "@prisma/client";
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -42,7 +42,7 @@ export const listCast = publicProcedure
 		if (castType) where.castType = castType;
 
 		const [castMembers, total] = await Promise.all([
-			prisma.mediaCast.findMany({
+			db.client.mediaCast.findMany({
 				where,
 				include: {
 					person: {
@@ -61,7 +61,7 @@ export const listCast = publicProcedure
 				skip,
 				take: limit,
 			}),
-			prisma.mediaCast.count({ where }),
+			db.client.mediaCast.count({ where }),
 		]);
 
 		return {
@@ -108,7 +108,7 @@ export const getMediaCast = publicProcedure
 			types.push("CINEMATOGRAPHER", "COMPOSER", "EDITOR", "OTHER");
 		}
 
-		const allCast = await prisma.mediaCast.findMany({
+		const allCast = await db.client.mediaCast.findMany({
 			where: {
 				mediaId,
 				castType: { in: types },

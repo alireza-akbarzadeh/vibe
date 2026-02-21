@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { MediaListItemSchema } from "@/orpc/models/media.schema";
@@ -23,7 +23,7 @@ export const checkFavorite = authedProcedure
 	.handler(async ({ input, context }) => {
 		const { mediaId } = input;
 
-		const count = await prisma.favorite.count({
+		const count = await db.client.favorite.count({
 			where: {
 				userId: context.user.id,
 				mediaId,
@@ -69,7 +69,7 @@ export const listFavorites = authedProcedure
 		const skip = (page - 1) * limit;
 
 		const [favorites, total] = await Promise.all([
-			prisma.favorite.findMany({
+			db.client.favorite.findMany({
 				where: { userId: context.user.id },
 				include: {
 					media: {
@@ -86,7 +86,7 @@ export const listFavorites = authedProcedure
 				skip,
 				take: limit,
 			}),
-			prisma.favorite.count({
+			db.client.favorite.count({
 				where: { userId: context.user.id },
 			}),
 		]);
@@ -100,7 +100,7 @@ export const listFavorites = authedProcedure
 					userId: f.userId,
 					mediaId: f.mediaId,
 					createdAt: f.createdAt.toISOString(),
-					media: f.media as any,
+					media: f.media,
 				})),
 				pagination: {
 					page,

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { publicProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { genreListOutput, genreOutput } from "@/orpc/models/genre";
@@ -20,7 +20,7 @@ export const listGenres = publicProcedure
 	.handler(async ({ input = {} }) => {
 		const { search, type } = input;
 
-		const genres = await prisma.genre.findMany({
+		const genres = await db.client.genre.findMany({
 			where: {
 				...(type ? { type } : {}),
 				...(search
@@ -55,7 +55,7 @@ export const getGenre = publicProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ResponseSchema.ApiResponseSchema(genreOutput))
 	.handler(async ({ input, errors }) => {
-		const genre = await prisma.genre.findUnique({
+		const genre = await db.client.genre.findUnique({
 			where: { id: input.id },
 		});
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { authedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 
@@ -21,7 +21,7 @@ export const toggleWatchList = authedProcedure
 		const { mediaId } = input;
 		const userId = context.user.id;
 
-		const media = await prisma.media.findUnique({
+		const media = await db.client.media.findUnique({
 			where: { id: mediaId },
 		});
 
@@ -29,12 +29,12 @@ export const toggleWatchList = authedProcedure
 			throw errors.NOT_FOUND({ message: "Media not found" });
 		}
 
-		const existing = await prisma.watchList.findUnique({
+		const existing = await db.client.watchList.findUnique({
 			where: { userId_mediaId: { userId, mediaId } },
 		});
 
 		if (existing) {
-			await prisma.watchList.delete({
+			await db.client.watchList.delete({
 				where: { userId_mediaId: { userId, mediaId } },
 			});
 			return {
@@ -44,7 +44,7 @@ export const toggleWatchList = authedProcedure
 			};
 		}
 
-		await prisma.watchList.create({
+		await db.client.watchList.create({
 			data: { userId, mediaId },
 		});
 

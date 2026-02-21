@@ -1,7 +1,7 @@
 // src/orpc/procedures/collection.ts
 
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { collectionCreateProcedure } from "@/orpc/context";
 import { ApiResponseSchema } from "@/orpc/helpers/response-schema";
 import {
@@ -26,7 +26,7 @@ export const createCollection = collectionCreateProcedure
 		),
 	)
 	.handler(async ({ input, context }) => {
-		const collection = await prisma.collection.create({
+		const collection = await db.client.collection.create({
 			data: input,
 		});
 
@@ -69,7 +69,7 @@ export const bulkCreateCollection = collectionCreateProcedure
 		}));
 
 		// Get existing collections by title
-		const existingCollections = await prisma.collection.findMany({
+		const existingCollections = await db.client.collection.findMany({
 			where: {
 				title: {
 					in: normalizedInput.map((c) => c.title),
@@ -93,13 +93,13 @@ export const bulkCreateCollection = collectionCreateProcedure
 		}
 
 		// Create in bulk
-		await prisma.collection.createMany({
+		await db.client.collection.createMany({
 			data: newCollections,
 			skipDuplicates: true,
 		});
 
 		// Fetch created collections to return full objects
-		const createdCollections = await prisma.collection.findMany({
+		const createdCollections = await db.client.collection.findMany({
 			where: {
 				title: {
 					in: newCollections.map((c) => c.title),

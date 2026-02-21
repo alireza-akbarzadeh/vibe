@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { permissionIdInput } from "@/orpc/models/permission";
@@ -13,7 +13,7 @@ export const deletePermission = adminProcedure
 		),
 	)
 	.handler(async ({ input, context, errors }) => {
-		const existing = await prisma.permission.findUnique({
+		const existing = await db.client.permission.findUnique({
 			where: { id: input.id },
 		});
 
@@ -21,7 +21,7 @@ export const deletePermission = adminProcedure
 			throw errors.NOT_FOUND({ message: "Permission not found" });
 		}
 
-		await prisma.permission.delete({
+		await db.client.permission.delete({
 			where: { id: input.id },
 		});
 

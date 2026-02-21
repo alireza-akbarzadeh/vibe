@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { polarClient } from "@/integrations/polar/polar-client";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { logger } from "@/lib/logger";
 import { adminProcedure } from "@/orpc/context";
 
@@ -40,12 +40,12 @@ export const adminCancelSubscription = adminProcedure
 			});
 
 			// Update local database
-			const user = await prisma.user.findFirst({
+			const user = await db.client.user.findFirst({
 				where: { customerId: subscription.customerId },
 			});
 
 			if (user) {
-				await prisma.user.update({
+				await db.client.user.update({
 					where: { id: user.id },
 					data: {
 						subscriptionStatus: "CANCELLED",
@@ -53,7 +53,7 @@ export const adminCancelSubscription = adminProcedure
 					},
 				});
 
-				await prisma.subscription.updateMany({
+				await db.client.subscription.updateMany({
 					where: {
 						userId: user.id,
 						referenceId: input.subscriptionId,
@@ -81,7 +81,7 @@ export const adminCancelSubscription = adminProcedure
 				throw errors.NOT_FOUND({ message: "Subscription not found" });
 			}
 			logger.error("[Admin] Cancel subscription error:", error);
-			throw errors.INTERNAL_ERROR({
+			throw errors.INTERNAL_SERVER_ERROR({
 				message: "Failed to cancel subscription",
 			});
 		}

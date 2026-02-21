@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import { UserAccessOutput, userIdInput } from "@/orpc/models/user-access";
 
@@ -9,7 +9,7 @@ export const getUserAccess = adminProcedure
 		const { userId } = input;
 
 		// Get user with roles and permissions
-		const user = await prisma.user.findUnique({
+		const user = await db.client.user.findUnique({
 			where: { id: userId },
 			include: {
 				roles: {
@@ -48,7 +48,6 @@ export const getUserAccess = adminProcedure
 			throw new Error("User not found");
 		}
 
-		// Get direct permissions
 		const directPermissions = user.permissions.map((up) => ({
 			id: up.permission.id,
 			name: up.permission.name,
@@ -60,15 +59,12 @@ export const getUserAccess = adminProcedure
 			grantedBy: up.grantedBy,
 		}));
 
-		// Get permissions from roles (deduplicate by permission ID)
 		const permissionMap = new Map();
 
-		// Add direct permissions first
 		for (const perm of directPermissions) {
 			permissionMap.set(perm.id, perm);
 		}
 
-		// Add role permissions (if not already direct)
 		for (const userRole of user.roles) {
 			for (const rolePerm of userRole.role.permissions) {
 				if (!permissionMap.has(rolePerm.permission.id)) {
@@ -86,7 +82,6 @@ export const getUserAccess = adminProcedure
 			}
 		}
 
-		// Get roles
 		const roles = user.roles.map((ur) => ({
 			id: ur.role.id,
 			name: ur.role.name,

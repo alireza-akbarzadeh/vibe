@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { subscribedProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import { addToWatchListInput, watchListOutput } from "@/orpc/models/watchlist";
@@ -8,7 +8,7 @@ export const addToWatchList = subscribedProcedure
 	.output(ResponseSchema.ApiResponseSchema(watchListOutput))
 	.handler(async ({ input, context, errors }) => {
 		// Check if media exists
-		const media = await prisma.media.findUnique({
+		const media = await db.client.media.findUnique({
 			where: { id: input.mediaId },
 		});
 
@@ -17,7 +17,7 @@ export const addToWatchList = subscribedProcedure
 		}
 
 		// Check if already in watchlist
-		const existing = await prisma.watchList.findUnique({
+		const existing = await db.client.watchList.findUnique({
 			where: {
 				userId_mediaId: {
 					userId: context.user.id,
@@ -30,7 +30,7 @@ export const addToWatchList = subscribedProcedure
 			throw errors.CONFLICT({ message: "Media already in watch list" });
 		}
 
-		const watchList = await prisma.watchList.create({
+		const watchList = await db.client.watchList.create({
 			data: {
 				userId: context.user.id,
 				mediaId: input.mediaId,

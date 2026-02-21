@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { prisma } from "@/lib/db.server";
+import { db } from "@/lib/db.server";
 import { adminProcedure } from "@/orpc/context";
 import * as ResponseSchema from "@/orpc/helpers/response-schema";
 import {
@@ -23,7 +23,7 @@ export const listPermissions = adminProcedure
 	.handler(async ({ input = {} }) => {
 		const { resource, action } = input;
 
-		const permissions = await prisma.permission.findMany({
+		const permissions = await db.client.permission.findMany({
 			where: {
 				...(resource && { resource }),
 				...(action && { action }),
@@ -53,7 +53,7 @@ export const getPermission = adminProcedure
 	.input(z.object({ id: z.string() }))
 	.output(ResponseSchema.ApiResponseSchema(permissionOutput))
 	.handler(async ({ input, errors }) => {
-		const permission = await prisma.permission.findUnique({
+		const permission = await db.client.permission.findUnique({
 			where: { id: input.id },
 		});
 
