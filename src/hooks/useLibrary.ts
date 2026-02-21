@@ -107,7 +107,7 @@ export function useViewingHistory(
 	options?: { page?: number; limit?: number },
 ) {
 	return useQuery(
-		orpc.viewingHistory.list.queryOptions({
+		orpc.viewingHistory.get.queryOptions({
 			input: {
 				profileId: profileId!,
 				page: options?.page ?? 1,
