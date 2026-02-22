@@ -6,7 +6,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "dev": "concurrently \"npm:dev:vite\"",
+    "dev": "npm run dev:vite",
     "dev-2": "concurrently \"npm:dev:vite\" \"npm:dev:ngrok\" \"npm:db:studio\"",
     "dev:simple": "vite dev --port 3000",
     "dev:vite": "cross-env TSS_DEV_SERVER='true' NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000",
